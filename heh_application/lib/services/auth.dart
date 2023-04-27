@@ -233,7 +233,7 @@ class Auth implements AuthBase {
           .where('id', isEqualTo: signUpUser.userID)
           .get();
       final List<DocumentSnapshot> documents = result.docs;
-      if (documents.length == 0) {
+      if (documents.isEmpty) {
         _firestore.collection('user').doc(signUpUser.userID).set({
           'nickname': signUpUser.firstName,
           'photoUrl': '',
