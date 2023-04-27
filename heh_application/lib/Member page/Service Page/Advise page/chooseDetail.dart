@@ -132,7 +132,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                     widget.physiotherapist.physiotherapistID),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    if (snapshot.data!.length > 0) {
+                    if (snapshot.data!.isNotEmpty) {
                       return ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,

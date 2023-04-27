@@ -1,14 +1,11 @@
-// ignore: file_names
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/login.dart';
 import 'package:heh_application/Member%20page/navigation_main.dart';
 import 'package:heh_application/Physiotherapist%20Page/navigation_main.dart';
-import 'package:heh_application/models/exercise_resource.dart';
 import 'package:heh_application/models/medical_record.dart';
 import 'package:heh_application/models/result_login.dart';
-import 'package:heh_application/models/schedule.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/firebase_firestore.dart';
@@ -20,11 +17,10 @@ ResultLogin? sharedResultLogin;
 SignUpUser? sharedCurrentUser;
 MedicalRecord? sharedMedicalRecord;
 Physiotherapist? sharedPhysiotherapist;
-ExerciseResource? sharedExerciseResource;
 
 class LandingPage extends StatelessWidget {
-  const LandingPage({Key? key}) : super(key: key);
-
+  LandingPage({Key? key, this.msg}) : super(key: key);
+  String? msg;
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
@@ -37,12 +33,18 @@ class LandingPage extends StatelessWidget {
         // final SignUpUser? user = snapshot.data;
 
         if (snapshot.data == null || snapshot.data!.userID == 'signout') {
-          print(context);
-          return const LoginPage();
-        } else {
+
+          return  LoginPage(msg: msg,);
+
+        }
+        else if (snapshot.data!.role!.name == "Admin" || snapshot.data!.role!.name == "Staff"){
+          return LandingPage(msg: 'Account của bạn không có quyền truy cập vào app',);
+        }
+
+        else {
           sharedResultLogin = snapshot.data;
           Future<SignUpUser> futureCurrentUser =
-              auth.getCurrentUser(sharedResultLogin!);
+          auth.getCurrentUser(sharedResultLogin!);
           return FutureBuilder<SignUpUser>(
               future: futureCurrentUser,
               builder: (context, snapshot) {
@@ -53,14 +55,11 @@ class LandingPage extends StatelessWidget {
                       create: (context) => FirebaseFirestores(),
                       child: Navigation_Bar(),
                     );
-                  } else if (sharedCurrentUser!.role!.name ==
-                      "Physiotherapist") {
+                  } else  {
                     return Provider<FirebaseFirestoreBase>(
                       create: (context) => FirebaseFirestores(),
                       child: const PhyNavigation_bar(),
                     );
-                  } else {
-                    return const LoginPage();
                   }
                 } else {
                   print("khong data");
@@ -76,8 +75,8 @@ class LandingPage extends StatelessWidget {
 
     // return const Navigation_Bar();
   }
-  // }
-  // return const Center(
-  //   child: CircularProgressIndicator(),
-  // );
+// }
+// return const Center(
+//   child: CircularProgressIndicator(),
+// );
 }

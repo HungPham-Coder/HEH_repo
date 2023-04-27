@@ -77,7 +77,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
               DateTime day = new DateFormat('dd-MM-yyyy').parse(_date.text);
               String dayStr = DateFormat('yyyy-MM-ddTHH:mm:ss').format(day);
               slotList = await CallAPI().getallSlotByDate(dayStr);
-              if (slotList!.length > 0) {
+              if (slotList!.isNotEmpty) {
                 setState(() {
                   check = true;
                 });
@@ -115,7 +115,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
             Time(),
             button(),
             const SizedBox(height: 10),
-            check == false && _date.text != "" && slotList!.length == 0
+            check == false && _date.text != "" && slotList!.isEmpty
                 ? const Center(
                     child: Text("Khong co slot nao"),
                   )
