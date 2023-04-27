@@ -12,7 +12,10 @@ class dialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(text),
+      title: Text(
+        text,
+        style: TextStyle(fontSize: 18),
+      ),
       actions: <Widget>[
         description(label: des),
         Row(
@@ -57,6 +60,7 @@ class dialog extends StatelessWidget {
         TextFormField(
           obscureText: obscureText,
           // controller: controller,
+
           decoration: const InputDecoration(
               hintText: "Yêu cầu",
               contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),

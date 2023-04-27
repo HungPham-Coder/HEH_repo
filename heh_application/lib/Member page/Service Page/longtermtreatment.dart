@@ -83,6 +83,16 @@ class SessionMenu extends StatelessWidget {
               Image.network(
                 icon,
                 width: 60,
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  return child;
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
               ),
               const SizedBox(
                 width: 20,

@@ -40,8 +40,8 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
             width: MediaQuery.of(context).size.width,
             height: 40,
             child: FutureBuilder<List<SubProfile>?>(
-                future: CallAPI()
-                    .getallSubProfileByUserIdAndSlotID(sharedCurrentUser!.userID!,slotID),
+                future: CallAPI().getallSubProfileByUserIdAndSlotID(
+                    sharedCurrentUser!.userID!, slotID),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (_relationships.length == 1) {
@@ -129,9 +129,13 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                         shrinkWrap: true,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
-                          DateTime tempStart =  new DateFormat("yyyy-MM-ddThh:mm:ss").parse(snapshot.data![index].slot.timeStart);
+                          DateTime tempStart =
+                              new DateFormat("yyyy-MM-ddThh:mm:ss")
+                                  .parse(snapshot.data![index].slot.timeStart);
                           String start = DateFormat("HH:mm").format(tempStart);
-                          DateTime tempEnd =  new DateFormat("yyyy-MM-ddThh:mm:ss").parse(snapshot.data![index].slot.timeEnd);
+                          DateTime tempEnd =
+                              new DateFormat("yyyy-MM-ddThh:mm:ss")
+                                  .parse(snapshot.data![index].slot.timeEnd);
                           String end = DateFormat("HH:mm").format(tempEnd);
                           return PhysioChooseMenu(
                               icon:
@@ -139,8 +143,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                               name:
                                   widget.physiotherapist.signUpUser!.lastName!,
                               time: "Khung giờ: ",
-                              timeStart:
-                                  '$start',
+                              timeStart: '$start',
                               timeEnd: '$end',
                               price: snapshot.data![index].typeOfSlot.price,
                               press: () => showDialog<String>(
@@ -149,7 +152,8 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                         AlertDialog(
                                       title:
                                           const Text("Chọn người được tư vấn"),
-                                      content: relationship(snapshot.data![index].slotID),
+                                      content: relationship(
+                                          snapshot.data![index].slotID),
                                       actions: [
                                         TextButton(
                                           onPressed: () =>
@@ -162,7 +166,6 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                                 "- Chọn -") {
                                               Navigator.pop(context, 'Ok');
                                             } else {
-
                                               BookingSchedule bookingSchedule =
                                                   BookingSchedule(
                                                       userID:
@@ -368,6 +371,18 @@ class PhysioChooseMenu extends StatelessWidget {
                   children: [
                     Image.network(
                       icon,
+                      frameBuilder:
+                          (context, child, frame, wasSynchronouslyLoaded) {
+                        return child;
+                      },
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                      },
                       width: 40,
                       height: 50,
                     ),
