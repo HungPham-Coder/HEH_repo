@@ -141,7 +141,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return const LandingPage();
+                              return  LandingPage();
                             },
                             settings: const RouteSettings(
                               name: "/landing",
