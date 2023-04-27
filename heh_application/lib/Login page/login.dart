@@ -107,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             inputPhone(
                                 obscureText: false,
@@ -330,9 +331,9 @@ class _LoginPageState extends State<LoginPage> {
         await auth.signInAnonymously();
 
         await stream.addLoginStream(resultLogin);
-      }
-      else {
-        ResultLogin resultLogin = ResultLogin(userID: "error login", firstName: 'null');
+      } else {
+        ResultLogin resultLogin =
+            ResultLogin(userID: "error login", firstName: 'null');
         await stream.addLoginStream(resultLogin);
       }
     } on Exception catch (e) {
