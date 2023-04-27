@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:heh_application/models/booking_detail.dart';
 import 'package:heh_application/models/booking_schedule.dart';
 import 'package:heh_application/models/exercise_model/category.dart';
@@ -34,20 +35,15 @@ class CallAPI {
       "content-type": "application/json",
     };
     var response = await http.post(url, body: body, headers: headers);
-
-    print(response.statusCode);
     if (response.statusCode == 200) {
       // return auth.signInWithEmailAndPassword(loginUser.phone, loginUser.password);
       Map<String, dynamic> responseBody = json.decode(response.body);
       Map<String, dynamic> result = responseBody["result"];
-      print(result["access_token"]);
+
       final headers = {
         "Content-Type": "application/json",
         "Authorization": "Bearer ${result["access_token"]}",
       };
-      var response1 = await http
-          .get(url, headers: headers)
-          .then((value) => print(value.body));
 
       return ResultLogin.fromMap(result);
     }
@@ -76,10 +72,8 @@ class CallAPI {
       "content-type": "application/json"
     };
     var response = await http.post(url, body: body, headers: headers);
-    print('${response.statusCode} register account');
 
     if (response.statusCode == 200) {
-      print(json.decode(response.body));
       return json.decode(response.body);
     } else {
       print(response.body);
@@ -114,7 +108,6 @@ class CallAPI {
     };
     var response = await http.get(url, headers: headers);
 
-    print('StatusCode: ${response.statusCode}');
     if (response.statusCode == 200) {
       return SignUpUser.fromMap(json.decode(response.body), '');
     } else {
@@ -132,7 +125,7 @@ class CallAPI {
       "content-type": "application/json"
     };
     var response = await http.get(url, headers: headers);
-    print(response.body);
+
     if (response.statusCode == 200) {
       return Role.fromMap(json.decode(response.body));
     } else {
@@ -148,8 +141,6 @@ class CallAPI {
       "content-type": "application/json"
     };
     var response = await http.get(url, headers: headers);
-    print(response.body);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
       List<Exercise> list = List<Exercise>.from(
@@ -197,7 +188,6 @@ class CallAPI {
       "content-type": "application/json"
     };
     var response = await http.get(url, headers: headers);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
       List<CategoryModel> list = List<CategoryModel>.from(
@@ -214,6 +204,28 @@ class CallAPI {
 
   Future<List<BookingDetail>> getAllBookingDetail() async {
     var url = Uri.parse('${link}/api/BookingDetail');
+    // var url = Uri.https('localhost:7166', 'api/BookingDetail');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      Iterable jsonResult = json.decode(response.body);
+      List<BookingDetail> list = List<BookingDetail>.from(
+          jsonResult.map((model) => BookingDetail.fromMap(model)));
+      if (list == null) {
+        throw Exception('BookingDetail List null');
+      } else {
+        return list;
+      }
+    } else {
+      throw Exception('Failed to load BookingDetail');
+    }
+  }
+
+  Future<List<BookingDetail>> getAllBookingDetailByUserID(String userID) async {
+    var url = Uri.parse('${link}/api/BookingDetail/GetByUserId?userID=$userID');
     // var url = Uri.https('localhost:7166', 'api/BookingDetail');
     final headers = {
       "Accept": "application/json",
@@ -360,11 +372,8 @@ class CallAPI {
       "content-type": "application/json"
     };
     var response = await http.post(url, body: body, headers: headers);
-    print(response.statusCode);
 
     if (response.statusCode == 200) {
-      print('medical add');
-      print(response.statusCode);
       return MedicalRecord.fromMap(json.decode(response.body));
     } else {
       print('medical add');
@@ -472,7 +481,6 @@ class CallAPI {
     });
     var response = await http.put(url, headers: headers, body: body);
     if (response.statusCode == 200) {
-      print(response.body);
     } else {
       print(response.body);
       throw Exception('Failed to load Schedule');
@@ -489,8 +497,6 @@ class CallAPI {
       "content-type": "application/json"
     };
     var response = await http.get(url, headers: headers);
-    print(response.body);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
       List<Schedule> list = List<Schedule>.from(
@@ -628,7 +634,6 @@ class CallAPI {
       "content-type": "application/json"
     };
     var response = await http.post(url, body: body, headers: headers);
-    print('${response.statusCode} add subProfile');
 
     if (response.statusCode == 200) {
       return SubProfile.fromMap(json.decode(response.body));
@@ -647,8 +652,6 @@ class CallAPI {
       "content-type": "application/json"
     };
     var response = await http.get(url, headers: headers);
-    print(response.body);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
       List<SubProfile> list = List<SubProfile>.from(
@@ -692,8 +695,7 @@ class CallAPI {
       "content-type": "application/json"
     };
     var response = await http.get(url, headers: headers);
-    print(response.body);
-    print(response.statusCode);
+
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
       List<SubProfile> list = List<SubProfile>.from(
@@ -733,8 +735,7 @@ class CallAPI {
       "content-type": "application/json"
     };
     var response = await http.get(url, headers: headers);
-    print(response.statusCode);
-    print("Relationship");
+
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
       List<Relationship> list = List<Relationship>.from(
@@ -811,10 +812,7 @@ class CallAPI {
       "content-type": "application/json"
     };
     var response = await http.post(url, body: body, headers: headers);
-    print('${response.statusCode} bookingschedule');
-    print(response.statusCode);
     if (response.statusCode == 200) {
-      print(json.decode(response.body));
       return BookingSchedule.fromMap(json.decode(response.body));
     } else {
       print(response.body);
@@ -837,10 +835,7 @@ class CallAPI {
       "content-type": "application/json"
     };
     var response = await http.post(url, body: body, headers: headers);
-    print('${response.statusCode} bookingdetail');
-    print(response.statusCode);
     if (response.statusCode == 200) {
-      print(json.decode(response.body));
       return true;
     } else {
       print(response.body);
@@ -862,7 +857,7 @@ class CallAPI {
       "content-type": "application/json"
     };
     var response = await http.post(url, body: body, headers: headers);
-    print('${response.statusCode} problem add');
+
     if (response.statusCode == 200) {
       return Problem1.FromMap(json.decode(response.body));
     } else {

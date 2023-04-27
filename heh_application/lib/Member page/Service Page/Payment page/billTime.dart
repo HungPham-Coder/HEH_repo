@@ -44,7 +44,7 @@ class _BillTimePageState extends State<BillTimePage> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     child: Column(
                       children: [
                         const Center(
@@ -94,16 +94,13 @@ class _BillTimePageState extends State<BillTimePage> {
                             const EdgeInsets.only(
                                 left: 25, right: 25, top: 15, bottom: 15)),
                         shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                        MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                               side: const BorderSide(color: Colors.white)),
                         )),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const TimeResultPage()));
+                      Navigator.of(context).pop();
                     },
                     child: const Text(
                       "Trở lại",
@@ -116,9 +113,9 @@ class _BillTimePageState extends State<BillTimePage> {
                   child: ElevatedButton(
                     style: ButtonStyle(
                         padding:
-                            MaterialStateProperty.all(const EdgeInsets.all(15)),
+                        MaterialStateProperty.all(const EdgeInsets.all(15)),
                         shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                        MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                               side: const BorderSide(color: Colors.white)),
