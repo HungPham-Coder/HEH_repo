@@ -1,3 +1,2 @@
-# HEH_repo
-
+# HEH
 This is a college student project.
