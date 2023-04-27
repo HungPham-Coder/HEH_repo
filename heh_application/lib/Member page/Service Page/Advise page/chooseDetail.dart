@@ -26,7 +26,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
 
   Widget relationship(String slotID) {
     return SizedBox(
-      height: 70,
+      height: 100,
       child: Column(
         children: [
           Row(
@@ -38,7 +38,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
           SizedBox(height: 5),
           SizedBox(
             width: MediaQuery.of(context).size.width,
-            height: 40,
+            height: 70,
             child: FutureBuilder<List<SubProfile>?>(
                 future: CallAPI()
                     .getallSubProfileByUserIdAndSlotID(sharedCurrentUser!.userID!,slotID),
@@ -51,30 +51,40 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                       });
                       print("Co data");
                     }
+                    if (_relationships.length <= 1){
+                      return Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Text("Hiện tại khung giờ này bạn đã đặt hết cho người thân của bạn rồi"),
+                        ],
+                      );
+                    }
+                    else {
+                      return DropdownButtonFormField<String>(
+                        decoration: const InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(width: 1, color: Colors.grey))),
+                        value: selectedSubName,
+                        items: _relationships
+                            .map((relationship) => DropdownMenuItem<String>(
+                            value: relationship,
+                            child: Text(
+                              relationship,
+                              style: const TextStyle(fontSize: 15),
+                            )))
+                            .toList(),
+                        onChanged: (subName) => setState(() {
+                          snapshot.data!.forEach((element) {
+                            if (subName == element.subName) {
+                              subProfile = element;
+                            }
+                          });
+                          selectedSubName = subName!;
+                        }),
+                      );
+                    }
 
-                    return DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 1, color: Colors.grey))),
-                      value: selectedSubName,
-                      items: _relationships
-                          .map((relationship) => DropdownMenuItem<String>(
-                              value: relationship,
-                              child: Text(
-                                relationship,
-                                style: const TextStyle(fontSize: 15),
-                              )))
-                          .toList(),
-                      onChanged: (subName) => setState(() {
-                        snapshot.data!.forEach((element) {
-                          if (subName == element.subName) {
-                            subProfile = element;
-                          }
-                        });
-                        selectedSubName = subName!;
-                      }),
-                    );
                   } else {
                     return const Center(
                       child: CircularProgressIndicator(),
@@ -106,7 +116,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
             const SizedBox(height: 20),
             PhysioProfile(
               image:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
+              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
               phy: "Chuyên viên",
               name: widget.physiotherapist.signUpUser!.lastName!,
               specialize: "Chuyên môn: ${widget.physiotherapist.specialize}",
@@ -135,20 +145,20 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                           String end = DateFormat("HH:mm").format(tempEnd);
                           return PhysioChooseMenu(
                               icon:
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
+                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
                               name:
-                                  widget.physiotherapist.signUpUser!.lastName!,
+                              widget.physiotherapist.signUpUser!.lastName!,
                               time: "Khung giờ: ",
                               timeStart:
-                                  '$start',
+                              '$start',
                               timeEnd: '$end',
                               price: snapshot.data![index].typeOfSlot.price,
                               press: () => showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        AlertDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    AlertDialog(
                                       title:
-                                          const Text("Chọn người được tư vấn"),
+                                      const Text("Chọn người được tư vấn"),
                                       content: relationship(snapshot.data![index].slotID),
                                       actions: [
                                         TextButton(
@@ -164,28 +174,28 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                             } else {
 
                                               BookingSchedule bookingSchedule =
-                                                  BookingSchedule(
-                                                      userID:
-                                                          sharedCurrentUser!
-                                                              .userID!,
-                                                      subProfileID:
-                                                          '${subProfile!.profileID}',
-                                                      scheduleID: snapshot
-                                                          .data![index]
-                                                          .scheduleID,
-                                                      dateBooking: DateFormat(
-                                                              "yyyy-MM-dd")
-                                                          .format(
-                                                              DateTime.now()),
-                                                      timeBooking: DateFormat(
-                                                              "yyyy-MM-ddTHH:mm:ss")
-                                                          .format(
-                                                              DateTime.now()));
+                                              BookingSchedule(
+                                                  userID:
+                                                  sharedCurrentUser!
+                                                      .userID!,
+                                                  subProfileID:
+                                                  '${subProfile!.profileID}',
+                                                  scheduleID: snapshot
+                                                      .data![index]
+                                                      .scheduleID,
+                                                  dateBooking: DateFormat(
+                                                      "yyyy-MM-dd")
+                                                      .format(
+                                                      DateTime.now()),
+                                                  timeBooking: DateFormat(
+                                                      "yyyy-MM-ddTHH:mm:ss")
+                                                      .format(
+                                                      DateTime.now()));
                                               BookingSchedule?
-                                                  bookingScheduleAdd =
-                                                  await CallAPI()
-                                                      .addBookingSchedule(
-                                                          bookingSchedule);
+                                              bookingScheduleAdd =
+                                              await CallAPI()
+                                                  .addBookingSchedule(
+                                                  bookingSchedule);
                                               print(
                                                   '${bookingScheduleAdd!.bookingScheduleID} booking schedule id add');
 
@@ -199,7 +209,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                                             schedule: snapshot
                                                                 .data![index],
                                                             bookingSchedule:
-                                                                bookingScheduleAdd,
+                                                            bookingScheduleAdd,
                                                           )));
                                             }
                                           },
@@ -207,22 +217,25 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                         )
                                       ],
                                     ),
-                                  ));
+                              ));
                         },
                       );
                     } else {
                       return Container(
-                        child:
-                            const Text("Physio dang ban het tat ca cac slot"),
+                        child: const Center(
+                            child: Text(
+                              "Physio dang ban het tat ca cac slot",
+                              style: TextStyle(fontSize: 16),
+                            )),
                       );
                     }
                   } else {
                     return Container(
                       child: const Center(
                           child: Text(
-                        "Physio dang ban het tat ca cac slot",
-                        style: TextStyle(fontSize: 16),
-                      )),
+                            "Physio dang ban het tat ca cac slot",
+                            style: TextStyle(fontSize: 16),
+                          )),
                     );
                   }
                 }),
@@ -350,7 +363,7 @@ class PhysioChooseMenu extends StatelessWidget {
             child: TextButton(
                 style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
+                    MaterialStateProperty.all<Color>(Colors.white),
                     padding: MaterialStateProperty.all(
                         const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 15)),

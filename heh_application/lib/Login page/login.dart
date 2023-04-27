@@ -316,6 +316,7 @@ class _LoginPageState extends State<LoginPage> {
 
         await stream.addLoginStream(resultLogin);
       }
+
     } on Exception catch (e) {
       print(e.toString());
     }
