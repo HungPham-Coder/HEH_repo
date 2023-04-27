@@ -79,7 +79,7 @@ class ResourceListView extends StatelessWidget {
             )),
         onPressed: press,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
               Image.network(
@@ -91,7 +91,7 @@ class ResourceListView extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 text,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 15,
                     color: Colors.black,
                     fontWeight: FontWeight.normal),
@@ -101,6 +101,102 @@ class ResourceListView extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class RegisterMenu extends StatelessWidget {
+  RegisterMenu({
+    Key? key,
+    required this.name,
+    required this.time,
+    required this.amount,
+    required this.icon,
+    required this.press,
+    required this.full,
+    required this.choose,
+  }) : super(key: key);
+
+  final String icon, name, time, amount, full;
+  final VoidCallback? press;
+  bool choose;
+
+  @override
+  Widget build(BuildContext context) {
+    // ignore: duplicate_ignore
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: TextButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white),
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 15)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: const BorderSide(
+                              color: Color.fromARGB(255, 46, 161, 226),
+                              width: 2)),
+                    )),
+                onPressed: press,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Image.network(
+                      icon,
+                      width: 40,
+                      height: 50,
+                    ),
+                    const SizedBox(width: 10),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width / 1.6,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(name,
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black)),
+                            Text(
+                              time,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            Text(
+                              amount,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            const SizedBox(height: 5),
+                            Visibility(
+                              visible: choose,
+                              child: Text(
+                                full,
+                                style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            )
+                          ],
+                        )),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Icon(Icons.add, size: 30),
+                    ),
+                  ],
+                )),
+          ),
+        ],
       ),
     );
   }
