@@ -84,6 +84,17 @@ class ServicePaid extends StatelessWidget {
                 children: [
                   Image.network(
                     icon,
+                    frameBuilder:
+                        (context, child, frame, wasSynchronouslyLoaded) {
+                      return child;
+                    },
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    },
                     width: 40,
                     height: 50,
                   ),

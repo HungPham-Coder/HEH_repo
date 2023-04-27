@@ -8,6 +8,7 @@ import 'package:heh_application/Physiotherapist%20Page/navigation_main.dart';
 import 'package:heh_application/models/exercise_resource.dart';
 import 'package:heh_application/models/medical_record.dart';
 import 'package:heh_application/models/result_login.dart';
+import 'package:heh_application/models/schedule.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/firebase_firestore.dart';

@@ -169,7 +169,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                                                         builder: (context) =>
                                                             dialog(
                                                               text:
-                                                                  "Chọn thời gian làm việc",
+                                                                  "Bạn muốn chọn thời gian này?",
                                                               des:
                                                                   "Yêu cầu của bạn đến quản lý",
                                                             )));

@@ -85,13 +85,26 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       const SizedBox(height: 10),
-                      Container(
+
+                      SizedBox(
                         height: MediaQuery.of(context).size.height / 4,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2Fwelcome2.png?alt=media&token=e26f1d4f-e548-406c-aa71-65c099663f85"))),
+                        child: Image.network(
+                          "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2Fwelcome2.png?alt=media&token=e26f1d4f-e548-406c-aa71-65c099663f85",
+                          frameBuilder:
+                              (context, child, frame, wasSynchronouslyLoaded) {
+                            return child;
+                          },
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          },
+                        ),
                       ),
+
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: Column(
@@ -115,7 +128,6 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) {
@@ -172,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              const Text("Bạn chưa có tài khoản ? "),
+                              const Text("Bạn chưa có tài khoản? "),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -313,7 +325,6 @@ class _LoginPageState extends State<LoginPage> {
         //add signup user to manage user object xuyen suot app
         // await  stream.addSignUpStream(signUpUser);
         await auth.signInAnonymously();
-
         await stream.addLoginStream(resultLogin);
       }
     } on Exception catch (e) {
@@ -437,20 +448,30 @@ class _LoginPageState extends State<LoginPage> {
               fontSize: 17, fontWeight: FontWeight.w400, color: Colors.black87),
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          keyboardType: TextInputType.phone,
-          obscureText: obscureText,
-          controller: phoneController,
-          decoration: const InputDecoration(
-              label: Text("Số điện thoại"),
-              // hintText: 'Số điện thoại',
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
-        ),
+        Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: TextFormField(
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "* Số điện thoại không được trống";
+                } else if (value.length < 10 || value.length > 10) {
+                  return "* Hãy điền đúng số điện thoại";
+                }
+              },
+              keyboardType: TextInputType.phone,
+              obscureText: obscureText,
+              controller: phoneController,
+              decoration: const InputDecoration(
+                  label: Text("Số điện thoại"),
+                  // hintText: 'Số điện thoại',
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey))),
+            )),
         const SizedBox(height: 10)
       ],
     );

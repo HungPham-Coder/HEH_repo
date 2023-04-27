@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Register%20slot%20page/register.dart';
-import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Schedule%20page/schedullt.dart';
+import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Schedule%20page/schedule.dart';
+import 'package:heh_application/common_widget/menu_listview.dart';
+
+import '../../../Login page/landing_page.dart';
 
 class FeaturePage extends StatefulWidget {
   const FeaturePage({Key? key}) : super(key: key);
@@ -54,65 +57,13 @@ class _FeaturePageState extends State<FeaturePage> {
                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.png?alt=media&token=45426216-f7a3-449b-8a91-05582ebc1339",
               text: "Khung giờ đã đăng ký.",
               press: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SchedulePage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SchedulePage()));
               },
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class FeatureMenu extends StatelessWidget {
-  const FeatureMenu({
-    Key? key,
-    required this.text,
-    required this.icon,
-    required this.press,
-  }) : super(key: key);
-
-  final String text, icon;
-  final VoidCallback press;
-
-  @override
-  Widget build(BuildContext context) {
-    // ignore: duplicate_ignore
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: TextButton(
-          style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(const Color(0xfff5f6f9)),
-              padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    side: const BorderSide(color: Colors.white)),
-              )),
-          onPressed: press,
-          child: Row(
-            children: [
-              Image.network(
-                icon,
-                width: 60,
-                height: 60,
-              ),
-              const SizedBox(
-                width: 20,
-                height: 10,
-              ),
-              Expanded(
-                  child: Text(
-                text,
-                style: Theme.of(context).textTheme.titleMedium,
-              )),
-              const Icon(Icons.arrow_forward_sharp),
-            ],
-          )),
     );
   }
 }

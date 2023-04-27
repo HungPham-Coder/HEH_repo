@@ -664,6 +664,24 @@ class CallAPI {
     }
   }
 
+  Future<SubProfile> getSubProfileBySubNameAndUserID(
+      String subName, String userID) async {
+    var url = Uri.parse(
+        '${link}/api/SubProfile/GetBySubNameAndUserID?subName=$subName&userID=$userID');
+
+    // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      return SubProfile.fromMap(json.decode(response.body));
+    } else {
+      throw Exception('Failed to load SubProfile ');
+    }
+  }
+
   Future<List<SubProfile>?> getallSubProfileByUserIdAndSlotID(
       String userId, String slotID) async {
     var url = Uri.parse(

@@ -99,25 +99,54 @@ class _WelcomePageState extends State<WelcomePage> {
                       textAlign: TextAlign.center),
                 ],
               ),
-              Container(
-                height: MediaQuery.of(context).size.height / 2,
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: NetworkImage(
-                            "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2Fwelcome2.png?alt=media&token=e26f1d4f-e548-406c-aa71-65c099663f85"))),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 40),
+                child: Image.network(
+                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2Fwelcome2.png?alt=media&token=e26f1d4f-e548-406c-aa71-65c099663f85",
+                  frameBuilder:
+                      (context, child, frame, wasSynchronouslyLoaded) {
+                    return child;
+                  },
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
               ),
+
+              // Container(
+              //   height: MediaQuery.of(context).size.height / 2,
+              //   decoration: BoxDecoration(
+              //       image: DecorationImage(
+              //     image: const NetworkImage(
+              //         "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2Fwelcome2.png?alt=media&token=e26f1d4f-e548-406c-aa71-65c099663f85"),
+              //     onError: (exception, stackTrace) {
+              //       return setState(() {
+              //         CircularProgressIndicator();
+              //       });
+              //     },
+              //   )),
+              // ),
               Column(
                 children: <Widget>[
                   MaterialButton(
                     minWidth: double.infinity,
                     height: 60,
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const LandingPage();
-                      },settings: RouteSettings(
-                            name: "/landing",
-                          ),));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const LandingPage();
+                            },
+                            settings: const RouteSettings(
+                              name: "/landing",
+                            ),
+                          ));
                     },
                     shape: RoundedRectangleBorder(
                         side: const BorderSide(color: Colors.black),
