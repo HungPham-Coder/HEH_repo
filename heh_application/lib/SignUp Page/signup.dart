@@ -392,10 +392,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey))),
             validator: (value) {
-              if (value != null && value.length > 10) {
-                return "Số điện thoại không được nhiều hơn 10 chữ số";
-              } else if (value!.isEmpty) {
-                return "Không được để trống";
+              if (value!.isEmpty) {
+                return "Hãy nhập số điện thoại";
+              } else if (value.length < 10 || value.length > 10) {
+                return "Hãy nhập đúng số điện thoại";
               } else {
                 return null;
               }
