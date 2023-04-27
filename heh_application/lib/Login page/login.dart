@@ -317,6 +317,10 @@ class _LoginPageState extends State<LoginPage> {
 
         await stream.addLoginStream(resultLogin);
       }
+      else {
+        ResultLogin resultLogin = ResultLogin(userID: "error login", firstName: 'null');
+        await stream.addLoginStream(resultLogin);
+      }
     } on Exception catch (e) {
       print(e.toString());
     }
