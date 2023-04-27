@@ -159,7 +159,7 @@ class RegisterMenu extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     SizedBox(
-                        width: MediaQuery.of(context).size.width / 1.6,
+                        width: MediaQuery.of(context).size.width / 1.65,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
