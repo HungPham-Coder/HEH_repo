@@ -34,24 +34,32 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
             ],
           ),
           // SizedBox(height: 5),
-          TextFormField(
-            // initialValue: dob,
-            // DateTime.parse(sharedCurrentUser!.dob as String).toString(),
-            readOnly: true,
-            controller: _date,
-            decoration: const InputDecoration(
-              labelText: "Chọn ngày",
+          Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: TextFormField(
+              // initialValue: dob,
+              // DateTime.parse(sharedCurrentUser!.dob as String).toString(),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "a";
+                }
+              },
+              readOnly: true,
+              controller: _date,
+              decoration: const InputDecoration(
+                labelText: "Chọn ngày",
+              ),
+              onTap: () async {
+                DateTime? pickeddate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2023),
+                    lastDate: DateTime(2999));
+                if (pickeddate != null) {
+                  _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
+                }
+              },
             ),
-            onTap: () async {
-              DateTime? pickeddate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2023),
-                  lastDate: DateTime(2999));
-              if (pickeddate != null) {
-                _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
-              }
-            },
           ),
         ],
       ),
@@ -116,8 +124,14 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
             button(),
             const SizedBox(height: 10),
             check == false && _date.text != "" && slotList!.length == 0
-                ? const Center(
-                    child: Text("Khong co slot nao"),
+                ? Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 150),
+                      child: Text(
+                        "Hiện tại không còn slot cho bạn",
+                        style: TextStyle(color: Colors.grey[500], fontSize: 16),
+                      ),
+                    ),
                   )
                 : (_date.text != "" && slotList != null)
                     ? Visibility(
@@ -127,6 +141,21 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                             const Text("Danh sách thời gian làm việc",
                                 style: TextStyle(
                                     fontWeight: FontWeight.w500, fontSize: 16)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Text("*",
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        fontStyle: FontStyle.italic,
+                                        color: Colors.red)),
+                                Text("(Tối đa 1 slot - 5 Chuyên viên)",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontStyle: FontStyle.italic,
+                                    )),
+                              ],
+                            ),
                             ListView.builder(
                                 shrinkWrap: true,
                                 itemCount: slotList!.length,
@@ -182,7 +211,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                                                 name:
                                                     "${slotList![index].slotName}",
                                                 full:
-                                                    "Slot này đầy. Vui lòng chọn slot khác.",
+                                                    "Slot đầy. Vui lòng chọn slot khác.",
                                                 choose: true,
                                                 time:
                                                     "Khung giờ: $start - $end",

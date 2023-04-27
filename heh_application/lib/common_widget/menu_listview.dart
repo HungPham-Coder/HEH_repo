@@ -222,9 +222,9 @@ class RegisterMenu extends StatelessWidget {
                             )
                           ],
                         )),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Icon(Icons.add, size: 30),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: const Icon(Icons.add, size: 30),
                     ),
                   ],
                 )),

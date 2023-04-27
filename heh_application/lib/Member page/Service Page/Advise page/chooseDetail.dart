@@ -53,10 +53,12 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                     }
                     if (_relationships.length <= 1) {
                       return Column(
-                        children: [
-                          SizedBox(height: 10),
+                        children: const [
+                          SizedBox(height: 5),
                           Text(
-                              "Hiện tại khung giờ này bạn đã đặt hết cho người thân của bạn rồi"),
+                            "Hiện tại không thể đặt khung giờ này vì bạn hoặc người thân của bạn đã đặt rồi.",
+                            style: TextStyle(fontSize: 14),
+                          ),
                         ],
                       );
                     } else {

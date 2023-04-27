@@ -13,8 +13,6 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  Schedule? schedule;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
