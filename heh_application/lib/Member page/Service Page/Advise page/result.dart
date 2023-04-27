@@ -11,10 +11,10 @@ import 'package:intl/intl.dart';
 class TimeResultPage extends StatefulWidget {
   TimeResultPage(
       {Key? key,
-        required this.timeStart,
-        required this.timeEnd,
-        required this.problem,
-        required this.subProfile})
+      required this.timeStart,
+      required this.timeEnd,
+      required this.problem,
+      required this.subProfile})
       : super(key: key);
   String timeStart;
   String timeEnd;
@@ -54,34 +54,50 @@ class _TimeResultPageState extends State<TimeResultPage> {
                             itemCount: snapshot.data!.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              DateTime dateStart = new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(snapshot.data![index].slot.timeStart);
-                              String startStr = DateFormat("HH:mm").format(dateStart);
-                              DateTime dateEnd = new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(snapshot.data![index].slot.timeEnd);
-                              String endStr = DateFormat("HH:mm").format(dateEnd);
+                              DateTime dateStart =
+                                  new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
+                                      snapshot.data![index].slot.timeStart);
+                              String startStr =
+                                  DateFormat("HH:mm").format(dateStart);
+                              DateTime dateEnd =
+                                  new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
+                                      snapshot.data![index].slot.timeEnd);
+                              String endStr =
+                                  DateFormat("HH:mm").format(dateEnd);
                               return PhysioChooseMenu(
                                 icon:
-                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
+                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
                                 name:
-                                "${snapshot.data![index].physiotherapist.signUpUser!.firstName}",
+                                    "${snapshot.data![index].physiotherapist.signUpUser!.firstName}",
                                 time: "Khung giờ: $startStr - $endStr",
                                 press: () async {
-                                  String date = DateFormat("yyyy-MM-dd").format(DateTime.now());
-                                  String time = DateFormat("HH:mm:ss").format(DateTime.now());
-                                  BookingSchedule bookingSchedule = BookingSchedule(
-                                      userID: sharedCurrentUser!.userID!,
-                                      subProfileID: widget.subProfile.profileID!,
-                                      scheduleID: snapshot.data![index].scheduleID,
-                                      dateBooking: date,
-                                      timeBooking: time);
+                                  String date = DateFormat("yyyy-MM-dd")
+                                      .format(DateTime.now());
+                                  String time = DateFormat("HH:mm:ss")
+                                      .format(DateTime.now());
+                                  BookingSchedule bookingSchedule =
+                                      BookingSchedule(
+                                          userID: sharedCurrentUser!.userID!,
+                                          subProfileID:
+                                              widget.subProfile.profileID!,
+                                          scheduleID:
+                                              snapshot.data![index].scheduleID,
+                                          dateBooking: date,
+                                          timeBooking: time);
 
-                                  BookingSchedule? bookingScheduleAdd = await CallAPI().addBookingSchedule(bookingSchedule);
-
+                                  BookingSchedule? bookingScheduleAdd =
+                                      await CallAPI()
+                                          .addBookingSchedule(bookingSchedule);
 
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              BillChoosePage(physiotherapist: snapshot.data![index].physiotherapist, schedule: snapshot.data![index], bookingSchedule: bookingScheduleAdd)));
+                                          builder: (context) => BillChoosePage(
+                                              physiotherapist: snapshot
+                                                  .data![index].physiotherapist,
+                                              schedule: snapshot.data![index],
+                                              bookingSchedule:
+                                                  bookingScheduleAdd)));
                                 },
                               );
                             });
@@ -122,7 +138,7 @@ class PhysioChooseMenu extends StatelessWidget {
           child: TextButton(
               style: ButtonStyle(
                   backgroundColor:
-                  MaterialStateProperty.all<Color>(Colors.white),
+                      MaterialStateProperty.all<Color>(Colors.white),
                   padding: MaterialStateProperty.all(
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 15)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
