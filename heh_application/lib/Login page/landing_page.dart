@@ -21,6 +21,7 @@ SignUpUser? sharedCurrentUser;
 MedicalRecord? sharedMedicalRecord;
 Physiotherapist? sharedPhysiotherapist;
 ExerciseResource? sharedExerciseResource;
+Schedule? schedule;
 
 class LandingPage extends StatelessWidget {
   const LandingPage({Key? key}) : super(key: key);
