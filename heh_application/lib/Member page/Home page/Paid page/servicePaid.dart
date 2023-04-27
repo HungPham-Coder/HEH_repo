@@ -42,7 +42,7 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
                         return ListView.builder(
                           shrinkWrap: true,
                           itemCount: snapshot.data!.length,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(
                                 snapshot.data![index].bookingSchedule!.schedule!

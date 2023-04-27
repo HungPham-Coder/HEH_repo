@@ -14,7 +14,7 @@ class dialog extends StatelessWidget {
     return AlertDialog(
       title: Text(
         text,
-        style: TextStyle(fontSize: 18),
+        style: const TextStyle(fontSize: 18),
       ),
       actions: <Widget>[
         description(label: des),

@@ -85,7 +85,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
               DateTime day = new DateFormat('dd-MM-yyyy').parse(_date.text);
               String dayStr = DateFormat('yyyy-MM-ddTHH:mm:ss').format(day);
               slotList = await CallAPI().getallSlotByDate(dayStr);
-              if (slotList!.length > 0) {
+              if (slotList!.isNotEmpty) {
                 setState(() {
                   check = true;
                 });

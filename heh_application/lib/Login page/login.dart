@@ -16,8 +16,8 @@ import 'package:provider/provider.dart';
 import '../models/result_login.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
-
+  LoginPage({Key? key, this.msg}) : super(key: key);
+  String? msg;
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -74,243 +74,232 @@ class _LoginPageState extends State<LoginPage> {
         ),
         body: SingleChildScrollView(
             child: SizedBox(
-          height: MediaQuery.of(context).size.height - 40,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      const SizedBox(height: 10),
-
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height / 4,
-                        child: Image.network(
-                          "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2Fwelcome2.png?alt=media&token=e26f1d4f-e548-406c-aa71-65c099663f85",
-                          frameBuilder:
-                              (context, child, frame, wasSynchronouslyLoaded) {
-                            return child;
-                          },
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            } else {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            }
-                          },
-                        ),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: Column(
-                          children: <Widget>[
-                            inputPhone(
-                                obscureText: false,
-                                label: "",
-                                phoneController: phoneController),
-                            inputPassword(
-                                passwordController: passwordController)
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 40),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) {
-                                      return ForgotPassword(
-                                        auth: auth,
-                                      );
-                                    }),
-                                  );
-                                },
-                                child: const Text(
-                                  "Quên mật khẩu?",
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 46, 161, 226),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          )),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 0),
-                          child: MaterialButton(
-                            minWidth: double.infinity,
-                            height: 60,
-                            onPressed: () {
-                              Login(phoneController.text,
-                                  passwordController.text, auth);
-                            },
-                            color: const Color.fromARGB(255, 46, 161, 226),
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: const Text(
-                              "Đăng nhập",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 22,
-                                color: Colors.white,
-                              ),
+              height: MediaQuery.of(context).size.height - 40,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          const SizedBox(height: 10),
+                          Container(
+                            height: MediaQuery.of(context).size.height / 4,
+                            decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2Fwelcome2.png?alt=media&token=e26f1d4f-e548-406c-aa71-65c099663f85"))),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: Column(
+                              children: <Widget>[
+                                Text(widget.msg == null ? '' : widget.msg!),
+                                inputPhone(
+                                    obscureText: false,
+                                    label: "",
+                                    phoneController: phoneController),
+                                inputPassword(
+                                    passwordController: passwordController)
+                              ],
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 40),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              const Text("Bạn chưa có tài khoản? "),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) {
-                                      return const SignUpPage();
-                                    }),
-                                  );
-                                },
-                                child: const Text(
-                                  "Đăng ký ",
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 46, 161, 226),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                ),
-                              ),
-                              const Text("tại đây!")
-                            ],
-                          )),
-                      const SizedBox(
-                        height: 15,
-                      ),
-
-                      // Row(children: <Widget>[
-                      //   Expanded(
-                      //       child: Container(
-                      //     margin:
-                      //         const EdgeInsets.only(left: 10.0, right: 10.0),
-                      //     child: const Divider(
-                      //       color: Colors.black,
-                      //       height: 20,
-                      //     ),
-                      //   )),
-                      //   const Text("Hoặc sử dụng",
-                      //       style: TextStyle(color: Colors.grey)),
-                      //   Expanded(
-                      //       child: Container(
-                      //     margin:
-                      //         const EdgeInsets.only(left: 10.0, right: 10.0),
-                      //     child: const Divider(
-                      //       color: Colors.black,
-                      //       height: 20,
-                      //     ),
-                      //   )),
-                      // ]),
-
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      // children: <Widget>[
-                      //   Container(
-                      //     height: MediaQuery
-                      //         .of(context)
-                      //         .size
-                      //         .height / 4,
-                      //     decoration: const BoxDecoration(
-                      //         image: DecorationImage(
-                      //             image: AssetImage(
-                      //                 "assets/images/welcome.jpg"))),
-                      //   ),
-
-                      Column(
-                        children: <Widget>[
-                          Row(children: <Widget>[
-                            Expanded(
-                                child: Container(
-                              margin: const EdgeInsets.only(
-                                  left: 10.0, right: 10.0),
-                              child: const Divider(
-                                color: Colors.black,
-                                height: 20,
-                              ),
-                            )),
-                            const Text("Hoặc sử dụng",
-                                style: TextStyle(color: Colors.grey)),
-                            Expanded(
-                                child: Container(
-                              margin: const EdgeInsets.only(
-                                  left: 10.0, right: 10.0),
-                              child: const Divider(
-                                color: Colors.black,
-                                height: 20,
-                              ),
-                            )),
-                          ]),
-
                           const SizedBox(
                             height: 10,
                           ),
+                          Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 40),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
 
-                          Center(
-                            child: FloatingActionButton.extended(
-                              heroTag: 'google',
-                              onPressed: () => _signInWithGoogle(),
-                              icon: Image.network(
-                                  'https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fgoogle_icon.png?alt=media&token=6234a131-fc34-4cd6-b596-beba7b1c3a46',
-                                  height: 30,
-                                  width: 30),
-                              label: const Text('Đăng nhập với Google'),
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
-                            ),
-                          ),
-                          // ignore: prefer_const_constructors
-                          SizedBox(
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) {
+                                          return ForgotPassword(
+                                            auth: auth,
+                                          );
+                                        }),
+                                      );
+                                    },
+                                    child: const Text(
+                                      "Quên mật khẩu?",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(255, 46, 161, 226),
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          const SizedBox(
                             height: 15,
                           ),
-                          Center(
-                            child: FloatingActionButton.extended(
-                              heroTag: 'facebook',
-                              onPressed: () => _signInWithFacebook(),
-                              icon: Image.network(
-                                  'https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Ffacebook_icon.png?alt=media&token=412d4a7e-32b4-49bc-9e94-ff7a294703b3',
-                                  height: 30,
-                                  width: 30),
-                              label: const Text('Đăng nhập với Facebook'),
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: Container(
+                              padding: const EdgeInsets.only(top: 0),
+                              child: MaterialButton(
+                                minWidth: double.infinity,
+                                height: 60,
+                                onPressed: () {
+                                  Login(phoneController.text,
+                                      passwordController.text, auth);
+                                },
+                                color: const Color.fromARGB(255, 46, 161, 226),
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: const Text(
+                                  "Đăng nhập",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 22,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                             ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 40),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  const Text("Bạn chưa có tài khoản ? "),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) {
+                                          return const SignUpPage();
+                                        }),
+                                      );
+                                    },
+                                    child: const Text(
+                                      "Đăng ký ",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(255, 46, 161, 226),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ),
+                                  const Text("tại đây!")
+                                ],
+                              )),
+                          const SizedBox(
+                            height: 15,
+                          ),
+
+                          // Row(children: <Widget>[
+                          //   Expanded(
+                          //       child: Container(
+                          //     margin:
+                          //         const EdgeInsets.only(left: 10.0, right: 10.0),
+                          //     child: const Divider(
+                          //       color: Colors.black,
+                          //       height: 20,
+                          //     ),
+                          //   )),
+                          //   const Text("Hoặc sử dụng",
+                          //       style: TextStyle(color: Colors.grey)),
+                          //   Expanded(
+                          //       child: Container(
+                          //     margin:
+                          //         const EdgeInsets.only(left: 10.0, right: 10.0),
+                          //     child: const Divider(
+                          //       color: Colors.black,
+                          //       height: 20,
+                          //     ),
+                          //   )),
+                          // ]),
+
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          // children: <Widget>[
+                          //   Container(
+                          //     height: MediaQuery
+                          //         .of(context)
+                          //         .size
+                          //         .height / 4,
+                          //     decoration: const BoxDecoration(
+                          //         image: DecorationImage(
+                          //             image: AssetImage(
+                          //                 "assets/images/welcome.jpg"))),
+                          //   ),
+
+                          Column(
+                            children: <Widget>[
+                              Row(children: <Widget>[
+                                Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 10.0, right: 10.0),
+                                      child: const Divider(
+                                        color: Colors.black,
+                                        height: 20,
+                                      ),
+                                    )),
+                                const Text("Hoặc sử dụng",
+                                    style: TextStyle(color: Colors.grey)),
+                                Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 10.0, right: 10.0),
+                                      child: const Divider(
+                                        color: Colors.black,
+                                        height: 20,
+                                      ),
+                                    )),
+                              ]),
+
+                              const SizedBox(
+                                height: 10,
+                              ),
+
+                              Center(
+                                child: FloatingActionButton.extended(
+                                  heroTag: 'google',
+                                  onPressed: () => _signInWithGoogle(),
+                                  icon: Image.network(
+                                      'https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fgoogle_icon.png?alt=media&token=6234a131-fc34-4cd6-b596-beba7b1c3a46',
+                                      height: 30,
+                                      width: 30),
+                                  label: const Text('Đăng nhập với Google'),
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.black,
+                                ),
+                              ),
+                              // ignore: prefer_const_constructors
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Center(
+                                child: FloatingActionButton.extended(
+                                  heroTag: 'facebook',
+                                  onPressed: () => _signInWithFacebook(),
+                                  icon: Image.network(
+                                      'https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Ffacebook_icon.png?alt=media&token=412d4a7e-32b4-49bc-9e94-ff7a294703b3',
+                                      height: 30,
+                                      width: 30),
+                                  label: const Text('Đăng nhập với Facebook'),
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.black,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-              ]),
-        )));
+                    ),
+                  ]),
+            )));
   }
 
   Future<void> Login(String phone, String password, AuthBase authBase) async {
@@ -325,6 +314,7 @@ class _LoginPageState extends State<LoginPage> {
         //add signup user to manage user object xuyen suot app
         // await  stream.addSignUpStream(signUpUser);
         await auth.signInAnonymously();
+
         await stream.addLoginStream(resultLogin);
       }
     } on Exception catch (e) {
@@ -437,8 +427,8 @@ class _LoginPageState extends State<LoginPage> {
 //create text field
   Widget inputPhone(
       {label,
-      obscureText = true,
-      required TextEditingController phoneController}) {
+        obscureText = true,
+        required TextEditingController phoneController}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -448,30 +438,20 @@ class _LoginPageState extends State<LoginPage> {
               fontSize: 17, fontWeight: FontWeight.w400, color: Colors.black87),
         ),
         const SizedBox(height: 5),
-        Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: TextFormField(
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "* Số điện thoại không được trống";
-                } else if (value.length < 10 || value.length > 10) {
-                  return "* Hãy điền đúng số điện thoại";
-                }
-              },
-              keyboardType: TextInputType.phone,
-              obscureText: obscureText,
-              controller: phoneController,
-              decoration: const InputDecoration(
-                  label: Text("Số điện thoại"),
-                  // hintText: 'Số điện thoại',
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                  ),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey))),
-            )),
+        TextFormField(
+          keyboardType: TextInputType.phone,
+          obscureText: obscureText,
+          controller: phoneController,
+          decoration: const InputDecoration(
+              label: Text("Số điện thoại"),
+              // hintText: 'Số điện thoại',
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
+        ),
         const SizedBox(height: 10)
       ],
     );
@@ -499,7 +479,7 @@ class _LoginPageState extends State<LoginPage> {
                   icon: Icon(
                       isObscure ? Icons.visibility_off : Icons.visibility)),
               contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
               enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
               ),
