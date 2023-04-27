@@ -36,24 +36,19 @@ class LandingPage extends StatelessWidget {
         // final ResultLogin? user = snapshot.data;
         // final SignUpUser? user = snapshot.data;
 
-        if (snapshot.data == null ) {
+        if (snapshot.data == null) {
           return LoginPage(
             msg: msg,
           );
-        }
-        else if (snapshot.data!.userID == 'error login'){
+        } else if (snapshot.data!.userID == 'error login') {
           return LoginPage(
-            msg: 'Tài khoản hoặc mật khẩu không đúng',
+            msg: 'Số điện thoại hoặc mật khẩu của bạn sai. Vui lòng nhập lại.',
           );
-        }
-        else if ( snapshot.data!.userID == 'signout'){
+        } else if (snapshot.data!.userID == 'signout') {
           return LoginPage(
             msg: msg,
           );
-        }
-
-
-        else if (snapshot.data!.role!.name == "Admin" ||
+        } else if (snapshot.data!.role!.name == "Admin" ||
             snapshot.data!.role!.name == "Staff") {
           return LandingPage(
             msg: 'Số điện thoại hoặc mật khẩu của bạn sai. Vui lòng nhập lại.',
@@ -61,7 +56,7 @@ class LandingPage extends StatelessWidget {
         } else {
           sharedResultLogin = snapshot.data;
           Future<SignUpUser> futureCurrentUser =
-          auth.getCurrentUser(sharedResultLogin!);
+              auth.getCurrentUser(sharedResultLogin!);
           return FutureBuilder<SignUpUser>(
               future: futureCurrentUser,
               builder: (context, snapshot) {
