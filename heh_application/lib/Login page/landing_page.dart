@@ -43,7 +43,7 @@ class LandingPage extends StatelessWidget {
         } else if (snapshot.data!.role!.name == "Admin" ||
             snapshot.data!.role!.name == "Staff") {
           return LandingPage(
-            msg: 'Account của bạn không có quyền truy cập vào app',
+            msg: 'Số điện thoại hoặc mật khẩu của bạn sai. Vui lòng nhập lại.',
           );
         } else {
           sharedResultLogin = snapshot.data;
@@ -69,7 +69,7 @@ class LandingPage extends StatelessWidget {
                   print("khong data");
 
                   return const Center(
-                    child: CircularProgressIndicator(),
+                    child: Text("ABC"),
                   );
                 }
               });
