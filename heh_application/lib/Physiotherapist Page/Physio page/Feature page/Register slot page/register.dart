@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import '../../../../common_widget/dialog.dart';
 import '../../../../common_widget/menu_listview.dart';
 import '../../../../models/slot.dart';
 import '../../../../services/call_api.dart';
@@ -16,94 +14,8 @@ class PhysioRegisterSlotPage extends StatefulWidget {
 class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
   bool check = false;
   final TextEditingController _date = TextEditingController();
+  final TextEditingController _des = TextEditingController();
   List<Slot>? slotList;
-
-  Widget Time() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: const [
-              Text("Chọn thời gian làm việc"),
-              Text(
-                " *",
-                style: TextStyle(color: Colors.red),
-              )
-            ],
-          ),
-          // SizedBox(height: 5),
-          Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: TextFormField(
-              // initialValue: dob,
-              // DateTime.parse(sharedCurrentUser!.dob as String).toString(),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "a";
-                }
-              },
-              readOnly: true,
-              controller: _date,
-              decoration: const InputDecoration(
-                labelText: "Chọn ngày",
-              ),
-              onTap: () async {
-                DateTime? pickeddate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2023),
-                    lastDate: DateTime(2999));
-                if (pickeddate != null) {
-                  _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
-                }
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget button() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ElevatedButton(
-          style: ButtonStyle(
-              backgroundColor: const MaterialStatePropertyAll(
-                  Color.fromARGB(255, 46, 161, 226)),
-              padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    side: const BorderSide(color: Colors.white)),
-              )),
-          onPressed: () async {
-            if (_date.text != '') {
-              DateTime day = new DateFormat('dd-MM-yyyy').parse(_date.text);
-              String dayStr = DateFormat('yyyy-MM-ddTHH:mm:ss').format(day);
-              slotList = await CallAPI().getallSlotByDate(dayStr);
-              if (slotList!.isNotEmpty) {
-                setState(() {
-                  check = true;
-                });
-              } else {
-                setState(() {
-                  check = false;
-                });
-              }
-
-              print(check);
-            }
-          },
-          child: const Text("Tìm kiếm",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-        ),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -197,10 +109,10 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                                                         context: context,
                                                         builder: (context) =>
                                                             dialog(
+                                                              label:
+                                                                  "Bạn có yêu cầu gì?",
                                                               text:
                                                                   "Bạn muốn chọn thời gian này?",
-                                                              des:
-                                                                  "Yêu cầu của bạn đến quản lý",
                                                             )));
                                               },
                                             );
@@ -235,4 +147,153 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
       ),
     );
   }
+
+  Widget Time() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: const [
+              Text("Chọn thời gian làm việc"),
+              Text(
+                " *",
+                style: TextStyle(color: Colors.red),
+              )
+            ],
+          ),
+          // SizedBox(height: 5),
+          Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: TextFormField(
+              // initialValue: dob,
+              // DateTime.parse(sharedCurrentUser!.dob as String).toString(),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "a";
+                }
+              },
+              readOnly: true,
+              controller: _date,
+              decoration: const InputDecoration(
+                labelText: "Chọn ngày",
+              ),
+              onTap: () async {
+                DateTime? pickeddate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2023),
+                    lastDate: DateTime(2999));
+                if (pickeddate != null) {
+                  _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget button() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: const MaterialStatePropertyAll(
+                  Color.fromARGB(255, 46, 161, 226)),
+              padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    side: const BorderSide(color: Colors.white)),
+              )),
+          onPressed: () async {
+            if (_date.text != '') {
+              DateTime day = new DateFormat('dd-MM-yyyy').parse(_date.text);
+              String dayStr = DateFormat('yyyy-MM-ddTHH:mm:ss').format(day);
+              slotList = await CallAPI().getallSlotByDate(dayStr);
+              if (slotList!.isNotEmpty) {
+                setState(() {
+                  check = true;
+                });
+              } else {
+                setState(() {
+                  check = false;
+                });
+              }
+
+              print(check);
+            }
+          },
+          child: const Text("Tìm kiếm",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+        ),
+      ],
+    );
+  }
+
+  Widget dialog({text, label}) {
+    return AlertDialog(
+      title: Text(
+        text,
+        style: const TextStyle(fontSize: 17),
+      ),
+      content: SizedBox(
+        height: 80,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(fontSize: 15),
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: _des,
+              decoration: const InputDecoration(
+                  hintText: "Yêu cầu",
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey))),
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              child: const Text('Hủy'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Đồng ý'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 }
+//   Widget description({label, obscureText = false}) {
+//     return Column(
+//       children: <Widget>[
+//         const SizedBox(height: 10),
+//         const SizedBox(height: 10)
+//       ],
+//     );
+//   }
+// }

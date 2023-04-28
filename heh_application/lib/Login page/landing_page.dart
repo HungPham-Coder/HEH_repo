@@ -77,7 +77,7 @@ class LandingPage extends StatelessWidget {
                   print("khong data");
 
                   return const Center(
-                    child: Text("ABC"),
+                    child: CircularProgressIndicator(),
                   );
                 }
               });
