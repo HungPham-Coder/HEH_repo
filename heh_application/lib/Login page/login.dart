@@ -489,7 +489,7 @@ class _LoginPageState extends State<LoginPage> {
         TextFormField(
           controller: passwordController,
           validator: (value) {
-            if (value!.isEmpty) {
+            if (value == '') {
               return "Hãy nhập mật khẩu";
             }
           },

@@ -44,17 +44,12 @@ class dialog extends StatelessWidget {
     obscureText = false,
   }) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(
-              label,
-              style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black87),
-            ),
-          ],
+        Text(
+          label,
+          style: const TextStyle(
+              fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87),
         ),
         const SizedBox(height: 10),
         TextFormField(
