@@ -279,6 +279,8 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
             TextButton(
               child: const Text('Đồng ý'),
               onPressed: () {
+                String required = _des.text;
+
                 Navigator.of(context).pop();
               },
             ),
