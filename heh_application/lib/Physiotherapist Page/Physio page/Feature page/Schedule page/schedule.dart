@@ -38,16 +38,16 @@ class _SchedulePageState extends State<SchedulePage> {
                       itemBuilder: (context, index) {
                         DateTime dateStart =
                             new DateFormat("yyyy-MM-ddTHH:mm:ss")
-                                .parse(snapshot.data![index].slot.timeStart);
+                                .parse(snapshot.data![index].slot!.timeStart);
                         String startStr = DateFormat("HH:mm").format(dateStart);
                         DateTime dateEnd = new DateFormat("yyyy-MM-ddTHH:mm:ss")
-                            .parse(snapshot.data![index].slot.timeEnd);
+                            .parse(snapshot.data![index].slot!.timeEnd);
                         String endStr = DateFormat("HH:mm").format(dateEnd);
                         return ScheduleMenu(
                           icon:
                               "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
                           press: () {},
-                          name: snapshot.data![index].slot.slotName,
+                          name: snapshot.data![index].slot!.slotName,
                           time: "Khung giờ: $startStr - $endStr",
                         );
                       });

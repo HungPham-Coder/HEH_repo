@@ -59,9 +59,9 @@ class _SessonDetailPageState extends State<SessonDetailPage> {
                               "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
                           name: widget.physiotherapist.signUpUser!.firstName!,
                           time: "Khung giờ: ",
-                          timeStart: '${snapshot.data![index].slot.timeStart}',
-                          timeEnd: '${snapshot.data![index].slot.timeEnd}',
-                          price: snapshot.data![index].typeOfSlot.price,
+                          timeStart: '${snapshot.data![index].slot!.timeStart}',
+                          timeEnd: '${snapshot.data![index].slot!.timeEnd}',
+                          price: snapshot.data![index].typeOfSlot!.price,
                           press: () {
                             Navigator.push(
                                 context,

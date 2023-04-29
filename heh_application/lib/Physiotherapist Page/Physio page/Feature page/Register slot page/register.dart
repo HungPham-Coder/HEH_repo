@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
+import 'package:heh_application/models/schedule.dart';
 import 'package:intl/intl.dart';
 import '../../../../common_widget/menu_listview.dart';
 import '../../../../models/slot.dart';
@@ -15,7 +17,9 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
   bool check = false;
   final TextEditingController _date = TextEditingController();
   final TextEditingController _des = TextEditingController();
+  String? dayStr;
   List<Slot>? slotList;
+  String? registerResult ;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +39,8 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
             Time(),
             button(),
             const SizedBox(height: 10),
+            registerResult == null ? Text('') : Text(registerResult!),
+
             check == false && _date.text != "" && slotList!.length == 0
                 ? Center(
                     child: Container(
@@ -107,13 +113,13 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                                                     context,
                                                     DialogRoute(
                                                         context: context,
-                                                        builder: (context) =>
-                                                            dialog(
-                                                              label:
-                                                                  "Bạn có yêu cầu gì?",
-                                                              text:
-                                                                  "Bạn muốn chọn thời gian này?",
-                                                            )));
+                                                        builder: (context) => dialog(
+                                                            label:
+                                                                "Bạn có yêu cầu gì?",
+                                                            text:
+                                                                "Bạn muốn chọn thời gian này?",
+                                                            slot: slotList![
+                                                                index])));
                                               },
                                             );
                                           } else {
@@ -213,8 +219,8 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
           onPressed: () async {
             if (_date.text != '') {
               DateTime day = new DateFormat('dd-MM-yyyy').parse(_date.text);
-              String dayStr = DateFormat('yyyy-MM-ddTHH:mm:ss').format(day);
-              slotList = await CallAPI().getallSlotByDate(dayStr);
+               dayStr = DateFormat('yyyy-MM-ddTHH:mm:ss').format(day);
+              slotList = await CallAPI().getallSlotByDate(dayStr!);
               if (slotList!.isNotEmpty) {
                 setState(() {
                   check = true;
@@ -235,7 +241,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
     );
   }
 
-  Widget dialog({text, label}) {
+  Widget dialog({text, label, required Slot slot}) {
     return AlertDialog(
       title: Text(
         text,
@@ -278,10 +284,29 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
             ),
             TextButton(
               child: const Text('Đồng ý'),
-              onPressed: () {
+              onPressed: () async {
                 String required = _des.text;
+                Schedule schedule = new Schedule(
+                    slotID: slot.slotID,
+                    physiotherapistID: sharedPhysiotherapist!.physiotherapistID,
+                    description: required,
+                    physioBookingStatus: false);
+               bool addStatus = await CallAPI().AddSchedule(schedule);
+               if (addStatus){
+                 slotList = await CallAPI().getallSlotByDate(dayStr!);
+                 setState(()   {
+                   registerResult = 'Đăng Ký Thành Công';
 
-                Navigator.of(context).pop();
+                   check = true;
+
+                 });
+                 Navigator.of(context).pop();
+               }
+               else {
+                 registerResult = 'Đăng Ký Thất bại';
+                 Navigator.of(context).pop();
+               }
+
               },
             ),
           ],

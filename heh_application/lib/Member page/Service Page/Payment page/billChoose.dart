@@ -32,14 +32,14 @@ class _BillChoosePageState extends State<BillChoosePage> {
   String? timeEnd;
   void formatDateAndTime() {
     DateTime tempDate =
-    new DateFormat("yyyy-MM-dd").parse(widget.schedule.slot.timeStart);
+    new DateFormat("yyyy-MM-dd").parse(widget.schedule.slot!.timeStart);
     day = DateFormat("dd-MM-yyyy").format(tempDate);
     DateTime tempTimeStart = new DateFormat("yyyy-MM-ddTHH:mm:ss")
-        .parse(widget.schedule.slot.timeStart);
+        .parse(widget.schedule.slot!.timeStart);
     timeStart = DateFormat("HH:mm").format(tempTimeStart);
 
     DateTime tempTimeEnd = new DateFormat("yyyy-MM-ddTHH:mm:ss")
-        .parse(widget.schedule.slot.timeEnd);
+        .parse(widget.schedule.slot!.timeEnd);
     timeEnd = DateFormat("HH:mm").format(tempTimeEnd);
     print(timeStart);
     print(timeEnd);
@@ -109,7 +109,7 @@ class _BillChoosePageState extends State<BillChoosePage> {
                         const SizedBox(height: 15),
                         information(
                             name: "Buổi điều trị: ",
-                            info: widget.schedule.slot.slotName),
+                            info: widget.schedule.slot!.slotName),
                         padding(),
                         information(name: "Ngày điều trị: ", info: day),
                         padding(),
@@ -121,7 +121,7 @@ class _BillChoosePageState extends State<BillChoosePage> {
                         padding(),
                         information(
                             name: "Số tiền: ",
-                            info: '${widget.schedule.typeOfSlot.price} VND'),
+                            info: '${widget.schedule.typeOfSlot!.price} VND'),
                         const SizedBox(height: 10),
                       ],
                     ),
