@@ -56,19 +56,19 @@ class _TimeResultPageState extends State<TimeResultPage> {
                             itemBuilder: (context, index) {
                               DateTime dateStart =
                                   new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
-                                      snapshot.data![index].slot.timeStart);
+                                      snapshot.data![index].slot!.timeStart);
                               String startStr =
                                   DateFormat("HH:mm").format(dateStart);
                               DateTime dateEnd =
                                   new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
-                                      snapshot.data![index].slot.timeEnd);
+                                      snapshot.data![index].slot!.timeEnd);
                               String endStr =
                                   DateFormat("HH:mm").format(dateEnd);
                               return PhysioChooseMenu(
                                 icon:
                                     "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
                                 name:
-                                    "${snapshot.data![index].physiotherapist.signUpUser!.firstName}",
+                                    "${snapshot.data![index].physiotherapist!.signUpUser!.firstName}",
                                 time: "Khung giờ: $startStr - $endStr",
                                 press: () async {
                                   String date = DateFormat("yyyy-MM-dd")
@@ -81,7 +81,7 @@ class _TimeResultPageState extends State<TimeResultPage> {
                                           subProfileID:
                                               widget.subProfile.profileID!,
                                           scheduleID:
-                                              snapshot.data![index].scheduleID,
+                                              snapshot.data![index].scheduleID!,
                                           dateBooking: date,
                                           timeBooking: time);
 
@@ -94,7 +94,7 @@ class _TimeResultPageState extends State<TimeResultPage> {
                                       MaterialPageRoute(
                                           builder: (context) => BillChoosePage(
                                               physiotherapist: snapshot
-                                                  .data![index].physiotherapist,
+                                                  .data![index].physiotherapist!,
                                               schedule: snapshot.data![index],
                                               bookingSchedule:
                                                   bookingScheduleAdd)));

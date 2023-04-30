@@ -463,6 +463,30 @@ class CallAPI {
       throw Exception('Failed to load Schedule');
     }
   }
+  Future<bool> AddSchedule(Schedule schedule) async {
+    var url = Uri.parse('${link}/api/Schedule');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+    final body = jsonEncode({
+      "slotID": schedule.slotID,
+      "physiotherapistID": schedule.physiotherapistID,
+      "description": schedule.description,
+      "physioBookingStatus":schedule.physioBookingStatus
+    });
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.post(url, body: body, headers: headers);
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      print(response.body);
+
+      throw Exception("failed to add Schedule");
+    }
+  }
 
   Future<void> updateScheduleWithPhysioBookingStatus(Schedule schedule) async {
     var url = Uri.parse('${link}/api/Schedule');
@@ -512,8 +536,8 @@ class CallAPI {
     }
   }
 
-  Future<List<Slot>?> getallSlotByDate(String date) async {
-    var url = Uri.parse('${link}/api/Slot/GetByDate/$date');
+  Future<List<Slot>?> getallSlotByDate(String date, String physioID) async {
+    var url = Uri.parse('${link}/api/Slot/GetByDate/$date?physioID=$physioID');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
