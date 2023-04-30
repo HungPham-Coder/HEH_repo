@@ -220,7 +220,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
             if (_date.text != '') {
               DateTime day = new DateFormat('dd-MM-yyyy').parse(_date.text);
                dayStr = DateFormat('yyyy-MM-ddTHH:mm:ss').format(day);
-              slotList = await CallAPI().getallSlotByDate(dayStr!);
+              slotList = await CallAPI().getallSlotByDate(dayStr!,sharedPhysiotherapist!.physiotherapistID);
               if (slotList!.isNotEmpty) {
                 setState(() {
                   check = true;
@@ -293,7 +293,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                     physioBookingStatus: false);
                bool addStatus = await CallAPI().AddSchedule(schedule);
                if (addStatus){
-                 slotList = await CallAPI().getallSlotByDate(dayStr!);
+                 slotList = await CallAPI().getallSlotByDate(dayStr!,  sharedPhysiotherapist!.physiotherapistID);
                  setState(()   {
                    registerResult = 'Đăng Ký Thành Công';
 
