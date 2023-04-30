@@ -536,8 +536,8 @@ class CallAPI {
     }
   }
 
-  Future<List<Slot>?> getallSlotByDate(String date) async {
-    var url = Uri.parse('${link}/api/Slot/GetByDate/$date');
+  Future<List<Slot>?> getallSlotByDate(String date, String physioID) async {
+    var url = Uri.parse('${link}/api/Slot/GetByDate/$date?physioID=$physioID');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
