@@ -42,7 +42,20 @@ class Schedule {
         description: json['description'],
         physioBookingStatus: json['physioBookingStatus'],
       );
-    } else {
+    }
+    else if (json['typeOfSlot'] == null){
+      return Schedule(
+        scheduleID: json['scheduleID'],
+        slotID: json['slotID'],
+        slot: Slot.fromMap(json['slot']),
+        physiotherapistID: json['physiotherapistID'],
+        physiotherapist: Physiotherapist.fromMap(json['physiotherapistDetail']),
+
+        description: json['description'],
+        physioBookingStatus: json['physioBookingStatus'],
+      );
+    }
+    else {
       return Schedule(
         scheduleID: json['scheduleID'],
         slotID: json['slotID'],

@@ -242,9 +242,11 @@ class ScheduleMenu extends StatelessWidget {
     required this.time,
     required this.icon,
     required this.press,
+    this.typeOfSlot,
   }) : super(key: key);
 
   final String icon, name, time;
+  final String? typeOfSlot;
   final VoidCallback? press;
 
   @override
@@ -310,6 +312,7 @@ class ScheduleMenu extends StatelessWidget {
                               time,
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
+                            typeOfSlot == null ? Text("Chưa gán")  : Text(typeOfSlot!) ,
                             const SizedBox(height: 5),
                           ],
                         )),
