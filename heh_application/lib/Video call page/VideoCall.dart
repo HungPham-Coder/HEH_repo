@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Video%20call%20page/views/chatscreen.dart';
+import 'package:heh_application/models/chat_model/user_chat.dart';
 
 class VideoCallPage extends StatefulWidget {
   const VideoCallPage({Key? key}) : super(key: key);
@@ -9,6 +10,7 @@ class VideoCallPage extends StatefulWidget {
 }
 
 class _VideoCallPageState extends State<VideoCallPage> {
+  UserChat? opponentUser;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -65,7 +65,6 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
                             shrinkWrap: true,
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
-                              print(snapshot.data![index].exerciseResourceID);
                               return ResourceListView(
                                 icon: snapshot.data![index].imageURL!,
                                 text: widget.exerciseResource![index].imageURL!,

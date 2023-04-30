@@ -343,7 +343,7 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
               children: [
                 IconButton(
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => VideoCallScreen(),
+                    builder: (context) => const VideoCallScreen(),
                   )),
                   icon: const Icon(Icons.video_call),
                 )
@@ -380,7 +380,7 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
     } else {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (context) =>  LoginPage(),
+          builder: (context) => LoginPage(),
         ),
         (Route<dynamic> route) => false,
       );
