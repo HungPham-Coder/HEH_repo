@@ -19,7 +19,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
   final TextEditingController _des = TextEditingController();
   String? dayStr;
   List<Slot>? slotList;
-  String? registerResult ;
+  String? registerResult = "";
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +39,6 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
             Time(),
             button(),
             const SizedBox(height: 10),
-            registerResult == null ? Text('') : Text(registerResult!),
-
             check == false && _date.text != "" && slotList!.length == 0
                 ? Center(
                     child: Container(
@@ -219,8 +217,9 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
           onPressed: () async {
             if (_date.text != '') {
               DateTime day = new DateFormat('dd-MM-yyyy').parse(_date.text);
-               dayStr = DateFormat('yyyy-MM-ddTHH:mm:ss').format(day);
-              slotList = await CallAPI().getallSlotByDate(dayStr!,sharedPhysiotherapist!.physiotherapistID);
+              dayStr = DateFormat('yyyy-MM-ddTHH:mm:ss').format(day);
+              slotList = await CallAPI().getallSlotByDate(
+                  dayStr!, sharedPhysiotherapist!.physiotherapistID);
               if (slotList!.isNotEmpty) {
                 setState(() {
                   check = true;
@@ -291,22 +290,41 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                     physiotherapistID: sharedPhysiotherapist!.physiotherapistID,
                     description: required,
                     physioBookingStatus: false);
-               bool addStatus = await CallAPI().AddSchedule(schedule);
-               if (addStatus){
-                 slotList = await CallAPI().getallSlotByDate(dayStr!,  sharedPhysiotherapist!.physiotherapistID);
-                 setState(()   {
-                   registerResult = 'Đăng Ký Thành Công';
-
-                   check = true;
-
-                 });
-                 Navigator.of(context).pop();
-               }
-               else {
-                 registerResult = 'Đăng Ký Thất bại';
-                 Navigator.of(context).pop();
-               }
-
+                bool addStatus = await CallAPI().AddSchedule(schedule);
+                if (addStatus) {
+                  slotList = await CallAPI().getallSlotByDate(
+                      dayStr!, sharedPhysiotherapist!.physiotherapistID);
+                  setState(() {
+                    registerResult = 'Đăng Ký Thành Công';
+                    final snackBar = SnackBar(
+                      content: Text(
+                        registerResult!,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      backgroundColor: Colors.green,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    check = true;
+                  });
+                  Navigator.of(context).pop();
+                } else {
+                  registerResult = 'Đăng Ký Thất bại';
+                  final snackBar = SnackBar(
+                    content: Text(
+                      registerResult!,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    backgroundColor: Colors.red,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  Navigator.of(context).pop();
+                }
               },
             ),
           ],

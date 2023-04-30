@@ -241,11 +241,10 @@ class ScheduleMenu extends StatelessWidget {
     required this.name,
     required this.time,
     required this.icon,
-    required this.type,
     required this.press,
   }) : super(key: key);
 
-  final String icon, name, time, type;
+  final String icon, name, time;
   final VoidCallback? press;
 
   @override
@@ -312,10 +311,6 @@ class ScheduleMenu extends StatelessWidget {
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             const SizedBox(height: 5),
-                            Text(
-                              type,
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
                           ],
                         )),
                   ],
