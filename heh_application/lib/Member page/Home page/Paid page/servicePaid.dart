@@ -28,67 +28,64 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
       ),
       body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Column(
-              children: [
-                const Center(
-                  child: Text("Danh sách các lịch bạn đã đặt."),
-                ),
-                FutureBuilder<List<BookingDetail>>(
-                    future: CallAPI()
-                        .getAllBookingDetailByUserID(sharedCurrentUser!.userID!),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(
-                                snapshot.data![index].bookingSchedule!.schedule!
-                                    .slot.timeStart);
-                            String day = DateFormat("dd-MM-yyyy").format(tempDate);
-                            DateTime tempStart =
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Column(
+          children: [
+            FutureBuilder<List<BookingDetail>>(
+                future: CallAPI()
+                    .getAllBookingDetailByUserID(sharedCurrentUser!.userID!),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(
+                            snapshot.data![index].bookingSchedule!.schedule!
+                                .slot.timeStart);
+                        String day = DateFormat("dd-MM-yyyy").format(tempDate);
+                        DateTime tempStart =
                             new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(snapshot
                                 .data![index]
                                 .bookingSchedule!
                                 .schedule!
                                 .slot
                                 .timeStart);
-                            String start = DateFormat("HH:mm").format(tempStart);
-                            DateTime tempEnd = new DateFormat("yyyy-MM-ddTHH:mm:ss")
-                                .parse(snapshot.data![index].bookingSchedule!
+                        String start = DateFormat("HH:mm").format(tempStart);
+                        DateTime tempEnd = new DateFormat("yyyy-MM-ddTHH:mm:ss")
+                            .parse(snapshot.data![index].bookingSchedule!
                                 .schedule!.slot.timeEnd);
-                            String end = DateFormat("HH:mm").format(tempEnd);
-                            return ServicePaid(
-                              icon:
+                        String end = DateFormat("HH:mm").format(tempEnd);
+                        return ServicePaid(
+                          icon:
                               "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
-                              name:
+                          name:
                               "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot.typeName}",
-                              date: "$day",
-                              time: "$start - $end",
-                              bookedFor:
+                          date: "$day",
+                          time: "$start - $end",
+                          bookedFor:
                               "${snapshot.data![index].bookingSchedule!.subProfile!.relationship!.relationName}",
-                              press: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
+                          press: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
                                         const ServicePaidPage()));
-                              },
-                            );
                           },
                         );
-                      } else {
-                        return Center(
-                          child: Text(
-                              'Hiện tại bạn đang chưa đăng ký bất kỳ lịch nào'),
-                        );
-                      }
-                    }),
-              ],
-            ),
-          )),
+                      },
+                    );
+                  } else {
+                    return const Center(
+                      child: Text(
+                          'Hiện tại bạn đang chưa đăng ký bất kỳ lịch nào'),
+                    );
+                  }
+                }),
+          ],
+        ),
+      )),
     );
   }
 }

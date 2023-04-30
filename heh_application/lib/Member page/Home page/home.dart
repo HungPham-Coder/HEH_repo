@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 
 import 'package:heh_application/Member%20page/Exercise%20Page/category.dart';
 import 'package:heh_application/Member%20page/Home%20page/Paid%20page/servicePaid.dart';
+import 'package:heh_application/Member%20page/Messenger%20page/messenger_page.dart';
 import 'package:heh_application/Member%20page/email.dart';
+import 'package:heh_application/Video%20call%20page/views/messenger_page.dart';
+import 'package:heh_application/models/chat_model/user_chat.dart';
+import 'package:heh_application/services/auth.dart';
+import 'package:heh_application/services/chat_provider.dart';
+import 'package:heh_application/services/firebase_firestore.dart';
+import 'package:provider/provider.dart';
 
 import '../../Welcome page/welcome_page.dart';
+import '../../common_widget/menu_listview.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,6 +23,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  UserChat? opponentUser;
   @override
   void initState() {
     super.initState();
@@ -51,8 +61,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Future<void> loadPhysioTherapistAccount() async {
+    final firestoreDatabase =
+        Provider.of<FirebaseFirestoreBase>(context, listen: false);
+    UserChat? userChatResult =
+        await firestoreDatabase.getPhysioUser(physioID: 'physiotherapist');
+    opponentUser = userChatResult;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context, listen: false);
     return WillPopScope(
         onWillPop: () => _onWillPop(context),
         child: Scaffold(
@@ -99,11 +118,33 @@ class _HomePageState extends State<HomePage> {
                   icon:
                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
                   text: "Dịch vụ đã đăng ký",
-                  press: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ServicePaidPage()));
+                  press: () async {
+                    await loadPhysioTherapistAccount();
+                    await auth.checkUserExistInFirebase(sharedCurrentUser!);
+
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      if (sharedCurrentUser?.image == null) {
+                        sharedCurrentUser?.setImage = "Không có hình";
+                      }
+
+                      if (sharedCurrentUser != null) {
+                        return Provider<ChatProviderBase>(
+                          create: (context) => ChatProvider(),
+                          child: MessengerScreenPage(
+                              oponentID: opponentUser!.id,
+                              oponentAvartar: opponentUser!.photoUrl,
+                              oponentNickName: opponentUser!.nickname,
+                              userAvatar: sharedCurrentUser!.image,
+                              currentUserID: sharedCurrentUser!.userID!),
+                        );
+                      } else {
+                        print('null');
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    }));
                   },
                 ),
                 // HomeMenu(
@@ -128,64 +169,5 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ));
-  }
-}
-
-class HomeMenu extends StatelessWidget {
-  HomeMenu({
-    Key? key,
-    required this.text,
-    required this.icon,
-    required this.press,
-  }) : super(key: key);
-
-  final String text, icon;
-  final VoidCallback press;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: TextButton(
-          style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(const Color(0xfff5f6f9)),
-              padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    side: const BorderSide(color: Colors.white)),
-              )),
-          onPressed: press,
-          child: Row(
-            children: [
-              Image.network(
-                icon,
-                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  return child;
-                },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child;
-                  } else {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                },
-                width: 60,
-                height: 60,
-              ),
-              const SizedBox(
-                width: 20,
-                height: 10,
-              ),
-              Expanded(
-                  child: Text(
-                text,
-                style: Theme.of(context).textTheme.titleMedium,
-              )),
-              const Icon(Icons.arrow_forward_sharp),
-            ],
-          )),
-    );
   }
 }
