@@ -5,8 +5,6 @@ import 'package:heh_application/models/schedule.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../models/physiotherapist.dart';
-
 class SchedulePage extends StatefulWidget {
   SchedulePage({Key? key}) : super(key: key);
 
@@ -61,7 +59,3 @@ class _SchedulePageState extends State<SchedulePage> {
         ])));
   }
 }
-  // 
-
-
-
