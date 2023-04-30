@@ -6,6 +6,7 @@ import 'package:heh_application/Physiotherapist%20Page/Physio%20page/home.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/notification.dart';
 import 'package:heh_application/Physiotherapist%20Page/Profile%20page/setting.dart';
 import 'package:heh_application/models/medical_record.dart';
+import 'package:heh_application/models/physiotherapist.dart';
 import 'package:heh_application/services/call_api.dart';
 
 // ignore: camel_case_types
@@ -30,7 +31,17 @@ class _PhyNavigation_barState extends State<PhyNavigation_bar> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: pageList[pageIndex],
+      body: FutureBuilder <Physiotherapist>(
+        future: CallAPI().getPhysiotherapistByUserID(sharedCurrentUser!.userID!),
+        builder:(context, snapshot)  {
+          if (snapshot.hasData){
+            sharedPhysiotherapist = snapshot.data;
+            return pageList[pageIndex];
+          }
+          else return Container();
+
+        }
+      ),
       bottomNavigationBar: BottomNavigationBar(
           backgroundColor: const Color.fromARGB(255, 46, 161, 226),
           fixedColor: Colors.white,

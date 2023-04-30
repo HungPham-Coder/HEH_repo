@@ -142,11 +142,11 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                         itemBuilder: (context, index) {
                           DateTime tempStart =
                               new DateFormat("yyyy-MM-ddThh:mm:ss")
-                                  .parse(snapshot.data![index].slot.timeStart);
+                                  .parse(snapshot.data![index].slot!.timeStart);
                           String start = DateFormat("HH:mm").format(tempStart);
                           DateTime tempEnd =
                               new DateFormat("yyyy-MM-ddThh:mm:ss")
-                                  .parse(snapshot.data![index].slot.timeEnd);
+                                  .parse(snapshot.data![index].slot!.timeEnd);
                           String end = DateFormat("HH:mm").format(tempEnd);
                           return PhysioChooseMenu(
                               icon:
@@ -156,7 +156,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                               time: "Khung giờ: ",
                               timeStart: '$start',
                               timeEnd: '$end',
-                              price: snapshot.data![index].typeOfSlot.price,
+                              price: snapshot.data![index].typeOfSlot!.price,
                               press: () => showDialog<String>(
                                     context: context,
                                     builder: (BuildContext context) =>
@@ -186,7 +186,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                                           '${subProfile!.profileID}',
                                                       scheduleID: snapshot
                                                           .data![index]
-                                                          .scheduleID,
+                                                          .scheduleID!,
                                                       dateBooking: DateFormat(
                                                               "yyyy-MM-dd")
                                                           .format(
