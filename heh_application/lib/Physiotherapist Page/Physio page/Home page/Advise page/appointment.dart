@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Notification%20page/adviseAppoint.dart/adviseDetail.dart';
 import 'package:heh_application/Video%20call%20page/VideoCall.dart';
+import 'package:heh_application/models/booking_detail.dart';
+import 'package:heh_application/services/call_api.dart';
+import 'package:heh_application/util/date_time_format.dart';
 
 class AppointmentPage extends StatefulWidget {
   const AppointmentPage({Key? key}) : super(key: key);
@@ -10,59 +14,60 @@ class AppointmentPage extends StatefulWidget {
 }
 
 class _AppointmentPageState extends State<AppointmentPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          "Danh sách buổi tư vấn",
-          style: TextStyle(fontSize: 23),
+  Widget button({required VoidCallback press}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+          child: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: const MaterialStatePropertyAll(
+                    Color.fromARGB(255, 210, 158, 36)),
+                padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      side: const BorderSide(color: Colors.white)),
+                )),
+            onPressed: press,
+            child: const Text("Thông tin",
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          ),
         ),
-        elevation: 10,
-        backgroundColor: const Color.fromARGB(255, 46, 161, 226),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ServicePaid(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
-              name: "Tư vấn một buổi",
-              date: "04-11-2023",
-              time: "11:00 - 12:00",
-              bookedFor: "Phạm Phú Minh Hưng",
-              press: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AppointmentPage()));
-              },
+        const SizedBox(width: 50),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+          child: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: const MaterialStatePropertyAll(Colors.green),
+                padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      side: const BorderSide(color: Colors.white)),
+                )),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => VideoCallPage()));
+            },
+            child: const Text(
+              "Tham gia",
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
-}
 
-class ServicePaid extends StatelessWidget {
-  const ServicePaid({
-    Key? key,
-    required this.time,
-    required this.name,
-    required this.icon,
-    required this.press,
-    required this.date,
-    required this.bookedFor,
-  }) : super(key: key);
-
-  final String icon, name, time, bookedFor, date;
-  final VoidCallback? press;
-
-  @override
-  Widget build(BuildContext context) {
-    // ignore: duplicate_ignore
+  Widget ServicePaid(
+      {required String icon,
+      name,
+      time,
+      bookedFor,
+      date,
+      required VoidCallback press}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
@@ -157,7 +162,7 @@ class ServicePaid extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 10),
-                          const button(),
+                          button(press: press),
                         ],
                       )),
                 ],
@@ -166,66 +171,86 @@ class ServicePaid extends StatelessWidget {
       ),
     );
   }
-}
 
-class button extends StatefulWidget {
-  const button({Key? key}) : super(key: key);
-
-  @override
-  State<button> createState() => _buttonState();
-}
-
-class _buttonState extends State<button> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-          child: ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: const MaterialStatePropertyAll(
-                    Color.fromARGB(255, 210, 158, 36)),
-                padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      side: const BorderSide(color: Colors.white)),
-                )),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const AdviseDetailPage()));
-            },
-            child: const Text("Thông tin",
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-          ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text(
+          "Danh sách buổi tư vấn",
+          style: TextStyle(fontSize: 23),
         ),
-        const SizedBox(width: 50),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-          child: ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: const MaterialStatePropertyAll(Colors.green),
-                padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      side: const BorderSide(color: Colors.white)),
-                )),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => VideoCallPage()));
-            },
-            child: const Text(
-              "Tham gia",
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-            ),
-          ),
+        elevation: 10,
+        backgroundColor: const Color.fromARGB(255, 46, 161, 226),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            FutureBuilder<List<BookingDetail>>(
+                future: CallAPI().getAllBookingDetailByPhysioIDAndTypeOfSlot(
+                    sharedPhysiotherapist!.physiotherapistID, 'Tư Vấn 1 Buổi'),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.isNotEmpty) {
+                      return ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: snapshot.data!.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            String day = DateTimeFormat.formatDate(snapshot
+                                .data![index]
+                                .bookingSchedule!
+                                .schedule!
+                                .slot!
+                                .timeStart);
+                            String start = DateTimeFormat.formateTime(snapshot
+                                .data![index]
+                                .bookingSchedule!
+                                .schedule!
+                                .slot!
+                                .timeStart);
+                            String end = DateTimeFormat.formateTime(snapshot
+                                .data![index]
+                                .bookingSchedule!
+                                .schedule!
+                                .slot!
+                                .timeEnd);
+
+                            return ServicePaid(
+                              icon:
+                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                              name:
+                                  "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                              date: "$day",
+                              time: "$start - $end",
+                              bookedFor:
+                                  "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
+                              press: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AdviseDetailPage(
+                                            bookingSchedule: snapshot
+                                                .data![index]
+                                                .bookingSchedule)));
+                              },
+                            );
+                          });
+                    } else {
+                      return Center(
+                        child: Text("Hiện tại chưa có ai đặt list empty"),
+                      );
+                    }
+                  } else {
+                    return Center(
+                      child: Text("Hiện tại chưa có ai đặt "),
+                    );
+                  }
+                }),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

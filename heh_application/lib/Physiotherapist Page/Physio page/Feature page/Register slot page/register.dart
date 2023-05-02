@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/models/schedule.dart';
+import 'package:heh_application/util/date_time_format.dart';
 import 'package:intl/intl.dart';
 import '../../../../common_widget/menu_listview.dart';
 import '../../../../models/slot.dart';
@@ -77,16 +78,8 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                                 itemCount: slotList!.length,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
-                                  DateTime startTime =
-                                      new DateFormat('yyyy-MM-ddTHH:mm:ss')
-                                          .parse(slotList![index].timeStart);
-                                  String start =
-                                      DateFormat('HH:mm').format(startTime);
-                                  DateTime endTime =
-                                      new DateFormat('yyyy-MM-ddTHH:mm:ss')
-                                          .parse(slotList![index].timeEnd);
-                                  String end =
-                                      DateFormat('HH:mm').format(endTime);
+                                  String start = DateTimeFormat.formateTime(slotList![index].timeStart);
+                                  String end = DateTimeFormat.formateTime(slotList![index].timeEnd);
 
                                   return FutureBuilder(
                                       future: CallAPI()
