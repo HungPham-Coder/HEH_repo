@@ -22,8 +22,8 @@ abstract class AuthBase {
       String categoryID, String accessToken);
   // Future<User?> signInWithPhoneAndPassword(String phoneNumber, String password);
 
-  // Future<User> signInWithEmailAndPassword (String username, String password);
-  // Future<User> signUpWithEmailAndPassword (String username, String password);
+  Future<User> signInWithEmailAndPassword(String username, String password);
+  Future<User> signUpWithEmailAndPassword(String username, String password);
   void verifyUserPhoneNumber(String phoneNumber);
   // Future<void> addLoginUserStream(ResultLogin resultLogin) ;
   // Future<void> addSignUpUserStream(SignUpUser? signUpUser);
@@ -31,7 +31,7 @@ abstract class AuthBase {
   Future<void> checkUserExistInFirebase(SignUpUser signUpUser);
   Future<SignUpUser> getCurrentUser(ResultLogin resultLogin);
   Future<void> signInAnonymously();
-  // User? get currenUser;
+  User? get currenUser;
   // Stream<ResultLogin> get userLoginStream;
   // Stream<SignUpUser> get userSignUpStream;
   void dispose();
@@ -53,7 +53,7 @@ class Auth implements AuthBase {
 
   // ignore: override_on_non_overriding_member
   // @override
-  // User? get currenUser => FirebaseAuth.instance.currentUser;
+  User? get currenUser => FirebaseAuth.instance.currentUser;
 
   @override
   Stream<User?> authStateChanges() => _firebaseAuth.authStateChanges();
@@ -159,16 +159,20 @@ class Auth implements AuthBase {
   //   }
   // }
 
-  // Future<User> signInWithEmailAndPassword (String username, String password) async {
-  //
-  //   final userCredential = await _firebaseAuth.signInWithCredential(EmailAuthProvider.credential(email: username, password: password));
-  //   return userCredential.user!;
-  // }
-  // @override
-  // Future<User> signUpWithEmailAndPassword(String username, String password) async {
-  //   final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(email: username, password: password);
-  //   return userCredential.user!;
-  // }
+  Future<User> signInWithEmailAndPassword(
+      String username, String password) async {
+    final userCredential = await _firebaseAuth.signInWithCredential(
+        EmailAuthProvider.credential(email: username, password: password));
+    return userCredential.user!;
+  }
+
+  @override
+  Future<User> signUpWithEmailAndPassword(
+      String username, String password) async {
+    final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: username, password: password);
+    return userCredential.user!;
+  }
 
   void verifyUserPhoneNumber(String phoneNumber) {
     _firebaseAuth.verifyPhoneNumber(

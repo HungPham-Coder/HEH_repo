@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/models/booking_detail.dart';
 import 'package:heh_application/models/booking_schedule.dart';
 import 'package:heh_application/models/exercise_model/category.dart';
@@ -8,6 +10,7 @@ import 'package:heh_application/models/exercise_model/exercise_detail.dart';
 import 'package:heh_application/models/exercise_resource.dart';
 import 'package:heh_application/models/login_user.dart';
 import 'package:heh_application/models/medical_record.dart';
+import 'package:heh_application/models/notification.dart';
 import 'package:heh_application/models/physiotherapist.dart';
 import 'package:heh_application/models/relationship.dart';
 import 'package:heh_application/models/result_login.dart';
@@ -925,6 +928,74 @@ class CallAPI {
       return Problem1.FromMap(json.decode(response.body));
     } else {
       print(response.body);
+    }
+  }
+  Future<String> addNotification(NotificationModel notification) async {
+    var url = Uri.parse('${link}/api/Notification');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+    final body = jsonEncode({
+      "action": notification.action,
+      "description": notification.description,
+      "subject":notification.subject,
+      "content":notification.content,
+      "userId":notification.userID
+    });
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}"
+    };
+    var response = await http.post(url, body: body, headers: headers);
+
+    if (response.statusCode == 200) {
+      return json.encode(response.body);
+    } else {
+
+      print(response.body);
+      throw Exception('Failed to add notification');
+    }
+  }
+  Future<List<NotificationModel>> getAllNotification() async {
+    var url = Uri.parse('${link}/api/Notification?PageIndex=1&PageSize=10&SortKey=DateCreated&SortOrder=ASC');
+    // var url = Uri.https('localhost:7166', 'api/UserExercise');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      Iterable jsonResult = json.decode(response.body)['data'];
+      List<NotificationModel> list = List<NotificationModel>.from(
+          jsonResult.map((model) => NotificationModel.fromMap(model)));
+      if (list == null) {
+        throw Exception('Notification List null');
+      } else {
+        return list;
+      }
+    } else {
+      throw Exception('Failed to load Notification List');
+    }
+  }
+  Future<bool> seenNotification(String userID) async {
+    var url = Uri.parse('${link}/api/Notification?userID=$userID');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}"
+    };
+    var response = await http.put(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+
+      print(response.body);
+      throw Exception('Failed to seen notification');
     }
   }
 }
