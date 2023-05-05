@@ -1,7 +1,5 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:heh_application/models/exercise_model/exercise_detail.dart';
-import 'package:heh_application/models/exercise_resource.dart';
 import 'package:video_player/video_player.dart';
 
 class ExerciseResourcesDetail extends StatefulWidget {
