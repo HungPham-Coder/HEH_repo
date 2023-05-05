@@ -7,13 +7,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:heh_application/Login%20page/choose_form.dart';
 
 import 'package:heh_application/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const WelcomePage());
+    await tester.pumpWidget(const ChooseForm());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

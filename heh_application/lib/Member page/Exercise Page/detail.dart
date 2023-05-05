@@ -72,7 +72,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                               if (exerciseDetailList != null) {
                                 return ExerciseResources(
                                   detailID: widget.exerciseID!,
-                                  // exerciseDetail: snapshot.data![index],
+                                  exerciseDetail: snapshot.data![index],
                                   // exerciseResource: exerciseResource,
                                 );
                               } else {

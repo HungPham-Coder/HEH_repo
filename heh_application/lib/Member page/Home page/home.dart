@@ -12,7 +12,6 @@ import 'package:heh_application/services/chat_provider.dart';
 import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:provider/provider.dart';
 
-import '../../Welcome page/welcome_page.dart';
 import '../../common_widget/menu_listview.dart';
 
 class HomePage extends StatefulWidget {
@@ -90,18 +89,12 @@ class _HomePageState extends State<HomePage> {
               children: [
                 const SizedBox(height: 20),
                 const Center(
-                  child: Text("Chào mừng đến với HEH",
+                  child: Text("Chào mừng bạn đến với HEH",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Colors.black,
                       )),
-                ),
-                const Center(
-                  child: Text(
-                      "'Trải nghiệm của bạn cũng là trải nghiệm của chúng tôi!'",
-                      style:
-                          TextStyle(fontSize: 13, fontStyle: FontStyle.italic)),
                 ),
                 HomeMenu(
                   icon:
@@ -147,15 +140,6 @@ class _HomePageState extends State<HomePage> {
                     }));
                   },
                 ),
-                // HomeMenu(
-                //   icon:
-                //       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
-                //   text: "Welcome page",
-                //   press: () {
-                //     Navigator.push(context,
-                //         MaterialPageRoute(builder: (context) => WelcomePage()));
-                //   },
-                // ),
                 HomeMenu(
                   icon:
                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",

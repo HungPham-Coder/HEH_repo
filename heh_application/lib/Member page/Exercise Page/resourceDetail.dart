@@ -7,12 +7,17 @@ import 'package:video_player/video_player.dart';
 class ExerciseResourcesDetail extends StatefulWidget {
   ExerciseResourcesDetail(
       {Key? key,
-      this.exerciseDetail,
-      this.exerciseResource,
-      required String exerciseID})
+      // this.exerciseDetail,
+      this.imageURL,
+      this.resourceName,
+      this.description,
+      this.videoURL,
+      // this.exerciseResource,
+      required this.resourceID})
       : super(key: key);
-  ExerciseDetail1? exerciseDetail;
-  List<ExerciseResource>? exerciseResource;
+  // ExerciseDetail1? exerciseDetail;
+  // List<ExerciseResource>? exerciseResource;
+  String? resourceID, imageURL, resourceName, description, videoURL;
   @override
   State<ExerciseResourcesDetail> createState() =>
       _ExerciseResourcesDetailState();
@@ -59,28 +64,34 @@ class _ExerciseResourcesDetailState extends State<ExerciseResourcesDetail> {
   // }
 
   void initPlayer() async {
-    widget.exerciseResource!.forEach((element) {
-      _vidController = VideoPlayerController.network(element.videoURL!);
-      _vidController.addListener(() {
-        setState(() {});
-      });
-      _vidController.initialize().then((value) {
-        setState(() {});
-      });
+    // widget.exerciseResource!.forEach((element) {
+    _vidController = VideoPlayerController.network(widget.videoURL!);
+    _vidController.addListener(() {
+      setState(() {});
     });
+    _vidController.initialize().then((value) {
+      setState(() {});
+    });
+    // });
     chewieController = ChewieController(
       videoPlayerController: _vidController,
       aspectRatio: 16 / 9,
       // autoInitialize: true,
     );
+    // }
+    ;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.exerciseDetail == null || widget.exerciseResource == null) {
+    if (widget.imageURL == null ||
+        widget.description == null ||
+        widget.resourceName == null ||
+        widget.videoURL == null) {
       return Scaffold(
         body: Container(
-          child: const Text("Khong co exercise cụ thể nào"),
+          child: const Center(
+              child: Text("Hiện tại không có video hoặc hình ảnh bài tập.")),
         ),
       );
     } else {
@@ -97,7 +108,7 @@ class _ExerciseResourcesDetailState extends State<ExerciseResourcesDetail> {
                 ],
                 toolbarHeight: 45,
                 title: Text(
-                  widget.exerciseDetail!.detailName!,
+                  widget.resourceName!,
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -124,18 +135,17 @@ class _ExerciseResourcesDetailState extends State<ExerciseResourcesDetail> {
                             ),
                           ),
                           Text(
-                            widget.exerciseDetail!.description,
+                            widget.description!,
                             style: const TextStyle(fontSize: 16),
                           ),
                           ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: widget.exerciseResource!.length,
+                            // itemCount: widget.exerciseResource!.length,
                             itemBuilder: (context, index) => SizedBox(
                               child: Padding(
                                   padding: const EdgeInsets.only(bottom: 0),
-                                  child: Image.network(widget
-                                      .exerciseResource![index].imageURL!)),
+                                  child: Image.network(widget.imageURL!)),
                             ),
                           ),
                           // Container(
@@ -237,9 +247,12 @@ class _ExerciseResourcesDetailState extends State<ExerciseResourcesDetail> {
                                       // ),
                                     ],
                                   )
-                                : const Center(
-                                    child: CircularProgressIndicator(
-                                        color: Colors.white),
+                                : const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 30),
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                          color: Colors.blue),
+                                    ),
                                   ),
                           ),
                           // ),

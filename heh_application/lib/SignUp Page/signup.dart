@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:heh_application/Login%20page/choose_form.dart';
 import 'package:heh_application/SignUp%20Page/signupMed.dart';
 import 'package:heh_application/main.dart';
 import 'package:heh_application/models/sign_up_user.dart';
@@ -183,7 +184,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const WelcomePage()));
+                                    builder: (context) => const ChooseForm()));
                           },
                           color: Colors.grey[400],
                           elevation: 0,

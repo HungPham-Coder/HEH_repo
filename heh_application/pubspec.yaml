@@ -61,6 +61,7 @@ dependencies:
   agora_chat_sdk: ^1.1.0+1
   chewie: ^1.4.0
   email_otp: ^2.0.1
+  intro_slider: ^4.2.0
 
 dev_dependencies:
 
@@ -88,7 +89,7 @@ flutter:
 
   assets:
     - assets/ca/
-   
+    - assets/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

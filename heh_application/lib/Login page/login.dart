@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,11 +36,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     super.dispose();
-    phoneController.dispose();
+    emailController.dispose();
     passwordController.dispose();
   }
 
-  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   String? get _errorText {
@@ -109,12 +110,38 @@ class _LoginPageState extends State<LoginPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            inputPhone(
+                            inputEmail(
                                 obscureText: false,
-                                phoneController: phoneController),
+                                phoneController: emailController),
                             inputPassword(
                                 passwordController: passwordController),
-                            const SizedBox(height: 10),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) {
+                                        return const ForgotPassword(
+                                            // auth: auth,
+                                            );
+                                      }),
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Quên mật khẩu?",
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 46, 161, 226),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
                             Text(
                               widget.msg == null ? '' : widget.msg!,
                               style: const TextStyle(color: Colors.red),
@@ -122,37 +149,8 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 40),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) {
-                                      return ForgotPassword(
-                                        auth: auth,
-                                      );
-                                    }),
-                                  );
-                                },
-                                child: const Text(
-                                  "Quên mật khẩu?",
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 46, 161, 226),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          )),
-                      const SizedBox(
-                        height: 15,
-                      ),
+                      const SizedBox(height: 10),
+
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: Container(
@@ -161,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                             minWidth: double.infinity,
                             height: 60,
                             onPressed: () {
-                              Login(phoneController.text,
+                              Login(emailController.text,
                                   passwordController.text, auth);
                             },
                             color: const Color.fromARGB(255, 46, 161, 226),
@@ -317,20 +315,41 @@ class _LoginPageState extends State<LoginPage> {
         )));
   }
 
-  Future<void> Login(String phone, String password, AuthBase authBase) async {
+  Future<void> Login(String email, String password, AuthBase authBase) async {
     try {
       final auth = Provider.of<AuthBase>(context, listen: false);
       final stream = StreamTest.instance;
-      LoginUser loginUser = LoginUser(phone: phone, password: password);
+      LoginUser loginUser = LoginUser(email: email, password: password);
       ResultLogin? resultLogin = await CallAPI().callLoginAPI(loginUser);
       if (resultLogin != null) {
         //add login stream to manage login state
-
         //add signup user to manage user object xuyen suot app
         // await  stream.addSignUpStream(signUpUser);
         await auth.signInAnonymously();
-
         await stream.addLoginStream(resultLogin);
+        // final registerResult = 'Đăng nhập thành công';
+        final snackBar = SnackBar(
+          content: Row(
+            children: [
+              const Text(
+                "Xin chào ",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500),
+              ),
+              Text(
+                resultLogin.firstName!,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.green,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
         ResultLogin resultLogin =
             ResultLogin(userID: "error login", firstName: 'null');
@@ -444,7 +463,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 //create text field
-  Widget inputPhone(
+  Widget inputEmail(
       {obscureText = true, required TextEditingController phoneController}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -453,20 +472,20 @@ class _LoginPageState extends State<LoginPage> {
         Form(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: TextFormField(
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Hãy nhập số điện thoại";
-                } else if (value.length < 10 || value.length > 10) {
-                  return "Hãy nhập đúng số điện thoại";
+              validator: (email) {
+                if (email != null && !EmailValidator.validate(email)) {
+                  return "Nhập đúng email";
+                } else if (email!.isEmpty) {
+                  return "Vui lòng nhập email!";
                 } else {
                   return null;
                 }
               },
-              keyboardType: TextInputType.phone,
+              keyboardType: TextInputType.emailAddress,
               obscureText: obscureText,
               controller: phoneController,
               decoration: const InputDecoration(
-                  label: Text("Số điện thoại"),
+                  label: Text("Email"),
                   // hintText: 'Số điện thoại',
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -486,7 +505,8 @@ class _LoginPageState extends State<LoginPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const SizedBox(height: 5),
-        TextFormField(
+        Form(
+            child: TextFormField(
           controller: passwordController,
           validator: (value) {
             if (value == '') {
@@ -511,8 +531,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               border: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey))),
-        ),
-        const SizedBox(height: 0)
+        ))
       ],
     );
   }

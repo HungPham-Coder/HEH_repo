@@ -35,7 +35,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
               Text(" *", style: TextStyle(color: Colors.red)),
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: 70,

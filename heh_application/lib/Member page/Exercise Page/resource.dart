@@ -5,20 +5,20 @@ import 'package:heh_application/models/exercise_model/exercise_detail.dart';
 import 'package:heh_application/models/exercise_resource.dart';
 import 'package:heh_application/services/call_api.dart';
 
-import '../../Login page/landing_page.dart';
 import '../../common_widget/search_delegate.dart';
 
 class ExerciseResources extends StatefulWidget {
   ExerciseResources({
     Key? key,
-    required this.detailID,
+    this.detailID,
     this.exerciseDetail,
     this.exerciseResource,
   }) : super(key: key);
 
   String? detailID;
   ExerciseDetail1? exerciseDetail;
-  List<ExerciseResource>? exerciseResource;
+  // List<ExerciseResource>? exerciseResource;
+  ExerciseResource? exerciseResource;
   @override
   State<ExerciseResources> createState() => _ExerciseResourcesState();
 }
@@ -49,7 +49,7 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
           backgroundColor: const Color.fromARGB(255, 46, 161, 226),
         ),
         body: CustomScrollView(
-          physics: const ScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             SliverToBoxAdapter(
               child: Column(
@@ -57,36 +57,47 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
                   const SizedBox(height: 5),
                   FutureBuilder<List<ExerciseResource>?>(
                       future: CallAPI().getExerciseResourceByExerciseDetailID(
-                          widget.detailID!),
+                          widget.exerciseDetail!.exerciseDetailID),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
+                            // physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
                               return ResourceListView(
                                 icon: snapshot.data![index].imageURL!,
-                                text: widget.exerciseResource![index].imageURL!,
+                                text: snapshot.data![index].resourceName!,
                                 press: () async {
-                                  List<ExerciseResource> exerciseResource =
-                                      await CallAPI()
-                                          .getExerciseResourceByExerciseDetailID(
-                                              snapshot.data![index]
-                                                  .exerciseDetailID);
+                                  // List<ExerciseDetail1> exerciseDetailList =
+                                  //     await CallAPI()
+                                  //         .getExerciseDetailByExerciseID(widget
+                                  //             .exerciseDetail!.exerciseID);
+                                  // List<ExerciseResource> exerciseResource =
+                                  //     await CallAPI()
+                                  //         .getExerciseResourceByExerciseDetailID(
+                                  //             snapshot.data![index]
+                                  //                 .exerciseDetailID);
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    if (exerciseResource != null) {
-                                      return ExerciseResourcesDetail(
-                                        exerciseID: widget.detailID!,
-                                        // exerciseDetail: snapshot.data![index],
-                                        exerciseResource: exerciseResource,
-                                      );
-                                    } else {
-                                      return ExerciseResourcesDetail(
-                                        exerciseID: widget.detailID!,
-                                      );
-                                    }
+                                    print(widget.exerciseDetail!.description);
+                                    // if (exerciseResource != null) {
+                                    return ExerciseResourcesDetail(
+                                      resourceID: widget.detailID,
+                                      // exerciseResource: exerciseResource,
+                                      imageURL: snapshot.data![index].imageURL!,
+                                      description:
+                                          widget.exerciseDetail!.description,
+                                      resourceName:
+                                          snapshot.data![index].resourceName,
+                                      videoURL: snapshot.data![index].videoURL,
+                                    );
+                                    // }
+                                    //  else {
+                                    //   return ExerciseResourcesDetail(
+                                    //     resourceID: widget.detailID,
+                                    //   );
+                                    // }
                                   }));
                                 },
                               );

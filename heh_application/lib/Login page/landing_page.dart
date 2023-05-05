@@ -42,7 +42,7 @@ class LandingPage extends StatelessWidget {
           );
         } else if (snapshot.data!.userID == 'error login') {
           return LoginPage(
-            msg: 'Số điện thoại hoặc mật khẩu của bạn sai. Vui lòng nhập lại.',
+            msg: 'Email hoặc mật khẩu của bạn sai. Vui lòng nhập lại.',
           );
         } else if (snapshot.data!.userID == 'signout') {
           return LoginPage(
@@ -51,7 +51,7 @@ class LandingPage extends StatelessWidget {
         } else if (snapshot.data!.role!.name == "Admin" ||
             snapshot.data!.role!.name == "Staff") {
           return LandingPage(
-            msg: 'Số điện thoại hoặc mật khẩu của bạn sai. Vui lòng nhập lại.',
+            msg: 'Email hoặc mật khẩu của bạn sai. Vui lòng nhập lại.',
           );
         } else {
           sharedResultLogin = snapshot.data;

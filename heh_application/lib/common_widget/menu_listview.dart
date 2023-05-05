@@ -74,7 +74,7 @@ class ResourceListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       alignment: Alignment.center,
       // height: 500,
       width: 350,
@@ -93,6 +93,7 @@ class ResourceListView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
+              const SizedBox(height: 10),
               Image.network(
                 icon,
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
@@ -261,21 +262,18 @@ class ScheduleMenu extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextButton(
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
-                    padding: MaterialStateProperty.all(
-                        const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 15)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: const BorderSide(
-                              color: Color.fromARGB(255, 46, 161, 226),
-                              width: 2)),
-                    )),
-                onPressed: press,
+            child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 46, 161, 226),
+                    width: 3,
+                  ),
+                  shape: BoxShape.rectangle,
+                  // color: Color.fromARGB(255, 46, 161, 226),
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -314,7 +312,7 @@ class ScheduleMenu extends StatelessWidget {
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             typeOfSlot == null
-                                ? Text("Chưa gán")
+                                ? const Text("Chưa có phân loại Slot")
                                 : Text(typeOfSlot!),
                             const SizedBox(height: 5),
                           ],

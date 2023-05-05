@@ -42,7 +42,7 @@ class _FavoritePageState extends State<FavoritePage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => ExerciseResources(
-                              detailID: "",
+                            // detailID: "",
                             )));
               },
             ),

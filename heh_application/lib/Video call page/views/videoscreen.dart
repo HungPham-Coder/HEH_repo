@@ -4,14 +4,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 
-int tokenRole = 1;
-int tokenExpireTime = 45;
-bool isTokenExpiring = false;
-String serverUrl = "https://agora-token-server-i5zg.onrender.com";
-String appID = "1405b81aefdb475a94c00cc139ed7450";
-String token = "";
-String channelName = "bb";
-
 class VideoCallScreen extends StatefulWidget {
   const VideoCallScreen({Key? key}) : super(key: key);
 
@@ -21,6 +13,14 @@ class VideoCallScreen extends StatefulWidget {
 
 class _VideoCallScreenState extends State<VideoCallScreen> {
   late RtcEngine engine;
+  bool isTokenExpiring = false;
+  int tokenRole = 1;
+  int tokenExpireTime = 45;
+  String token = "";
+  static String channelName = "bb";
+  static String serverUrl = "https://agora-token-server-i5zg.onrender.com";
+  static String appID = "1405b81aefdb475a94c00cc139ed7450";
+
   final AgoraClient client = AgoraClient(
       agoraConnectionData: AgoraConnectionData(
     username: "ab",

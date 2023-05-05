@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:heh_application/Login%20page/choose_form.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Family%20page/signupMed.dart';
 import 'package:heh_application/SignUp%20Page/signupMed.dart';
 import 'package:heh_application/main.dart';
@@ -23,8 +24,9 @@ class SignUpFamilyPage extends StatefulWidget {
 class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
   genderGroup _genderValue = genderGroup.male;
 
-  final List<String> _relationships =["- Chọn -",];
-
+  final List<String> _relationships = [
+    "- Chọn -",
+  ];
 
   String selectedRelationship = "- Chọn -";
 
@@ -143,41 +145,40 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                   height: 60,
                   // child: SizedBox(
                   child: FutureBuilder<List<Relationship>>(
-                    future: CallAPI().getAllRelationship(),
-                    builder: (context, snapshot)  {
-                      if (snapshot.hasData){
-                        if (_relationships.length == 1){
-                          snapshot.data!.forEach((element) {
-                            String field = "${element.relationName}";
-                            _relationships.add(field);
-                          });
-                          print("Co data");
+                      future: CallAPI().getAllRelationship(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          if (_relationships.length == 1) {
+                            snapshot.data!.forEach((element) {
+                              String field = "${element.relationName}";
+                              _relationships.add(field);
+                            });
+                            print("Co data");
+                          }
+                          return DropdownButtonFormField<String>(
+                            decoration: const InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1, color: Colors.grey))),
+                            value: selectedRelationship,
+                            items: _relationships
+                                .map((relationship) => DropdownMenuItem<String>(
+                                    value: relationship,
+                                    child: Text(
+                                      relationship,
+                                      style: const TextStyle(fontSize: 15),
+                                    )))
+                                .toList(),
+                            onChanged: (relationship) => setState(() {
+                              selectedRelationship = relationship!;
+                            }),
+                          );
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
                         }
-                        return DropdownButtonFormField<String>(
-                          decoration: const InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(width: 1, color: Colors.grey))),
-                          value: selectedRelationship,
-                          items: _relationships
-                              .map((relationship) => DropdownMenuItem<String>(
-                              value: relationship,
-                              child: Text(
-                                relationship,
-                                style: const TextStyle(fontSize: 15),
-                              )))
-                              .toList(),
-                          onChanged: (relationship) => setState(() {
-                            selectedRelationship = relationship!;
-                          }),
-                        );
-                      }
-                      else {
-                        return Center(child: CircularProgressIndicator(),);
-                      }
-
-                    }
-                  )
+                      })
 
                   // ),
                   ),
@@ -193,7 +194,7 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const WelcomePage()));
+                                    builder: (context) => const ChooseForm()));
                           },
                           color: Colors.grey[400],
                           elevation: 0,
