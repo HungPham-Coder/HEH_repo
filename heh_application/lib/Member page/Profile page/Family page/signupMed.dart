@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heh_application/Login%20page/choose_form.dart';
 import 'package:heh_application/SignUp%20Page/signup.dart';
 import 'package:heh_application/main.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -181,7 +182,7 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const WelcomePage()));
+                                    builder: (context) => const ChooseForm()));
                           },
                           color: Colors.grey[400],
                           elevation: 0,
@@ -217,7 +218,7 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const WelcomePage()));
+                                    builder: (context) => const ChooseForm()));
                           },
                           color: const Color.fromARGB(255, 46, 161, 226),
                           elevation: 0,

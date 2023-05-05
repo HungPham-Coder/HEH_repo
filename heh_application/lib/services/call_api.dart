@@ -28,8 +28,8 @@ class CallAPI {
   Future<ResultLogin?> callLoginAPI(LoginUser loginUser) async {
     var url = Uri.parse('${link}/api/User/Login');
     // var url = Uri.https('localhost:7166', 'api/User/Login');
-    final body = jsonEncode(
-        {"phoneNumber": loginUser.phone, "password": loginUser.password});
+    final body =
+        jsonEncode({"email": loginUser.email, "password": loginUser.password});
     final headers = {
       "Accept": "application/json",
       "content-type": "application/json",
@@ -463,6 +463,7 @@ class CallAPI {
       throw Exception('Failed to load Schedule');
     }
   }
+
   Future<bool> AddSchedule(Schedule schedule) async {
     var url = Uri.parse('${link}/api/Schedule');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
@@ -471,7 +472,7 @@ class CallAPI {
       "slotID": schedule.slotID,
       "physiotherapistID": schedule.physiotherapistID,
       "description": schedule.description,
-      "physioBookingStatus":schedule.physioBookingStatus
+      "physioBookingStatus": schedule.physioBookingStatus
     });
     final headers = {
       "Accept": "application/json",

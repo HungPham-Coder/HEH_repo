@@ -25,19 +25,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ServicePaid(
+            const ServicePaid(
               icon:
                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
               name: "Tư vấn một buổi",
               date: "04-11-2023",
               time: "11:00 - 12:00",
               bookedFor: "Phạm Phú Minh Hưng",
-              press: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AppointmentPage()));
-              },
             ),
           ],
         ),
@@ -52,13 +46,11 @@ class ServicePaid extends StatelessWidget {
     required this.time,
     required this.name,
     required this.icon,
-    required this.press,
     required this.date,
     required this.bookedFor,
   }) : super(key: key);
 
   final String icon, name, time, bookedFor, date;
-  final VoidCallback? press;
 
   @override
   Widget build(BuildContext context) {
@@ -216,8 +208,10 @@ class _buttonState extends State<button> {
                       side: const BorderSide(color: Colors.white)),
                 )),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => VideoCallPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const VideoCallPage()));
             },
             child: const Text(
               "Tham gia",

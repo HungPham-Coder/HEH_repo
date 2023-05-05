@@ -90,62 +90,6 @@ class _AdviseDetailPageState extends State<AdviseDetailPage> {
                     ]),
                   ),
                 ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //   children: [
-                //     Padding(
-                //       padding: const EdgeInsets.only(left: 20),
-                //       child: ElevatedButton(
-                //         style: ButtonStyle(
-                //             backgroundColor: const MaterialStatePropertyAll<Color>(
-                //                 Colors.black12),
-                //             padding: MaterialStateProperty.all(
-                //                 const EdgeInsets.only(
-                //                     left: 25, right: 25, top: 15, bottom: 15)),
-                //             shape:
-                //                 MaterialStateProperty.all<RoundedRectangleBorder>(
-                //               RoundedRectangleBorder(
-                //                   borderRadius: BorderRadius.circular(15),
-                //                   side: const BorderSide(color: Colors.white)),
-                //             )),
-                //         onPressed: () {
-                //           Navigator.push(
-                //               context,
-                //               MaterialPageRoute(
-                //                   builder: (context) => const AdviseDetailPage()));
-                //         },
-                //         child: const Text(
-                //           "Trở lại",
-                //           style: TextStyle(fontSize: 16),
-                //         ),
-                //       ),
-                //     ),
-                //     Padding(
-                //       padding: const EdgeInsets.only(right: 20),
-                //       child: ElevatedButton(
-                //         style: ButtonStyle(
-                //             padding:
-                //                 MaterialStateProperty.all(const EdgeInsets.all(15)),
-                //             shape:
-                //                 MaterialStateProperty.all<RoundedRectangleBorder>(
-                //               RoundedRectangleBorder(
-                //                   borderRadius: BorderRadius.circular(15),
-                //                   side: const BorderSide(color: Colors.white)),
-                //             )),
-                //         onPressed: () {
-                //           Navigator.push(
-                //               context,
-                //               MaterialPageRoute(
-                //                   builder: (context) => const AdviseDetailPage()));
-                //         },
-                //         child: const Text(
-                //           "Thanh toán",
-                //           style: TextStyle(fontSize: 16),
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
               ],
             ),
           ),

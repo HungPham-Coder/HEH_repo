@@ -52,8 +52,15 @@ class _SchedulePageState extends State<SchedulePage> {
                         );
                       });
                 } else {
-                  return const Center(
-                      child: Text("Bạn chưa đăng ký slot nào."));
+                  return Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 300),
+                      child: Text(
+                        "Hiện tại không còn slot cho bạn",
+                        style: TextStyle(color: Colors.grey[500], fontSize: 16),
+                      ),
+                    ),
+                  );
                 }
               })
         ])));

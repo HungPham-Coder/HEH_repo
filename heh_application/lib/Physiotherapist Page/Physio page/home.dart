@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Home%20page/Advise%20page/appointment.dart';
-import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Home%20page/Session%20Page/session.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/messenger.dart';
 
 class PhysioHomePage extends StatefulWidget {
@@ -38,17 +37,15 @@ class _PhysioHomePageState extends State<PhysioHomePage> {
                         builder: (context) => const AppointmentPage()));
               },
             ),
-            HomeMenu(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fplan.png?alt=media&token=2356eeaa-f224-4b1f-ad5f-f0cb34f2e922",
-              text: "Tham gia buổi điều trị",
-              press: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SessionPage()));
-              },
-            ),
+            // HomeMenu(
+            //   icon:
+            //       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fplan.png?alt=media&token=2356eeaa-f224-4b1f-ad5f-f0cb34f2e922",
+            //   text: "Tham gia buổi điều trị",
+            //   press: () {
+            //     Navigator.push(context,
+            //         MaterialPageRoute(builder: (context) => WelcomePage()));
+            //   },
+            // ),
             HomeMenu(
               icon:
                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcare.png?alt=media&token=0ce5dd58-bcaf-45a8-b277-05eaad8b89b8",

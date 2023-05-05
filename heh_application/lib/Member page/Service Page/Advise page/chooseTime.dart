@@ -53,10 +53,10 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
     if (_time.length == 1) {
       list.forEach((element) {
         DateTime tempStart =
-        new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(element.timeStart);
+            new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(element.timeStart);
         String start = DateFormat("HH:mm").format(tempStart);
         DateTime tempEnd =
-        new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(element.timeEnd);
+            new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(element.timeEnd);
         String end = DateFormat("HH:mm").format(tempEnd);
         _time.add("${start} - ${end}");
       });
@@ -74,7 +74,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
               Text(" *", style: TextStyle(color: Colors.red)),
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: 70,
@@ -95,15 +95,15 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                       decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
                               borderSide:
-                              BorderSide(width: 1, color: Colors.grey))),
+                                  BorderSide(width: 1, color: Colors.grey))),
                       value: selectedSubName,
                       items: _relationships
                           .map((relationship) => DropdownMenuItem<String>(
-                          value: relationship,
-                          child: Text(
-                            relationship,
-                            style: const TextStyle(fontSize: 15),
-                          )))
+                              value: relationship,
+                              child: Text(
+                                relationship,
+                                style: const TextStyle(fontSize: 15),
+                              )))
                           .toList(),
                       onChanged: (subName) => setState(() {
                         snapshot.data!.forEach((element) {
@@ -180,7 +180,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                     confirmText: const Text("Chấp nhận",
                         style: TextStyle(fontSize: 18)),
                     cancelText:
-                    const Text("Hủy", style: TextStyle(fontSize: 18)),
+                        const Text("Hủy", style: TextStyle(fontSize: 18)),
                     initialChildSize: 0.4,
                     title: const Text("Tình trạng của bạn"),
                     buttonText: const Text(
@@ -199,7 +199,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                     },
                     chipDisplay: MultiSelectChipDisplay(onTap: (values) {
                       setState(
-                            () {
+                        () {
                           _itemChange(values!, false);
                         },
                       );
@@ -240,15 +240,15 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                     value: selectedTime,
                     items: _time
                         .map((relationship) => DropdownMenuItem<String>(
-                        value: relationship,
-                        child: Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            relationship,
-                            style: const TextStyle(fontSize: 13),
-                          ),
-                        )))
+                            value: relationship,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                relationship,
+                                style: const TextStyle(fontSize: 13),
+                              ),
+                            )))
                         .toList(),
                     onChanged: (relationship) => setState(() {
                       selectedTime = relationship;
@@ -256,7 +256,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                     }),
                   );
                 } else {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
@@ -299,10 +299,10 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
               const SizedBox(height: 10),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: Container(
                   decoration:
-                  BoxDecoration(border: Border.all(color: Colors.black)),
+                      BoxDecoration(border: Border.all(color: Colors.black)),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
@@ -323,11 +323,11 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ElevatedButton(
                   style: ButtonStyle(
                       padding:
-                      MaterialStateProperty.all(const EdgeInsets.all(15)),
+                          MaterialStateProperty.all(const EdgeInsets.all(15)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
@@ -336,7 +336,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                   onPressed: () async {
                     SubProfile subProfile = await CallAPI()
                         .getSubProfileBySubNameAndUserID(
-                        selectedSubName.trim(), sharedCurrentUser!.userID!);
+                            selectedSubName.trim(), sharedCurrentUser!.userID!);
                     String problem = '';
                     _selectedProblems.forEach((element) {
                       if (element != _selectedProblems.last) {
@@ -347,7 +347,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                     });
 
                     DateTime tempDate =
-                    new DateFormat("dd-MM-yyyy").parse(_date.text);
+                        new DateFormat("dd-MM-yyyy").parse(_date.text);
 
                     String date = DateFormat("yyyy-MM-dd").format(tempDate);
                     print(date);
@@ -366,11 +366,11 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => TimeResultPage(
-                              subProfile: subProfile,
-                              timeStart: timeStart,
-                              timeEnd: timeEnd,
-                              problem: problem,
-                            )));
+                                  subProfile: subProfile,
+                                  timeStart: timeStart,
+                                  timeEnd: timeEnd,
+                                  problem: problem,
+                                )));
                   },
                   child: const Text(
                     "Tìm kiếm",
@@ -462,7 +462,7 @@ class PhysioChooseMenu extends StatelessWidget {
             child: TextButton(
                 style: ButtonStyle(
                     backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.white),
+                        MaterialStateProperty.all<Color>(Colors.white),
                     padding: MaterialStateProperty.all(
                         const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 15)),
