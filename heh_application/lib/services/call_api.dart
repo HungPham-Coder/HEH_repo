@@ -245,6 +245,28 @@ class CallAPI {
       throw Exception('Failed to load BookingDetail');
     }
   }
+  Future<List<BookingDetail>> getAllBookingDetailByPhysioIDAndTypeOfSlot(String physioID, String typeOfSlot) async {
+    var url = Uri.parse('${link}/api/BookingDetail/GetAllBookingDetailByPhysioIDAndTypeOfSlot?physioID=$physioID&typeOfSlot=$typeOfSlot');
+    // var url = Uri.https('localhost:7166', 'api/BookingDetail');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      Iterable jsonResult = json.decode(response.body);
+      List<BookingDetail> list = List<BookingDetail>.from(
+          jsonResult.map((model) => BookingDetail.fromMap(model)));
+      if (list == null) {
+        throw Exception('BookingDetail List null');
+      } else {
+        return list;
+      }
+    } else {
+      print(response.body);
+      throw Exception('Failed to load BookingDetail');
+    }
+  }
 
   Future<List<ExerciseResource>> getAllExerciseResource() async {
     var url = Uri.parse('${link}/api/ExerciseResource');
@@ -340,6 +362,22 @@ class CallAPI {
       String userID) async {
     var url = Uri.parse(
         '${link}/api/MedicalRecord/GetByRelationNameAndUserID?relationName=Tôi&userID=$userID');
+    // var url = Uri.https('localhost:7166', 'api/MedicalRecord');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      return MedicalRecord.fromMap(json.decode(response.body));
+    } else {
+      throw Exception('Failed to load MedicalRecord');
+    }
+  }
+  Future<MedicalRecord?> getMedicalRecordBySubProfileID(
+      String subID) async {
+    var url = Uri.parse(
+        '${link}/api/MedicalRecord/GetBySubProfileID?subID=$subID');
     // var url = Uri.https('localhost:7166', 'api/MedicalRecord');
     final headers = {
       "Accept": "application/json",

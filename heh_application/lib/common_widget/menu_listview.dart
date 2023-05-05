@@ -255,6 +255,7 @@ class ScheduleMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: duplicate_ignore
     return Padding(
+<<<<<<< HEAD
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -322,6 +323,64 @@ class ScheduleMenu extends StatelessWidget {
           ),
         ],
       ),
+=======
+
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      child: TextButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              padding: MaterialStateProperty.all(
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 15)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(
+                        color: Color.fromARGB(255, 46, 161, 226), width: 2)),
+              )),
+          onPressed: press,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Image.network(
+                icon,
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  return child;
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+                width: 40,
+                height: 50,
+              ),
+              const SizedBox(width: 10),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width / 1.6,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(name,
+                          style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black)),
+                      const SizedBox(height: 5),
+                      Text(
+                        time,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      typeOfSlot == null ? Text("Chưa gán") : Text(typeOfSlot!),
+                      const SizedBox(height: 5),
+                    ],
+                  )),
+            ],
+          )),
+
+>>>>>>> 6bfb2b85c2f78b3fba6c75101e248c1fdc0101ad
     );
   }
 }
