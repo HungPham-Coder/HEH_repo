@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/choose_form.dart';
 import 'package:intro_slider/intro_slider.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'services/auth.dart';
 
 class WelcomePage extends StatefulWidget {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   const WelcomePage({Key? key}) : super(key: key);
 
   @override
@@ -24,6 +26,38 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   void initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Allow Notification'),
+            content:
+                const Text('App của chúng tôi muốn truy cập quyền thông báo'),
+            actions: [
+              TextButton(
+                onPressed: () => AwesomeNotifications()
+                    .requestPermissionToSendNotifications()
+                    .then((_) => Navigator.pop(context)),
+                child: const Text(
+                  'Đồng ý',
+                  style: TextStyle(color: Colors.teal, fontSize: 18),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'Hủy bỏ',
+                  style: TextStyle(color: Colors.grey, fontSize: 18),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    });
     super.initState();
     slides.add(
       const ContentConfig(
