@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/login.dart';
 import 'package:heh_application/Member%20page/navigation_main.dart';
@@ -14,6 +16,7 @@ import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:provider/provider.dart';
 import '../models/physiotherapist.dart';
 import '../services/stream_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 ResultLogin? sharedResultLogin;
 SignUpUser? sharedCurrentUser;
@@ -35,7 +38,15 @@ class LandingPage extends StatelessWidget {
         // if (snapshot.connectionState == ConnectionState.active) {
         // final ResultLogin? user = snapshot.data;
         // final SignUpUser? user = snapshot.data;
+        if (snapshot.connectionState == ConnectionState.active){
+          final user = snapshot.data;
+          if (user == null){
 
+          }
+          else {
+
+          }
+        }
         if (snapshot.data == null) {
           return LoginPage(
             msg: msg,
@@ -54,6 +65,7 @@ class LandingPage extends StatelessWidget {
             msg: 'Số điện thoại hoặc mật khẩu của bạn sai. Vui lòng nhập lại.',
           );
         } else {
+          // prefs
           sharedResultLogin = snapshot.data;
           Future<SignUpUser> futureCurrentUser =
               auth.getCurrentUser(sharedResultLogin!);

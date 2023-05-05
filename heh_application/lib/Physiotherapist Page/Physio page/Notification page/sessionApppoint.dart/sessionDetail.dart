@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heh_application/models/booking_detail.dart';
 import 'package:heh_application/models/booking_schedule.dart';
 import 'package:heh_application/models/medical_record.dart';
 import 'package:heh_application/services/call_api.dart';
@@ -20,7 +21,6 @@ class _SessionDetailPageState extends State<SessionDetailPage> {
         widget.bookingSchedule!.schedule!.slot!.timeStart);
     String end = DateTimeFormat.formateTime(
         widget.bookingSchedule!.schedule!.slot!.timeEnd);
-
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -36,7 +36,7 @@ class _SessionDetailPageState extends State<SessionDetailPage> {
               children: [
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black),
@@ -44,7 +44,7 @@ class _SessionDetailPageState extends State<SessionDetailPage> {
                     child: Column(children: [
                       const SizedBox(height: 10),
                       const CircleAvatar(
-                        maxRadius: 50,
+                        maxRadius: 40,
                         backgroundColor: Color.fromARGB(255, 220, 220, 220),
                         backgroundImage: NetworkImage(
                             "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fperson.png?alt=media&token=c5c521dc-2f27-4fb9-ba76-b0241c2dfe19"),
@@ -53,77 +53,74 @@ class _SessionDetailPageState extends State<SessionDetailPage> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15, vertical: 5),
                         child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Center(
-                                  child: Text("Thông tin",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500))),
-                              const SizedBox(height: 20),
-                              information(
-                                  name: "Tên người đặt: ",
-                                  info:
-                                      "${widget.bookingSchedule!.signUpUser!.firstName}"),
-                              padding(),
-                              information(
-                                  name: "Tên người được điều trị: ",
-                                  info:
-                                      "${widget.bookingSchedule!.subProfile!.subName}"),
-                              padding(),
-                              information(
-                                  name: "Buổi điều trị: ", info: "Buổi ABC"),
-                              padding(),
-                              information(
-                                  name: "Ngày điều trị: ", info: "$date"),
-                              padding(),
-                              information(
-                                  name: "Thời gian bắt đầu: ", info: "$start"),
-                              padding(),
-                              information(
-                                  name: "Thời gian kết thúc: ", info: "$end"),
-                              padding(),
-                              FutureBuilder<MedicalRecord?>(
-                                  future: CallAPI()
-                                      .getMedicalRecordBySubProfileID(
-                                          widget.bookingSchedule!.subProfileID),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return Column(
-                                        children: [
-                                          information(
-                                              name: "Tình trạng: ",
-                                              info:
-                                                  "${snapshot.data!.problem}"),
-                                          padding(),
-                                          information(
-                                              name: "Hoạt động khó khăn: ",
-                                              info:
-                                                  "${snapshot.data!.difficulty}"),
-                                          padding(),
-                                          information(
-                                              name: "Chấn thương: ",
-                                              info: "${snapshot.data!.injury}"),
-                                          padding(),
-                                          information(
-                                              name: "Bệnh lý: ",
-                                              info: "${snapshot.data!.curing}"),
-                                          padding(),
-                                          information(
-                                              name: "Thuốc đang sử dụng: ",
-                                              info:
-                                                  "${snapshot.data!.medicine}"),
-                                          const SizedBox(height: 10),
-                                        ],
-                                      );
-                                    } else {
-                                      return information(
-                                          name: "Tình trạng: ",
-                                          info: "loading lỗi");
-                                    }
-                                  }),
-                            ]),
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Center(
+                                child: Text("Thông tin",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500))),
+                            const SizedBox(height: 20),
+                            information(
+                                name: "Tên người đặt: ", info: "${widget.bookingSchedule!.signUpUser!.firstName}"),
+                            padding(),
+                            information(
+                                name: "Tên người được điều trị: ",
+                                info: "${widget.bookingSchedule!.subProfile!.subName}"),
+                            padding(),
+                            information(
+                                name: "Buổi điều trị: ", info: "${widget.bookingSchedule!.schedule!.slot!.slotName}"),
+                            padding(),
+                            information(
+                                name: "Ngày điều trị: ", info: "$date"),
+                            padding(),
+                            information(
+                                name: "Thời gian bắt đầu: ", info: "$start"),
+                            padding(),
+                            information(
+                                name: "Thời gian kết thúc: ", info: "$end"),
+                            FutureBuilder<MedicalRecord?>(
+                                future: CallAPI()
+                                    .getMedicalRecordBySubProfileID(
+                                    widget.bookingSchedule!.subProfileID),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Column(
+                                      children: [
+                                        information(
+                                            name: "Tình trạng: ",
+                                            info:
+                                            "${snapshot.data!.problem}"),
+                                        padding(),
+                                        information(
+                                            name: "Hoạt động khó khăn: ",
+                                            info:
+                                            "${snapshot.data!.difficulty}"),
+                                        padding(),
+                                        information(
+                                            name: "Chấn thương: ",
+                                            info: "${snapshot.data!.injury}"),
+                                        padding(),
+                                        information(
+                                            name: "Bệnh lý: ",
+                                            info: "${snapshot.data!.curing}"),
+                                        padding(),
+                                        information(
+                                            name: "Thuốc đang sử dụng: ",
+                                            info:
+                                            "${snapshot.data!.medicine}"),
+                                        const SizedBox(height: 10),
+                                      ],
+                                    );
+                                  } else {
+                                    return information(
+                                        name: "Tình trạng: ",
+                                        info: "loading lỗi");
+                                  }
+                                }),
+                          ],
+                        ),
                       ),
                     ]),
                   ),
@@ -150,7 +147,7 @@ class _SessionDetailPageState extends State<SessionDetailPage> {
                 //           Navigator.push(
                 //               context,
                 //               MaterialPageRoute(
-                //                   builder: (context) => const SessionDetailPage()));
+                //                   builder: (context) => const AdviseDetailPage()));
                 //         },
                 //         child: const Text(
                 //           "Trở lại",
@@ -174,7 +171,7 @@ class _SessionDetailPageState extends State<SessionDetailPage> {
                 //           Navigator.push(
                 //               context,
                 //               MaterialPageRoute(
-                //                   builder: (context) => const SessionDetailPage()));
+                //                   builder: (context) => const AdviseDetailPage()));
                 //         },
                 //         child: const Text(
                 //           "Thanh toán",
@@ -198,14 +195,19 @@ class information extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      Wrap(
+    return SizedBox(
+      width: double.maxFinite,
+      child: Stack(
         children: [
-          Text(name),
-          Text(info, style: const TextStyle(fontWeight: FontWeight.w600)),
+          Wrap(
+            children: [
+              Text(name),
+              Text(info, style: const TextStyle(fontWeight: FontWeight.w600)),
+            ],
+          ),
         ],
       ),
-    ]);
+    );
   }
 }
 

@@ -78,8 +78,10 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                                 itemCount: slotList!.length,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
-                                  String start = DateTimeFormat.formateTime(slotList![index].timeStart);
-                                  String end = DateTimeFormat.formateTime(slotList![index].timeEnd);
+                                  String start = DateTimeFormat.formateTime(
+                                      slotList![index].timeStart);
+                                  String end = DateTimeFormat.formateTime(
+                                      slotList![index].timeEnd);
 
                                   return FutureBuilder(
                                       future: CallAPI()
@@ -180,8 +182,8 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                 DateTime? pickeddate = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
-                    firstDate: DateTime(2023),
-                    lastDate: DateTime(2999));
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.sunday));
                 if (pickeddate != null) {
                   _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
                 }
