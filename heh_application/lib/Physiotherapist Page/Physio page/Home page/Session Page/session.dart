@@ -6,14 +6,14 @@ import 'package:heh_application/models/booking_detail.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/util/date_time_format.dart';
 
-class AppointmentPage extends StatefulWidget {
-  const AppointmentPage({Key? key}) : super(key: key);
+class SessionPage extends StatefulWidget {
+  const SessionPage({Key? key}) : super(key: key);
 
   @override
-  State<AppointmentPage> createState() => _AppointmentPageState();
+  State<SessionPage> createState() => _SessionPageState();
 }
 
-class _AppointmentPageState extends State<AppointmentPage> {
+class _SessionPageState extends State<SessionPage> {
   Widget button({required VoidCallback press}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -63,11 +63,11 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   Widget ServicePaid(
       {required String icon,
-      name,
-      time,
-      bookedFor,
-      date,
-      required VoidCallback press}) {
+        name,
+        time,
+        bookedFor,
+        date,
+        required VoidCallback press}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
@@ -189,7 +189,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
           children: [
             FutureBuilder<List<BookingDetail>>(
                 future: CallAPI().getAllBookingDetailByPhysioIDAndTypeOfSlot(
-                    sharedPhysiotherapist!.physiotherapistID, 'Tư Vấn 1 Buổi'),
+                    sharedPhysiotherapist!.physiotherapistID, 'Tư Vấn Dài Hạn'),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.isNotEmpty) {
@@ -219,13 +219,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
                             return ServicePaid(
                               icon:
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
                               name:
-                                  "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                              "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
                               date: "$day",
                               time: "$start - $end",
                               bookedFor:
-                                  "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
+                              "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
                               press: () {
                                 Navigator.push(
                                     context,

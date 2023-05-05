@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Notification%20page/adviseAppoint.dart/adviseDetail.dart';
+import 'package:heh_application/models/booking_detail.dart';
+import 'package:heh_application/services/call_api.dart';
+import 'package:heh_application/util/date_time_format.dart';
+import 'package:intl/intl.dart';
 
 class AdviseAppointmentPage extends StatefulWidget {
   const AdviseAppointmentPage({Key? key}) : super(key: key);
@@ -24,18 +29,52 @@ class _AdviseAppointmentPageState extends State<AdviseAppointmentPage> {
           child: Column(
             children: [
               const SizedBox(height: 10),
-              AdviseMenu(
-                icon:
-                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
-                name: "Nguyễn Văn A",
-                press: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AdviseDetailPage()));
-                },
-                time: "Khung giờ đặt: 11:00 - 12:00",
-              ),
+              FutureBuilder<List<BookingDetail>>(
+                  future: CallAPI().getAllBookingDetailByPhysioIDAndTypeOfSlot(
+                      sharedPhysiotherapist!.physiotherapistID,
+                      'Tư Vấn 1 Buổi'),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.isNotEmpty){
+
+                        return ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: snapshot.data!.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              String start = DateTimeFormat.formateTime(snapshot.data![index].bookingSchedule!
+                                  .schedule!.slot!.timeStart);
+                              String end = DateTimeFormat.formateTime(snapshot.data![index].bookingSchedule!
+                                  .schedule!.slot!.timeEnd);
+
+                              return AdviseMenu(
+                                icon:
+                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
+                                name:
+                                "${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
+                                press: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AdviseDetailPage(bookingSchedule: snapshot.data![index].bookingSchedule,)));
+                                },
+                                time: "Khung giờ đặt: $start - $end",
+                              );
+                            });
+                      }
+                      else {
+                        return Center(
+                          child: Text("Hiện tại chưa có ai đặt list empty"),
+                        );
+                      }
+
+                    } else {
+                      return Center(
+                        child: Text("Hiện tại chưa có ai đặt "),
+                      );
+                    }
+                  }),
             ],
           ),
         ));

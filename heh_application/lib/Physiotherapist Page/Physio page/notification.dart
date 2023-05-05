@@ -10,6 +10,8 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+  String count = '1';
+  bool isLabelVisible = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,11 +31,16 @@ class _NotificationPageState extends State<NotificationPage> {
           Column(
             children: [
               AppointmentMenu(
-                count: "1",
+                isLabelVisible: isLabelVisible,
+                count: count,
                 icon:
                     "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvise.png?alt=media&token=73296749-85c7-415c-9287-eb044d23d6a1",
                 text: "Tư vấn một buổi",
                 press: () {
+                  setState(() {
+                    isLabelVisible = false;
+                    count = '';
+                  });
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -41,6 +48,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 },
               ),
               AppointmentMenu(
+                isLabelVisible: isLabelVisible,
                 count: "2",
                 icon:
                     "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphysio.png?alt=media&token=dcc89b01-2c15-4808-87eb-4a2ecc9667a3",
@@ -68,9 +76,11 @@ class AppointmentMenu extends StatelessWidget {
     required this.icon,
     required this.press,
     required this.count,
+    required this.isLabelVisible,
   }) : super(key: key);
 
   final String text, icon, count;
+  final bool isLabelVisible;
   final VoidCallback press;
 
   @override
@@ -92,7 +102,7 @@ class AppointmentMenu extends StatelessWidget {
           child: Row(
             children: [
               Badge(
-                isLabelVisible: true,
+                isLabelVisible: isLabelVisible,
                 textStyle:
                     const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                 label: Text(count),
