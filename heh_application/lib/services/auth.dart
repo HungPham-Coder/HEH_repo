@@ -22,13 +22,14 @@ abstract class AuthBase {
       String categoryID, String accessToken);
   // Future<User?> signInWithPhoneAndPassword(String phoneNumber, String password);
 
-  Future<User> signInWithEmailAndPassword(String username, String password);
-  Future<User> signUpWithEmailAndPassword(String username, String password);
+  Future<User?> signInWithEmailAndPassword(String username, String password);
+  Future<User?> signUpWithEmailAndPassword(String username, String password);
   void verifyUserPhoneNumber(String phoneNumber);
   // Future<void> addLoginUserStream(ResultLogin resultLogin) ;
   // Future<void> addSignUpUserStream(SignUpUser? signUpUser);
   Future<bool> checkUserExistInPostgre(String email);
   Future<void> checkUserExistInFirebase(SignUpUser signUpUser);
+  Future<bool> checkUserExistInFirebaseLogIn (String email);
   Future<SignUpUser> getCurrentUser(ResultLogin resultLogin);
   Future<void> signInAnonymously();
   User? get currenUser;
@@ -282,6 +283,25 @@ class Auth implements AuthBase {
   Future<void> signInAnonymously() async {
     // TODO: implement signInAnonymously
     await _firebaseAuth.signInAnonymously();
+  }
+
+  @override
+  Future<bool> checkUserExistInFirebaseLogIn(String email) async {
+    // TODO: implement checkUserExistInFirebaseLogIn
+    try{
+      final list = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+      if (list.isNotEmpty){
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+
+   on FirebaseException catch (e){
+      print(e.message);
+      return true;
+    }
   }
 
   // @override

@@ -6,15 +6,16 @@ import 'package:provider/provider.dart';
 
 import 'services/auth.dart';
 
-class WelcomePage extends StatefulWidget {
-  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  const WelcomePage({Key? key}) : super(key: key);
+final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+class WelcomePage1 extends StatefulWidget {
+  const WelcomePage1({Key? key}) : super(key: key);
 
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   @override
-  State<WelcomePage> createState() => _WelcomePageState();
+  State<WelcomePage1> createState() => _WelcomePage1State();
 }
 
-class _WelcomePageState extends State<WelcomePage> {
+class _WelcomePage1State extends State<WelcomePage1> {
   @override
   void dispose() {
     final auth = Provider.of<AuthBase>(context, listen: false);
@@ -31,15 +32,18 @@ class _WelcomePageState extends State<WelcomePage> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Allow Notification'),
-            content:
-                const Text('App của chúng tôi muốn truy cập quyền thông báo'),
+
+            title: Text('Allow Notification'),
+            content: Text('App của chúng tôi muốn truy cập quyền thông báo'),
+
             actions: [
               TextButton(
                 onPressed: () => AwesomeNotifications()
                     .requestPermissionToSendNotifications()
                     .then((_) => Navigator.pop(context)),
-                child: const Text(
+
+                child: Text(
+
                   'Đồng ý',
                   style: TextStyle(color: Colors.teal, fontSize: 18),
                 ),
@@ -48,7 +52,9 @@ class _WelcomePageState extends State<WelcomePage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text(
+
+                child: Text(
+
                   'Hủy bỏ',
                   style: TextStyle(color: Colors.grey, fontSize: 18),
                 ),
@@ -176,36 +182,40 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return IntroSlider(
-      renderSkipBtn: const Text("Bỏ qua",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)),
-      renderNextBtn: const Padding(
-        padding: EdgeInsets.only(right: 10),
-        child: Text("Tiếp theo",
+    return Scaffold(
+      body: IntroSlider(
+        key: scaffoldKey,
+        renderSkipBtn: const Text("Bỏ qua",
             style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 15)),
+                color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)),
+        renderNextBtn: const Padding(
+          padding: EdgeInsets.only(right: 10),
+          child: Text("Tiếp theo",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15)),
+        ),
+        renderDoneBtn: const Text("Kết thúc",
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)),
+        scrollPhysics: const ClampingScrollPhysics(),
+        indicatorConfig: const IndicatorConfig(
+            colorActiveIndicator: Colors.white,
+            typeIndicatorAnimation: TypeIndicatorAnimation.sizeTransition,
+            colorIndicator: Colors.black,
+            spaceBetweenIndicator: 10),
+        listContentConfig: slides,
+        onDonePress:() {
+          Navigator.push(scaffoldKey.currentContext!,
+              MaterialPageRoute(builder: (context) => const ChooseForm()));
+
+        },
+        onSkipPress: () {
+          Navigator.push(scaffoldKey.currentContext!,
+              MaterialPageRoute(builder: (context) => const ChooseForm()));
+        },
       ),
-      renderDoneBtn: const Text("Kết thúc",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)),
-      scrollPhysics: const ClampingScrollPhysics(),
-      indicatorConfig: const IndicatorConfig(
-          colorActiveIndicator: Colors.white,
-          typeIndicatorAnimation: TypeIndicatorAnimation.sizeTransition,
-          colorIndicator: Colors.black,
-          spaceBetweenIndicator: 10),
-      listContentConfig: slides,
-      onDonePress: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ChooseForm()));
-      },
-      onSkipPress: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ChooseForm()));
-      },
     );
   }
 }
