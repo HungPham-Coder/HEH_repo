@@ -1,5 +1,6 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:heh_application/models/exercise_resource.dart';
 import 'package:video_player/video_player.dart';
 
 class ExerciseResourcesDetail extends StatefulWidget {
@@ -10,11 +11,11 @@ class ExerciseResourcesDetail extends StatefulWidget {
       this.resourceName,
       this.description,
       this.videoURL,
-      // this.exerciseResource,
+      this.exerciseResource,
       required this.resourceID})
       : super(key: key);
   // ExerciseDetail1? exerciseDetail;
-  // List<ExerciseResource>? exerciseResource;
+  List<ExerciseResource>? exerciseResource;
   String? resourceID, imageURL, resourceName, description, videoURL;
   @override
   State<ExerciseResourcesDetail> createState() =>
@@ -82,7 +83,8 @@ class _ExerciseResourcesDetailState extends State<ExerciseResourcesDetail> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.imageURL == null ||
+    if (widget.exerciseResource != null ||
+        widget.imageURL == null ||
         widget.description == null ||
         widget.resourceName == null ||
         widget.videoURL == null) {

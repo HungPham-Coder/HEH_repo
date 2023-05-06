@@ -89,8 +89,7 @@ class _WelcomePageState extends State<WelcomePage> {
         ),
         pathImage: "assets/images/welcome2.png",
         heightImage: 300,
-        description:
-            "'Trải nghiệm của bạn cũng là\ntrải nghiệm của chúng tôi!'\n\nHãy tham gia cùng chúng tôi.",
+        description: "Cùng bạn cải thiện,\nduy trì sức khoẻ.",
         styleDescription: TextStyle(
           fontWeight: FontWeight.w600,
           color: Colors.white,
@@ -101,18 +100,75 @@ class _WelcomePageState extends State<WelcomePage> {
     );
     slides.add(
       const ContentConfig(
-        title: "ERASER",
+        title: "Tư liệu miễn phí",
+        marginTitle: EdgeInsets.symmetric(vertical: 40),
+        styleTitle: TextStyle(
+          fontSize: 26,
+          color: Colors.white,
+          fontWeight: FontWeight.w700,
+          fontFamily: 'Roadbrush',
+          shadows: [
+            Shadow(
+                // bottomLeft
+                offset: Offset(-1.5, -1.5),
+                color: Colors.black),
+            Shadow(
+                // bottomRight
+                offset: Offset(1.5, -1.5),
+                color: Colors.black),
+            Shadow(
+                // topRight
+                offset: Offset(1.5, 1.5),
+                color: Colors.black),
+            Shadow(
+                // topLeft
+                offset: Offset(-1.5, 1.5),
+                color: Colors.black),
+          ],
+        ),
         pathImage: "assets/images/welcome2.png",
-        description: "description",
+        textAlignDescription: TextAlign.start,
+        styleDescription: TextStyle(
+            fontWeight: FontWeight.w500, color: Colors.white, fontSize: 17),
+        description:
+            "HEH có các bài tập Trị Liệu bao gồm nội dung tập và video miễn phí.\n\nNgoài ra bạn có thể tập chung với người thân của mình để cùng cãi thiện sức khỏe của bản thân.\n\nBạn cũng có thể lưu lại bài tập riêng của mình.",
         backgroundColor: Color.fromARGB(255, 46, 161, 226),
       ),
     );
     slides.add(
       const ContentConfig(
-        title: "ERASER",
+        title: "Dịch vụ tư vấn",
+        marginTitle: EdgeInsets.symmetric(vertical: 40),
+        styleTitle: TextStyle(
+          fontSize: 26,
+          color: Colors.white,
+          fontWeight: FontWeight.w700,
+          fontFamily: 'Roadbrush',
+          shadows: [
+            Shadow(
+                // bottomLeft
+                offset: Offset(-1.5, -1.5),
+                color: Colors.black),
+            Shadow(
+                // bottomRight
+                offset: Offset(1.5, -1.5),
+                color: Colors.black),
+            Shadow(
+                // topRight
+                offset: Offset(1.5, 1.5),
+                color: Colors.black),
+            Shadow(
+                // topLeft
+                offset: Offset(-1.5, 1.5),
+                color: Colors.black),
+          ],
+        ),
         pathImage: "assets/images/welcome2.png",
         description:
-            "'Trải nghiệm của bạn cũng là\ntrải nghiệm của chúng tôi!'\n\nHãy tham gia cùng chúng tôi.",
+            "Bạn sẽ dược tư vấn miễn phí bởi Chuyên Viên Trị Liệu.\n\nĐể góp phần bảo vệ môi trường cũng như là tiện lợi cho bạn.\n\nHEH sẽ cung cấp dịch vụ trả phí với hình thức Video Call, Chuyên Viên Trị Liệu sẽ tư vấn, theo dõi bạn.\n\n Ngoài ra bạn có thể chọn Chuyên VIên mà mình mong muốn",
+        textAlignDescription: TextAlign.start,
+        styleDescription: TextStyle(
+            fontWeight: FontWeight.w500, color: Colors.white, fontSize: 17),
         backgroundColor: Color.fromARGB(255, 46, 161, 226),
       ),
     );

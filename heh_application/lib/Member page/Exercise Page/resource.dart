@@ -73,31 +73,30 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
                                   //     await CallAPI()
                                   //         .getExerciseDetailByExerciseID(widget
                                   //             .exerciseDetail!.exerciseID);
-                                  // List<ExerciseResource> exerciseResource =
-                                  //     await CallAPI()
-                                  //         .getExerciseResourceByExerciseDetailID(
-                                  //             snapshot.data![index]
-                                  //                 .exerciseDetailID);
+                                  List<ExerciseResource> exerciseResource =
+                                      await CallAPI()
+                                          .getExerciseResourceByExerciseDetailID(
+                                              snapshot.data![index]
+                                                  .exerciseDetailID);
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    print(widget.exerciseDetail!.description);
-                                    // if (exerciseResource != null) {
-                                    return ExerciseResourcesDetail(
-                                      resourceID: widget.detailID,
-                                      // exerciseResource: exerciseResource,
-                                      imageURL: snapshot.data![index].imageURL!,
-                                      description:
-                                          widget.exerciseDetail!.description,
-                                      resourceName:
-                                          snapshot.data![index].resourceName,
-                                      videoURL: snapshot.data![index].videoURL,
-                                    );
-                                    // }
-                                    //  else {
-                                    //   return ExerciseResourcesDetail(
-                                    //     resourceID: widget.detailID,
-                                    //   );
-                                    // }
+                                    print(exerciseResource);
+                                    if (widget.detailID != null) {
+                                      return ExerciseResourcesDetail(
+                                        resourceID: widget.detailID,
+                                        // exerciseResource: exerciseResource,
+                                        imageURL:
+                                            snapshot.data![index].imageURL!,
+                                        description:
+                                            widget.exerciseDetail!.description,
+                                        resourceName:
+                                            snapshot.data![index].resourceName,
+                                        videoURL:
+                                            snapshot.data![index].videoURL,
+                                      );
+                                    } else {
+                                      return CircularProgressIndicator();
+                                    }
                                   }));
                                 },
                               );
