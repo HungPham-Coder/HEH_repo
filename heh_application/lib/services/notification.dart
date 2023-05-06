@@ -24,7 +24,7 @@ class NotificationService {
     debugPrint('Revieved');
     final payload = receivedAction.payload ?? {};
     if (payload["navigate"] == "true") {
-      WelcomePage.navigatorKey.currentState?.push(
+      WelcomePage1.navigatorKey.currentState?.push(
         MaterialPageRoute(
           builder: (_) => LandingPage(),
         ),

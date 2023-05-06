@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:heh_application/models/role.dart';
 
 class ResultLogin {
@@ -27,5 +29,16 @@ class ResultLogin {
         lastName: json["lastName"],
         role: Role.fromMap(json["role"])
     );
+  }
+  Map<String,dynamic> toJson() {
+    return {
+      'access_token':accessToken,
+      'userID':userID,
+      'username':username,
+      'firstName':firstName,
+      'phoneNumber':phoneNumber,
+      'lastName':lastName,
+      'role': role!.toJson()
+    };
   }
 }
