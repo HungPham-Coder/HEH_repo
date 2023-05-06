@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
+import 'package:heh_application/Login%20page/login.dart';
 import 'package:heh_application/SignUp%20Page/signup.dart';
+import 'package:heh_application/welcome.dart';
 
 class ChooseForm extends StatefulWidget {
   const ChooseForm({Key? key}) : super(key: key);
@@ -69,7 +71,7 @@ class _ChooseFormState extends State<ChooseForm> {
                     height: 60,
                     onPressed: () {
                       Navigator.push(
-                          context,
+                          scaffoldKey.currentContext!,
                           MaterialPageRoute(
                             builder: (context) {
                               return LandingPage();

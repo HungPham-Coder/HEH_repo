@@ -87,15 +87,21 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   otpLength: 6,
                   otpType: OTPType.digitsOnly);
               if (await myauth.sendOTP() == true) {
-                choose = true;
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text("Mã OTP đã gửi đến email của bạn."),
-                ));
+                setState(() {
+                  choose = true;
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Mã OTP đã gửi đến email của bạn."),
+                  ));
+                });
+
               } else {
-                choose = false;
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text("Xin lỗi, gửi OTP thất bại."),
-                ));
+                setState(() {
+                  choose = false;
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Xin lỗi, gửi OTP thất bại."),
+                  ));
+                });
+
               }
             },
             child: const Text("Gửi OTP")),
