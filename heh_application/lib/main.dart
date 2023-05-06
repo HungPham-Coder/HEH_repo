@@ -14,11 +14,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Login page/landing_page.dart';
 import 'SignUp Page/signup.dart';
 import 'models/sign_up_user.dart';
-
+SharedPreferences? preferences;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-  // SharedPreferences prefs =await SharedPreferences.getInstance();
   AwesomeNotifications().initialize(
       null,
       [
@@ -42,11 +41,12 @@ Future<void> main() async {
   SecurityContext.defaultContext
       .setTrustedCertificatesBytes(data.buffer.asUint8List());
   await Firebase.initializeApp();
+
   runApp(Provider<AuthBase>(
     create: (context) => Auth(),
-    child: const MaterialApp(
+    child:  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: WelcomePage(),
+      home: WelcomePage1() ,
     ),
   ));
 }

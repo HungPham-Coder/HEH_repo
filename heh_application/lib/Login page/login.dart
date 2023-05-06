@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:heh_application/ExceptionDialog/show_exception_alert_dialog.dart
 import 'package:heh_application/ForgotPassword%20Page/forgotPass.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/SignUp%20Page/signup.dart';
+import 'package:heh_application/main.dart';
 import 'package:heh_application/models/login_user.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 import 'package:heh_application/services/auth.dart';
@@ -13,6 +16,7 @@ import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/stream_test.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/result_login.dart';
 
@@ -26,6 +30,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool isObscure = false;
   bool _submitted = false;
+
 
   @override
   void initState() {
@@ -279,7 +284,7 @@ class _LoginPageState extends State<LoginPage> {
                           Center(
                             child: FloatingActionButton.extended(
                               heroTag: 'google',
-                              onPressed: () => _signInWithGoogle(),
+                              onPressed: null,
                               icon: Image.network(
                                   'https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fgoogle_icon.png?alt=media&token=6234a131-fc34-4cd6-b596-beba7b1c3a46',
                                   height: 30,
@@ -325,8 +330,10 @@ class _LoginPageState extends State<LoginPage> {
         //add login stream to manage login state
         //add signup user to manage user object xuyen suot app
         // await  stream.addSignUpStream(signUpUser);
-        await auth.signInAnonymously();
+        // await auth.signInAnonymously();
+        preferences!.setString('result_login', json.encode(resultLogin.toJson()));
         await stream.addLoginStream(resultLogin);
+
         // final registerResult = 'Đăng nhập thành công';
         final snackBar = SnackBar(
           content: Row(
@@ -351,61 +358,62 @@ class _LoginPageState extends State<LoginPage> {
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
-        ResultLogin resultLogin =
-            ResultLogin(userID: "error login", firstName: 'null');
-        await stream.addLoginStream(resultLogin);
+        // ResultLogin resultLogin =
+        //     ResultLogin(userID: "error login", firstName: 'null');
+        // await stream.addLoginStream(resultLogin);
+        LandingPage(msg: 'Tài khoản hoặc mật khẩu sai',);
       }
     } on Exception catch (e) {
       print(e.toString());
     }
   }
 
-  Future<void> _signInWithGoogle() async {
-    try {
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      final stream = StreamTest.instance;
-      User? user = await auth.signInWithGoogle();
-      // await user!.reload();
-      var email;
-      for (var field in user!.providerData) {
-        email = field.email;
-      }
-      // DateTime? dateTime = "2023-03-27";
-
-      SignUpUser signUpUser = SignUpUser(
-          firstName: user.displayName,
-          lastName: 'lastName',
-          phone: '1234567890',
-          password: '123456789',
-          email: email,
-          gender: true,
-          // dob: DateFormat('yyyy-MM-dd').format(dateTime as DateTime),
-          address: "abc",
-          image: user.photoURL);
-      bool checkUserExist = await auth.checkUserExistInPostgre(email);
-
-      if (checkUserExist == false) {
-        await CallAPI().callRegisterAPI(signUpUser);
-
-        // else {
-        //   LoginPage();
-        // }
-      } else {}
-
-      ResultLogin resultLogin = ResultLogin(
-        userID: email,
-        firstName: user.displayName,
-        lastName: "google",
-        phoneNumber: user.phoneNumber,
-      );
-
-      // await  stream.addSignUpStream(signUpUser);
-
-      await stream.addLoginStream(resultLogin);
-    } on Exception catch (e) {
-      // _showSignInError(e);
-    }
-  }
+  // Future<void> _signInWithGoogle() async {
+  //   try {
+  //     final auth = Provider.of<AuthBase>(context, listen: false);
+  //     final stream = StreamTest.instance;
+  //     User? user = await auth.signInWithGoogle();
+  //     // await user!.reload();
+  //     var email;
+  //     for (var field in user!.providerData) {
+  //       email = field.email;
+  //     }
+  //     // DateTime? dateTime = "2023-03-27";
+  //
+  //     SignUpUser signUpUser = SignUpUser(
+  //         firstName: user.displayName,
+  //         lastName: 'lastName',
+  //         phone: '1234567890',
+  //         password: '123456789',
+  //         email: email,
+  //         gender: true,
+  //         // dob: DateFormat('yyyy-MM-dd').format(dateTime as DateTime),
+  //         address: "abc",
+  //         image: user.photoURL);
+  //     bool checkUserExist = await auth.checkUserExistInPostgre(email);
+  //
+  //     if (checkUserExist == false) {
+  //       await CallAPI().callRegisterAPI(signUpUser);
+  //
+  //       // else {
+  //       //   LoginPage();
+  //       // }
+  //     } else {}
+  //
+  //     ResultLogin resultLogin = ResultLogin(
+  //       userID: email,
+  //       firstName: user.displayName,
+  //       lastName: "google",
+  //       phoneNumber: user.phoneNumber,
+  //     );
+  //
+  //     // await  stream.addSignUpStream(signUpUser);
+  //
+  //     await stream.addLoginStream(resultLogin);
+  //   } on Exception catch (e) {
+  //     // _showSignInError(e);
+  //   }
+  // }
 
   Future<void> _signInWithFacebook() async {
     try {

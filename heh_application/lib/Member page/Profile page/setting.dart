@@ -5,6 +5,7 @@ import 'package:heh_application/Member%20page/Profile%20page/Personal%20page/per
 import 'package:heh_application/Member%20page/Profile%20page/changePass.dart';
 
 import 'package:heh_application/Member%20page/Profile%20page/history.dart';
+import 'package:heh_application/main.dart';
 
 import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/call_api.dart';
@@ -131,6 +132,7 @@ class _SettingPageState extends State<SettingPage> {
 
   void signout() async {
     final stream = StreamTest.instance;
+    preferences!.remove('result_login');
     final auth = Provider.of<AuthBase>(context, listen: false);
     await stream.handleLogout();
     await auth.signOut(context);

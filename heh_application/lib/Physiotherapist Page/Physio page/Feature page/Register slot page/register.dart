@@ -183,7 +183,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                     context: context,
                     initialDate: DateTime.now(),
                     firstDate: DateTime.now(),
-                    lastDate: DateTime(DateTime.now().year,DateTime.now().month,DateTime.sunday));
+                    lastDate: DateTime(2099),);
                 if (pickeddate != null) {
                   _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
                 }
