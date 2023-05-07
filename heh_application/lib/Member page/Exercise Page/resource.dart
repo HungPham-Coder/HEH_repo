@@ -80,7 +80,7 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
                                   //                 .exerciseDetailID);
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    print(widget.exerciseDetail!.description);
+                                    print(snapshot.data![index].videoURL);
                                     // if (exerciseResource != null) {
                                     return ExerciseResourcesDetail(
                                       resourceID: widget.detailID,
@@ -92,6 +92,7 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
                                           snapshot.data![index].resourceName,
                                       videoURL: snapshot.data![index].videoURL,
                                     );
+                                        // return ExerciseResourcesDetail ();
                                     // }
                                     //  else {
                                     //   return ExerciseResourcesDetail(
