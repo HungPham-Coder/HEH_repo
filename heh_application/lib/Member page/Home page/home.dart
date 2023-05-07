@@ -112,6 +112,10 @@ class _HomePageState extends State<HomePage> {
                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
                   text: "Dịch vụ đã đăng ký",
                   press: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ServicePaidPage()));
                     await loadPhysioTherapistAccount();
                     await auth.checkUserExistInFirebase(sharedCurrentUser!);
 

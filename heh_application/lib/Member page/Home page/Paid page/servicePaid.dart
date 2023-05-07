@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 
 import 'package:heh_application/Video%20call%20page/VideoCall.dart';
+import 'package:heh_application/Video%20call%20page/views/messenger_page.dart';
 import 'package:heh_application/models/booking_detail.dart';
+import 'package:heh_application/models/chat_model/user_chat.dart';
+import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
+import 'package:heh_application/services/chat_provider.dart';
+import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ServicePaidPage extends StatefulWidget {
   const ServicePaidPage({Key? key}) : super(key: key);
@@ -14,8 +20,23 @@ class ServicePaidPage extends StatefulWidget {
 }
 
 class _ServicePaidPageState extends State<ServicePaidPage> {
+  UserChat? opponentUser;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> loadPhysioTherapistAccount() async {
+    final firestoreDatabase =
+        Provider.of<FirebaseFirestoreBase>(context, listen: false);
+    UserChat? userChatResult =
+        await firestoreDatabase.getPhysioUser(physioID: 'physiotherapist');
+    opponentUser = userChatResult;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -69,12 +90,35 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
                           time: "$start - $end",
                           bookedFor:
                               "${snapshot.data![index].bookingSchedule!.subProfile!.relationship!.relationName}",
-                          press: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ServicePaidPage()));
+                          press: () async {
+                            await loadPhysioTherapistAccount();
+                            await auth
+                                .checkUserExistInFirebase(sharedCurrentUser!);
+
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              if (sharedCurrentUser?.image == null) {
+                                sharedCurrentUser?.setImage = "Không có hình";
+                              }
+
+                              if (sharedCurrentUser != null) {
+                                return Provider<ChatProviderBase>(
+                                  create: (context) => ChatProvider(),
+                                  child: MessengerScreenPage(
+                                      oponentID: opponentUser!.id,
+                                      oponentAvartar: opponentUser!.photoUrl,
+                                      oponentNickName: opponentUser!.nickname,
+                                      userAvatar: sharedCurrentUser!.image,
+                                      currentUserID:
+                                          sharedCurrentUser!.userID!),
+                                );
+                              } else {
+                                print('null');
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                            }));
                           },
                         );
                       },

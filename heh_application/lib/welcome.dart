@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'services/auth.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
 class WelcomePage1 extends StatefulWidget {
   const WelcomePage1({Key? key}) : super(key: key);
 
@@ -32,18 +33,15 @@ class _WelcomePage1State extends State<WelcomePage1> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-
-            title: Text('Allow Notification'),
-            content: Text('App của chúng tôi muốn truy cập quyền thông báo'),
-
+            title: const Text('Allow Notification'),
+            content:
+                const Text('App của chúng tôi muốn truy cập quyền thông báo'),
             actions: [
               TextButton(
                 onPressed: () => AwesomeNotifications()
                     .requestPermissionToSendNotifications()
                     .then((_) => Navigator.pop(context)),
-
-                child: Text(
-
+                child: const Text(
                   'Đồng ý',
                   style: TextStyle(color: Colors.teal, fontSize: 18),
                 ),
@@ -52,9 +50,7 @@ class _WelcomePage1State extends State<WelcomePage1> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-
-                child: Text(
-
+                child: const Text(
                   'Hủy bỏ',
                   style: TextStyle(color: Colors.grey, fontSize: 18),
                 ),
@@ -187,7 +183,9 @@ class _WelcomePage1State extends State<WelcomePage1> {
         key: scaffoldKey,
         renderSkipBtn: const Text("Bỏ qua",
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)),
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 15)),
         renderNextBtn: const Padding(
           padding: EdgeInsets.only(right: 10),
           child: Text("Tiếp theo",
@@ -198,7 +196,9 @@ class _WelcomePage1State extends State<WelcomePage1> {
         ),
         renderDoneBtn: const Text("Kết thúc",
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)),
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 15)),
         scrollPhysics: const ClampingScrollPhysics(),
         indicatorConfig: const IndicatorConfig(
             colorActiveIndicator: Colors.white,
@@ -206,10 +206,10 @@ class _WelcomePage1State extends State<WelcomePage1> {
             colorIndicator: Colors.black,
             spaceBetweenIndicator: 10),
         listContentConfig: slides,
-        onDonePress:() {
+        onDonePress: () {
           Navigator.push(scaffoldKey.currentContext!,
               MaterialPageRoute(builder: (context) => const ChooseForm()));
-
+          // const ChooseForm();
         },
         onSkipPress: () {
           Navigator.push(scaffoldKey.currentContext!,
