@@ -6,13 +6,13 @@ import 'package:video_player/video_player.dart';
 class ExerciseResourcesDetail extends StatefulWidget {
   ExerciseResourcesDetail(
       {Key? key,
-      // this.exerciseDetail,
-      this.imageURL,
-      this.resourceName,
-      this.description,
-      this.videoURL,
-      this.exerciseResource,
-      required this.resourceID})
+        // this.exerciseDetail,
+        this.imageURL,
+        this.resourceName,
+        this.description,
+        this.videoURL,
+        this.exerciseResource,
+        required this.resourceID})
       : super(key: key);
   // ExerciseDetail1? exerciseDetail;
   List<ExerciseResource>? exerciseResource;
@@ -79,7 +79,7 @@ class _ExerciseResourcesDetailState extends State<ExerciseResourcesDetail> {
       // autoInitialize: true,
     );
     // }
-    ;
+        ;
   }
 
   @override
@@ -96,67 +96,68 @@ class _ExerciseResourcesDetailState extends State<ExerciseResourcesDetail> {
         ),
       );
     } else {
-      return CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            actions: const [
-              Padding(
-                padding: EdgeInsets.only(right: 10),
-                child: Icon(Icons.favorite_border, size: 30),
-              )
-            ],
-            toolbarHeight: 45,
-            title: Text(
-              widget.resourceName!,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-                // fontFamily: "Times New Roman",
+      return Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              actions: const [
+                Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Icon(Icons.favorite_border, size: 30),
+                )
+              ],
+              toolbarHeight: 45,
+              title: Text(
+                widget.resourceName!,
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  // fontFamily: "Times New Roman",
+                ),
               ),
+              backgroundColor: const Color.fromARGB(255, 46, 161, 226),
+              expandedHeight: 20,
             ),
-            backgroundColor: const Color.fromARGB(255, 46, 161, 226),
-            expandedHeight: 20,
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const SizedBox(height: 10),
-                      const Center(
-                        child: Text(
-                          "Thông tin bài tập",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ),
-                      Text(
-                        widget.description!,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Container(child: Image.network(widget.imageURL!)),
-                      // ListView.builder(
-                      //   shrinkWrap: true,
-                      //   physics: const NeverScrollableScrollPhysics(),
-                      // itemCount: widget.exerciseResource!.length,
-                      //   itemBuilder: (context, index) => SizedBox(
-                      //     child: Padding(
-                      //         padding: const EdgeInsets.only(bottom: 0),
-                      //         child: Image.network(widget.imageURL!)),
-                      //   ),
-                      // ),
-                      // Container(
-                      //   color: const Color.fromARGB(255, 46, 161, 226),
-                      //   height: MediaQuery.of(context).size.height / 2.5,
-                      //   child:
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 0, vertical: 0),
-                        child: _vidController.value.isInitialized
-                            ? Column(
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            const SizedBox(height: 10),
+                            const Center(
+                              child: Text(
+                                "Thông tin bài tập",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ),
+                            Text(
+                              widget.description!,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            Container(child: Image.network(widget.imageURL!)),
+                            // ListView.builder(
+                            //   shrinkWrap: true,
+                            //   physics: const NeverScrollableScrollPhysics(),
+                            // itemCount: widget.exerciseResource!.length,
+                            //   itemBuilder: (context, index) => SizedBox(
+                            //     child: Padding(
+                            //         padding: const EdgeInsets.only(bottom: 0),
+                            //         child: Image.network(widget.imageURL!)),
+                            //   ),
+                            // ),
+                            // Container(
+                            //   color: const Color.fromARGB(255, 46, 161, 226),
+                            //   height: MediaQuery.of(context).size.height / 2.5,
+                            //   child:
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 0),
+                              child: _vidController.value.isInitialized
+                                  ? Column(
                                 children: <Widget>[
                                   const SizedBox(height: 10),
                                   const Text("Video hướng dẫn",
@@ -245,22 +246,23 @@ class _ExerciseResourcesDetailState extends State<ExerciseResourcesDetail> {
                                   // ),
                                 ],
                               )
-                            : const Padding(
+                                  : const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 30),
                                 child: Center(
                                   child: CircularProgressIndicator(
                                       color: Colors.blue),
                                 ),
                               ),
-                      ),
-                      // ),
-                    ],
-                  )),
-                ],
+                            ),
+                            // ),
+                          ],
+                        )),
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       );
     }
   }
