@@ -41,7 +41,7 @@ class _LandingPageState extends State<LandingPage> {
   ResultLogin? resultLogin;
   @override
   void initState() {
-    init();
+    // init();
     // TODO: implement initState
 
     super.initState();
@@ -118,8 +118,10 @@ class _LandingPageState extends State<LandingPage> {
             msg: 'Email hoặc mật khẩu của bạn sai. Vui lòng nhập lại.',
           );
         } else {
+
           // prefs
           sharedResultLogin = snapshot.data;
+
           Future<SignUpUser> futureCurrentUser =
               auth.getCurrentUser(sharedResultLogin!);
           return FutureBuilder<SignUpUser>(

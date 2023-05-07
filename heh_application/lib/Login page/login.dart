@@ -331,10 +331,7 @@ class _LoginPageState extends State<LoginPage> {
         //add signup user to manage user object xuyen suot app
         // await  stream.addSignUpStream(signUpUser);
         // await auth.signInAnonymously();
-        preferences!.setString('result_login', json.encode(resultLogin.toJson()));
-        await stream.addLoginStream(resultLogin);
-
-        // final registerResult = 'Đăng nhập thành công';
+        // preferences!.setString('result_login', json.encode(resultLogin.toJson()));
         final snackBar = SnackBar(
           content: Row(
             children: [
@@ -357,6 +354,10 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: Colors.green,
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        await stream.addLoginStream(resultLogin);
+
+        // final registerResult = 'Đăng nhập thành công';
+
       } else {
         // ResultLogin resultLogin =
         //     ResultLogin(userID: "error login", firstName: 'null');

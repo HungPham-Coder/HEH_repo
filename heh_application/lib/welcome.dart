@@ -209,7 +209,7 @@ class _WelcomePage1State extends State<WelcomePage1> {
         onDonePress: () {
           Navigator.push(scaffoldKey.currentContext!,
               MaterialPageRoute(builder: (context) => const ChooseForm()));
-          // const ChooseForm();
+
         },
         onSkipPress: () {
           Navigator.push(scaffoldKey.currentContext!,
