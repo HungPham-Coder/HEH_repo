@@ -30,7 +30,7 @@ ExerciseResource? sharedExerciseResource;
 Schedule? schedule;
 
 class LandingPage extends StatefulWidget {
-   LandingPage({Key? key, this.msg}) : super(key: key);
+  LandingPage({Key? key, this.msg}) : super(key: key);
   String? msg;
 
   @override
@@ -103,8 +103,7 @@ class _LandingPageState extends State<LandingPage> {
           return LoginPage(
             msg: widget.msg,
           );
-         // return WelcomePage1();
-          
+          // return WelcomePage1();
         } else if (snapshot.data!.userID == 'error login') {
           return LoginPage(
             msg: 'Email hoặc mật khẩu của bạn sai. Vui lòng nhập lại.',
@@ -141,7 +140,6 @@ class _LandingPageState extends State<LandingPage> {
                   }
                 } else {
                   print("khong data");
-
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
