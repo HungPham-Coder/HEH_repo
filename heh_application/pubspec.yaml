@@ -61,9 +61,8 @@ dependencies:
   agora_chat_sdk: ^1.1.0+1
   chewie: ^1.4.0
   email_otp: ^2.0.1
-
+  youtube_player_flutter: ^8.1.2
   intro_slider: ^4.2.0
-
   awesome_notifications: ^0.7.4+1
   shared_preferences: ^2.0.15
 
