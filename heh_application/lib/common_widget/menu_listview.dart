@@ -74,9 +74,9 @@ class ResourceListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       alignment: Alignment.center,
-      // height: 500,
+      height: 500,
       width: 350,
       child: TextButton(
         style: ButtonStyle(
