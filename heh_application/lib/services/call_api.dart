@@ -248,8 +248,11 @@ class CallAPI {
       throw Exception('Failed to load BookingDetail');
     }
   }
-  Future<List<BookingDetail>> getAllBookingDetailByPhysioIDAndTypeOfSlot(String physioID, String typeOfSlot) async {
-    var url = Uri.parse('${link}/api/BookingDetail/GetAllBookingDetailByPhysioIDAndTypeOfSlot?physioID=$physioID&typeOfSlot=$typeOfSlot');
+
+  Future<List<BookingDetail>> getAllBookingDetailByPhysioIDAndTypeOfSlot(
+      String physioID, String typeOfSlot) async {
+    var url = Uri.parse(
+        '${link}/api/BookingDetail/GetAllBookingDetailByPhysioIDAndTypeOfSlot?physioID=$physioID&typeOfSlot=$typeOfSlot');
     // var url = Uri.https('localhost:7166', 'api/BookingDetail');
     final headers = {
       "Accept": "application/json",
@@ -377,10 +380,10 @@ class CallAPI {
       throw Exception('Failed to load MedicalRecord');
     }
   }
-  Future<MedicalRecord?> getMedicalRecordBySubProfileID(
-      String subID) async {
-    var url = Uri.parse(
-        '${link}/api/MedicalRecord/GetBySubProfileID?subID=$subID');
+
+  Future<MedicalRecord?> getMedicalRecordBySubProfileID(String subID) async {
+    var url =
+        Uri.parse('${link}/api/MedicalRecord/GetBySubProfileID?subID=$subID');
     // var url = Uri.https('localhost:7166', 'api/MedicalRecord');
     final headers = {
       "Accept": "application/json",
@@ -578,8 +581,34 @@ class CallAPI {
     }
   }
 
-  Future<List<Slot>?> getallSlotByDate(String date, String physioID) async {
-    var url = Uri.parse('${link}/api/Slot/GetByDate/$date?physioID=$physioID');
+  Future<List<Schedule>?> getallSlotByPhysiotherapistIDAndTypeOfSlot(
+      String physiotherapistID, String typeOfSlot) async {
+    var url = Uri.parse(
+        '${link}/api/Schedule/GetAllSlotByPhysiotherapistIDAndTypeOfSlot/$physiotherapistID?typeOfSlot=$typeOfSlot');
+    // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      Iterable jsonResult = json.decode(response.body);
+      List<Schedule> list = List<Schedule>.from(
+          jsonResult.map((model) => Schedule.fromMap(model)));
+
+      if (list == null) {
+        print("List Schedule Null");
+      } else {
+        return list;
+      }
+    } else {
+      throw Exception('Failed to load Schedule List');
+    }
+  }
+
+  Future<List<Slot>?> getallSlotByDateAndPhysioID(
+      String date, String physioID) async {
+    var url = Uri.parse('${link}/api/Slot/GetByDateAndPhysioID/$date?physioID=$physioID');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
@@ -601,6 +630,29 @@ class CallAPI {
     }
   }
 
+  Future<List<Slot>> GetAllSlotByDateAndTypeOfSlot(String date, String typeOfSlot) async {
+    var url = Uri.parse('${link}/api/Slot/GetByDateAndTypeOfSlot?date=$date&typeOfSlot=$typeOfSlot');
+    // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      Iterable jsonResult = json.decode(response.body);
+      List<Slot> list =
+          List<Slot>.from(jsonResult.map((model) => Slot.fromMap(model)));
+
+      if (list == null) {
+        throw Exception('Slot List null');
+      } else {
+        return list;
+      }
+    } else {
+      throw Exception('Failed to load Slot List');
+    }
+  }
+
   Future<int> getNumberOfPhysioRegisterOnSlot(String slotID) async {
     var url =
         Uri.parse('${link}/api/Schedule/GetNumberOfPhysioRegister/$slotID');
@@ -617,10 +669,10 @@ class CallAPI {
     }
   }
 
-  Future<List<Schedule>> getallPhysiotherapistBySlotTimeAndSkill(
-      String timeStart, String timeEnd, String skill) async {
+  Future<List<Schedule>> getallPhysiotherapistBySlotTimeAndSkillAndTypeOfSlot(
+      String timeStart, String timeEnd, String skill, String typeOfSlot) async {
     var url = Uri.parse(
-        '${link}/api/Schedule/getAllPhysiotherapistBySlotTimeAndSkill?timeStart=$timeStart&timeEnd=$timeEnd&skill=$skill');
+        '${link}/api/Schedule/GetAllPhysiotherapistBySlotTimeAndSkillAndTypeOfSlot?timeStart=$timeStart&timeEnd=$timeEnd&skill=$skill&typeOfSlot=$typeOfSlot');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
@@ -930,6 +982,7 @@ class CallAPI {
       print(response.body);
     }
   }
+
   Future<String> addNotification(NotificationModel notification) async {
     var url = Uri.parse('${link}/api/Notification');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
@@ -937,9 +990,9 @@ class CallAPI {
     final body = jsonEncode({
       "action": notification.action,
       "description": notification.description,
-      "subject":notification.subject,
-      "content":notification.content,
-      "userId":notification.userID
+      "subject": notification.subject,
+      "content": notification.content,
+      "userId": notification.userID
     });
     final headers = {
       "Accept": "application/json",
@@ -951,13 +1004,14 @@ class CallAPI {
     if (response.statusCode == 200) {
       return json.encode(response.body);
     } else {
-
       print(response.body);
       throw Exception('Failed to add notification');
     }
   }
+
   Future<List<NotificationModel>> getAllNotification() async {
-    var url = Uri.parse('${link}/api/Notification?PageIndex=1&PageSize=10&SortKey=DateCreated&SortOrder=ASC');
+    var url = Uri.parse(
+        '${link}/api/Notification?PageIndex=1&PageSize=10&SortKey=DateCreated&SortOrder=ASC');
     // var url = Uri.https('localhost:7166', 'api/UserExercise');
     final headers = {
       "Accept": "application/json",
@@ -978,10 +1032,10 @@ class CallAPI {
       throw Exception('Failed to load Notification List');
     }
   }
+
   Future<bool> seenNotification(String userID) async {
     var url = Uri.parse('${link}/api/Notification?userID=$userID');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
-
 
     final headers = {
       "Accept": "application/json",
@@ -993,7 +1047,6 @@ class CallAPI {
     if (response.statusCode == 200) {
       return true;
     } else {
-
       print(response.body);
       throw Exception('Failed to seen notification');
     }
