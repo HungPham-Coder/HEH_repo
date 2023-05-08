@@ -592,11 +592,7 @@ class CallAPI {
     }
   }
 
-<<<<<<< HEAD
-  Future<List<Slot>?> getallSlotByDate(String date, String physioID) async {
-    var url = Uri.parse(
-        '${link}/api/Slot/GetByDateAndPhysioID/$date?physioID=$physioID');
-=======
+
   Future<List<Schedule>?> getallSlotByPhysiotherapistIDAndTypeOfSlot(
       String physiotherapistID, String typeOfSlot) async {
     var url = Uri.parse(
@@ -625,7 +621,7 @@ class CallAPI {
   Future<List<Slot>?> getallSlotByDateAndPhysioID(
       String date, String physioID) async {
     var url = Uri.parse('${link}/api/Slot/GetByDateAndPhysioID/$date?physioID=$physioID');
->>>>>>> 3cb91d51a46e503b81a0997cc2b831428437f96b
+
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
