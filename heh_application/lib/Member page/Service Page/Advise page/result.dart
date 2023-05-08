@@ -6,6 +6,7 @@ import 'package:heh_application/models/booking_schedule.dart';
 import 'package:heh_application/models/schedule.dart';
 import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/call_api.dart';
+import 'package:heh_application/util/date_time_format.dart';
 import 'package:intl/intl.dart';
 
 class TimeResultPage extends StatefulWidget {
@@ -45,8 +46,8 @@ class _TimeResultPageState extends State<TimeResultPage> {
                 const SizedBox(height: 20),
                 CurrentTime(),
                 FutureBuilder<List<Schedule>>(
-                    future: CallAPI().getallPhysiotherapistBySlotTimeAndSkill(
-                        widget.timeStart, widget.timeEnd, widget.problem),
+                    future: CallAPI().getallPhysiotherapistBySlotTimeAndSkillAndTypeOfSlot(
+                        widget.timeStart, widget.timeEnd, 'Đau Lưng','Tư Vấn 1 Buổi'),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return ListView.builder(
@@ -54,17 +55,11 @@ class _TimeResultPageState extends State<TimeResultPage> {
                             itemCount: snapshot.data!.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              DateTime dateStart =
-                                  new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
-                                      snapshot.data![index].slot!.timeStart);
-                              String startStr =
-                                  DateFormat("HH:mm").format(dateStart);
-                              DateTime dateEnd =
-                                  new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
-                                      snapshot.data![index].slot!.timeEnd);
-                              String endStr =
-                                  DateFormat("HH:mm").format(dateEnd);
+                              String startStr = DateTimeFormat.formateTime(snapshot.data![index].slot!.timeStart);
+                              String endStr = DateTimeFormat.formateTime(snapshot.data![index].slot!.timeEnd);
+
                               return PhysioChooseMenu(
+                                slotName: '${snapshot.data![index].slot!.slotName}',
                                 icon:
                                     "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
                                 name:
@@ -120,10 +115,10 @@ class PhysioChooseMenu extends StatelessWidget {
     required this.time,
     required this.name,
     required this.icon,
-    required this.press,
+    required this.press, required this.slotName,
   }) : super(key: key);
 
-  final String icon, name, time;
+  final String icon, name, time, slotName;
   final VoidCallback? press;
 
   @override
@@ -176,9 +171,13 @@ class PhysioChooseMenu extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            name,
+                            'Chuyên viên: $name',
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
+                          // Text(
+                          //   'Khung giờ: $slotName',
+                          //   style: Theme.of(context).textTheme.bodyText1,
+                          // ),
                           const SizedBox(height: 10),
                           Text(
                             time,

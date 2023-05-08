@@ -5,6 +5,7 @@ import 'package:heh_application/models/exercise_model/category.dart';
 import 'package:heh_application/models/slot.dart';
 import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/call_api.dart';
+import 'package:heh_application/util/date_time_format.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
@@ -19,7 +20,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
   final List<String> _relationships = [
     "- Chọn -",
   ];
-
+  String? dateSearch;
   String selectedSubName = "- Chọn -";
   SubProfile? subProfile;
   final TextEditingController _date = TextEditingController();
@@ -31,6 +32,9 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
     "- Chọn khung giờ -",
   ];
   String? selectedTime = "- Chọn khung giờ -";
+
+  bool timeVisible = false;
+
   void addProblem(List<CategoryModel> list) {
     if (_problems.isEmpty) {
       list.forEach((category) {
@@ -52,12 +56,20 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
   void addSlot(List<Slot> list) {
     if (_time.length == 1) {
       list.forEach((element) {
-        DateTime tempStart =
-            new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(element.timeStart);
-        String start = DateFormat("HH:mm").format(tempStart);
-        DateTime tempEnd =
-            new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(element.timeEnd);
-        String end = DateFormat("HH:mm").format(tempEnd);
+
+        String start = DateTimeFormat.formateTime(element.timeStart);
+        String end = DateTimeFormat.formateTime(element.timeEnd);
+        _time.add("${start} - ${end}");
+      });
+    }
+    else {
+      _time.removeWhere((element) =>
+        element != "- Chọn khung giờ -"
+      );
+      list.forEach((element) {
+
+        String start = DateTimeFormat.formateTime(element.timeStart);
+        String end = DateTimeFormat.formateTime(element.timeEnd);
         _time.add("${start} - ${end}");
       });
     }
@@ -146,9 +158,14 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                 context: context,
                 initialDate: DateTime.now(),
                 firstDate: DateTime(1960),
-                lastDate: DateTime(2030));
+                lastDate: DateTime(2099));
             if (pickeddate != null) {
               _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
+              setState(() {
+                dateSearch = DateFormat('yyyy-MM-dd').format(pickeddate);
+                timeVisible = true;
+              });
+
             }
           },
         ),
@@ -216,73 +233,85 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
     );
   }
 
-  Widget Time() {
-    return Column(
-      children: [
-        Row(
-          children: const [
-            Text("Bạn muốn đặt khung giờ nào?"),
-            Text(" *", style: TextStyle(color: Colors.red)),
+  Widget Time(String? date) {
+    if (date != null){
+      return Visibility(
+        visible: timeVisible,
+        child: Column(
+          children: [
+            Row(
+              children: const [
+                Text("Bạn muốn đặt khung giờ nào?"),
+                Text(" *", style: TextStyle(color: Colors.red)),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              child: FutureBuilder<List<Slot>>(
+                  future: CallAPI().GetAllSlotByDateAndTypeOfSlot(date,'Tư Vấn 1 Buổi'),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+
+                        addSlot(snapshot.data!);
+                        return DropdownButtonFormField<String>(
+                          value: selectedTime,
+                          items: _time
+                              .map((relationship) => DropdownMenuItem<String>(
+                              value: relationship,
+                              child: Padding(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 10),
+                                child: Text(
+                                  relationship,
+                                  style: const TextStyle(fontSize: 13),
+                                ),
+                              )))
+                              .toList(),
+                          onChanged: (relationship) => setState(() {
+                            selectedTime = relationship;
+                            print(selectedTime);
+                          }),
+                        );
+                      }
+
+                     else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }),
+            )
           ],
         ),
-        const SizedBox(
-          height: 5,
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 50,
-          child: FutureBuilder<List<Slot>>(
-              future: CallAPI().getAllSlot(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  addSlot(snapshot.data!);
-                  return DropdownButtonFormField<String>(
-                    value: selectedTime,
-                    items: _time
-                        .map((relationship) => DropdownMenuItem<String>(
-                            value: relationship,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Text(
-                                relationship,
-                                style: const TextStyle(fontSize: 13),
-                              ),
-                            )))
-                        .toList(),
-                    onChanged: (relationship) => setState(() {
-                      selectedTime = relationship;
-                      print(selectedTime);
-                    }),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              }),
-        )
-      ],
-    );
+      );
+    }
+    else {
+      return Container();
+    }
+
   }
 
   @override
   Widget build(BuildContext context) {
-    if (selectedTime != '- Chọn khung giờ -' && _date.text != '') {
-      DateTime tempDate = new DateFormat("dd-MM-yyyy").parse(_date.text);
-
-      String date = DateFormat("yyyy-MM-dd").format(tempDate);
-      print(date);
-
-      var a = selectedTime!.trim().split('-');
-      String start = a[0].trim();
-      String end = a[1].trim();
-      DateTime dateStart = new DateFormat("HH:mm").parse(start);
-      String startStr = DateFormat("HH:mm:ss").format(dateStart);
-      String b = '${date}T${startStr}';
-      print(b);
-    }
-
+    // if (selectedTime != '- Chọn khung giờ -' && _date.text != '') {
+    //   DateTime tempDate = new DateFormat("dd-MM-yyyy").parse(_date.text);
+    //
+    //   String date = DateFormat("yyyy-MM-dd").format(tempDate);
+    //   print(date);
+    //
+    //   var a = selectedTime!.trim().split('-');
+    //   String start = a[0].trim();
+    //   String end = a[1].trim();
+    //   DateTime dateStart = new DateFormat("HH:mm").parse(start);
+    //   String startStr = DateFormat("HH:mm:ss").format(dateStart);
+    //   String b = '${date}T${startStr}';
+    //   print(b);
+    // }
+  print(dateSearch);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -314,7 +343,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                         const SizedBox(height: 20),
                         Date(),
                         const SizedBox(height: 20),
-                        Time(),
+                        Time(dateSearch),
                         const SizedBox(height: 10),
                       ],
                     ),
