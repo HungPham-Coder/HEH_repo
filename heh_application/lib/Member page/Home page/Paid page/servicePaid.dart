@@ -20,23 +20,8 @@ class ServicePaidPage extends StatefulWidget {
 }
 
 class _ServicePaidPageState extends State<ServicePaidPage> {
-  UserChat? opponentUser;
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Future<void> loadPhysioTherapistAccount() async {
-    final firestoreDatabase =
-        Provider.of<FirebaseFirestoreBase>(context, listen: false);
-    UserChat? userChatResult =
-        await firestoreDatabase.getPhysioUser(physioID: 'physiotherapist');
-    opponentUser = userChatResult;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<AuthBase>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -90,36 +75,6 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
                           time: "$start - $end",
                           bookedFor:
                               "${snapshot.data![index].bookingSchedule!.subProfile!.relationship!.relationName}",
-                          press: () async {
-                            await loadPhysioTherapistAccount();
-                            await auth
-                                .checkUserExistInFirebase(sharedCurrentUser!);
-
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              if (sharedCurrentUser?.image == null) {
-                                sharedCurrentUser?.setImage = "Không có hình";
-                              }
-
-                              if (sharedCurrentUser != null) {
-                                return Provider<ChatProviderBase>(
-                                  create: (context) => ChatProvider(),
-                                  child: MessengerScreenPage(
-                                      oponentID: opponentUser!.id,
-                                      oponentAvartar: opponentUser!.photoUrl,
-                                      oponentNickName: opponentUser!.nickname,
-                                      userAvatar: sharedCurrentUser!.image,
-                                      currentUserID:
-                                          sharedCurrentUser!.userID!),
-                                );
-                              } else {
-                                print('null');
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                            }));
-                          },
                         );
                       },
                     );
@@ -143,13 +98,11 @@ class ServicePaid extends StatelessWidget {
     required this.time,
     required this.name,
     required this.icon,
-    required this.press,
     required this.date,
     required this.bookedFor,
   }) : super(key: key);
 
   final String icon, name, time, bookedFor, date;
-  final VoidCallback? press;
 
   @override
   Widget build(BuildContext context) {
@@ -256,8 +209,23 @@ class button extends StatefulWidget {
 }
 
 class _buttonState extends State<button> {
+  UserChat? opponentUser;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> loadPhysioTherapistAccount() async {
+    final firestoreDatabase =
+        Provider.of<FirebaseFirestoreBase>(context, listen: false);
+    UserChat? userChatResult =
+        await firestoreDatabase.getPhysioUser(physioID: 'physiotherapist');
+    opponentUser = userChatResult;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context, listen: false);
     return Row(
       children: [
         Padding(
@@ -295,11 +263,32 @@ class _buttonState extends State<button> {
                       borderRadius: BorderRadius.circular(15),
                       side: const BorderSide(color: Colors.white)),
                 )),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const VideoCallPage()));
+            onPressed: () async {
+              await loadPhysioTherapistAccount();
+              await auth.checkUserExistInFirebase(sharedCurrentUser!);
+
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                if (sharedCurrentUser?.image == null) {
+                  sharedCurrentUser?.setImage = "Không có hình";
+                }
+
+                if (sharedCurrentUser != null) {
+                  return Provider<ChatProviderBase>(
+                    create: (context) => ChatProvider(),
+                    child: MessengerScreenPage(
+                        oponentID: opponentUser!.id,
+                        oponentAvartar: opponentUser!.photoUrl,
+                        oponentNickName: opponentUser!.nickname,
+                        userAvatar: sharedCurrentUser!.image,
+                        currentUserID: sharedCurrentUser!.userID!),
+                  );
+                } else {
+                  print('null');
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }));
             },
             child: const Text(
               "Tham gia",

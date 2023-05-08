@@ -2,7 +2,7 @@ import 'package:heh_application/models/sub_profile.dart';
 
 class MedicalRecord {
   String? medicalRecordID;
-  String subProfileID;
+  String? subProfileID;
   SubProfile? subProfile;
   String? problem;
   String? difficulty;
@@ -31,9 +31,7 @@ class MedicalRecord {
         curing: json['curing'],
         medicine: json['medicine'],
       );
-
-    }
-    else {
+    } else {
       return MedicalRecord(
         medicalRecordID: json['medicalRecordID'],
         subProfileID: json['subProfileID'],
@@ -45,6 +43,5 @@ class MedicalRecord {
         medicine: json['medicine'],
       );
     }
-
   }
 }

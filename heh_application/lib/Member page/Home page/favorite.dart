@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:heh_application/Member%20page/Exercise%20Page/resource.dart';
+import 'package:heh_application/Exercise%20Page/resource.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({Key? key}) : super(key: key);

@@ -248,8 +248,11 @@ class CallAPI {
       throw Exception('Failed to load BookingDetail');
     }
   }
-  Future<List<BookingDetail>> getAllBookingDetailByPhysioIDAndTypeOfSlot(String physioID, String typeOfSlot) async {
-    var url = Uri.parse('${link}/api/BookingDetail/GetAllBookingDetailByPhysioIDAndTypeOfSlot?physioID=$physioID&typeOfSlot=$typeOfSlot');
+
+  Future<List<BookingDetail>> getAllBookingDetailByPhysioIDAndTypeOfSlot(
+      String physioID, String typeOfSlot) async {
+    var url = Uri.parse(
+        '${link}/api/BookingDetail/GetAllBookingDetailByPhysioIDAndTypeOfSlot?physioID=$physioID&typeOfSlot=$typeOfSlot');
     // var url = Uri.https('localhost:7166', 'api/BookingDetail');
     final headers = {
       "Accept": "application/json",
@@ -372,15 +375,26 @@ class CallAPI {
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
+      print(response.body);
       return MedicalRecord.fromMap(json.decode(response.body));
     } else {
-      throw Exception('Failed to load MedicalRecord');
+      // throw Exception('Failed to load MedicalRecord');
+      return MedicalRecord(
+        subProfileID: null,
+        curing: null,
+        difficulty: null,
+        injury: null,
+        medicalRecordID: null,
+        medicine: null,
+        problem: null,
+        subProfile: null,
+      );
     }
   }
-  Future<MedicalRecord?> getMedicalRecordBySubProfileID(
-      String subID) async {
-    var url = Uri.parse(
-        '${link}/api/MedicalRecord/GetBySubProfileID?subID=$subID');
+
+  Future<MedicalRecord?> getMedicalRecordBySubProfileID(String subID) async {
+    var url =
+        Uri.parse('${link}/api/MedicalRecord/GetBySubProfileID?subID=$subID');
     // var url = Uri.https('localhost:7166', 'api/MedicalRecord');
     final headers = {
       "Accept": "application/json",
@@ -579,7 +593,8 @@ class CallAPI {
   }
 
   Future<List<Slot>?> getallSlotByDate(String date, String physioID) async {
-    var url = Uri.parse('${link}/api/Slot/GetByDate/$date?physioID=$physioID');
+    var url = Uri.parse(
+        '${link}/api/Slot/GetByDateAndPhysioID/$date?physioID=$physioID');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
@@ -930,6 +945,7 @@ class CallAPI {
       print(response.body);
     }
   }
+
   Future<String> addNotification(NotificationModel notification) async {
     var url = Uri.parse('${link}/api/Notification');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
@@ -937,9 +953,9 @@ class CallAPI {
     final body = jsonEncode({
       "action": notification.action,
       "description": notification.description,
-      "subject":notification.subject,
-      "content":notification.content,
-      "userId":notification.userID
+      "subject": notification.subject,
+      "content": notification.content,
+      "userId": notification.userID
     });
     final headers = {
       "Accept": "application/json",
@@ -951,13 +967,14 @@ class CallAPI {
     if (response.statusCode == 200) {
       return json.encode(response.body);
     } else {
-
       print(response.body);
       throw Exception('Failed to add notification');
     }
   }
+
   Future<List<NotificationModel>> getAllNotification() async {
-    var url = Uri.parse('${link}/api/Notification?PageIndex=1&PageSize=10&SortKey=DateCreated&SortOrder=ASC');
+    var url = Uri.parse(
+        '${link}/api/Notification?PageIndex=1&PageSize=10&SortKey=DateCreated&SortOrder=ASC');
     // var url = Uri.https('localhost:7166', 'api/UserExercise');
     final headers = {
       "Accept": "application/json",
@@ -978,10 +995,10 @@ class CallAPI {
       throw Exception('Failed to load Notification List');
     }
   }
+
   Future<bool> seenNotification(String userID) async {
     var url = Uri.parse('${link}/api/Notification?userID=$userID');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
-
 
     final headers = {
       "Accept": "application/json",
@@ -993,7 +1010,6 @@ class CallAPI {
     if (response.statusCode == 200) {
       return true;
     } else {
-
       print(response.body);
       throw Exception('Failed to seen notification');
     }

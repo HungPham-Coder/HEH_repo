@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:heh_application/Member%20page/Exercise%20Page/resource.dart';
+import 'package:heh_application/Exercise%20Page/resource.dart';
 
 import 'package:heh_application/common_widget/menu_listview.dart';
 import 'package:heh_application/models/exercise_model/exercise_detail.dart';
@@ -8,7 +8,7 @@ import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:provider/provider.dart';
 
-import '../../common_widget/search_delegate.dart';
+import '../common_widget/search_delegate.dart';
 
 class ExerciseDetail extends StatefulWidget {
   ExerciseDetail({Key? key, this.exerciseID}) : super(key: key);

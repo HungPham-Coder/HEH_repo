@@ -132,7 +132,7 @@ class _SettingPageState extends State<SettingPage> {
 
   void signout() async {
     final stream = StreamTest.instance;
-    preferences!.remove('result_login');
+    // preferences!.remove('result_login');
     final auth = Provider.of<AuthBase>(context, listen: false);
     await stream.handleLogout();
     await auth.signOut(context);

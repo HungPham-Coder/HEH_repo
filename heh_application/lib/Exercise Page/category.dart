@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:heh_application/Member%20page/Exercise%20Page/exercise.dart';
+import 'package:heh_application/Exercise%20Page/exercise.dart';
 import 'package:heh_application/common_widget/menu_listview.dart';
 import 'package:heh_application/models/exercise_model/category.dart';
 import 'package:heh_application/services/call_api.dart';
 
-import '../../common_widget/search_delegate.dart';
+import '../common_widget/search_delegate.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({Key? key}) : super(key: key);

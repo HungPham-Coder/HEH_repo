@@ -118,7 +118,6 @@ class _LandingPageState extends State<LandingPage> {
             msg: 'Email hoặc mật khẩu của bạn sai. Vui lòng nhập lại.',
           );
         } else {
-
           // prefs
           sharedResultLogin = snapshot.data;
 

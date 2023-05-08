@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 
 import 'package:heh_application/Member%20page/Service%20Page/advisesession.dart';
-import 'package:heh_application/Member%20page/Service%20Page/longtermtreatment.dart';
 import 'package:heh_application/Member%20page/Messenger%20page/messenger_page.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 import 'package:heh_application/models/chat_model/user_chat.dart';
@@ -74,18 +73,6 @@ class _PhysiotherapistState extends State<Physiotherapist> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const AdviseSession()));
-              },
-            ),
-            PhysiptherapistMenu(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphysio.png?alt=media&token=dcc89b01-2c15-4808-87eb-4a2ecc9667a3",
-              text: "Điều trị lâu dài",
-              press: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LongTermTreatment(),
-                    ));
               },
             ),
             PhysiptherapistMenu(
