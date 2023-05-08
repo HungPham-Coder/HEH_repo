@@ -592,9 +592,40 @@ class CallAPI {
     }
   }
 
+<<<<<<< HEAD
   Future<List<Slot>?> getallSlotByDate(String date, String physioID) async {
     var url = Uri.parse(
         '${link}/api/Slot/GetByDateAndPhysioID/$date?physioID=$physioID');
+=======
+  Future<List<Schedule>?> getallSlotByPhysiotherapistIDAndTypeOfSlot(
+      String physiotherapistID, String typeOfSlot) async {
+    var url = Uri.parse(
+        '${link}/api/Schedule/GetAllSlotByPhysiotherapistIDAndTypeOfSlot/$physiotherapistID?typeOfSlot=$typeOfSlot');
+    // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      Iterable jsonResult = json.decode(response.body);
+      List<Schedule> list = List<Schedule>.from(
+          jsonResult.map((model) => Schedule.fromMap(model)));
+
+      if (list == null) {
+        print("List Schedule Null");
+      } else {
+        return list;
+      }
+    } else {
+      throw Exception('Failed to load Schedule List');
+    }
+  }
+
+  Future<List<Slot>?> getallSlotByDateAndPhysioID(
+      String date, String physioID) async {
+    var url = Uri.parse('${link}/api/Slot/GetByDateAndPhysioID/$date?physioID=$physioID');
+>>>>>>> 3cb91d51a46e503b81a0997cc2b831428437f96b
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
@@ -616,6 +647,29 @@ class CallAPI {
     }
   }
 
+  Future<List<Slot>> GetAllSlotByDateAndTypeOfSlot(String date, String typeOfSlot) async {
+    var url = Uri.parse('${link}/api/Slot/GetByDateAndTypeOfSlot?date=$date&typeOfSlot=$typeOfSlot');
+    // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      Iterable jsonResult = json.decode(response.body);
+      List<Slot> list =
+          List<Slot>.from(jsonResult.map((model) => Slot.fromMap(model)));
+
+      if (list == null) {
+        throw Exception('Slot List null');
+      } else {
+        return list;
+      }
+    } else {
+      throw Exception('Failed to load Slot List');
+    }
+  }
+
   Future<int> getNumberOfPhysioRegisterOnSlot(String slotID) async {
     var url =
         Uri.parse('${link}/api/Schedule/GetNumberOfPhysioRegister/$slotID');
@@ -632,10 +686,10 @@ class CallAPI {
     }
   }
 
-  Future<List<Schedule>> getallPhysiotherapistBySlotTimeAndSkill(
-      String timeStart, String timeEnd, String skill) async {
+  Future<List<Schedule>> getallPhysiotherapistBySlotTimeAndSkillAndTypeOfSlot(
+      String timeStart, String timeEnd, String skill, String typeOfSlot) async {
     var url = Uri.parse(
-        '${link}/api/Schedule/getAllPhysiotherapistBySlotTimeAndSkill?timeStart=$timeStart&timeEnd=$timeEnd&skill=$skill');
+        '${link}/api/Schedule/GetAllPhysiotherapistBySlotTimeAndSkillAndTypeOfSlot?timeStart=$timeStart&timeEnd=$timeEnd&skill=$skill&typeOfSlot=$typeOfSlot');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",

@@ -45,7 +45,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 150),
                       child: Text(
-                        "Hiện tại không còn slot cho bạn",
+                        "Bạn chưa đăng ký slot nào",
                         style: TextStyle(color: Colors.grey[500], fontSize: 16),
                       ),
                     ),
@@ -213,7 +213,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
             if (_date.text != '') {
               DateTime day = new DateFormat('dd-MM-yyyy').parse(_date.text);
               dayStr = DateFormat('yyyy-MM-ddTHH:mm:ss').format(day);
-              slotList = await CallAPI().getallSlotByDate(
+              slotList = await CallAPI().getallSlotByDateAndPhysioID(
                   dayStr!, sharedPhysiotherapist!.physiotherapistID);
               if (slotList!.isNotEmpty) {
                 setState(() {
@@ -287,7 +287,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                     physioBookingStatus: false);
                 bool addStatus = await CallAPI().AddSchedule(schedule);
                 if (addStatus) {
-                  slotList = await CallAPI().getallSlotByDate(
+                  slotList = await CallAPI().getallSlotByDateAndPhysioID(
                       dayStr!, sharedPhysiotherapist!.physiotherapistID);
                   setState(() {
                     registerResult = 'Đăng Ký Thành Công';
