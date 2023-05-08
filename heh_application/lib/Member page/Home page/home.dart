@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 
-import 'package:heh_application/Member%20page/Exercise%20Page/category.dart';
+import 'package:heh_application/Exercise%20Page/category.dart';
 import 'package:heh_application/Member%20page/Home%20page/Paid%20page/servicePaid.dart';
 import 'package:heh_application/Member%20page/Messenger%20page/messenger_page.dart';
 import 'package:heh_application/Member%20page/email.dart';
@@ -116,41 +116,6 @@ class _HomePageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const ServicePaidPage()));
-                    await loadPhysioTherapistAccount();
-                    await auth.checkUserExistInFirebase(sharedCurrentUser!);
-
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      if (sharedCurrentUser?.image == null) {
-                        sharedCurrentUser?.setImage = "Không có hình";
-                      }
-
-                      if (sharedCurrentUser != null) {
-                        return Provider<ChatProviderBase>(
-                          create: (context) => ChatProvider(),
-                          child: MessengerScreenPage(
-                              oponentID: opponentUser!.id,
-                              oponentAvartar: opponentUser!.photoUrl,
-                              oponentNickName: opponentUser!.nickname,
-                              userAvatar: sharedCurrentUser!.image,
-                              currentUserID: sharedCurrentUser!.userID!),
-                        );
-                      } else {
-                        print('null');
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    }));
-                  },
-                ),
-                HomeMenu(
-                  icon:
-                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
-                  text: "Email page",
-                  press: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const Email()));
                   },
                 ),
               ],

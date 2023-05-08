@@ -261,8 +261,8 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget fullName({label, obscureText = false}) {
-    String patttern = "'[\x5F]+|[a-z]|[0-9]";
-    RegExp regExp = new RegExp(patttern);
+    // String patttern = "'[\x5F]+|[a-z]|[0-9]";
+    // RegExp regExp = new RegExp(patttern);
     return Column(
       children: <Widget>[
         Row(
@@ -285,13 +285,13 @@ class _SignUpPageState extends State<SignUpPage> {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: TextFormField(
             keyboardType: TextInputType.name,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return "Hãy nhập Họ và Tên của bạn.";
-              } else if (!regExp.hasMatch(value)) {
-                return "Hãy nhập đúng tên";
-              }
-            },
+            // validator: (value) {
+            //   if (value!.isEmpty) {
+            //     return "Hãy nhập Họ và Tên của bạn.";
+            //   } else if (!regExp.hasMatch(value)) {
+            //     return "Hãy nhập đúng tên";
+            //   }
+            // },
             obscureText: obscureText,
             controller: _firstName,
             decoration: const InputDecoration(

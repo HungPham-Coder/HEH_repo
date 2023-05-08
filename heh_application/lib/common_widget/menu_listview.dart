@@ -76,8 +76,6 @@ class ResourceListView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       alignment: Alignment.center,
-      height: 500,
-      width: 350,
       child: TextButton(
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
@@ -255,8 +253,6 @@ class ScheduleMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: duplicate_ignore
     return Padding(
-
-
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: TextButton(
           style: ButtonStyle(
@@ -311,7 +307,6 @@ class ScheduleMenu extends StatelessWidget {
                   )),
             ],
           )),
-
     );
   }
 }

@@ -106,7 +106,6 @@ class _LoginPageState extends State<LoginPage> {
                                   child: CircularProgressIndicator());
                             }
                           },
-                          
                         ),
                       ),
                       Padding(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:heh_application/Member%20page/Exercise%20Page/resourceDetail.dart';
+import 'package:heh_application/Exercise%20Page/resourceDetail.dart';
 import 'package:heh_application/common_widget/menu_listview.dart';
 import 'package:heh_application/models/exercise_model/exercise_detail.dart';
 import 'package:heh_application/models/exercise_resource.dart';
 import 'package:heh_application/services/call_api.dart';
 
-import '../../common_widget/search_delegate.dart';
+import '../common_widget/search_delegate.dart';
 
 class ExerciseResources extends StatefulWidget {
   ExerciseResources({
@@ -74,30 +74,31 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
                                   //         .getExerciseDetailByExerciseID(widget
                                   //             .exerciseDetail!.exerciseID);
                                   List<ExerciseResource> exerciseResource =
-                                  await CallAPI()
-                                      .getExerciseResourceByExerciseDetailID(
-                                      snapshot.data![index]
-                                          .exerciseDetailID);
+                                      await CallAPI()
+                                          .getExerciseResourceByExerciseDetailID(
+                                              snapshot.data![index]
+                                                  .exerciseDetailID);
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                        print(exerciseResource);
-                                        if (widget.detailID != null) {
-                                          return ExerciseResourcesDetail(
-                                            resourceID: widget.detailID,
-                                            // exerciseResource: exerciseResource,
-                                            imageURL:
+                                    print(exerciseResource);
+                                    if (widget.detailID != null) {
+                                      print(snapshot.data![index].videoURL);
+                                      return ExerciseResourcesDetail(
+                                        resourceID: widget.detailID,
+                                        // exerciseResource: exerciseResource,
+                                        imageURL:
                                             snapshot.data![index].imageURL!,
-                                            description:
+                                        description:
                                             widget.exerciseDetail!.description,
-                                            resourceName:
+                                        resourceName:
                                             snapshot.data![index].resourceName,
-                                            videoURL:
+                                        videoURL:
                                             snapshot.data![index].videoURL,
-                                          );
-                                        } else {
-                                          return CircularProgressIndicator();
-                                        }
-                                      }));
+                                      );
+                                    } else {
+                                      return CircularProgressIndicator();
+                                    }
+                                  }));
                                 },
                               );
                             },
