@@ -131,57 +131,57 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
             const SizedBox(height: 5),
             FutureBuilder<List<Schedule>?>(
                 future: CallAPI().getallSlotByPhysiotherapistIDAndTypeOfSlot(
-                    widget.physiotherapist.physiotherapistID,'Tư vấn trị liệu'),
+                    widget.physiotherapist.physiotherapistID,
+                    'Tư vấn trị liệu'),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     int count = 0;
                     snapshot.data!.forEach((element) {
-                      if (element.physioBookingStatus == true){
-                        count ++;
+                      if (element.physioBookingStatus == true) {
+                        count++;
                       }
                     });
-                    if (count == snapshot.data!.length){
+                    if (count == snapshot.data!.length) {
                       return Container(
                         child: const Center(
                             child: Text(
-                              "Physio dang ban het tat ca cac slot",
-                              style: TextStyle(fontSize: 16),
-                            )),
+                          "Physio dang ban het tat ca cac slot",
+                          style: TextStyle(fontSize: 16),
+                        )),
                       );
-                    }
-                    else {
+                    } else {
                       return ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
                           DateTime tempStart =
-                          new DateFormat("yyyy-MM-ddThh:mm:ss")
-                              .parse(snapshot.data![index].slot!.timeStart);
+                              new DateFormat("yyyy-MM-ddThh:mm:ss")
+                                  .parse(snapshot.data![index].slot!.timeStart);
                           String start = DateFormat("HH:mm").format(tempStart);
                           DateTime tempEnd =
-                          new DateFormat("yyyy-MM-ddThh:mm:ss")
-                              .parse(snapshot.data![index].slot!.timeEnd);
+                              new DateFormat("yyyy-MM-ddThh:mm:ss")
+                                  .parse(snapshot.data![index].slot!.timeEnd);
                           String end = DateFormat("HH:mm").format(tempEnd);
                           String? notify;
-                          snapshot.data![index].physioBookingStatus == true ? notify = 'Slot này đã có người đặt rồi' : notify = '';
+                          snapshot.data![index].physioBookingStatus == true
+                              ? notify = 'Slot này đã có người đặt rồi'
+                              : notify = '';
                           return PhysioChooseMenu(
                               notify: notify,
-
                               icon:
-                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
-                              name:
-                              snapshot.data![index].slot!.slotName,
+                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
+                              name: snapshot.data![index].slot!.slotName,
                               time: "Khung giờ: ",
                               timeStart: '$start',
                               timeEnd: '$end',
                               price: snapshot.data![index].typeOfSlot!.price,
                               press: () => showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    AlertDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
                                       title:
-                                      const Text("Chọn người được tư vấn"),
+                                          const Text("Chọn người được tư vấn"),
                                       content: relationship(
                                           snapshot.data![index].slotID),
                                       actions: [
@@ -197,25 +197,23 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                               Navigator.pop(context, 'Ok');
                                             } else {
                                               BookingSchedule bookingSchedule =
-                                              BookingSchedule(
-                                                  userID:
-                                                  sharedCurrentUser!
-                                                      .userID!,
-                                                  subProfileID:
-                                                  '${subProfile!.profileID}',
-                                                  scheduleID: snapshot
-                                                      .data![index]
-                                                      .scheduleID!,
-                                                  dateBooking: DateFormat(
-                                                      "yyyy-MM-dd")
-                                                      .format(
-                                                      DateTime.now()),
-                                                  timeBooking: DateFormat(
-                                                      "yyyy-MM-ddTHH:mm:ss")
-                                                      .format(
-                                                      DateTime.now()));
-
-
+                                                  BookingSchedule(
+                                                      userID:
+                                                          sharedCurrentUser!
+                                                              .userID!,
+                                                      subProfileID:
+                                                          '${subProfile!.profileID}',
+                                                      scheduleID: snapshot
+                                                          .data![index]
+                                                          .scheduleID!,
+                                                      dateBooking: DateFormat(
+                                                              "yyyy-MM-dd")
+                                                          .format(
+                                                              DateTime.now()),
+                                                      timeBooking: DateFormat(
+                                                              "yyyy-MM-ddTHH:mm:ss")
+                                                          .format(
+                                                              DateTime.now()));
 
                                               Navigator.push(
                                                   context,
@@ -227,7 +225,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                                             schedule: snapshot
                                                                 .data![index],
                                                             bookingSchedule:
-                                                            bookingSchedule,
+                                                                bookingSchedule,
                                                           )));
                                             }
                                           },
@@ -235,19 +233,18 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                         )
                                       ],
                                     ),
-                              ));
+                                  ));
                         },
                       );
                     }
-
                   } else {
                     return Container(
-                      // child: const Center(
-                      //     child: Text(
-                      //   "Physio dang ban het tat ca cac slot",
-                      //   style: TextStyle(fontSize: 16),
-                      // )),
-                    );
+                        // child: const Center(
+                        //     child: Text(
+                        //   "Physio dang ban het tat ca cac slot",
+                        //   style: TextStyle(fontSize: 16),
+                        // )),
+                        );
                   }
                 }),
           ],
@@ -352,7 +349,8 @@ class PhysioChooseMenu extends StatelessWidget {
     required this.timeEnd,
     required this.name,
     required this.icon,
-    required this.press, this.notify,
+    required this.press,
+    this.notify,
   }) : super(key: key);
 
   final String icon, name, time;
@@ -362,14 +360,11 @@ class PhysioChooseMenu extends StatelessWidget {
   bool visible = false;
   double price;
 
-
   @override
   Widget build(BuildContext context) {
-    if (notify == ''){
+    if (notify == '') {
       visible = false;
-
-    }
-    else {
+    } else {
       visible = true;
       press = null;
     }
@@ -432,13 +427,14 @@ class PhysioChooseMenu extends StatelessWidget {
                             //   height: 10,
                             // ),
                             Text(
-                              '$time : $timeStart - $timeEnd',
+                              '$time$timeStart - $timeEnd',
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             Text(
                               '$price VND',
                             ),
-                            Visibility(visible: visible,child: Text('$notify')),
+                            Visibility(
+                                visible: visible, child: Text('$notify')),
                           ],
                         )),
                     const Padding(

@@ -45,15 +45,15 @@ class _TimeResultPageState extends State<TimeResultPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                const SizedBox(height: 20),
-                CurrentTime(),
+                // const SizedBox(height: 20),
+                // CurrentTime(),
                 FutureBuilder<List<Schedule>>(
                     future: CallAPI()
                         .getallPhysiotherapistBySlotTimeAndSkillAndTypeOfSlot(
                             widget.timeStart,
                             widget.timeEnd,
                             'Đau Lưng',
-                            'Tư Vấn 1 Buổi'),
+                            'Tư vấn trị liệu'),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return ListView.builder(
@@ -88,7 +88,6 @@ class _TimeResultPageState extends State<TimeResultPage> {
                                               snapshot.data![index].scheduleID!,
                                           dateBooking: date,
                                           timeBooking: time);
-
 
                                   Navigator.push(
                                       context,
