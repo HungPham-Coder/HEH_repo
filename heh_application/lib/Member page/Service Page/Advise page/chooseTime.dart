@@ -247,7 +247,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
               height: 50,
               child: FutureBuilder<List<Slot>>(
                   future: CallAPI()
-                      .GetAllSlotByDateAndTypeOfSlot(date, 'Tư Vấn 1 Buổi'),
+                      .GetAllSlotByDateAndTypeOfSlot(date, 'Tư vấn trị liệu'),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       addSlot(snapshot.data!);
