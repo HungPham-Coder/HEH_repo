@@ -454,16 +454,6 @@ class SessionMenu extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(15)),
             border: Border.all(color: Colors.black),
           ),
-          // style: ButtonStyle(
-          //     backgroundColor: MaterialStateProperty.all<Color>(
-          //         Color.fromARGB(255, 130, 203, 246)),
-          //     padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
-          //     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          //       RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(15),
-          //           side: const BorderSide(
-          //               color: Color.fromARGB(255, 46, 161, 226), width: 2)),
-          //     )),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -501,6 +491,79 @@ class SessionMenu extends StatelessWidget {
                         name,
                         style: const TextStyle(color: Colors.white),
                       ),
+                      Text(
+                        time,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  )),
+              TextButton(
+                  child: const Icon(
+                    Icons.edit,
+                    color: Colors.black,
+                  ),
+                  onPressed: buttonPress),
+            ],
+          )),
+    );
+  }
+}
+
+class SessionScheduleMenu extends StatelessWidget {
+  SessionScheduleMenu({
+    Key? key,
+    required this.icon,
+    required this.name,
+    required this.time,
+    required this.buttonPress,
+  }) : super(key: key);
+
+  final String icon, name, time;
+  final VoidCallback buttonPress;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 46, 161, 226),
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
+            border: Border.all(color: Colors.black),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Image.network(
+                icon,
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  return child;
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+                width: 40,
+                height: 50,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width / 1.7,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(name,
+                          style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white)),
+                      const SizedBox(height: 5),
                       Text(
                         time,
                         style: const TextStyle(color: Colors.white),

@@ -35,7 +35,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   final TextEditingController _date = TextEditingController();
   final TextEditingController _firstName = TextEditingController();
-  final TextEditingController _lastName = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _address = TextEditingController();
