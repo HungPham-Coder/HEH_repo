@@ -11,7 +11,7 @@ class FirestoreService {
     required String path,
     required T Function(Map<String, dynamic> data, String documentId) builder,
     Query<Map<String, dynamic>> Function(Query<Map<String, dynamic>> query)?
-        queryBuilder,
+    queryBuilder,
     // int Function (T lhs, T rhs)? sort,
   }) {
     Query<Map<String, dynamic>> query = _firebaseFirestore.collection(path);
