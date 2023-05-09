@@ -15,15 +15,42 @@ class PhysioRegisterSlotPage extends StatefulWidget {
 }
 
 class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
-  bool check = false;
+  bool check = true;
   final TextEditingController _date = TextEditingController();
   final TextEditingController _des = TextEditingController();
   String? dayStr;
-  List<Slot>? slotList;
+  List<Slot>? slotList ;
   String? registerResult = "";
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    // _date.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
+    // dayStr  = DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now());
+    // _date.text = "26-04-2023";
+    // dayStr = "2023-04-26T00:00:00";
+    // getInitSlotList(dayStr!);
+    super.initState();
+  }
+
+  void getInitSlotList(String date) async {
+
+
+   slotList = await CallAPI().getallSlotByDateAndPhysioID(
+        date, sharedPhysiotherapist!.physiotherapistID);
+
+    if (slotList == null) {
+      print('a');
+    }
+    else {
+      print ('b');
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -40,17 +67,17 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
             Time(),
             button(),
             const SizedBox(height: 10),
-            check == false && _date.text != "" && slotList!.length == 0
+            check == false && _date.text == "" && slotList!.length == 0
                 ? Center(
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 150),
                       child: Text(
-                        "Bạn chưa đăng ký slot nào",
+                        "Bạn hãy chọn ngày để đăng ký slot",
                         style: TextStyle(color: Colors.grey[500], fontSize: 16),
                       ),
                     ),
                   )
-                : (_date.text != "" && slotList != null)
+                : (_date.text != "" && slotList != null && check == true)
                     ? Visibility(
                         visible: check,
                         child: Column(
@@ -140,7 +167,16 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                                 })
                           ],
                         ))
-                    : Container()
+                    : Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 150),
+                          child: Text(
+                            "Hiện tại đã hết slot có thể đăng ký",
+                            style: TextStyle(
+                                color: Colors.grey[500], fontSize: 16),
+                          ),
+                        ),
+                      )
           ],
         ),
       ),
@@ -182,7 +218,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                 DateTime? pickeddate = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
-                  firstDate: DateTime.now(),
+                  firstDate: DateTime(1960),
                   lastDate: DateTime(2099),
                 );
                 if (pickeddate != null) {
