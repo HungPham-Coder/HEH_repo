@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Advise%20page/result.dart';
 
 import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/paymentTime.dart';
+import 'package:heh_application/models/booking_detail.dart';
 
 class BillTimePage extends StatefulWidget {
   const BillTimePage({Key? key}) : super(key: key);
@@ -121,10 +122,15 @@ class _BillTimePageState extends State<BillTimePage> {
                               side: const BorderSide(color: Colors.white)),
                         )),
                     onPressed: () {
+                      // BookingDetail bookingDetail = BookingDetail(
+                      //   bookingScheduleID:
+                      //   widget.bookingSchedule!.bookingScheduleID!,
+                      //   shorttermStatus: 0,
+                      // );
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const PaymentTimePage()));
+                              builder: (context) =>  PaymentTimePage()));
                     },
                     child: const Text(
                       "Thanh toán",

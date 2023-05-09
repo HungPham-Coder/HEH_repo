@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/success.dart';
+import 'package:heh_application/models/booking_detail.dart';
+import 'package:heh_application/services/call_api.dart';
 // import 'package:lottie/lottie.dart';
 
 // enum paymentGroup { male, female, others }
 
 class PaymentTimePage extends StatefulWidget {
-  const PaymentTimePage({Key? key}) : super(key: key);
-
+   PaymentTimePage({Key? key,  this.bookingDetail}) : super(key: key);
+  BookingDetail? bookingDetail;
   @override
   State<PaymentTimePage> createState() => _PaymentTimePageState();
 }
@@ -56,10 +58,10 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
+                          children:  [
                             Text("Người thanh toán: "),
-                            Text("Nguyễn Văn A",
-                                style: TextStyle(fontWeight: FontWeight.w600)),
+                            Text("${widget.bookingDetail!.bookingSchedule!.signUpUser!.firstName}",
+                                style: TextStyle (fontWeight: FontWeight.w600)),
                           ],
                         ),
                         Padding(
@@ -74,8 +76,8 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                           children: [
                             const Text("Số tiền: "),
                             Row(
-                              children: const [
-                                Text("100,000",
+                              children:  [
+                                Text("${widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.price}",
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600)),
                                 Text(" VNĐ",
@@ -119,10 +121,11 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
+                children:  [
                   Text("Số tiền:"),
-                  Text("100,000 VNĐ",
+                  Text("${widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.price}",
                       style: TextStyle(fontWeight: FontWeight.w600)),
+                  Text(" VND"),
                 ],
               ),
               const SizedBox(height: 10),
@@ -139,15 +142,26 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                           borderRadius: BorderRadius.circular(15),
                           side: const BorderSide(color: Colors.white)),
                     )),
-                onPressed: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const FailPage()));
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SuccessPage()));
+                onPressed: () async {
+
+                  bool addBookingDetail =
+                      await CallAPI().addBookingDetail(widget.bookingDetail!);
+                  if (addBookingDetail) {
+                    widget.bookingDetail!.bookingSchedule!.schedule!.physioBookingStatus = true;
+                    await CallAPI().updateScheduleWithPhysioBookingStatus(
+                        widget.bookingDetail!.bookingSchedule!.schedule!);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SuccessPage()));
+                  }
+                  // else {
+                  //   Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) =>  FailPage()));
+                  // }
+
                 },
                 child: const Text(
                   "Thanh toán",

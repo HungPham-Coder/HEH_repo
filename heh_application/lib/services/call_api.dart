@@ -860,6 +860,37 @@ class CallAPI {
     }
   }
 
+  Future<BookingDetail> getBookingDetailByID(String bookingDetailID) async {
+    var url =
+    Uri.parse('${link}/api/BookingDetail/$bookingDetailID');
+    // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      return BookingDetail.fromMap(json.decode(response.body));
+    } else {
+      throw Exception(response.body);
+    }
+  }
+  Future<BookingSchedule> getBookingScheduleByID(String bookingScheduleID) async {
+    var url =
+    Uri.parse('${link}/api/BookingSchedule/$bookingScheduleID');
+    // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      return BookingSchedule.fromMap(json.decode(response.body));
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
   Future<List<Relationship>> getAllRelationship() async {
     var url = Uri.parse('${link}/api/Relationship');
     // var url = Uri.https('localhost:7166', 'api/TypeOfSlot');
