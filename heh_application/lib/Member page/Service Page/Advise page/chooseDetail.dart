@@ -214,13 +214,8 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                                       "yyyy-MM-ddTHH:mm:ss")
                                                       .format(
                                                       DateTime.now()));
-                                              BookingSchedule?
-                                              bookingScheduleAdd =
-                                              await CallAPI()
-                                                  .addBookingSchedule(
-                                                  bookingSchedule);
-                                              print(
-                                                  '${bookingScheduleAdd!.bookingScheduleID} booking schedule id add');
+
+
 
                                               Navigator.push(
                                                   context,
@@ -232,7 +227,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                                             schedule: snapshot
                                                                 .data![index],
                                                             bookingSchedule:
-                                                            bookingScheduleAdd,
+                                                            bookingSchedule,
                                                           )));
                                             }
                                           },

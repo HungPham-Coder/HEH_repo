@@ -89,9 +89,6 @@ class _TimeResultPageState extends State<TimeResultPage> {
                                           dateBooking: date,
                                           timeBooking: time);
 
-                                  BookingSchedule? bookingScheduleAdd =
-                                      await CallAPI()
-                                          .addBookingSchedule(bookingSchedule);
 
                                   Navigator.push(
                                       context,
@@ -102,7 +99,7 @@ class _TimeResultPageState extends State<TimeResultPage> {
                                                   .physiotherapist!,
                                               schedule: snapshot.data![index],
                                               bookingSchedule:
-                                                  bookingScheduleAdd)));
+                                                  bookingSchedule)));
                                 },
                               );
                             });
