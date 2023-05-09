@@ -131,7 +131,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
             const SizedBox(height: 5),
             FutureBuilder<List<Schedule>?>(
                 future: CallAPI().getallSlotByPhysiotherapistIDAndTypeOfSlot(
-                    widget.physiotherapist.physiotherapistID,'Tư Vấn 1 Buổi'),
+                    widget.physiotherapist.physiotherapistID,'Tư vấn trị liệu'),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     int count = 0;
