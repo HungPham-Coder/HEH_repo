@@ -171,9 +171,10 @@ class _BillChoosePageState extends State<BillChoosePage> {
                         )),
                     onPressed: () async {
                       BookingDetail bookingDetail = BookingDetail(
-                          bookingScheduleID:
-                              widget.bookingSchedule!.bookingScheduleID!,
-                          status: true);
+                        bookingScheduleID:
+                            widget.bookingSchedule!.bookingScheduleID!,
+                        shorttermStatus: 0,
+                      );
                       bool addBookingDetail =
                           await CallAPI().addBookingDetail(bookingDetail);
                       if (addBookingDetail) {

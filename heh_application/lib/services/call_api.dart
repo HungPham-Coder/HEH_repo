@@ -578,6 +578,7 @@ class CallAPI {
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
+      print(response.body);
       Iterable jsonResult = json.decode(response.body);
       List<Schedule> list = List<Schedule>.from(
           jsonResult.map((model) => Schedule.fromMap(model)));
