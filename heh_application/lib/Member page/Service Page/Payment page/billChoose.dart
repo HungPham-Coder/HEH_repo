@@ -15,9 +15,9 @@ import 'package:intl/intl.dart';
 class BillChoosePage extends StatefulWidget {
   BillChoosePage(
       {Key? key,
-        required this.physiotherapist,
-        required this.schedule,
-        required this.bookingSchedule})
+      required this.physiotherapist,
+      required this.schedule,
+      required this.bookingSchedule})
       : super(key: key);
   Physiotherapist physiotherapist;
   Schedule schedule;
@@ -32,7 +32,7 @@ class _BillChoosePageState extends State<BillChoosePage> {
   String? timeEnd;
   void formatDateAndTime() {
     DateTime tempDate =
-    new DateFormat("yyyy-MM-dd").parse(widget.schedule.slot!.timeStart);
+        new DateFormat("yyyy-MM-dd").parse(widget.schedule.slot!.timeStart);
     day = DateFormat("dd-MM-yyyy").format(tempDate);
     DateTime tempTimeStart = new DateFormat("yyyy-MM-ddTHH:mm:ss")
         .parse(widget.schedule.slot!.timeStart);
@@ -85,7 +85,7 @@ class _BillChoosePageState extends State<BillChoosePage> {
                   ),
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -100,7 +100,8 @@ class _BillChoosePageState extends State<BillChoosePage> {
                         padding(),
                         information(
                             name: "Tên chuyên viên: ",
-                            info: widget.physiotherapist.signUpUser!.lastName!),
+                            info:
+                                widget.physiotherapist.signUpUser!.firstName!),
                         padding(),
                         information(
                             name: "Tên người đặt: ",
@@ -142,7 +143,7 @@ class _BillChoosePageState extends State<BillChoosePage> {
                             const EdgeInsets.only(
                                 left: 25, right: 25, top: 15, bottom: 15)),
                         shape:
-                        MaterialStateProperty.all<RoundedRectangleBorder>(
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                               side: const BorderSide(color: Colors.white)),
@@ -161,9 +162,9 @@ class _BillChoosePageState extends State<BillChoosePage> {
                   child: ElevatedButton(
                     style: ButtonStyle(
                         padding:
-                        MaterialStateProperty.all(const EdgeInsets.all(15)),
+                            MaterialStateProperty.all(const EdgeInsets.all(15)),
                         shape:
-                        MaterialStateProperty.all<RoundedRectangleBorder>(
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                               side: const BorderSide(color: Colors.white)),
@@ -171,10 +172,10 @@ class _BillChoosePageState extends State<BillChoosePage> {
                     onPressed: () async {
                       BookingDetail bookingDetail = BookingDetail(
                           bookingScheduleID:
-                          widget.bookingSchedule!.bookingScheduleID!,
+                              widget.bookingSchedule!.bookingScheduleID!,
                           status: true);
                       bool addBookingDetail =
-                      await CallAPI().addBookingDetail(bookingDetail);
+                          await CallAPI().addBookingDetail(bookingDetail);
                       if (addBookingDetail) {
                         widget.schedule.physioBookingStatus = true;
                         await CallAPI().updateScheduleWithPhysioBookingStatus(

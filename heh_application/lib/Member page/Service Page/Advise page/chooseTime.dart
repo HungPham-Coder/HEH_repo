@@ -56,18 +56,13 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
   void addSlot(List<Slot> list) {
     if (_time.length == 1) {
       list.forEach((element) {
-
         String start = DateTimeFormat.formateTime(element.timeStart);
         String end = DateTimeFormat.formateTime(element.timeEnd);
         _time.add("${start} - ${end}");
       });
-    }
-    else {
-      _time.removeWhere((element) =>
-        element != "- Chọn khung giờ -"
-      );
+    } else {
+      _time.removeWhere((element) => element != "- Chọn khung giờ -");
       list.forEach((element) {
-
         String start = DateTimeFormat.formateTime(element.timeStart);
         String end = DateTimeFormat.formateTime(element.timeEnd);
         _time.add("${start} - ${end}");
@@ -165,7 +160,6 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                 dateSearch = DateFormat('yyyy-MM-dd').format(pickeddate);
                 timeVisible = true;
               });
-
             }
           },
         ),
@@ -234,7 +228,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
   }
 
   Widget Time(String? date) {
-    if (date != null){
+    if (date != null) {
       return Visibility(
         visible: timeVisible,
         child: Column(
@@ -252,33 +246,31 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
               width: MediaQuery.of(context).size.width,
               height: 50,
               child: FutureBuilder<List<Slot>>(
-                  future: CallAPI().GetAllSlotByDateAndTypeOfSlot(date,'Tư Vấn 1 Buổi'),
+                  future: CallAPI()
+                      .GetAllSlotByDateAndTypeOfSlot(date, 'Tư Vấn 1 Buổi'),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-
-                        addSlot(snapshot.data!);
-                        return DropdownButtonFormField<String>(
-                          value: selectedTime,
-                          items: _time
-                              .map((relationship) => DropdownMenuItem<String>(
-                              value: relationship,
-                              child: Padding(
-                                padding:
-                                const EdgeInsets.symmetric(horizontal: 10),
-                                child: Text(
-                                  relationship,
-                                  style: const TextStyle(fontSize: 13),
-                                ),
-                              )))
-                              .toList(),
-                          onChanged: (relationship) => setState(() {
-                            selectedTime = relationship;
-                            print(selectedTime);
-                          }),
-                        );
-                      }
-
-                     else {
+                      addSlot(snapshot.data!);
+                      return DropdownButtonFormField<String>(
+                        value: selectedTime,
+                        items: _time
+                            .map((relationship) => DropdownMenuItem<String>(
+                                value: relationship,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: Text(
+                                    relationship,
+                                    style: const TextStyle(fontSize: 13),
+                                  ),
+                                )))
+                            .toList(),
+                        onChanged: (relationship) => setState(() {
+                          selectedTime = relationship;
+                          print(selectedTime);
+                        }),
+                      );
+                    } else {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
@@ -288,11 +280,9 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
           ],
         ),
       );
-    }
-    else {
+    } else {
       return Container();
     }
-
   }
 
   @override
@@ -311,7 +301,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
     //   String b = '${date}T${startStr}';
     //   print(b);
     // }
-  print(dateSearch);
+    print(dateSearch);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(

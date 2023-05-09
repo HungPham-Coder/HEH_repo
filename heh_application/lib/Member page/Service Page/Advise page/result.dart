@@ -9,6 +9,8 @@ import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/util/date_time_format.dart';
 import 'package:intl/intl.dart';
 
+import '../../../common_widget/menu_listview.dart';
+
 class TimeResultPage extends StatefulWidget {
   TimeResultPage(
       {Key? key,
@@ -46,8 +48,12 @@ class _TimeResultPageState extends State<TimeResultPage> {
                 const SizedBox(height: 20),
                 CurrentTime(),
                 FutureBuilder<List<Schedule>>(
-                    future: CallAPI().getallPhysiotherapistBySlotTimeAndSkillAndTypeOfSlot(
-                        widget.timeStart, widget.timeEnd, 'Đau Lưng','Tư Vấn 1 Buổi'),
+                    future: CallAPI()
+                        .getallPhysiotherapistBySlotTimeAndSkillAndTypeOfSlot(
+                            widget.timeStart,
+                            widget.timeEnd,
+                            'Đau Lưng',
+                            'Tư Vấn 1 Buổi'),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return ListView.builder(
@@ -55,11 +61,14 @@ class _TimeResultPageState extends State<TimeResultPage> {
                             itemCount: snapshot.data!.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              String startStr = DateTimeFormat.formateTime(snapshot.data![index].slot!.timeStart);
-                              String endStr = DateTimeFormat.formateTime(snapshot.data![index].slot!.timeEnd);
+                              String startStr = DateTimeFormat.formateTime(
+                                  snapshot.data![index].slot!.timeStart);
+                              String endStr = DateTimeFormat.formateTime(
+                                  snapshot.data![index].slot!.timeEnd);
 
                               return PhysioChooseMenu(
-                                slotName: '${snapshot.data![index].slot!.slotName}',
+                                slotName:
+                                    '${snapshot.data![index].slot!.slotName}',
                                 icon:
                                     "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
                                 name:
@@ -89,7 +98,8 @@ class _TimeResultPageState extends State<TimeResultPage> {
                                       MaterialPageRoute(
                                           builder: (context) => BillChoosePage(
                                               physiotherapist: snapshot
-                                                  .data![index].physiotherapist!,
+                                                  .data![index]
+                                                  .physiotherapist!,
                                               schedule: snapshot.data![index],
                                               bookingSchedule:
                                                   bookingScheduleAdd)));
@@ -106,94 +116,6 @@ class _TimeResultPageState extends State<TimeResultPage> {
             ),
           ),
         ));
-  }
-}
-
-class PhysioChooseMenu extends StatelessWidget {
-  const PhysioChooseMenu({
-    Key? key,
-    required this.time,
-    required this.name,
-    required this.icon,
-    required this.press, required this.slotName,
-  }) : super(key: key);
-
-  final String icon, name, time, slotName;
-  final VoidCallback? press;
-
-  @override
-  Widget build(BuildContext context) {
-    // ignore: duplicate_ignore
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: TextButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white),
-                  padding: MaterialStateProperty.all(
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 15)),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: const BorderSide(
-                            color: Color.fromARGB(255, 46, 161, 226),
-                            width: 2)),
-                  )),
-              onPressed: press,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.network(
-                    icon,
-                    frameBuilder:
-                        (context, child, frame, wasSynchronouslyLoaded) {
-                      return child;
-                    },
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      } else {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                    },
-                    width: 40,
-                    height: 50,
-                  ),
-                  const SizedBox(width: 5),
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.6,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Chuyên viên: $name',
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                          // Text(
-                          //   'Khung giờ: $slotName',
-                          //   style: Theme.of(context).textTheme.bodyText1,
-                          // ),
-                          const SizedBox(height: 10),
-                          Text(
-                            time,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
-                      )),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Icon(Icons.arrow_forward_ios_rounded),
-                  ),
-                ],
-              )),
-        ),
-      ],
-    );
   }
 }
 

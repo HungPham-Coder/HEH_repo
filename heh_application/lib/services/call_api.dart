@@ -592,7 +592,6 @@ class CallAPI {
     }
   }
 
-
   Future<List<Schedule>?> getallSlotByPhysiotherapistIDAndTypeOfSlot(
       String physiotherapistID, String typeOfSlot) async {
     var url = Uri.parse(
@@ -620,8 +619,8 @@ class CallAPI {
 
   Future<List<Slot>?> getallSlotByDateAndPhysioID(
       String date, String physioID) async {
-    var url = Uri.parse('${link}/api/Slot/GetByDateAndPhysioID/$date?physioID=$physioID');
-
+    var url = Uri.parse(
+        '${link}/api/Slot/GetByDateAndPhysioID/$date?physioID=$physioID');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
@@ -643,8 +642,10 @@ class CallAPI {
     }
   }
 
-  Future<List<Slot>> GetAllSlotByDateAndTypeOfSlot(String date, String typeOfSlot) async {
-    var url = Uri.parse('${link}/api/Slot/GetByDateAndTypeOfSlot?date=$date&typeOfSlot=$typeOfSlot');
+  Future<List<Slot>> GetAllSlotByDateAndTypeOfSlot(
+      String date, String typeOfSlot) async {
+    var url = Uri.parse(
+        '${link}/api/Slot/GetByDateAndTypeOfSlot?date=$date&typeOfSlot=$typeOfSlot');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
