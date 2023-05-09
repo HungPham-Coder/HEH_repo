@@ -325,12 +325,12 @@ class _LoginPageState extends State<LoginPage> {
 
         // final registerResult = 'Đăng nhập thành công';
       } else {
-        // ResultLogin resultLogin =
-        //     ResultLogin(userID: "error login", firstName: 'null');
-        // await stream.addLoginStream(resultLogin);
-        LandingPage(
-          msg: 'Tài khoản hoặc mật khẩu sai',
-        );
+        ResultLogin resultLogin =
+            ResultLogin(userID: "error login", firstName: 'null');
+        await stream.addLoginStream(resultLogin);
+        // LandingPage(
+        //   msg: 'Tài khoản hoặc mật khẩu sai',
+        // );
       }
     } on Exception catch (e) {
       print(e.toString());
