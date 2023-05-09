@@ -170,23 +170,19 @@ class _BillChoosePageState extends State<BillChoosePage> {
                               side: const BorderSide(color: Colors.white)),
                         )),
                     onPressed: () async {
+                     BookingSchedule? bookingScheduleAdd = await CallAPI().addBookingSchedule(widget.bookingSchedule!);
+                      BookingSchedule bookingSchedule = await CallAPI().getBookingScheduleByID(bookingScheduleAdd!.bookingScheduleID!);
                       BookingDetail bookingDetail = BookingDetail(
-                        bookingScheduleID:
-                            widget.bookingSchedule!.bookingScheduleID!,
+                        bookingScheduleID: bookingScheduleAdd.bookingScheduleID!,
+                        bookingSchedule:bookingSchedule,
                         shorttermStatus: 0,
                       );
-                      bool addBookingDetail =
-                          await CallAPI().addBookingDetail(bookingDetail);
-                      if (addBookingDetail) {
-                        widget.schedule.physioBookingStatus = true;
-                        await CallAPI().updateScheduleWithPhysioBookingStatus(
-                            widget.schedule);
-                      }
+
 
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const PaymentTimePage()));
+                              builder: (context) =>  PaymentTimePage(bookingDetail: bookingDetail,)));
                     },
                     child: const Text(
                       "Thanh toán",
