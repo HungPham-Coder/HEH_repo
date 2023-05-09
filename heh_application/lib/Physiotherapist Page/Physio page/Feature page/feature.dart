@@ -4,7 +4,7 @@ import 'package:heh_application/Exercise%20Page/category.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Register%20slot%20page/register.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Schedule%20page/schedule.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Session%20page/advise_list.dart';
-import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Session%20page/session.dart';
+import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Session%20page/session_Schedule.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Home%20page/Session%20Page/session.dart';
 import 'package:heh_application/common_widget/menu_listview.dart';
 
