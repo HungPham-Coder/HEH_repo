@@ -37,9 +37,6 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           children: [
-            const Center(
-              child: Text("Danh sách các lịch bạn đã đặt."),
-            ),
             FutureBuilder<List<BookingDetail>>(
                 future: CallAPI()
                     .getAllBookingDetailByUserID(sharedCurrentUser!.userID!),

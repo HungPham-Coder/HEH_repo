@@ -92,7 +92,7 @@ class _InformationPageState extends State<InformationPage> {
                                               color: Color.fromARGB(
                                                   255, 46, 161, 226))),
                                     )),
-                                onPressed: () async {},
+                                onPressed: () {},
                                 child: SvgPicture.network(
                                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcamera.svg?alt=media&token=afa6a202-304e-45af-8df5-870126316135",
                                   width: 20,

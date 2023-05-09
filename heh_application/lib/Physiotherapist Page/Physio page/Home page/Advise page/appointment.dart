@@ -48,8 +48,10 @@ class _AppointmentPageState extends State<AppointmentPage> {
                       side: const BorderSide(color: Colors.white)),
                 )),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => VideoCallPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const VideoCallPage()));
             },
             child: const Text(
               "Tham gia",
@@ -194,7 +196,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   if (snapshot.hasData) {
                     if (snapshot.data!.isNotEmpty) {
                       return ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: snapshot.data!.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
@@ -238,13 +240,25 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             );
                           });
                     } else {
-                      return Center(
-                        child: Text("Hiện tại chưa có ai đặt list empty"),
+                      return Container(
+                        padding: const EdgeInsets.symmetric(vertical: 280),
+                        child: const Center(
+                          child: Text(
+                            "Hiện tại không có lịch đặt hẹn.",
+                            style: TextStyle(fontSize: 18, color: Colors.grey),
+                          ),
+                        ),
                       );
                     }
                   } else {
-                    return Center(
-                      child: Text("Hiện tại chưa có ai đặt "),
+                    return Container(
+                      padding: const EdgeInsets.symmetric(vertical: 280),
+                      child: const Center(
+                        child: Text(
+                          "Hiện tại không có lịch đặt hẹn.",
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        ),
+                      ),
                     );
                   }
                 }),

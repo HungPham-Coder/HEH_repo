@@ -180,10 +180,11 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
               ),
               onTap: () async {
                 DateTime? pickeddate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2099),);
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime(2099),
+                );
                 if (pickeddate != null) {
                   _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
                 }
