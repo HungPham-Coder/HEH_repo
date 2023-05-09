@@ -53,7 +53,7 @@ class _TimeResultPageState extends State<TimeResultPage> {
                             widget.timeStart,
                             widget.timeEnd,
                             'Đau Lưng',
-                            'Tư Vấn 1 Buổi'),
+                            'Tư vấn trị liệu'),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return ListView.builder(
