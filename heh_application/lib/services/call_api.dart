@@ -618,7 +618,7 @@ class CallAPI {
     }
   }
 
-  Future<List<Slot>?> getallSlotByDateAndPhysioID(
+  Future<List<Slot>> getallSlotByDateAndPhysioID(
       String date, String physioID) async {
     var url = Uri.parse(
         '${link}/api/Slot/GetByDateAndPhysioID/$date?physioID=$physioID');
@@ -635,6 +635,7 @@ class CallAPI {
 
       if (list == null) {
         print("List Schedule Null");
+        throw Exception("List Schedule Null");
       } else {
         return list;
       }

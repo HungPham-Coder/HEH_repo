@@ -300,9 +300,7 @@ class ScheduleMenu extends StatelessWidget {
                         time,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                      typeOfSlot == null
-                          ? const Text("Chưa phân công")
-                          : Text(typeOfSlot!),
+                      Text('$typeOfSlot'),
                       const SizedBox(height: 5),
                     ],
                   )),
