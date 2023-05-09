@@ -29,19 +29,17 @@ class _PhyNavigation_barState extends State<PhyNavigation_bar> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      body: FutureBuilder <Physiotherapist>(
-        future: CallAPI().getPhysiotherapistByUserID(sharedCurrentUser!.userID!),
-        builder:(context, snapshot)  {
-          if (snapshot.hasData){
-            sharedPhysiotherapist = snapshot.data;
-            return pageList[pageIndex];
-          }
-          else return Container();
-
-        }
-      ),
+      body: FutureBuilder<Physiotherapist>(
+          future:
+              CallAPI().getPhysiotherapistByUserID(sharedCurrentUser!.userID!),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              sharedPhysiotherapist = snapshot.data;
+              return pageList[pageIndex];
+            } else
+              return Container();
+          }),
       bottomNavigationBar: BottomNavigationBar(
           backgroundColor: const Color.fromARGB(255, 46, 161, 226),
           fixedColor: Colors.white,

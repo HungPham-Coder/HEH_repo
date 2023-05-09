@@ -35,42 +35,51 @@ class _AdviseAppointmentPageState extends State<AdviseAppointmentPage> {
                       'Tư Vấn 1 Buổi'),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.isNotEmpty){
-
+                      if (snapshot.data!.isNotEmpty) {
                         return ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: snapshot.data!.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              String start = DateTimeFormat.formateTime(snapshot.data![index].bookingSchedule!
-                                  .schedule!.slot!.timeStart);
-                              String end = DateTimeFormat.formateTime(snapshot.data![index].bookingSchedule!
-                                  .schedule!.slot!.timeEnd);
+                              String start = DateTimeFormat.formateTime(snapshot
+                                  .data![index]
+                                  .bookingSchedule!
+                                  .schedule!
+                                  .slot!
+                                  .timeStart);
+                              String end = DateTimeFormat.formateTime(snapshot
+                                  .data![index]
+                                  .bookingSchedule!
+                                  .schedule!
+                                  .slot!
+                                  .timeEnd);
 
                               return AdviseMenu(
                                 icon:
-                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
+                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
                                 name:
-                                "${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
+                                    "${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
                                 press: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              AdviseDetailPage(bookingSchedule: snapshot.data![index].bookingSchedule,)));
+                                              AdviseDetailPage(
+                                                bookingSchedule: snapshot
+                                                    .data![index]
+                                                    .bookingSchedule,
+                                              )));
                                 },
                                 time: "Khung giờ đặt: $start - $end",
                               );
                             });
-                      }
-                      else {
-                        return Center(
+                      } else {
+                        return const Center(
                           child: Text("Hiện tại chưa có ai đặt list empty"),
                         );
                       }
-
                     } else {
-                      return Center(
+                      return const Center(
                         child: Text("Hiện tại chưa có ai đặt "),
                       );
                     }

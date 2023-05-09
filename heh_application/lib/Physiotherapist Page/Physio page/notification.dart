@@ -11,7 +11,7 @@ class NotificationPage extends StatefulWidget {
 
 class _NotificationPageState extends State<NotificationPage> {
   String count = '1';
-  bool isLabelVisible = true;
+  bool isLabelVisible = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
