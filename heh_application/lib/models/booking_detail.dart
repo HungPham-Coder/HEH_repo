@@ -6,20 +6,24 @@ class BookingDetail {
   String bookingScheduleID;
   BookingSchedule? bookingSchedule;
   String? videoCallRoom;
-  bool status;
+  int? longtermStatus;
+  int? shorttermStatus;
 
   BookingDetail(
       { this.bookingDetailID,
       required this.bookingScheduleID,
        this.bookingSchedule,
         this.videoCallRoom,
-      required this.status});
+        this.longtermStatus,
+        this.shorttermStatus
+      });
   factory BookingDetail.fromMap(Map<String, dynamic> json) {
     return BookingDetail(
         bookingDetailID: json['bookingDetailID'],
         bookingScheduleID: json['bookingScheduleID'],
         bookingSchedule:BookingSchedule.fromMap(json['bookingSchedule']) ,
         videoCallRoom: json['videoCallRoom'],
-        status: json['status']);
+        shorttermStatus: json['shorttermStatus'],
+    longtermStatus: json['longtermStatus']);
   }
 }

@@ -52,7 +52,7 @@ class _MessengerPageState extends State<MessengerPage> {
   void initState() {
     super.initState();
     readLocal();
-    scrollController.addListener(_scrollController);
+    scrollController.addListener(_scrollListener);
     transform = TransformationController();
   }
 
@@ -131,74 +131,78 @@ class _MessengerPageState extends State<MessengerPage> {
               children: [
                 chatMessages.type == MessageType.text
                     ? messageBubble(
-                        chatContent: chatMessages.content,
-                        color: Colors.blue,
-                        textColor: Colors.white,
-                        margin: const EdgeInsets.only(right: 10, top: 2),
-                      )
+                  chatContent: chatMessages.content,
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                  margin: const EdgeInsets.only(right: 10, top: 2),
+                )
                     : chatMessages.type == MessageType.image
-                        ? Container(
-                            margin: const EdgeInsets.only(right: 10, top: 10),
-                            child: chatImage(imageSrc: chatMessages.content),
-                          )
-                        : const SizedBox.shrink(),
+                    ? Container(
+                  margin: const EdgeInsets.only(
+                      right: 10, top: 10),
+                  child: chatImage(
+                    imageSrc: chatMessages.content,),
+                )
+                    : const SizedBox.shrink(),
                 isMessageSent(index)
                     ? Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Image.network(
+                    widget.userAvatar!,
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (BuildContext ctx, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.red,
+                          value: loadingProgress.expectedTotalBytes !=
+                              null &&
+                              loadingProgress.expectedTotalBytes !=
+                                  null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                              : null,
                         ),
-                        // child: Image.network(
-                        //   widget.userAvatar!,
-                        //   width: 40,
-                        //   height: 40,
-                        //   fit: BoxFit.cover,
-                        //   loadingBuilder: (BuildContext ctx, Widget child,
-                        //       ImageChunkEvent? loadingProgress) {
-                        //     if (loadingProgress == null) return child;
-                        //     return Center(
-                        //       child: CircularProgressIndicator(
-                        //         color: Colors.blueAccent,
-                        //         value: loadingProgress.expectedTotalBytes !=
-                        //                     null &&
-                        //                 loadingProgress.expectedTotalBytes !=
-                        //                     null
-                        //             ? loadingProgress.cumulativeBytesLoaded /
-                        //                 loadingProgress.expectedTotalBytes!
-                        //             : null,
-                        //       ),
-                        //     );
-                        //   },
-                        //   errorBuilder: (context, object, stackTrace) {
-                        //     return Text("");
-                        //     // return const Icon(
-                        //     //   Icons.account_circle,
-                        //     //   size: 35,
-                        //     //   color: Colors.grey,
-                        //     // );
-                        //   },
-                        // ),
-                      )
+                      );
+                    },
+                    errorBuilder: (context, object, stackTrace) {
+                      return const Icon(
+                        Icons.account_circle,
+                        size: 35,
+                        color: Colors.lightGreenAccent,
+                      );
+                    },
+                  ),
+                )
                     : Container(
-                        width: 0,
-                      ),
+                  width: 35,
+                ),
               ],
             ),
             isMessageSent(index)
                 ? Container(
-                    margin: const EdgeInsets.only(right: 10, top: 6, bottom: 8),
-                    child: Text(
-                      DateFormat('dd MMM yyyy, hh:mm a').format(
-                        DateTime.fromMillisecondsSinceEpoch(
-                          int.parse(chatMessages.timestamp),
-                        ),
-                      ),
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
-                    ),
-                  )
+              margin: const EdgeInsets.only(
+                  right: 50,
+                  top: 6,
+                  bottom: 8),
+              child: Text(
+                DateFormat('dd MMM yyyy, hh:mm a').format(
+                  DateTime.fromMillisecondsSinceEpoch(
+                    int.parse(chatMessages.timestamp),
+                  ),
+                ),
+                style: const TextStyle(
+                    color: Colors.blue,
+                    fontSize: 12,
+                    fontStyle: FontStyle.italic),
+              ),
+            )
                 : const SizedBox.shrink(),
           ],
         );
@@ -210,75 +214,80 @@ class _MessengerPageState extends State<MessengerPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 isMessageReceived(index)
-                    // left side (received message)
+                // left side (received message)
                     ? Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Image.network(
+                    widget.oponentAvartar,
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (BuildContext ctx, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.blue,
+                          value: loadingProgress.expectedTotalBytes !=
+                              null &&
+                              loadingProgress.expectedTotalBytes !=
+                                  null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                              : null,
                         ),
-                        child: Image.network(
-                          widget.oponentID,
-                          width: 40,
-                          height: 40,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (BuildContext ctx, Widget child,
-                              ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.lightBlueAccent,
-                                value: loadingProgress.expectedTotalBytes !=
-                                            null &&
-                                        loadingProgress.expectedTotalBytes !=
-                                            null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, object, stackTrace) {
-                            return const Icon(
-                              Icons.account_circle,
-                              size: 35,
-                              color: Colors.grey,
-                            );
-                          },
-                        ),
-                      )
+                      );
+                    },
+                    errorBuilder: (context, object, stackTrace) {
+                      return const Icon(
+                        Icons.account_circle,
+                        size: 35,
+                        color: Colors.grey,
+                      );
+                    },
+                  ),
+                )
                     : Container(
-                        width: 35,
-                      ),
+                  width: 35,
+                ),
                 chatMessages.type == MessageType.text
                     ? messageBubble(
-                        color: Colors.lightBlueAccent,
-                        textColor: Colors.white,
-                        chatContent: chatMessages.content,
-                        margin: const EdgeInsets.only(left: 10),
-                      )
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                  chatContent: chatMessages.content,
+                  margin: const EdgeInsets.only(left: 10),
+                )
                     : chatMessages.type == MessageType.image
-                        ? Container(
-                            margin: const EdgeInsets.only(left: 10, top: 10),
-                            child: chatImage(imageSrc: chatMessages.content),
-                          )
-                        : const SizedBox.shrink(),
+                    ? Container(
+                  margin: const EdgeInsets.only(
+                      left: 10, top: 10),
+                  child: chatImage(
+                      imageSrc: chatMessages.content),
+                )
+                    : const SizedBox.shrink(),
               ],
             ),
             isMessageReceived(index)
                 ? Container(
-                    margin: const EdgeInsets.only(left: 50, top: 6, bottom: 8),
-                    child: Text(
-                      DateFormat('dd MMM yyyy, hh:mm a').format(
-                        DateTime.fromMillisecondsSinceEpoch(
-                          int.parse(chatMessages.timestamp),
-                        ),
-                      ),
-                      style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                          fontStyle: FontStyle.italic),
-                    ),
-                  )
+              margin: const EdgeInsets.only(
+                  left: 50,
+                  top: 6,
+                  bottom: 8),
+              child: Text(
+                DateFormat('dd MMM yyyy, hh:mm a').format(
+                  DateTime.fromMillisecondsSinceEpoch(
+                    int.parse(chatMessages.timestamp),
+                  ),
+                ),
+                style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                    fontStyle: FontStyle.italic),
+              ),
+            )
                 : const SizedBox.shrink(),
           ],
         );
@@ -289,45 +298,40 @@ class _MessengerPageState extends State<MessengerPage> {
   }
 
   Widget buildListMessage() {
-    return SizedBox(
-      // width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height / 1.4,
-      child: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        child: Flexible(
-          child: groupChatID.isNotEmpty
-              ? StreamBuilder<QuerySnapshot>(
-                  stream: ChatProvider().getChatMessage(groupChatID, _limit),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasData) {
-                      listMessages = snapshot.data!.docs;
-                      if (listMessages.isNotEmpty) {
-                        return ListView.builder(
-                            padding: const EdgeInsets.all(10),
-                            itemCount: snapshot.data?.docs.length,
-                            reverse: true,
-                            controller: scrollController,
-                            itemBuilder: (context, index) =>
-                                buildItem(index, snapshot.data?.docs[index]));
-                      } else {
-                        return const Center(
-                          child: Text('Không có tin nhắn...'),
-                        );
-                      }
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.lightBlueAccent,
-                        ),
-                      );
-                    }
-                  })
-              : const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.lightBlueAccent,
-                  ),
+    return Flexible(
+      child: groupChatID.isNotEmpty
+          ? StreamBuilder<QuerySnapshot>(
+          stream: ChatProvider().getChatMessage(groupChatID, _limit),
+          builder: (BuildContext context,
+              AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasData) {
+              listMessages = snapshot.data!.docs;
+              if (listMessages.isNotEmpty) {
+
+                return ListView.builder(
+                    padding: const EdgeInsets.all(10),
+                    itemCount: snapshot.data?.docs.length,
+                    reverse: true,
+                    controller: scrollController,
+                    itemBuilder: (context, index) =>
+                        buildItem(index, snapshot.data?.docs[index]));
+
+              } else {
+                return const Center(
+                  child: Text('Không có tin nhắn...'),
+                );
+              }
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.blue,
                 ),
+              );
+            }
+          })
+          : const Center(
+        child: CircularProgressIndicator(
+          color: Colors.lightBlueAccent,
         ),
       ),
     );
@@ -359,17 +363,15 @@ class _MessengerPageState extends State<MessengerPage> {
           elevation: 10,
           backgroundColor: const Color.fromARGB(255, 46, 161, 226),
         ),
-        body: SingleChildScrollView(
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              child: Column(
-                children: [
-                  buildListMessage(),
-                  const SizedBox(height: 10),
-                  buildMessageInput(),
-                ],
-              ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            child: Column(
+              children: [
+                buildListMessage(),
+                // const SizedBox(height: 10),
+                buildMessageInput(),
+              ],
             ),
           ),
         ));
@@ -393,7 +395,7 @@ class _MessengerPageState extends State<MessengerPage> {
         {FirestoreConstants.chattingWith: widget.oponentID});
   }
 
-  void _scrollController() {
+  void _scrollListener() {
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
       setState(() {
