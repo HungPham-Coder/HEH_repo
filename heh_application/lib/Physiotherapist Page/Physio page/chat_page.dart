@@ -53,7 +53,6 @@ class _ChatPageState extends State<ChatPage> {
   final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
 
-
   late AuthBase authBase;
 
   @override
@@ -89,7 +88,7 @@ class _ChatPageState extends State<ChatPage> {
       groupChatId = widget.peerId;
     } else {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) =>  LoginPage()),
+          MaterialPageRoute(builder: (context) => LoginPage()),
           (Route<dynamic> route) => false);
     }
 
@@ -142,7 +141,8 @@ class _ChatPageState extends State<ChatPage> {
 
   void uploadImageFile() async {
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-    UploadTask uploadTask = ChatProvider().upLoadImageFile(imageFile!, fileName);
+    UploadTask uploadTask =
+        ChatProvider().upLoadImageFile(imageFile!, fileName);
     try {
       TaskSnapshot snapshot = await uploadTask;
       imageUrl = await snapshot.ref.getDownloadURL();
@@ -162,7 +162,7 @@ class _ChatPageState extends State<ChatPage> {
     if (content.trim().isNotEmpty) {
       textEditingController.clear();
       ChatProvider().sendChatMessage(
-          groupChatId,content, type, widget.currentUserID, widget.peerId);
+          groupChatId, content, type, widget.currentUserID, widget.peerId);
       // scrollController.animateTo(0,
       //     duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
     } else {
@@ -204,19 +204,6 @@ class _ChatPageState extends State<ChatPage> {
           "Chăm sóc khách hàng",
           style: TextStyle(fontSize: 18),
         ),
-        // actions: [
-        //   IconButton(
-        //     onPressed: () {
-        //       ProfileProvider profileProvider;
-        //       profileProvider = context.read<ProfileProvider>();
-        //       String callPhoneNumber =
-        //           profileProvider.getPrefs(FirestoreConstants.phoneNumber) ??
-        //               "";
-        //       _callPhoneNumber(callPhoneNumber);
-        //     },
-        //     icon: const Icon(Icons.phone),
-        //   ),
-        // ],
       ),
       body: SafeArea(
         child: Padding(
@@ -305,10 +292,10 @@ class _ChatPageState extends State<ChatPage> {
                       )
                     : chatMessages.type == MessageType.image
                         ? Container(
-                            margin: const EdgeInsets.only(
-                                right: 10, top: 10),
+                            margin: const EdgeInsets.only(right: 10, top: 10),
                             child: chatImage(
-                                imageSrc: chatMessages.content,),
+                              imageSrc: chatMessages.content,
+                            ),
                           )
                         : const SizedBox.shrink(),
                 isMessageSent(index)
@@ -354,10 +341,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
             isMessageSent(index)
                 ? Container(
-                    margin: const EdgeInsets.only(
-                        right: 50,
-                        top: 6,
-                        bottom: 8),
+                    margin: const EdgeInsets.only(right: 50, top: 6, bottom: 8),
                     child: Text(
                       DateFormat('dd MMM yyyy, hh:mm a').format(
                         DateTime.fromMillisecondsSinceEpoch(
@@ -429,20 +413,15 @@ class _ChatPageState extends State<ChatPage> {
                       )
                     : chatMessages.type == MessageType.image
                         ? Container(
-                            margin: const EdgeInsets.only(
-                                left: 10, top: 10),
-                            child: chatImage(
-                                imageSrc: chatMessages.content),
+                            margin: const EdgeInsets.only(left: 10, top: 10),
+                            child: chatImage(imageSrc: chatMessages.content),
                           )
                         : const SizedBox.shrink(),
               ],
             ),
             isMessageReceived(index)
                 ? Container(
-                    margin: const EdgeInsets.only(
-                        left: 50,
-                        top: 6,
-                        bottom: 8),
+                    margin: const EdgeInsets.only(left: 50, top: 6, bottom: 8),
                     child: Text(
                       DateFormat('dd MMM yyyy, hh:mm a').format(
                         DateTime.fromMillisecondsSinceEpoch(
@@ -474,15 +453,13 @@ class _ChatPageState extends State<ChatPage> {
                 if (snapshot.hasData) {
                   listMessages = snapshot.data!.docs;
                   if (listMessages.isNotEmpty) {
-
-                     return ListView.builder(
-                          padding: const EdgeInsets.all(10),
-                          itemCount: snapshot.data?.docs.length,
-                          reverse: true,
-                          controller: scrollController,
-                          itemBuilder: (context, index) =>
-                              buildItem(index, snapshot.data?.docs[index]));
-
+                    return ListView.builder(
+                        padding: const EdgeInsets.all(10),
+                        itemCount: snapshot.data?.docs.length,
+                        reverse: true,
+                        controller: scrollController,
+                        itemBuilder: (context, index) =>
+                            buildItem(index, snapshot.data?.docs[index]));
                   } else {
                     return const Center(
                       child: Text('Không có tin nhắn...'),

@@ -76,7 +76,7 @@ class _MessengerPageState extends State<MessengerPage> {
             ),
             child: IconButton(
               onPressed: getImage,
-              icon: const Icon(Icons.image, size: 30),
+              icon: const Icon(Icons.camera_alt, size: 30),
               color: Colors.white,
             ),
           ),
@@ -101,18 +101,6 @@ class _MessengerPageState extends State<MessengerPage> {
               onSendMessage(textEditingController.text, MessageType.text);
             },
           )),
-          // Container(
-          //   margin: const EdgeInsets.only(left: 4),
-          //   decoration: BoxDecoration(
-          //       color: const Color.fromARGB(255, 46, 161, 226),
-          //       borderRadius: BorderRadius.circular(30)),
-          //   child: IconButton(
-          //     onPressed: () =>
-          //         onSendMessage(textEditingController.text, MessageType.text),
-          //     icon: const Icon(Icons.send_rounded),
-          //     color: Colors.white,
-          //   ),
-          // ),
         ],
       ),
     );
@@ -131,78 +119,75 @@ class _MessengerPageState extends State<MessengerPage> {
               children: [
                 chatMessages.type == MessageType.text
                     ? messageBubble(
-                  chatContent: chatMessages.content,
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  margin: const EdgeInsets.only(right: 10, top: 2),
-                )
+                        chatContent: chatMessages.content,
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                        margin: const EdgeInsets.only(right: 5, top: 2),
+                      )
                     : chatMessages.type == MessageType.image
-                    ? Container(
-                  margin: const EdgeInsets.only(
-                      right: 10, top: 10),
-                  child: chatImage(
-                    imageSrc: chatMessages.content,),
-                )
-                    : const SizedBox.shrink(),
+                        ? Container(
+                            margin: const EdgeInsets.only(right: 5, top: 10),
+                            child: chatImage(
+                              imageSrc: chatMessages.content,
+                            ),
+                          )
+                        : const SizedBox.shrink(),
                 isMessageSent(index)
                     ? Container(
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Image.network(
-                    widget.userAvatar!,
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (BuildContext ctx, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.red,
-                          value: loadingProgress.expectedTotalBytes !=
-                              null &&
-                              loadingProgress.expectedTotalBytes !=
-                                  null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
-                    errorBuilder: (context, object, stackTrace) {
-                      return const Icon(
-                        Icons.account_circle,
-                        size: 35,
-                        color: Colors.lightGreenAccent,
-                      );
-                    },
-                  ),
-                )
+                        // clipBehavior: Clip.hardEdge,
+                        // decoration: BoxDecoration(
+                        //   borderRadius: BorderRadius.circular(20),
+                        // ),
+                        // child: Image.network(
+                        //   widget.userAvatar!,
+                        //   width: 40,
+                        //   height: 40,
+                        //   fit: BoxFit.cover,
+                        //   loadingBuilder: (BuildContext ctx, Widget child,
+                        //       ImageChunkEvent? loadingProgress) {
+                        //     if (loadingProgress == null) return child;
+                        //     return Center(
+                        //       child: CircularProgressIndicator(
+                        //         color: Colors.red,
+                        //         value: loadingProgress.expectedTotalBytes !=
+                        //                     null &&
+                        //                 loadingProgress.expectedTotalBytes !=
+                        //                     null
+                        //             ? loadingProgress.cumulativeBytesLoaded /
+                        //                 loadingProgress.expectedTotalBytes!
+                        //             : null,
+                        //       ),
+                        //     );
+                        //   },
+                        //   errorBuilder: (context, object, stackTrace) {
+                        //     return const Icon(
+                        //       Icons.account_circle,
+                        //       size: 35,
+                        //       color: Colors.lightGreenAccent,
+                        //     );
+                        //   },
+                        // ),
+                        )
                     : Container(
-                  width: 35,
-                ),
+                        height: 5,
+                      ),
               ],
             ),
             isMessageSent(index)
                 ? Container(
-              margin: const EdgeInsets.only(
-                  right: 50,
-                  top: 6,
-                  bottom: 8),
-              child: Text(
-                DateFormat('dd MMM yyyy, hh:mm a').format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(chatMessages.timestamp),
-                  ),
-                ),
-                style: const TextStyle(
-                    color: Colors.blue,
-                    fontSize: 12,
-                    fontStyle: FontStyle.italic),
-              ),
-            )
+                    margin: const EdgeInsets.only(right: 5, top: 5, bottom: 8),
+                    child: Text(
+                      DateFormat('dd MMM yyyy, hh:mm a').format(
+                        DateTime.fromMillisecondsSinceEpoch(
+                          int.parse(chatMessages.timestamp),
+                        ),
+                      ),
+                      style: const TextStyle(
+                          color: Colors.blue,
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic),
+                    ),
+                  )
                 : const SizedBox.shrink(),
           ],
         );
@@ -214,80 +199,75 @@ class _MessengerPageState extends State<MessengerPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 isMessageReceived(index)
-                // left side (received message)
+                    // left side (received message)
                     ? Container(
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Image.network(
-                    widget.oponentAvartar,
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (BuildContext ctx, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.blue,
-                          value: loadingProgress.expectedTotalBytes !=
-                              null &&
-                              loadingProgress.expectedTotalBytes !=
-                                  null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                              : null,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      );
-                    },
-                    errorBuilder: (context, object, stackTrace) {
-                      return const Icon(
-                        Icons.account_circle,
-                        size: 35,
-                        color: Colors.grey,
-                      );
-                    },
-                  ),
-                )
+                        child: Image.network(
+                          widget.oponentAvartar,
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (BuildContext ctx, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.grey,
+                                value: loadingProgress.expectedTotalBytes !=
+                                            null &&
+                                        loadingProgress.expectedTotalBytes !=
+                                            null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, object, stackTrace) {
+                            return const Icon(
+                              Icons.account_circle,
+                              size: 35,
+                              color: Colors.grey,
+                            );
+                          },
+                        ),
+                      )
                     : Container(
-                  width: 35,
-                ),
+                        width: 35,
+                      ),
                 chatMessages.type == MessageType.text
                     ? messageBubble(
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  chatContent: chatMessages.content,
-                  margin: const EdgeInsets.only(left: 10),
-                )
+                        color: Colors.grey,
+                        textColor: Colors.white,
+                        chatContent: chatMessages.content,
+                        margin: const EdgeInsets.only(left: 5, top: 2),
+                      )
                     : chatMessages.type == MessageType.image
-                    ? Container(
-                  margin: const EdgeInsets.only(
-                      left: 10, top: 10),
-                  child: chatImage(
-                      imageSrc: chatMessages.content),
-                )
-                    : const SizedBox.shrink(),
+                        ? Container(
+                            margin: const EdgeInsets.only(left: 5, top: 5),
+                            child: chatImage(imageSrc: chatMessages.content),
+                          )
+                        : const SizedBox.shrink(),
               ],
             ),
             isMessageReceived(index)
                 ? Container(
-              margin: const EdgeInsets.only(
-                  left: 50,
-                  top: 6,
-                  bottom: 8),
-              child: Text(
-                DateFormat('dd MMM yyyy, hh:mm a').format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(chatMessages.timestamp),
-                  ),
-                ),
-                style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                    fontStyle: FontStyle.italic),
-              ),
-            )
+                    margin: const EdgeInsets.only(left: 38, top: 5, bottom: 8),
+                    child: Text(
+                      DateFormat('dd MMM yyyy, hh:mm a').format(
+                        DateTime.fromMillisecondsSinceEpoch(
+                          int.parse(chatMessages.timestamp),
+                        ),
+                      ),
+                      style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic),
+                    ),
+                  )
                 : const SizedBox.shrink(),
           ],
         );
@@ -301,39 +281,36 @@ class _MessengerPageState extends State<MessengerPage> {
     return Flexible(
       child: groupChatID.isNotEmpty
           ? StreamBuilder<QuerySnapshot>(
-          stream: ChatProvider().getChatMessage(groupChatID, _limit),
-          builder: (BuildContext context,
-              AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasData) {
-              listMessages = snapshot.data!.docs;
-              if (listMessages.isNotEmpty) {
-
-                return ListView.builder(
-                    padding: const EdgeInsets.all(10),
-                    itemCount: snapshot.data?.docs.length,
-                    reverse: true,
-                    controller: scrollController,
-                    itemBuilder: (context, index) =>
-                        buildItem(index, snapshot.data?.docs[index]));
-
-              } else {
-                return const Center(
-                  child: Text('Không có tin nhắn...'),
-                );
-              }
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.blue,
-                ),
-              );
-            }
-          })
+              stream: ChatProvider().getChatMessage(groupChatID, _limit),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  listMessages = snapshot.data!.docs;
+                  if (listMessages.isNotEmpty) {
+                    return ListView.builder(
+                        itemCount: snapshot.data?.docs.length,
+                        reverse: true,
+                        controller: scrollController,
+                        itemBuilder: (context, index) =>
+                            buildItem(index, snapshot.data?.docs[index]));
+                  } else {
+                    return const Center(
+                      child: Text('Không có tin nhắn...'),
+                    );
+                  }
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.blue,
+                    ),
+                  );
+                }
+              })
           : const Center(
-        child: CircularProgressIndicator(
-          color: Colors.lightBlueAccent,
-        ),
-      ),
+              child: CircularProgressIndicator(
+                color: Colors.lightBlueAccent,
+              ),
+            ),
     );
   }
 
@@ -342,20 +319,6 @@ class _MessengerPageState extends State<MessengerPage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          // actions: [
-          //   Row(
-          //     children: [
-          //       IconButton(
-          //         onPressed: () {},
-          //         icon: const Icon(Icons.call),
-          //       ),
-          //       IconButton(
-          //         onPressed: () {},
-          //         icon: const Icon(Icons.video_call),
-          //       )
-          //     ],
-          //   )
-          // ],
           title: const Text(
             "Chăm sóc khách hàng",
             style: TextStyle(fontSize: 18),
@@ -365,11 +328,10 @@ class _MessengerPageState extends State<MessengerPage> {
         ),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 20),
             child: Column(
               children: [
                 buildListMessage(),
-                // const SizedBox(height: 10),
                 buildMessageInput(),
               ],
             ),
@@ -384,7 +346,7 @@ class _MessengerPageState extends State<MessengerPage> {
     } else {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (context) =>  LoginPage(),
+          builder: (context) => LoginPage(),
         ),
         (Route<dynamic> route) => false,
       );

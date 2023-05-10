@@ -128,7 +128,7 @@ class _WelcomePage1State extends State<WelcomePage1> {
                 color: Colors.black),
           ],
         ),
-        pathImage: "assets/images/welcome2.png",
+        pathImage: "assets/images/welcome1.jpg",
         textAlignDescription: TextAlign.start,
         styleDescription: TextStyle(
             fontWeight: FontWeight.w500, color: Colors.white, fontSize: 17),
@@ -209,7 +209,6 @@ class _WelcomePage1State extends State<WelcomePage1> {
         onDonePress: () {
           Navigator.push(scaffoldKey.currentContext!,
               MaterialPageRoute(builder: (context) => const ChooseForm()));
-
         },
         onSkipPress: () {
           Navigator.push(scaffoldKey.currentContext!,

@@ -7,7 +7,7 @@ import 'package:heh_application/services/call_api.dart';
 // enum paymentGroup { male, female, others }
 
 class PaymentTimePage extends StatefulWidget {
-   PaymentTimePage({Key? key,  this.bookingDetail}) : super(key: key);
+  PaymentTimePage({Key? key, this.bookingDetail}) : super(key: key);
   BookingDetail? bookingDetail;
   @override
   State<PaymentTimePage> createState() => _PaymentTimePageState();
@@ -58,10 +58,11 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children:  [
+                          children: [
                             Text("Người thanh toán: "),
-                            Text("${widget.bookingDetail!.bookingSchedule!.signUpUser!.firstName}",
-                                style: TextStyle (fontWeight: FontWeight.w600)),
+                            Text(
+                                "${widget.bookingDetail!.bookingSchedule!.signUpUser!.firstName}",
+                                style: TextStyle(fontWeight: FontWeight.w600)),
                           ],
                         ),
                         Padding(
@@ -76,8 +77,9 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                           children: [
                             const Text("Số tiền: "),
                             Row(
-                              children:  [
-                                Text("${widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.price}",
+                              children: [
+                                Text(
+                                    "${widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.price}",
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600)),
                                 Text(" VNĐ",
@@ -121,9 +123,10 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children:  [
+                children: [
                   Text("Số tiền:"),
-                  Text("${widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.price}",
+                  Text(
+                      "${widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.price}",
                       style: TextStyle(fontWeight: FontWeight.w600)),
                   Text(" VND"),
                 ],
@@ -143,11 +146,11 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                           side: const BorderSide(color: Colors.white)),
                     )),
                 onPressed: () async {
-
                   bool addBookingDetail =
                       await CallAPI().addBookingDetail(widget.bookingDetail!);
                   if (addBookingDetail) {
-                    widget.bookingDetail!.bookingSchedule!.schedule!.physioBookingStatus = true;
+                    widget.bookingDetail!.bookingSchedule!.schedule!
+                        .physioBookingStatus = true;
                     await CallAPI().updateScheduleWithPhysioBookingStatus(
                         widget.bookingDetail!.bookingSchedule!.schedule!);
                     Navigator.push(
@@ -161,7 +164,6 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                   //       MaterialPageRoute(
                   //           builder: (context) =>  FailPage()));
                   // }
-
                 },
                 child: const Text(
                   "Thanh toán",

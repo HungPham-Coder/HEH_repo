@@ -136,6 +136,31 @@ class CallAPI {
     }
   }
 
+  Future<void> updateUserbyUID(SignUpUser signUpUser) async {
+    var url = Uri.parse('${link}/api/User');
+    // var url = Uri.https('localhost:7166', 'api/Schedule');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    final body = jsonEncode({
+      "id": signUpUser.userID,
+      "phoneNumber": signUpUser.phone,
+      "firstname": signUpUser.firstName,
+      "email": signUpUser.email,
+      "address": signUpUser.address,
+      "image": signUpUser.image,
+      "dob": signUpUser.dob,
+      "gender": signUpUser.gender
+    });
+    var response = await http.put(url, headers: headers, body: body);
+    if (response.statusCode == 200) {
+    } else {
+      print(response.body);
+      throw Exception('Failed to update User');
+    }
+  }
+
   Future<List<Exercise>> getListExerciseByCategoryID(String categoryId) async {
     var url = Uri.parse('${link}/api/Exercise/GetByCategoryId/$categoryId');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
@@ -862,8 +887,7 @@ class CallAPI {
   }
 
   Future<BookingDetail> getBookingDetailByID(String bookingDetailID) async {
-    var url =
-    Uri.parse('${link}/api/BookingDetail/$bookingDetailID');
+    var url = Uri.parse('${link}/api/BookingDetail/$bookingDetailID');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
@@ -876,9 +900,10 @@ class CallAPI {
       throw Exception(response.body);
     }
   }
-  Future<BookingSchedule> getBookingScheduleByID(String bookingScheduleID) async {
-    var url =
-    Uri.parse('${link}/api/BookingSchedule/$bookingScheduleID');
+
+  Future<BookingSchedule> getBookingScheduleByID(
+      String bookingScheduleID) async {
+    var url = Uri.parse('${link}/api/BookingSchedule/$bookingScheduleID');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",

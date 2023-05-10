@@ -221,7 +221,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               phone: _phone.text,
                               address: _address.text,
                               gender: gender,
-                              dob: dob,
+                              dob: _date.text,
                               password: _password.text,
                             );
 
@@ -285,6 +285,7 @@ class _SignUpPageState extends State<SignUpPage> {
         Form(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: TextFormField(
+            textCapitalization: TextCapitalization.characters,
             keyboardType: TextInputType.name,
             // validator: (value) {
             //   if (value!.isEmpty) {
