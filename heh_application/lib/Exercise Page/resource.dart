@@ -82,7 +82,7 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
                                       MaterialPageRoute(builder: (context) {
                                     print(exerciseResource);
                                     if (widget.detailID != null) {
-                                      print(snapshot.data![index].videoURL);
+
                                       return ExerciseResourcesDetail(
                                         resourceID: widget.detailID,
                                         // exerciseResource: exerciseResource,

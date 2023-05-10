@@ -65,19 +65,23 @@ class _InformationPageState extends State<InformationPage> {
         setState(() {
           isLoading = true;
         });
-        uploadImageFile();
+       await uploadImageFile();
       }
     }
   }
 
-  void uploadImageFile() async {
+  Future<void> uploadImageFile() async {
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
     UploadTask uploadTask =
         ChatProvider().upLoadImageFile(imageFile!, fileName);
     try {
       TaskSnapshot snapshot = await uploadTask;
       imageUrl = await snapshot.ref.getDownloadURL();
+
       setState(() {
+        // imageUrl = imageUrl;
+          sharedCurrentUser!.setImage = imageUrl;
+          print(sharedCurrentUser!.image);
         isLoading = false;
       });
     } on FirebaseException catch (e) {
@@ -513,7 +517,11 @@ class _InformationPageState extends State<InformationPage> {
                               side: const BorderSide(
                                   color: Color.fromARGB(255, 46, 161, 226))),
                         )),
-                    onPressed: getImage,
+                    onPressed: () async {
+                      await getImage();
+
+                      await CallAPI().updateUserbyUID(sharedCurrentUser!);
+                    },
                     child: SvgPicture.network(
                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcamera.svg?alt=media&token=afa6a202-304e-45af-8df5-870126316135",
                       width: 20,

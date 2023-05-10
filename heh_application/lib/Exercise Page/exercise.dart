@@ -52,7 +52,7 @@ class _ExercisePageState extends State<ExercisePage> {
                       shrinkWrap: true,
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        print(snapshot.data![index].exerciseName);
+
                         return MenuListView(
                           icon:
                               "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbackache.png?alt=media&token=d725e1f5-c106-41f7-9ee5-ade77c464a54",

@@ -394,7 +394,7 @@ class _LoginPageState extends State<LoginPage> {
       for (var field in user.providerData) {
         email = field.email;
       }
-      print(email);
+
       bool checkUserExistInPostgre = await auth.checkUserExistInPostgre(email);
       SignUpUser signUpUser = SignUpUser(
           firstName: user.displayName,
@@ -408,14 +408,14 @@ class _LoginPageState extends State<LoginPage> {
           image: user.photoURL);
 
       if (checkUserExistInPostgre == false) {
-        print("register");
+
 
         await CallAPI().callRegisterAPI(signUpUser);
         // else {
         //   LoginPage();
         // }
       } else {
-        print("da registered roi");
+
       }
       ResultLogin resultLogin = ResultLogin(
           userID: email,

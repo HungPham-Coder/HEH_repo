@@ -50,7 +50,7 @@ class _LandingPageState extends State<LandingPage> {
   Future<void> init() async {
     preferences = await SharedPreferences.getInstance();
     final resultLoginJson = preferences!.getString('result_login');
-    print(resultLoginJson);
+
     if (resultLoginJson == null) {
       return;
     } else {
@@ -140,7 +140,7 @@ class _LandingPageState extends State<LandingPage> {
                     );
                   }
                 } else {
-                  print("khong data");
+          
                   return const Center(
                     child: CircularProgressIndicator(),
                   );

@@ -53,7 +53,7 @@ class _SettingPageState extends State<SettingPage> {
               children: [
                 CircleAvatar(
                   backgroundImage:
-                      NetworkImage(sharedCurrentUser!.image.toString()),
+                      NetworkImage(sharedCurrentUser!.image!),
                 ),
               ],
             ),
