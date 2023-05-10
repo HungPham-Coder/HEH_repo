@@ -284,7 +284,7 @@ class PhysioProfile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 60),
+                    padding: const EdgeInsets.only(left: 20, right: 50),
                     child: SizedBox(
                         height: 100,
                         width: 100,

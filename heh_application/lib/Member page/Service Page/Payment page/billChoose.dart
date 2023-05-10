@@ -176,6 +176,7 @@ class _BillChoosePageState extends State<BillChoosePage> {
                         bookingScheduleID: bookingScheduleAdd.bookingScheduleID!,
                         bookingSchedule:bookingSchedule,
                         shorttermStatus: 0,
+                        longtermStatus: -1
                       );
 
 

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Session%20page/session_Schedule.dart';
 import 'package:heh_application/common_widget/menu_listview.dart';
+import 'package:heh_application/models/booking_detail.dart';
+import 'package:heh_application/services/call_api.dart';
 
 class SessionListPage extends StatefulWidget {
   const SessionListPage({Key? key}) : super(key: key);
@@ -25,11 +28,53 @@ class _SessionListPageState extends State<SessionListPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ServicePaid(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
-              name: "Nguyễn Văn A",
-              status: "Chờ",
+            FutureBuilder <List<BookingDetail>?>(
+              future: CallAPI().getLongTermListByStatus(3),
+              builder: (context, snapshot){
+                if (snapshot.hasData){
+                  if (snapshot.data!.isNotEmpty){
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder:(context, index) {
+                        return ServicePaid(
+                          icon:
+                          "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
+                          name: "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
+                          status: snapshot.data![index].longtermStatus == 0 ? "Chờ":"Đã được lên lịch",
+                        );
+                      },
+                    );
+                  }
+                  else {
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 150),
+                        child: Text(
+                          "Hiện tại đã hết slot có thể đăng ký",
+                          style: TextStyle(
+                              color: Colors.grey[500], fontSize: 16),
+                        ),
+                      ),
+                    );
+                  }
+
+                }
+                else {
+                  return Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 150),
+                      child: Text(
+                        "Hiện tại đã hết slot có thể đăng ký",
+                        style: TextStyle(
+                            color: Colors.grey[500], fontSize: 16),
+                      ),
+                    ),
+                  );
+                }
+
+              },
             ),
           ],
         ),

@@ -274,10 +274,18 @@ class CallAPI {
     }
   }
 
-  Future<List<BookingDetail>> getAllBookingDetailByPhysioIDAndTypeOfSlot(
-      String physioID, String typeOfSlot) async {
+  Future<List<BookingDetail>> getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+      String physioID,
+      String typeOfSlot,
+      int shortTermStatus,
+      int longTermStatus) async {
     var url = Uri.parse(
-        '${link}/api/BookingDetail/GetAllBookingDetailByPhysioIDAndTypeOfSlot?physioID=$physioID&typeOfSlot=$typeOfSlot');
+        '${link}/api/BookingDetail/'
+            'GetAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus'
+            '?physioID=$physioID'
+            '&typeOfSlot=$typeOfSlot'
+            '&shortTermStatus=$shortTermStatus'
+            '&longTermStatus=$longTermStatus');
     // var url = Uri.https('localhost:7166', 'api/BookingDetail');
     final headers = {
       "Accept": "application/json",
@@ -298,6 +306,8 @@ class CallAPI {
       throw Exception('Failed to load BookingDetail');
     }
   }
+
+
 
   Future<List<ExerciseResource>> getAllExerciseResource() async {
     var url = Uri.parse('${link}/api/ExerciseResource');
@@ -589,6 +599,55 @@ class CallAPI {
     } else {
       print(response.body);
       throw Exception('Failed to load Schedule');
+    }
+  }
+
+  Future<void> updateBookingDetailStatus(BookingDetail bookingDetail) async {
+    var url = Uri.parse('${link}/api/BookingDetail');
+    // var url = Uri.https('localhost:7166', 'api/Schedule');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    final body = jsonEncode({
+      "bookingDetailID": bookingDetail.bookingDetailID,
+      "bookingScheduleID": bookingDetail.bookingScheduleID,
+      "videoCallRoom": bookingDetail.videoCallRoom,
+      "imageUrl":null,
+      "longtermStatus": bookingDetail.longtermStatus,
+      "shorttermStatus": bookingDetail.shorttermStatus,
+    });
+    var response = await http.put(url, headers: headers, body: body);
+    if (response.statusCode == 200) {
+    } else {
+      print(response.body);
+      throw Exception('Failed to load Schedule');
+    }
+  }
+
+  Future<List<BookingDetail>?> getLongTermListByStatus(
+      int shortTermStatus) async {
+    var url = Uri.parse(
+        '${link}/api/BookingDetail/GetLongTermListByStatus?shortTermStatus=$shortTermStatus');
+    // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      print(response.body);
+      Iterable jsonResult = json.decode(response.body);
+      List<BookingDetail> list = List<BookingDetail>.from(
+          jsonResult.map((model) => BookingDetail.fromMap(model)));
+
+      if (list == null) {
+        print("List Long term Null");
+      } else {
+        return list;
+      }
+    } else {
+      throw Exception('Failed to load List Long term');
     }
   }
 
@@ -1018,7 +1077,8 @@ class CallAPI {
     final body = jsonEncode({
       "bookingScheduleID": bookingDetail.bookingScheduleID,
       "videoCallRoom": bookingDetail.videoCallRoom,
-      "status": true,
+      "longtermStatus":bookingDetail.longtermStatus,
+      "shorttermStatus":bookingDetail.shorttermStatus,
     });
     final headers = {
       "Accept": "application/json",

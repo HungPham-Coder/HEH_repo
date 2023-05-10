@@ -190,8 +190,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
         child: Column(
           children: [
             FutureBuilder<List<BookingDetail>>(
-                future: CallAPI().getAllBookingDetailByPhysioIDAndTypeOfSlot(
-                    sharedPhysiotherapist!.physiotherapistID, 'Tư Vấn 1 Buổi'),
+                future: CallAPI().getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                    sharedPhysiotherapist!.physiotherapistID, 'Tư vấn trị liệu',1,-1),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.isNotEmpty) {
