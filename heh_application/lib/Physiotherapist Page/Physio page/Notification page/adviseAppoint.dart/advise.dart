@@ -30,9 +30,9 @@ class _AdviseAppointmentPageState extends State<AdviseAppointmentPage> {
             children: [
               const SizedBox(height: 10),
               FutureBuilder<List<BookingDetail>>(
-                  future: CallAPI().getAllBookingDetailByPhysioIDAndTypeOfSlot(
+                  future: CallAPI().getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
                       sharedPhysiotherapist!.physiotherapistID,
-                      'Tư Vấn 1 Buổi'),
+                      'Tư vấn trị liệu',1,-1),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.isNotEmpty) {

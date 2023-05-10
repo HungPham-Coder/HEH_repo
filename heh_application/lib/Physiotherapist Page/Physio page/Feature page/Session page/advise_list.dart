@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Session%20page/session_Schedule.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Session%20page/session_list.dart';
 import 'package:heh_application/common_widget/menu_listview.dart';
+import 'package:heh_application/models/booking_detail.dart';
+import 'package:heh_application/services/call_api.dart';
+import 'package:heh_application/util/date_time_format.dart';
 
 class AdviseListPage extends StatefulWidget {
   const AdviseListPage({Key? key}) : super(key: key);
@@ -36,15 +40,106 @@ class _AdviseListPageState extends State<AdviseListPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ServicePaid(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
-              date: "",
-              name: "Nguyễn Văn A",
-              time: "",
-              status: "Xong",
-              press: () {},
-            ),
+            FutureBuilder<List<BookingDetail>>(
+                future: CallAPI()
+                    .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                        sharedPhysiotherapist!.physiotherapistID,
+                        'Tư vấn trị liệu',
+                        3,
+                        -1),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.isNotEmpty) {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            bool visible = true;
+                            String subName;
+                            String preName;
+                            if (snapshot.data![index].bookingSchedule!
+                                    .subProfile!.relationship!.relationName ==
+                                "Tôi") {
+                              visible = false;
+
+                              subName = "";
+                            } else {
+                              subName = snapshot.data![index].bookingSchedule!
+                                  .subProfile!.subName;
+                            }
+                            String date = DateTimeFormat.formatDate(snapshot
+                                .data![index]
+                                .bookingSchedule!
+                                .schedule!
+                                .slot!
+                                .timeStart);
+                            String start = DateTimeFormat.formateTime(snapshot
+                                .data![index]
+                                .bookingSchedule!
+                                .schedule!
+                                .slot!
+                                .timeStart);
+                            String end = DateTimeFormat.formateTime(snapshot
+                                .data![index]
+                                .bookingSchedule!
+                                .schedule!
+                                .slot!
+                                .timeEnd);
+                            return ServicePaid(
+                                icon:
+                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
+                                date: "$date",
+                                name:
+                                    "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
+                                subName: subName,
+                                time: "$start - $end",
+                                status:
+                                    snapshot.data![index].shorttermStatus == 3
+                                        ? 'xong'
+                                        : 'chưa xong',
+                                press: () {
+                                  String bookingScheduleID =
+                                      snapshot.data![index].bookingScheduleID;
+                                  BookingDetail bookingDetail = BookingDetail(
+                                    bookingDetailID: snapshot.data![index].bookingDetailID,
+                                      bookingScheduleID: bookingScheduleID,
+                                      longtermStatus: 0,
+                                      shorttermStatus: 3);
+                                  CallAPI()
+                                      .updateBookingDetailStatus(bookingDetail);
+                                  Navigator.pop(context);
+                                  setState(() {
+
+                                  });
+                                },
+                                visible: visible);
+                          });
+                    } else {
+                      return Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 150),
+                          child: Text(
+                            "Hiện tại đã hết slot có thể đăng ký",
+                            style: TextStyle(
+                                color: Colors.grey[500], fontSize: 16),
+                          ),
+                        ),
+                      );
+                    }
+                  } else {
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 150),
+                        child: Text(
+                          "Hiện tại đã hết slot có thể đăng ký",
+                          style:
+                              TextStyle(color: Colors.grey[500], fontSize: 16),
+                        ),
+                      ),
+                    );
+                  }
+                }),
           ],
         ),
       ),
@@ -57,6 +152,8 @@ class _AdviseListPageState extends State<AdviseListPage> {
       time,
       date,
       status,
+      String? subName,
+      required bool visible,
       required VoidCallback press}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -106,6 +203,16 @@ class _AdviseListPageState extends State<AdviseListPage> {
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black),
                           ),
+                          Visibility(
+                            visible: visible,
+                            child: Text(
+                              "$subName",
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black),
+                            ),
+                          ),
                           const SizedBox(height: 5),
                           Row(
                             children: [
@@ -153,7 +260,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
                           ),
                         ],
                       )),
-                  dialog(),
+                  dialog(press: press),
                 ],
               )),
         ],
@@ -161,7 +268,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
     );
   }
 
-  Widget dialog() {
+  Widget dialog({required VoidCallback press}) {
     return IconButton(
       icon: Icon(Icons.add),
       onPressed: () => showDialog<String>(
@@ -176,7 +283,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
               child: const Text('Hủy'),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: press,
               child: const Text('Thêm'),
             ),
           ],

@@ -36,6 +36,7 @@ class _SchedulePageState extends State<SchedulePage> {
                   return ListView.builder(
                       itemCount: snapshot.data!.length,
                       shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         DateTime dateStart =
                             new DateFormat("yyyy-MM-ddTHH:mm:ss")
