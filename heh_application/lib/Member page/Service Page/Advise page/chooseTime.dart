@@ -93,7 +93,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                     if (_relationships.length == 1) {
                       snapshot.data!.forEach((element) {
                         String field = "${element.subName}";
-                        print(field);
+
                         _relationships.add(field);
                       });
                       print("Co data");

@@ -1,4 +1,4 @@
-import 'package:heh_application/models/result_login.dart';
+
 import 'package:heh_application/models/role.dart';
 
 class SignUpUser {

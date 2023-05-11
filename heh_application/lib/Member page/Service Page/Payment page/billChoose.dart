@@ -41,8 +41,7 @@ class _BillChoosePageState extends State<BillChoosePage> {
     DateTime tempTimeEnd = new DateFormat("yyyy-MM-ddTHH:mm:ss")
         .parse(widget.schedule.slot!.timeEnd);
     timeEnd = DateFormat("HH:mm").format(tempTimeEnd);
-    print(timeStart);
-    print(timeEnd);
+
   }
 
   @override

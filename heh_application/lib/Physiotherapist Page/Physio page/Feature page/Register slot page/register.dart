@@ -40,11 +40,8 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
         date, sharedPhysiotherapist!.physiotherapistID);
 
     if (slotList == null) {
-      print('a');
     }
     else {
-      print ('b');
-
     }
   }
 
@@ -261,8 +258,6 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                   check = false;
                 });
               }
-
-              print(check);
             }
           },
           child: const Text("Tìm kiếm",

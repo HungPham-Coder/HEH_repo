@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:heh_application/models/sign_up_user.dart';
+
 import 'package:heh_application/services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage ;
@@ -49,7 +47,7 @@ class FirebaseFirestores extends FirebaseFirestoreBase {
   Future<String> getImageUrl(String imageName) async {
     // TODO: implement getImage
     String downloadUrl = await storage.ref('image/$imageName').getDownloadURL();
-    print(downloadUrl);
+
     return downloadUrl;
   }
 
@@ -57,7 +55,7 @@ class FirebaseFirestores extends FirebaseFirestoreBase {
   Future<String> getIconUrl(String icon) async {
     // TODO: implement getIcon
     String downloadUrl = await storage.ref('icon/$icon').getDownloadURL();
-    print(downloadUrl);
+
     return downloadUrl;
   }
 }

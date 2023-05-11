@@ -61,7 +61,7 @@ class ChatProvider extends ChatProviderBase {
   @override
   UploadTask upLoadImageFile(File image, String filename) {
     // TODO: implement upLoadImageFile
-    Reference reference = _firebaseStorage.ref().child(filename);
+    Reference reference = _firebaseStorage.ref().child('avatar/${filename}');
     UploadTask uploadTask = reference.putFile(image as File);
     return uploadTask;
   }

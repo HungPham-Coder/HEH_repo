@@ -302,7 +302,7 @@ class CallAPI {
         return list;
       }
     } else {
-      print(response.body);
+
       throw Exception('Failed to load BookingDetail');
     }
   }
@@ -410,7 +410,7 @@ class CallAPI {
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
-      print(response.body);
+
       return MedicalRecord.fromMap(json.decode(response.body));
     } else {
       // throw Exception('Failed to load MedicalRecord');
@@ -466,8 +466,7 @@ class CallAPI {
     if (response.statusCode == 200) {
       return MedicalRecord.fromMap(json.decode(response.body));
     } else {
-      print('medical add');
-      print(response.statusCode);
+
     }
   }
 
@@ -620,7 +619,7 @@ class CallAPI {
     var response = await http.put(url, headers: headers, body: body);
     if (response.statusCode == 200) {
     } else {
-      print(response.body);
+
       throw Exception('Failed to load Schedule');
     }
   }
@@ -636,13 +635,13 @@ class CallAPI {
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
-      print(response.body);
+
       Iterable jsonResult = json.decode(response.body);
       List<BookingDetail> list = List<BookingDetail>.from(
           jsonResult.map((model) => BookingDetail.fromMap(model)));
 
       if (list == null) {
-        print("List Long term Null");
+
       } else {
         return list;
       }
@@ -856,7 +855,7 @@ class CallAPI {
     if (response.statusCode == 200) {
       return SubProfile.fromMap(json.decode(response.body));
     } else {
-      print(response.body);
+
 
       throw Exception("failed to add subprofile");
     }
@@ -876,7 +875,7 @@ class CallAPI {
           jsonResult.map((model) => SubProfile.fromMap(model)));
 
       if (list == null) {
-        print("List SubProfile Null");
+
       } else {
         return list;
       }
@@ -1064,7 +1063,7 @@ class CallAPI {
     if (response.statusCode == 200) {
       return BookingSchedule.fromMap(json.decode(response.body));
     } else {
-      print(response.body);
+
 
       return null;
     }
@@ -1088,7 +1087,7 @@ class CallAPI {
     if (response.statusCode == 200) {
       return true;
     } else {
-      print(response.body);
+
 
       return false;
     }
@@ -1111,7 +1110,7 @@ class CallAPI {
     if (response.statusCode == 200) {
       return Problem1.FromMap(json.decode(response.body));
     } else {
-      print(response.body);
+
     }
   }
 
@@ -1136,7 +1135,7 @@ class CallAPI {
     if (response.statusCode == 200) {
       return json.encode(response.body);
     } else {
-      print(response.body);
+
       throw Exception('Failed to add notification');
     }
   }

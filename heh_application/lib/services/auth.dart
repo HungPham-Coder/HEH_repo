@@ -89,7 +89,7 @@ class Auth implements AuthBase {
         //throw exception when idtoken is null
       }
     } else {
-      print("User null");
+
 
       throw FirebaseAuthException(
           code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');

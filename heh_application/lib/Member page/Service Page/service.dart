@@ -99,7 +99,7 @@ class _PhysiotherapistState extends State<Physiotherapist> {
                           currentUserID: sharedCurrentUser!.userID!),
                     );
                   } else {
-                    print('null');
+
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
