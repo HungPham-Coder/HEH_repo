@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
-import 'package:heh_application/Member%20page/Profile%20page/Personal%20page/personal.dart';
 import 'package:heh_application/Member%20page/Profile%20page/setting.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 import 'package:heh_application/services/call_api.dart';
