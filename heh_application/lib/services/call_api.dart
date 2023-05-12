@@ -274,18 +274,18 @@ class CallAPI {
     }
   }
 
-  Future<List<BookingDetail>> getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-      String physioID,
-      String typeOfSlot,
-      int shortTermStatus,
-      int longTermStatus) async {
-    var url = Uri.parse(
-        '${link}/api/BookingDetail/'
-            'GetAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus'
-            '?physioID=$physioID'
-            '&typeOfSlot=$typeOfSlot'
-            '&shortTermStatus=$shortTermStatus'
-            '&longTermStatus=$longTermStatus');
+  Future<List<BookingDetail>>
+      getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+          String physioID,
+          String typeOfSlot,
+          int shortTermStatus,
+          int longTermStatus) async {
+    var url = Uri.parse('${link}/api/BookingDetail/'
+        'GetAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus'
+        '?physioID=$physioID'
+        '&typeOfSlot=$typeOfSlot'
+        '&shortTermStatus=$shortTermStatus'
+        '&longTermStatus=$longTermStatus');
     // var url = Uri.https('localhost:7166', 'api/BookingDetail');
     final headers = {
       "Accept": "application/json",
@@ -302,12 +302,9 @@ class CallAPI {
         return list;
       }
     } else {
-
       throw Exception('Failed to load BookingDetail');
     }
   }
-
-
 
   Future<List<ExerciseResource>> getAllExerciseResource() async {
     var url = Uri.parse('${link}/api/ExerciseResource');
@@ -399,6 +396,31 @@ class CallAPI {
     }
   }
 
+  Future<void> updateMedicalRecordbysubIDandMedicalID(
+      MedicalRecord medicalRecord) async {
+    var url = Uri.parse('${link}/api/MedicalRecord');
+    // var url = Uri.https('localhost:7166', 'api/Schedule');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    final body = jsonEncode({
+      "medicalRecordID": medicalRecord.medicalRecordID,
+      "subProfileID": medicalRecord.subProfileID,
+      "problem": medicalRecord.problem,
+      "difficult": medicalRecord.difficulty,
+      "injury": medicalRecord.injury,
+      "curing": medicalRecord.curing,
+      "medicine": medicalRecord.medicine,
+    });
+    var response = await http.put(url, headers: headers, body: body);
+    if (response.statusCode == 200) {
+    } else {
+      print(response.body);
+      throw Exception('Failed to update MeidicalRecord');
+    }
+  }
+
   Future<MedicalRecord?> getMedicalRecordByUserIDAndRelationName(
       String userID) async {
     var url = Uri.parse(
@@ -410,7 +432,6 @@ class CallAPI {
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
-
       return MedicalRecord.fromMap(json.decode(response.body));
     } else {
       // throw Exception('Failed to load MedicalRecord');
@@ -465,9 +486,33 @@ class CallAPI {
 
     if (response.statusCode == 200) {
       return MedicalRecord.fromMap(json.decode(response.body));
-    } else {
+    } else {}
+  }
 
-    }
+  Future<MedicalRecord?> updateMedicalRecord(
+      MedicalRecord medicalRecord) async {
+    var url = Uri.parse('${link}/api/MedicalRecord');
+    // var url = Uri.https('localhost:7166', 'api/MedicalRecord/Create');
+
+    final body = jsonEncode({
+      "medicalRecordID": medicalRecord.medicalRecordID,
+      "subProfileID": medicalRecord.subProfileID,
+      "problem": medicalRecord.problem,
+      "difficult": medicalRecord.difficulty,
+      "injury": medicalRecord.injury,
+      "curing": medicalRecord.curing,
+      "medicine": medicalRecord.medicine,
+      "isDeleted": false,
+    });
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.post(url, body: body, headers: headers);
+
+    if (response.statusCode == 200) {
+      return MedicalRecord.fromMap(json.decode(response.body));
+    } else {}
   }
 
   Future<List<Physiotherapist>> getAllPhysiotherapist() async {
@@ -612,14 +657,13 @@ class CallAPI {
       "bookingDetailID": bookingDetail.bookingDetailID,
       "bookingScheduleID": bookingDetail.bookingScheduleID,
       "videoCallRoom": bookingDetail.videoCallRoom,
-      "imageUrl":null,
+      "imageUrl": null,
       "longtermStatus": bookingDetail.longtermStatus,
       "shorttermStatus": bookingDetail.shorttermStatus,
     });
     var response = await http.put(url, headers: headers, body: body);
     if (response.statusCode == 200) {
     } else {
-
       throw Exception('Failed to load Schedule');
     }
   }
@@ -635,13 +679,11 @@ class CallAPI {
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
-
       Iterable jsonResult = json.decode(response.body);
       List<BookingDetail> list = List<BookingDetail>.from(
           jsonResult.map((model) => BookingDetail.fromMap(model)));
 
       if (list == null) {
-
       } else {
         return list;
       }
@@ -855,8 +897,6 @@ class CallAPI {
     if (response.statusCode == 200) {
       return SubProfile.fromMap(json.decode(response.body));
     } else {
-
-
       throw Exception("failed to add subprofile");
     }
   }
@@ -875,7 +915,6 @@ class CallAPI {
           jsonResult.map((model) => SubProfile.fromMap(model)));
 
       if (list == null) {
-
       } else {
         return list;
       }
@@ -1063,8 +1102,6 @@ class CallAPI {
     if (response.statusCode == 200) {
       return BookingSchedule.fromMap(json.decode(response.body));
     } else {
-
-
       return null;
     }
   }
@@ -1076,8 +1113,8 @@ class CallAPI {
     final body = jsonEncode({
       "bookingScheduleID": bookingDetail.bookingScheduleID,
       "videoCallRoom": bookingDetail.videoCallRoom,
-      "longtermStatus":bookingDetail.longtermStatus,
-      "shorttermStatus":bookingDetail.shorttermStatus,
+      "longtermStatus": bookingDetail.longtermStatus,
+      "shorttermStatus": bookingDetail.shorttermStatus,
     });
     final headers = {
       "Accept": "application/json",
@@ -1087,8 +1124,6 @@ class CallAPI {
     if (response.statusCode == 200) {
       return true;
     } else {
-
-
       return false;
     }
   }
@@ -1109,9 +1144,27 @@ class CallAPI {
 
     if (response.statusCode == 200) {
       return Problem1.FromMap(json.decode(response.body));
-    } else {
+    } else {}
+  }
 
-    }
+  Future<Problem1?> updateProblem(Problem1 problem) async {
+    var url = Uri.parse('${link}/api/Problem');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+    final body = jsonEncode({
+      "problemID": problem.problemID,
+      "categoryID": problem.categoryID,
+      "medicalRecordID": problem.medicalRecordID,
+    });
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.post(url, body: body, headers: headers);
+
+    if (response.statusCode == 200) {
+      return Problem1.FromMap(json.decode(response.body));
+    } else {}
   }
 
   Future<String> addNotification(NotificationModel notification) async {
@@ -1135,7 +1188,6 @@ class CallAPI {
     if (response.statusCode == 200) {
       return json.encode(response.body);
     } else {
-
       throw Exception('Failed to add notification');
     }
   }

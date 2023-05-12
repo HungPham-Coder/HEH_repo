@@ -64,7 +64,7 @@ class _InformationPageState extends State<InformationPage> {
         setState(() {
           isLoading = true;
         });
-       await uploadImageFile();
+        await uploadImageFile();
       }
     }
   }
@@ -79,8 +79,8 @@ class _InformationPageState extends State<InformationPage> {
 
       setState(() {
         // imageUrl = imageUrl;
-          sharedCurrentUser!.setImage = imageUrl;
-          print(sharedCurrentUser!.image);
+        sharedCurrentUser!.setImage = imageUrl;
+        print(sharedCurrentUser!.image);
         isLoading = false;
       });
     } on FirebaseException catch (e) {
@@ -165,10 +165,11 @@ class _InformationPageState extends State<InformationPage> {
                     child: MaterialButton(
                       height: 50,
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SettingPage()));
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const SettingPage()));
+                        Navigator.pop(context);
                       },
                       color: Colors.grey[400],
                       elevation: 0,
@@ -210,7 +211,7 @@ class _InformationPageState extends State<InformationPage> {
                           password: sharedCurrentUser!.password,
                         );
                         CallAPI().updateUserbyUID(signUpUser);
-                        setState(() {});
+
                         final snackBar = SnackBar(
                           content: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -269,28 +270,32 @@ class _InformationPageState extends State<InformationPage> {
           ],
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          // initialValue: sharedCurrentUser!.firstName,
-          textCapitalization: TextCapitalization.words,
-          obscureText: obscureText,
-          keyboardType: TextInputType.name,
-          controller: _firstName,
-          decoration: InputDecoration(
-              hintStyle: const TextStyle(color: Colors.black),
-              hintText: sharedCurrentUser!.firstName,
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
-          validator: (value) {
-            if (value == null) {
-              return null;
-            }
-          },
-        ),
+        Form(
+            autovalidateMode: AutovalidateMode.disabled,
+            child: TextFormField(
+              // initialValue: sharedCurrentUser!.firstName,
+              textCapitalization: TextCapitalization.words,
+              obscureText: obscureText,
+              keyboardType: TextInputType.name,
+              controller: _firstName,
+              decoration: InputDecoration(
+                  hintStyle: const TextStyle(color: Colors.black),
+                  hintText: sharedCurrentUser!.firstName,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  border: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey))),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return null;
+                } else {
+                  return null;
+                }
+              },
+            )),
         const SizedBox(height: 10)
       ],
     );
@@ -315,28 +320,32 @@ class _InformationPageState extends State<InformationPage> {
           ],
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          // initialValue: sharedCurrentUser!.address,
-          textCapitalization: TextCapitalization.words,
-          keyboardType: TextInputType.streetAddress,
-          controller: _address,
-          obscureText: obscureText,
-          decoration: InputDecoration(
-              hintStyle: const TextStyle(color: Colors.black),
-              hintText: sharedCurrentUser!.address,
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
-          validator: (value) {
-            if (value == null) {
-              return null;
-            }
-          },
-        ),
+        Form(
+            autovalidateMode: AutovalidateMode.disabled,
+            child: TextFormField(
+              // initialValue: sharedCurrentUser!.address,
+              textCapitalization: TextCapitalization.words,
+              keyboardType: TextInputType.streetAddress,
+              controller: _address,
+              obscureText: obscureText,
+              decoration: InputDecoration(
+                  hintStyle: const TextStyle(color: Colors.black),
+                  hintText: sharedCurrentUser!.address,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  border: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey))),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return null;
+                } else {
+                  return null;
+                }
+              },
+            )),
         const SizedBox(height: 10)
       ],
     );
@@ -408,6 +417,7 @@ class _InformationPageState extends State<InformationPage> {
         Form(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: TextFormField(
+                readOnly: true,
                 controller: _email,
                 obscureText: obscureText,
                 keyboardType: TextInputType.emailAddress,

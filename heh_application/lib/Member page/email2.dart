@@ -1,22 +1,22 @@
 import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
-import 'package:heh_application/Member%20page/email2.dart';
 
-import '../SignUp Page/otp.dart';
-
-class Email extends StatefulWidget {
-  const Email({Key? key}) : super(key: key);
-
-  @override
-  State<Email> createState() => _EmailState();
-}
-
-class _EmailState extends State<Email> {
-  TextEditingController email = new TextEditingController();
-  TextEditingController otp = new TextEditingController();
+class Email1 extends StatefulWidget {
+  Email1({
+    Key? key,
+    required this.myauth,
+  }) : super(key: key);
 
   EmailOTP myauth = EmailOTP();
+
+  @override
+  State<Email1> createState() => _Email1State();
+}
+
+class _Email1State extends State<Email1> {
+  TextEditingController email = new TextEditingController();
+  TextEditingController otp = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,41 +33,29 @@ class _EmailState extends State<Email> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
-                          controller: email,
+                          controller: otp,
                           decoration:
-                              const InputDecoration(hintText: "User Email")),
+                              const InputDecoration(hintText: "Enter OTP")),
                     ),
                     ElevatedButton(
                         onPressed: () async {
-                          myauth.setConfig(
-                              appEmail: "me@rohitchouhan.com",
-                              appName: "Email OTP",
-                              userEmail: email.text,
-                              otpLength: 6,
-                              otpType: OTPType.digitsOnly);
-                          if (await myauth.sendOTP() == true) {
+                          if (await widget.myauth.verifyOTP(otp: otp.text) ==
+                              true) {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
-                              content: Text("OTP has been sent"),
+                              content: Text("OTP is verified"),
                             ));
                           } else {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
-                              content: Text("Oops, OTP send failed"),
+                              content: Text("Invalid OTP"),
                             ));
                           }
-
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Email1(
-                                        myauth: myauth,
-                                      )));
                         },
-                        child: const Text("Send OTP")),
+                        child: const Text("Verify")),
                   ],
                 ),
-              ),
+              )
             ],
           ),
         ),

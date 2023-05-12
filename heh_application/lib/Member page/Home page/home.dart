@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-
 import 'package:heh_application/Exercise%20Page/category.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Home%20page/Paid%20page/servicePaid.dart';
+import 'package:heh_application/Member%20page/email.dart';
+import 'package:heh_application/SignUp%20Page/otp.dart';
 
 import 'package:heh_application/models/chat_model/user_chat.dart';
 import 'package:heh_application/services/auth.dart';
@@ -114,6 +116,28 @@ class _HomePageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const ServicePaidPage()));
+                  },
+                ),
+                // HomeMenu(
+                //   icon:
+                //       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
+                //   text: "OTP",
+                //   press: () async {
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //             builder: (context) => OTPPage(
+                //                   email: sharedCurrentUser!.email,
+                //                 )));
+                //   },
+                // ),
+                HomeMenu(
+                  icon:
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
+                  text: "Email",
+                  press: () async {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const Email()));
                   },
                 ),
               ],

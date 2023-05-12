@@ -11,6 +11,7 @@ import 'package:heh_application/main.dart';
 import 'package:heh_application/models/exercise_resource.dart';
 import 'package:heh_application/models/login_user.dart';
 import 'package:heh_application/models/medical_record.dart';
+import 'package:heh_application/models/problem.dart';
 import 'package:heh_application/models/result_login.dart';
 import 'package:heh_application/models/schedule.dart';
 import 'package:heh_application/models/sign_up_user.dart';
@@ -28,6 +29,7 @@ MedicalRecord? sharedMedicalRecord;
 Physiotherapist? sharedPhysiotherapist;
 ExerciseResource? sharedExerciseResource;
 Schedule? schedule;
+Problem1? sharedProblem;
 
 class LandingPage extends StatefulWidget {
   LandingPage({Key? key, this.msg}) : super(key: key);
@@ -140,7 +142,6 @@ class _LandingPageState extends State<LandingPage> {
                     );
                   }
                 } else {
-          
                   return const Center(
                     child: CircularProgressIndicator(),
                   );

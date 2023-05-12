@@ -11,6 +11,7 @@ import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/call_api.dart';
 
 import 'package:heh_application/services/stream_test.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:provider/provider.dart';
 
@@ -52,8 +53,7 @@ class _SettingPageState extends State<SettingPage> {
               // ignore: prefer_const_literals_to_create_immutables
               children: [
                 CircleAvatar(
-                  backgroundImage:
-                      NetworkImage(sharedCurrentUser!.image!),
+                  backgroundImage: NetworkImage(sharedCurrentUser!.image!),
                 ),
               ],
             ),
@@ -62,17 +62,6 @@ class _SettingPageState extends State<SettingPage> {
           Text(sharedCurrentUser!.firstName.toString(),
               style: const TextStyle(fontSize: 30)),
           const SizedBox(height: 20),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 90),
-          //   child: Row(
-          //     children: const <Widget>[
-          //       Text("Số dư TK: 123,456.78đ "),
-          //       Icon(
-          //         Icons.add_circle_outline_rounded,
-          //       ),
-          //     ],
-          //   ),
-          // ),
           ProfileMenu(
             icon:
                 "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fperson.svg?alt=media&token=7bef043d-fdb5-4c5b-bb2e-644ee7682345",

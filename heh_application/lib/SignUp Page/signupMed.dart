@@ -1,5 +1,7 @@
+import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/choose_form.dart';
+import 'package:heh_application/SignUp%20Page/otp.dart';
 import 'package:heh_application/SignUp%20Page/signup.dart';
 import 'package:heh_application/main.dart';
 import 'package:heh_application/models/medical_record.dart';
@@ -32,6 +34,8 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
   final TextEditingController _injury = TextEditingController();
   final TextEditingController _curing = TextEditingController();
   final TextEditingController _medicine = TextEditingController();
+
+  EmailOTP myauth = EmailOTP();
 
   Future<void> signUp(SignUpUser signUpUser) async {
     CallAPI().callRegisterAPI(signUpUser);
@@ -129,7 +133,6 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                                       style: TextStyle(fontSize: 18)),
                                   cancelText: const Text("Hủy",
                                       style: TextStyle(fontSize: 18)),
-                                  initialChildSize: 0.4,
                                   title: const Text("Tình trạng của bạn"),
                                   buttonText: const Text(
                                     "Tình trạng",
@@ -202,7 +205,7 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
                       padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -223,33 +226,6 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                           ),
                           child: const Text(
                             "Hủy",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      )),
-                  Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 0),
-                      child: Container(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: MaterialButton(
-                          height: 50,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const ChooseForm()));
-                          },
-                          color: Colors.grey[400],
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Text(
-                            "Bỏ qua",
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 18,
@@ -320,10 +296,33 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                                 }
                               });
                             });
+                            //gửi mã OTP
+                            myauth.setConfig(
+                                appEmail: "me@rohitchouhan.com",
+                                appName: "Email OTP",
+                                userEmail: widget.signUpUser.email,
+                                otpLength: 6,
+                                otpType: OTPType.digitsOnly);
+                            if (await myauth.sendOTP() == true) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("OTP đã được gửi."),
+                              ));
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Không gửi được OTP."),
+                              ));
+                            }
+                            print(myauth);
+
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LandingPage()));
+                                    builder: (context) => OTPPage(
+                                          email: widget.signUpUser.email,
+                                          myauth: myauth,
+                                        )));
                           },
                           color: const Color.fromARGB(255, 46, 161, 226),
                           elevation: 0,
