@@ -18,12 +18,23 @@ class BookingDetail {
         this.shorttermStatus
       });
   factory BookingDetail.fromMap(Map<String, dynamic> json) {
-    return BookingDetail(
-        bookingDetailID: json['bookingDetailID'],
-        bookingScheduleID: json['bookingScheduleID'],
-        bookingSchedule:BookingSchedule.fromMap(json['bookingSchedule']) ,
-        videoCallRoom: json['videoCallRoom'],
-        shorttermStatus: json['shorttermStatus'],
-    longtermStatus: json['longtermStatus']);
+    if (json['bookingSchedule'] != null){
+      return BookingDetail(
+          bookingDetailID: json['bookingDetailID'],
+          bookingScheduleID: json['bookingScheduleID'],
+          bookingSchedule:BookingSchedule.fromMap(json['bookingSchedule']) ,
+          videoCallRoom: json['videoCallRoom'],
+          shorttermStatus: json['shorttermStatus'],
+          longtermStatus: json['longtermStatus']);
+    }
+    else {
+      return BookingDetail(
+          bookingDetailID: json['bookingDetailID'],
+          bookingScheduleID: json['bookingScheduleID'],
+          videoCallRoom: json['videoCallRoom'],
+          shorttermStatus: json['shorttermStatus'],
+          longtermStatus: json['longtermStatus']);
+    }
+
   }
 }

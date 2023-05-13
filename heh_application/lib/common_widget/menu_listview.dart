@@ -552,7 +552,7 @@ class SessionScheduleMenu extends StatelessWidget {
                 width: 10,
               ),
               SizedBox(
-                  width: MediaQuery.of(context).size.width / 1.7,
+                  width: MediaQuery.of(context).size.width / 1.8,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

@@ -38,8 +38,12 @@ class _PhysioChoosePageState extends State<PhysioChoosePage> {
                       if (sharedMedicalRecord!.problem!
                           .contains(element.skill!)) {
                         listPhysio.add(element);
+                        print(element.signUpUser!.firstName);
+                        print(sharedMedicalRecord!.problem);
                       }
                     });
+
+
                     if (listPhysio != null) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
