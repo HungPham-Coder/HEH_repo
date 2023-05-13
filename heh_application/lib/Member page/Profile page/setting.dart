@@ -6,6 +6,7 @@ import 'package:heh_application/Member%20page/Profile%20page/changePass.dart';
 
 import 'package:heh_application/Member%20page/Profile%20page/history.dart';
 import 'package:heh_application/main.dart';
+import 'package:heh_application/models/sign_up_user.dart';
 
 import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/call_api.dart';

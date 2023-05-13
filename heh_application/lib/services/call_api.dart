@@ -17,6 +17,7 @@ import 'package:heh_application/models/result_login.dart';
 import 'package:heh_application/models/schedule.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 import 'package:heh_application/models/slot.dart';
+import 'package:heh_application/models/slot.dart';
 import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/models/type_of_slot.dart';
 import 'package:heh_application/models/user_exercise.dart';
@@ -487,6 +488,7 @@ class CallAPI {
     if (response.statusCode == 200) {
       return MedicalRecord.fromMap(json.decode(response.body));
     } else {}
+
   }
 
   Future<MedicalRecord?> updateMedicalRecord(
@@ -513,6 +515,7 @@ class CallAPI {
     if (response.statusCode == 200) {
       return MedicalRecord.fromMap(json.decode(response.body));
     } else {}
+
   }
 
   Future<List<Physiotherapist>> getAllPhysiotherapist() async {
@@ -623,7 +626,7 @@ class CallAPI {
     }
   }
 
-  Future<void> updateScheduleWithPhysioBookingStatus(Schedule schedule) async {
+  Future<void> updateSchedule(Schedule schedule) async {
     var url = Uri.parse('${link}/api/Schedule');
     // var url = Uri.https('localhost:7166', 'api/Schedule');
     final headers = {
@@ -769,6 +772,32 @@ class CallAPI {
     }
   }
 
+  Future<List<Schedule>> GetAllSlotTypeNotAssignedByDateAndPhysioID(
+      String date, String physioID) async {
+    var url = Uri.parse(
+        '${link}/api/Schedule/GetAllSlotTypeNotAssignedByDateAndPhysioID?date=$date&physioID=$physioID');
+    // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      Iterable jsonResult = json.decode(response.body);
+      List<Schedule> list =
+          List<Schedule>.from(jsonResult.map((model) => Schedule.fromMap(model)));
+
+      if (list == null) {
+        throw Exception('Schedule List null');
+      } else {
+        return list;
+      }
+    } else {
+      print(response.body);
+      throw Exception('Failed to load Schedule List');
+    }
+  }
+
   Future<List<Slot>> GetAllSlotByDateAndTypeOfSlot(
       String date, String typeOfSlot) async {
     var url = Uri.parse(
@@ -897,6 +926,26 @@ class CallAPI {
     if (response.statusCode == 200) {
       return SubProfile.fromMap(json.decode(response.body));
     } else {
+
+      throw Exception("failed to add subprofile");
+    }
+  }
+
+  Future<TypeOfSlot> GetTypeOfSlotByTypeName(String typeName) async {
+    var url =
+        Uri.parse('${link}/api/TypeOfSlot/GetByTypeName?typeName=$typeName');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      return TypeOfSlot.fromMap(json.decode(response.body));
+    } else {
+
       throw Exception("failed to add subprofile");
     }
   }
@@ -1106,7 +1155,7 @@ class CallAPI {
     }
   }
 
-  Future<bool> addBookingDetail(BookingDetail bookingDetail) async {
+  Future<BookingDetail> addBookingDetail(BookingDetail bookingDetail) async {
     var url = Uri.parse('${link}/api/BookingDetail/Create');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
 
@@ -1122,9 +1171,11 @@ class CallAPI {
     };
     var response = await http.post(url, body: body, headers: headers);
     if (response.statusCode == 200) {
-      return true;
+      return BookingDetail.fromMap(json.decode(response.body));
     } else {
-      return false;
+
+      throw Exception('Failed to add BookingDetail');
+
     }
   }
 
@@ -1145,6 +1196,7 @@ class CallAPI {
     if (response.statusCode == 200) {
       return Problem1.FromMap(json.decode(response.body));
     } else {}
+
   }
 
   Future<Problem1?> updateProblem(Problem1 problem) async {
@@ -1165,6 +1217,7 @@ class CallAPI {
     if (response.statusCode == 200) {
       return Problem1.FromMap(json.decode(response.body));
     } else {}
+
   }
 
   Future<String> addNotification(NotificationModel notification) async {
