@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
+import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Session%20page/session_Schedule.dart';
 import 'package:heh_application/models/booking_detail.dart';
 import 'package:heh_application/models/booking_schedule.dart';
 import 'package:heh_application/models/exercise_model/category.dart';
@@ -510,7 +511,7 @@ class CallAPI {
       "Accept": "application/json",
       "content-type": "application/json"
     };
-    var response = await http.post(url, body: body, headers: headers);
+    var response = await http.put(url, body: body, headers: headers);
 
     if (response.statusCode == 200) {
       return MedicalRecord.fromMap(json.decode(response.body));
@@ -601,13 +602,48 @@ class CallAPI {
     }
   }
 
-  Future<bool> AddSchedule(Schedule schedule) async {
+  Future<dynamic> AddSlot(Slot slot) async {
+    var url = Uri.parse('${link}/api/Slot/Create');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+    final body = jsonEncode({
+      "slotName": slot.slotName,
+      "timeStart": slot.timeStart,
+      "timeEnd": slot.timeEnd,
+      "available": true
+    });
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}"
+    };
+    var response = await http.post(url, body: body, headers: headers);
+
+    if (response.statusCode == 200) {
+      addSlotStatus = 200;
+      return Slot.fromMap(json.decode(response.body));
+    } else {
+
+      addSlotStatus = 400;
+      Iterable jsonResult = json.decode(response.body);
+      List<Slot> list = List<Slot>.from(
+          jsonResult.map((model) => Slot.fromMap(model)));
+      if (list == null) {
+        throw Exception('Slot List null');
+      } else {
+        return list;
+      }
+    }
+  }
+
+  Future<Schedule> AddSchedule(Schedule schedule) async {
     var url = Uri.parse('${link}/api/Schedule');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
 
     final body = jsonEncode({
       "slotID": schedule.slotID,
       "physiotherapistID": schedule.physiotherapistID,
+      "typeOfSlotID" : schedule.typeOfSlotID,
       "description": schedule.description,
       "physioBookingStatus": schedule.physioBookingStatus
     });
@@ -618,7 +654,7 @@ class CallAPI {
     var response = await http.post(url, body: body, headers: headers);
 
     if (response.statusCode == 200) {
-      return true;
+      return Schedule.fromMap(json.decode(response.body));
     } else {
       print(response.body);
 

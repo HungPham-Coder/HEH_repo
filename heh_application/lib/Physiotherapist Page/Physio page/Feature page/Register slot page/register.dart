@@ -110,7 +110,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                                   return FutureBuilder(
                                       future: CallAPI()
                                           .getNumberOfPhysioRegisterOnSlot(
-                                              slotList![index].slotID),
+                                              slotList![index].slotID!),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
                                           if (slotList![index].available ==
@@ -313,12 +313,13 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
               onPressed: () async {
                 String required = _des.text;
                 Schedule schedule = new Schedule(
-                    slotID: slot.slotID,
+                    slotID: slot.slotID!,
                     physiotherapistID: sharedPhysiotherapist!.physiotherapistID,
+                    typeOfSlotID: null,
                     description: required,
                     physioBookingStatus: false);
-                bool addStatus = await CallAPI().AddSchedule(schedule);
-                if (addStatus) {
+                Schedule scheduleAdd = await CallAPI().AddSchedule(schedule);
+                if (scheduleAdd != null) {
                   slotList = await CallAPI().getallSlotByDateAndPhysioID(
                       dayStr!, sharedPhysiotherapist!.physiotherapistID);
                   setState(() {

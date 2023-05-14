@@ -12,22 +12,36 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../common_widget/menu_listview.dart';
 
+int addSlotStatus = 200;
+
 class SessionRegisterPage extends StatefulWidget {
-  SessionRegisterPage({Key? key, required this.bookingDetail, this.listDetail})
+  SessionRegisterPage({Key? key, this.bookingDetail, this.listDetail})
       : super(key: key);
-  BookingDetail bookingDetail;
+  BookingDetail? bookingDetail;
   List<BookingDetail>? listDetail;
+
   @override
   State<SessionRegisterPage> createState() => _SessionRegisterPageState();
 }
 
 class _SessionRegisterPageState extends State<SessionRegisterPage> {
+  TextEditingController _timeStart = TextEditingController();
+  TextEditingController _timeEnd = TextEditingController();
+
+  String? startCompare;
+  String? endCompare;
+  String? startAdd;
+  String? endAdd;
+
   final List<String> _time = [
     "- Chọn khung giờ -",
   ];
+  bool visibleAdd = false;
+  bool visibleCheckAfter = false;
   String? selectedTime = "- Chọn khung giờ -";
   Schedule? schedule;
   late Map<DateTime, List<BookingDetail>> selectedEvents = {};
+  List<Slot>? listSlotDup;
 
   CalendarFormat _format = CalendarFormat.month;
   DateTime _selectedDay = DateTime.now();
@@ -145,8 +159,6 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                 setState(() {
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay;
-                  print(_selectedDay);
-                  print(_focusedDay);
                 });
               },
               calendarStyle: const CalendarStyle(
@@ -168,10 +180,13 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                   formatButtonShowsNext: true),
             ),
             ..._getEvents(_selectedDay)
-                .map((BookingDetail e) => SessionScheduleMenu(
+                .map((BookingDetail e) {
+                  String start = DateTimeFormat.formateTime(e.bookingSchedule!.schedule!.slot!.timeStart);
+                  String end = DateTimeFormat.formateTime(e.bookingSchedule!.schedule!.slot!.timeEnd);
+                  return SessionScheduleMenu(
                       name:
                           "Người điều trị: ${e.bookingSchedule!.subProfile!.signUpUser!.firstName}",
-                      time: "Khung giờ: ",
+                      time: "Khung giờ: ${start}-${end}",
                       icon:
                           "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbooking.png?alt=media&token=aa78656d-2651-42a4-810e-07c273cdfe5a",
                       buttonPress: () {
@@ -200,7 +215,8 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                   ],
                                 ));
                       },
-                    )),
+                    );
+                }),
           ],
         ),
       ),
@@ -208,208 +224,304 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
         child: const Icon(Icons.add),
         onPressed: () {
           String datefmt = DateFormat("yyyy-MM-dd").format(_selectedDay);
+          DateTime dateCreate = new DateFormat("yyyy-MM-dd").parse(datefmt);
           showDialog(
               context: context,
-              builder: (context) => AlertDialog(
-                    title: const Text("Tạo lịch dài hạn"),
-                    content: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Time(datefmt),
-                        ],
+              builder: (context) =>
+                  StatefulBuilder(builder: (context, setState) {
+                    return AlertDialog(
+                      title: const Text("Tạo lịch dài hạn"),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Time(datefmt),
+                          ],
+                        ),
                       ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'Hủy'),
-                        child: const Text("Hủy"),
-                      ),
-                      TextButton(
-                          onPressed: () async {
-                            TypeOfSlot typeOfSlot = await CallAPI()
-                                .GetTypeOfSlotByTypeName('Trị liệu dài hạn');
-                            schedule!.typeOfSlotID = typeOfSlot.typeOfSlotID;
-                            schedule!.physioBookingStatus = true;
-                            await CallAPI().updateSchedule(schedule!);
-                            BookingSchedule bookingSchedule = BookingSchedule(
-                                userID: widget
-                                    .bookingDetail.bookingSchedule!.userID,
-                                subProfileID: widget.bookingDetail
-                                    .bookingSchedule!.subProfileID,
-                                scheduleID: schedule!.scheduleID!,
-                                dateBooking: DateFormat("yyyy-MM-dd")
-                                    .format(DateTime.now()),
-                                timeBooking: DateFormat("yyyy-MM-ddTHH:mm:ss")
-                                    .format(DateTime.now()));
-                            BookingSchedule? bookingScheduleAdd =
-                                await CallAPI()
-                                    .addBookingSchedule(bookingSchedule);
-                            BookingDetail bookingDetail = BookingDetail(
-                                bookingScheduleID:
-                                    bookingScheduleAdd!.bookingScheduleID!,
-                                shorttermStatus: 3,
-                                longtermStatus: 1,
-                            videoCallRoom: "Mới add");
-
-                            BookingDetail bookingDetailAdd =
-                                await CallAPI().addBookingDetail(bookingDetail);
-                            if (bookingDetailAdd != null) {
-                              BookingDetail bookingDetailGet = await CallAPI()
-                                  .getBookingDetailByID(
-                                      bookingDetailAdd.bookingDetailID!);
-                              if (selectedEvents[_selectedDay] != null) {
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, 'Hủy');
+                            _timeStart.clear();
+                            _timeEnd.clear();
+                            setState(() {
+                              visibleCheckAfter = false;
+                              visibleAdd = false;
+                            });
+                          },
+                          child: const Text("Hủy"),
+                        ),
+                        TextButton(
+                            onPressed: () async {
+                              //compare start và end
+                              DateTime start = DateTime.parse(startCompare!);
+                              DateTime end = DateTime.parse(endCompare!);
+                              if (start.compareTo(end) >= 0) {
                                 setState(() {
-                                  selectedEvents[_selectedDay]!
-                                      .add(bookingDetailGet);
+                                  visibleAdd = false;
+                                  visibleCheckAfter = true;
                                 });
-
+                                // Navigator.pop(context);
+                                // return Time(datefmt);
                               } else {
                                 setState(() {
-                                  selectedTime = "- Chọn khung giờ -";
-                                  selectedEvents[_selectedDay] = [
-                                    bookingDetailGet
-                                  ];
+                                  visibleCheckAfter = false;
                                 });
+                                //get Type of slot
+                                TypeOfSlot typeOfSlot = await CallAPI()
+                                    .GetTypeOfSlotByTypeName(
+                                        'Trị liệu dài hạn');
+                                //add slot
+                                Slot slot = Slot(
+                                    timeStart: startAdd!,
+                                    timeEnd: endAdd!,
+                                    slotName:
+                                        "Trị Liệu dài hạn cho ${widget.bookingDetail!.bookingSchedule!.subProfile!.subName}",
+                                    available: true);
+                                dynamic result = await CallAPI().AddSlot(slot);
+                                //check add slot thành công hay không
+                                if (addSlotStatus == 400) {
+                                  setState(() {
+                                    listSlotDup = result;
+                                    visibleAdd = true;
+                                  });
+
+                                  print(listSlotDup!.length);
+                                } else {
+                                  setState(() {
+                                    visibleAdd = false;
+                                  });
+                                  Slot slot = result;
+                                  //add schedule
+                                  Schedule schedule = Schedule(
+                                      slotID: slot.slotID!,
+                                      physiotherapistID: sharedPhysiotherapist!
+                                          .physiotherapistID,
+                                      typeOfSlotID: typeOfSlot.typeOfSlotID,
+                                      description: "Slot Trị liệu dài hạn",
+                                      physioBookingStatus: true);
+                                  Schedule addSchedule =
+                                      await CallAPI().AddSchedule(schedule);
+                                  //check add schedule
+                                  if (addSchedule != null) {
+                                    //add booking detail
+                                    BookingSchedule bookingSchedule =
+                                        BookingSchedule(
+                                            userID:
+                                                widget.bookingDetail!
+                                                    .bookingSchedule!.userID,
+                                            subProfileID:
+                                                widget
+                                                    .bookingDetail!
+                                                    .bookingSchedule!
+                                                    .subProfileID,
+                                            scheduleID: addSchedule.scheduleID!,
+                                            dateBooking:
+                                                DateFormat("yyyy-MM-dd")
+                                                    .format(DateTime.now()),
+                                            timeBooking: DateFormat(
+                                                    "yyyy-MM-ddTHH:mm:ss")
+                                                .format(DateTime.now()));
+                                    BookingSchedule? bookingScheduleAdd =
+                                        await CallAPI().addBookingSchedule(
+                                            bookingSchedule);
+                                    //add booking detail
+                                    BookingDetail bookingDetail = BookingDetail(
+                                        bookingScheduleID: bookingScheduleAdd!
+                                            .bookingScheduleID!,
+                                        shorttermStatus: 3,
+                                        longtermStatus: 1,
+                                        videoCallRoom: "Mới add");
+
+                                    BookingDetail bookingDetailAdd =
+                                        await CallAPI()
+                                            .addBookingDetail(bookingDetail);
+                                    //check add booking detail
+                                    if (bookingDetailAdd != null) {
+                                      //get booking detail vừa mới add
+                                      BookingDetail bookingDetailGet =
+                                          await CallAPI().getBookingDetailByID(
+                                              bookingDetailAdd
+                                                  .bookingDetailID!);
+                                      if (selectedEvents[dateCreate] != null) {
+                                        selectedEvents[dateCreate]!
+                                            .add(bookingDetailGet);
+                                      } else {
+                                        selectedEvents[dateCreate] = [
+                                          bookingDetailGet
+                                        ];
+                                      }
+                                    }
+                                  }
+                                }
                               }
-                            }
 
+                              Navigator.pop(context);
+                              _timeStart.clear();
+                              _timeEnd.clear();
+                              print(_selectedDay);
 
-                            Navigator.pop(context);
+                            },
+                            child: const Text("Tạo")),
+                      ],
+                    );
+                  }));
 
-                            return;
-                          },
-                          child: const Text("Tạo")),
-                    ],
-                  ));
         },
       ),
     );
   }
 
-  // Widget Time() {
-  //   return Column(
-  //     children: [
-  //       Form(
-  //           autovalidateMode: AutovalidateMode.onUserInteraction,
-  //           child: TextFormField(
-  //               controller: _timeStart,
-  //               readOnly: true,
-  //               decoration: const InputDecoration(
-  //                 labelText: "Thời gian bắt đầu",
-  //               ),
-  //               onTap: () async {
-  //                 final selectedTime = await showTimePicker(
-  //                   context: context,
-  //                   initialTime: TimeOfDay.now(),
-  //                   builder: (BuildContext context, Widget? child) {
-  //                     return MediaQuery(
-  //                       data: MediaQuery.of(context)
-  //                           .copyWith(alwaysUse24HourFormat: true),
-  //                       child: child!,
-  //                     );
-  //                   },
-  //                 );
-  //
-  //                 if (selectedTime != null) {
-  //                   final text = selectedTime.format(context);
-  //                   setState(() {
-  //                     _timeStart.text = text;
-  //                   });
-  //                 }
-  //               })),
-  //       TextFormField(
-  //         controller: _timeEnd,
-  //         readOnly: true,
-  //         decoration: const InputDecoration(
-  //           labelText: "Thời gian kết thúc",
-  //         ),
-  //         onTap: () async {
-  //           final selectedTime = await showTimePicker(
-  //             context: context,
-  //             initialTime: TimeOfDay.now(),
-  //             builder: (BuildContext context, Widget? child) {
-  //               return MediaQuery(
-  //                 data: MediaQuery.of(context)
-  //                     .copyWith(alwaysUse24HourFormat: true),
-  //                 child: child!,
-  //               );
-  //             },
-  //           );
-  //
-  //           if (selectedTime != null) {
-  //             final text = selectedTime.format(context);
-  //             setState(() {
-  //               _timeEnd.text = text;
-  //             });
-  //           }
-  //         },
-  //       )
-  //     ],
-  //   );
-  // }
   Widget Time(String? date) {
-    if (date != null) {
-      return Column(
-        children: [
-          Row(
-            children: const [
-              Text("Bạn muốn đặt khung giờ nào?"),
-              Text(" *", style: TextStyle(color: Colors.red)),
-            ],
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 50,
-            child: FutureBuilder<List<Schedule>>(
-                future: CallAPI().GetAllSlotTypeNotAssignedByDateAndPhysioID(
-                    date, sharedPhysiotherapist!.physiotherapistID),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    addSlot(snapshot.data!);
-                    return DropdownButtonFormField<String>(
-                      value: selectedTime,
-                      items: _time
-                          .map((relationship) => DropdownMenuItem<String>(
-                              value: relationship,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: Text(
-                                  relationship,
-                                  style: const TextStyle(fontSize: 13),
-                                ),
-                              )))
-                          .toList(),
-                      onChanged: (relationship) => setState(() {
-                        selectedTime = relationship;
-                        print(selectedTime);
-                        var timeSplit = selectedTime!.trim().split('-');
-                        String start = timeSplit[0].trim();
-                        String end = timeSplit[1].trim();
-                        snapshot.data!.forEach((element) {
-                          if (element.slot!.timeStart.contains(start) &&
-                              element.slot!.timeEnd.contains(end)) {
-                            setState(() {
-                              schedule = element;
-                            });
-                          }
-                        });
+    return Column(
+      children: [
+        visibleCheckAfter == true
+            ? Text('Thời gian bắt đầu phải trước thời gian kết thúc')
+            : Container(),
+        visibleAdd == true
+            ? Column(
+                children: [
+                  Text('Khung thời gian đăng ký đã có slot rồi'),
+                  ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: listSlotDup?.length,
+                      itemBuilder: (context, index) {
+                        String start = DateTimeFormat.formateTime(
+                            listSlotDup![index].timeStart);
+                        String end = DateTimeFormat.formateTime(
+                            listSlotDup![index].timeEnd);
+
+                        return Text('Khung giờ : $start-$end');
                       }),
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                ],
+              )
+            : Container(),
+        Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: TextFormField(
+                controller: _timeStart,
+                readOnly: true,
+                decoration: const InputDecoration(
+                  labelText: "Thời gian bắt đầu",
+                ),
+                onTap: () async {
+                  final selectedTime = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                    builder: (BuildContext context, Widget? child) {
+                      return MediaQuery(
+                        data: MediaQuery.of(context)
+                            .copyWith(alwaysUse24HourFormat: true),
+                        child: child!,
+                      );
+                    },
+                  );
+
+                  if (selectedTime != null) {
+                    final text = selectedTime.format(context);
+                    setState(() {
+                      startCompare = '$date $text';
+                      startAdd = '${date}T$text';
+                      _timeStart.text = text;
+                    });
                   }
-                }),
-          )
-        ],
-      );
-    } else {
-      return Container();
-    }
+                })),
+        TextFormField(
+          controller: _timeEnd,
+          readOnly: true,
+          decoration: const InputDecoration(
+            labelText: "Thời gian kết thúc",
+          ),
+          onTap: () async {
+            final selectedTime = await showTimePicker(
+              context: context,
+              initialTime: TimeOfDay.now(),
+              builder: (BuildContext context, Widget? child) {
+                return MediaQuery(
+                  data: MediaQuery.of(context)
+                      .copyWith(alwaysUse24HourFormat: true),
+                  child: child!,
+                );
+              },
+            );
+
+            if (selectedTime != null) {
+              final text = selectedTime.format(context);
+              setState(() {
+                endCompare = '$date $text';
+                endAdd = '${date}T$text';
+                _timeEnd.text = text;
+              });
+            }
+          },
+        ),
+      ],
+    );
   }
+  // Widget Time(String? date) {
+  //   if (date != null) {
+  //     return Column(
+  //       children: [
+  //         Row(
+  //           children: const [
+  //             Text("Bạn muốn đặt khung giờ nào?"),
+  //             Text(" *", style: TextStyle(color: Colors.red)),
+  //           ],
+  //         ),
+  //         const SizedBox(
+  //           height: 5,
+  //         ),
+  //         SizedBox(
+  //           width: MediaQuery.of(context).size.width,
+  //           height: 50,
+  //           child: FutureBuilder<List<Schedule>>(
+  //               future: CallAPI().GetAllSlotTypeNotAssignedByDateAndPhysioID(
+  //                   date, sharedPhysiotherapist!.physiotherapistID),
+  //               builder: (context, snapshot) {
+  //                 if (snapshot.hasData) {
+  //                   addSlot(snapshot.data!);
+  //                   return DropdownButtonFormField<String>(
+  //                     value: selectedTime,
+  //                     items: _time
+  //                         .map((relationship) => DropdownMenuItem<String>(
+  //                             value: relationship,
+  //                             child: Padding(
+  //                               padding:
+  //                                   const EdgeInsets.symmetric(horizontal: 10),
+  //                               child: Text(
+  //                                 relationship,
+  //                                 style: const TextStyle(fontSize: 13),
+  //                               ),
+  //                             )))
+  //                         .toList(),
+  //                     onChanged: (relationship) => setState(() {
+  //                       selectedTime = relationship;
+  //                       print(selectedTime);
+  //                       var timeSplit = selectedTime!.trim().split('-');
+  //                       String start = timeSplit[0].trim();
+  //                       String end = timeSplit[1].trim();
+  //                       snapshot.data!.forEach((element) {
+  //                         if (element.slot!.timeStart.contains(start) &&
+  //                             element.slot!.timeEnd.contains(end)) {
+  //                           setState(() {
+  //                             schedule = element;
+  //                           });
+  //                         }
+  //                       });
+  //                     }),
+  //                   );
+  //                 } else {
+  //                   return const Center(
+  //                     child: CircularProgressIndicator(),
+  //                   );
+  //                 }
+  //               }),
+  //         )
+  //       ],
+  //     );
+  //   } else {
+  //     return Container();
+  //   }
+  // }
 }
