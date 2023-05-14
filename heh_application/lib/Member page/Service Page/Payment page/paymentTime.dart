@@ -155,12 +155,12 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                           side: const BorderSide(color: Colors.white)),
                     )),
                 onPressed: () async {
-                  bool addBookingDetail =
+                  BookingDetail addBookingDetail =
                       await CallAPI().addBookingDetail(widget.bookingDetail!);
-                  if (addBookingDetail) {
+                  if (addBookingDetail != null) {
                     widget.bookingDetail!.bookingSchedule!.schedule!
                         .physioBookingStatus = true;
-                    await CallAPI().updateScheduleWithPhysioBookingStatus(
+                    await CallAPI().updateSchedule(
                         widget.bookingDetail!.bookingSchedule!.schedule!);
                     Navigator.push(
                         context,

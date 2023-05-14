@@ -28,52 +28,51 @@ class _SessionListPageState extends State<SessionListPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            FutureBuilder <List<BookingDetail>?>(
+            FutureBuilder<List<BookingDetail>?>(
               future: CallAPI().getLongTermListByStatus(3),
-              builder: (context, snapshot){
-                if (snapshot.hasData){
-                  if (snapshot.data!.isNotEmpty){
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.isNotEmpty) {
                     return ListView.builder(
                       shrinkWrap: true,
                       itemCount: snapshot.data!.length,
                       physics: NeverScrollableScrollPhysics(),
-                      itemBuilder:(context, index) {
+                      itemBuilder: (context, index) {
                         return ServicePaid(
+                          bookingDetail: snapshot.data![index],
                           icon:
-                          "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
-                          name: "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
-                          status: snapshot.data![index].longtermStatus == 0 ? "Chờ":"Đã được lên lịch",
+                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
+                          name:
+                              "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
+                          status: snapshot.data![index].longtermStatus == 0
+                              ? "Chờ"
+                              : "Đã được lên lịch",
                         );
                       },
                     );
-                  }
-                  else {
+                  } else {
                     return Center(
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 150),
                         child: Text(
                           "Hiện tại đã hết slot có thể đăng ký",
-                          style: TextStyle(
-                              color: Colors.grey[500], fontSize: 16),
+                          style:
+                              TextStyle(color: Colors.grey[500], fontSize: 16),
                         ),
                       ),
                     );
                   }
-
-                }
-                else {
+                } else {
                   return Center(
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 150),
                       child: Text(
                         "Hiện tại đã hết slot có thể đăng ký",
-                        style: TextStyle(
-                            color: Colors.grey[500], fontSize: 16),
+                        style: TextStyle(color: Colors.grey[500], fontSize: 16),
                       ),
                     ),
                   );
                 }
-
               },
             ),
           ],
@@ -82,7 +81,11 @@ class _SessionListPageState extends State<SessionListPage> {
     );
   }
 
-  Widget ServicePaid({required String icon, name, status}) {
+  Widget ServicePaid(
+      {required String icon,
+      name,
+      status,
+      required BookingDetail bookingDetail}) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -164,7 +167,7 @@ class _SessionListPageState extends State<SessionListPage> {
                           // const SizedBox(height: 10),
                         ],
                       )),
-                  button(),
+                  button(bookingDetail),
                 ],
               )),
         ],
@@ -172,13 +175,18 @@ class _SessionListPageState extends State<SessionListPage> {
     );
   }
 
-  Widget button() {
+  Widget button(BookingDetail bookingDetail) {
     return IconButton(
-        onPressed: () {
+        onPressed: () async {
+          List<BookingDetail>? listLongTerm =
+              await CallAPI().getLongTermListByStatus(3);
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const SessionRegisterPage()));
+                  builder: (context) => SessionRegisterPage(
+                        bookingDetail: bookingDetail,
+                        listDetail: listLongTerm,
+                      )));
         },
         icon: const Icon(Icons.schedule));
   }

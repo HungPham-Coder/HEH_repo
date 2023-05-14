@@ -3,7 +3,7 @@
 
 
 class Slot {
-  String slotID;
+  String? slotID;
   String slotName;
 
   String timeStart;
@@ -11,7 +11,7 @@ class Slot {
   bool available;
 
   Slot(
-      {required this.slotID,
+      { this.slotID,
       required this.timeStart,
       required this.timeEnd,
 

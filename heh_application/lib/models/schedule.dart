@@ -43,11 +43,11 @@ class Schedule {
         physioBookingStatus: json['physioBookingStatus'],
       );
     }
-    else if (json['typeOfSlot'] == null){
+    else if (json['typeOfSlot'] == null || json['slot'] == null){
       return Schedule(
         scheduleID: json['scheduleID'],
         slotID: json['slotID'],
-        slot: Slot.fromMap(json['slot']),
+        // slot: Slot.fromMap(json['slot']),
         physiotherapistID: json['physiotherapistID'],
         physiotherapist: Physiotherapist.fromMap(json['physiotherapistDetail']),
 

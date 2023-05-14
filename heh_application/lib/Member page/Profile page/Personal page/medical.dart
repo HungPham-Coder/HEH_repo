@@ -234,8 +234,8 @@ class _MedicalPageState extends State<MedicalPage> {
                                     print(
                                         "medicalID: ${medical.medicalRecordID!}");
                                     await CallAPI().updateProblem(problem1);
-                                    print(
-                                        "problem1: ${sharedProblem!.problemID}");
+                                    // print(
+                                    //     "problem1: ${sharedProblem!.problemID}");
                                   }
                                 });
                               });
