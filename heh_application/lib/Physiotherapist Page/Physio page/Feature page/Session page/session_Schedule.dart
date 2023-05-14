@@ -57,7 +57,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
         child: Column(
           children: [
             TableCalendar(
-              focusedDay: _selectedDay,
+              focusedDay: _focusedDay,
               firstDay: DateTime.now(),
               lastDay: DateTime(2099),
               startingDayOfWeek: StartingDayOfWeek.monday,

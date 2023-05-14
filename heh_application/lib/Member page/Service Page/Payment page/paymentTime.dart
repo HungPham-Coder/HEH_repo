@@ -4,7 +4,7 @@ import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/succ
 import 'package:heh_application/models/booking_detail.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:flutter/services.dart';
-// import 'package:flutter_hl_vnpay/flutter_hl_vnpay.dart';
+
 import 'package:crypto/crypto.dart';
 // import 'package:lottie/lottie.dart';
 
@@ -19,8 +19,6 @@ class PaymentTimePage extends StatefulWidget {
 
 class _PaymentTimePageState extends State<PaymentTimePage> {
   // paymentGroup _paymentValue = paymentGroup.male;
-  String _paymentResultCodeCode = 'Unknown';
-
   @override
   void initState() {
     super.initState();
@@ -115,15 +113,10 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
           Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(children: [
-                // choose(
-                //   icon:
-                //       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FQR.jpg?alt=media&token=cf838750-d192-44cf-831d-4cf7fc0d1802",
-                // )
-                Text('Result Code: $_paymentResultCodeCode\n'),
-                // ElevatedButton(
-                //   onPressed: this._onBuyCoinPressed,
-                //   child: Text('10.000 VND'),
-                // )
+                choose(
+                  icon:
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FQR.jpg?alt=media&token=cf838750-d192-44cf-831d-4cf7fc0d1802",
+                )
               ])),
           SizedBox(
             height: 130,
@@ -192,65 +185,6 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
       ),
     );
   }
-
-  // _onBuyCoinPressed() async {
-  //   String paymentResultCodeCode;
-  //   // Platform messages may fail, so we use a try/catch PlatformException.
-  //   try {
-  //     String url = 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-  //     String tmnCode = 'SOLUTION'; // Get from VNPay
-  //     String hashKey = 'VQWLEXBMLOWVLSCJWRBCIOFRPTOROYCQ'; // Get from VNPay
-
-  //     final params = <String, dynamic>{
-  //       'vnp_Command': 'pay',
-  //       'vnp_Amount': '3000000',
-  //       'vnp_CreateDate': '20210315151908',
-  //       'vnp_CurrCode': 'VND',
-  //       'vnp_IpAddr': '192.168.15.102',
-  //       'vnp_Locale': 'vn',
-  //       'vnp_OrderInfo': '5fa66b8b5f376a000417e501 pay coin 30000 VND',
-  //       'vnp_ReturnUrl':
-  //           'https://hl-solutions.vercel.app/orders/order-return', // Your Server https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/#code-returnurl
-  //       'vnp_TmnCode': tmnCode,
-  //       'vnp_TxnRef': DateTime.now().millisecondsSinceEpoch.toString(),
-  //       'vnp_Version': '2.0.0'
-  //     };
-
-  //     final sortedParams = FlutterHlVnpay.instance.sortParams(params);
-  //     final hashDataBuffer = new StringBuffer();
-  //     sortedParams.forEach((key, value) {
-  //       hashDataBuffer.write(key);
-  //       hashDataBuffer.write('=');
-  //       hashDataBuffer.write(value);
-  //       hashDataBuffer.write('&');
-  //     });
-  //     final hashData =
-  //         hashDataBuffer.toString().substring(0, hashDataBuffer.length - 1);
-  //     final query = Uri(queryParameters: sortedParams).query;
-  //     print('hashData = $hashData');
-  //     print('query = $query');
-
-  //     var bytes = utf8.encode(hashKey + hashData.toString());
-  //     final vnpSecureHash = sha256.convert(bytes);
-  //     final paymentUrl =
-  //         "$url?$query&vnp_SecureHashType=SHA256&vnp_SecureHash=$vnpSecureHash";
-  //     print('paymentUrl = $paymentUrl');
-  //     paymentResultCodeCode = (await FlutterHlVnpay.instance.show(
-  //             paymentUrl: paymentUrl, tmnCode: tmnCode, scheme: 'hlsolutions'))
-  //         .toString();
-  //   } on PlatformException {
-  //     paymentResultCodeCode = 'Failed to get payment result code';
-  //   }
-
-  //   // If the widget was removed from the tree while the asynchronous platform
-  //   // message was in flight, we want to discard the reply rather than calling
-  //   // setState to update our non-existent appearance.
-  //   if (!mounted) return;
-
-  //   setState(() {
-  //     _paymentResultCodeCode = paymentResultCodeCode;
-  //   });
-  // }
 }
 
 class choose extends StatefulWidget {
