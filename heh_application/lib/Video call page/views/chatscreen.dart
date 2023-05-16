@@ -44,7 +44,7 @@ class _ChatScreenState extends State<ChatScreen> {
         actions: [
           IconButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const VideoCallScreen(),
+                    builder: (context) =>  VideoCallScreen(),
                   )),
               icon: const Icon(Icons.video_call)),
         ],

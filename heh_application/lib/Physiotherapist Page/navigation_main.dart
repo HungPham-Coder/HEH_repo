@@ -30,7 +30,7 @@ class _PhyNavigation_barState extends State<PhyNavigation_bar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<Physiotherapist>(
+      body: FutureBuilder<PhysiotherapistModel>(
           future:
               CallAPI().getPhysiotherapistByUserID(sharedCurrentUser!.userID!),
           builder: (context, snapshot) {

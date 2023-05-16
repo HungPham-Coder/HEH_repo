@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
+import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/billChoose.dart';
+import 'package:heh_application/Member%20page/Service%20Page/service.dart';
 
 import 'package:heh_application/Video%20call%20page/VideoCall.dart';
 import 'package:heh_application/Video%20call%20page/views/messenger_page.dart';
 import 'package:heh_application/models/booking_detail.dart';
+import 'package:heh_application/models/booking_schedule.dart';
 import 'package:heh_application/models/chat_model/user_chat.dart';
+import 'package:heh_application/models/physiotherapist.dart';
+import 'package:heh_application/models/schedule.dart';
 import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/chat_provider.dart';
 import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:heh_application/models/sign_up_user.dart';
 
 class ServicePaidPage extends StatefulWidget {
-  const ServicePaidPage({Key? key}) : super(key: key);
-
+   ServicePaidPage({Key? key, required this.firebaseFirestoreBase}) : super(key: key);
+  FirebaseFirestoreBase firebaseFirestoreBase;
   @override
   State<ServicePaidPage> createState() => _ServicePaidPageState();
 }
 
 class _ServicePaidPageState extends State<ServicePaidPage> {
+  UserChat? opponentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,6 +79,11 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
                           time: "$start - $end",
                           bookedFor:
                               "${snapshot.data![index].bookingSchedule!.subProfile!.relationship!.relationName}",
+                          bookingSchedule: snapshot.data![index].bookingSchedule!,
+                          physiotherapist: snapshot.data![index].bookingSchedule!.schedule!.physiotherapist!,
+                          schedule: snapshot.data![index].bookingSchedule!.schedule!,
+                          firebaseFirestoreBase: widget.firebaseFirestoreBase,
+                          bookingDetail: snapshot.data![index]
                         );
                       },
                     );
@@ -87,23 +99,13 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
       )),
     );
   }
-}
-
-class ServicePaid extends StatelessWidget {
-  const ServicePaid({
-    Key? key,
-    required this.time,
-    required this.name,
-    required this.icon,
-    required this.date,
-    required this.bookedFor,
-  }) : super(key: key);
-
-  final String icon, name, time, bookedFor, date;
-
-  @override
-  Widget build(BuildContext context) {
-    // ignore: duplicate_ignore
+  Widget ServicePaid ({required String icon,name,time,bookedFor,date,
+    required PhysiotherapistModel physiotherapist,
+    required Schedule schedule,
+    required BookingSchedule bookingSchedule,
+    required FirebaseFirestoreBase firebaseFirestoreBase,
+    required BookingDetail bookingDetail
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: Column(
@@ -187,7 +189,13 @@ class ServicePaid extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 10),
-                          const button(),
+                           button(schedule: schedule,
+                               physiotherapist: physiotherapist,
+                               bookingSchedule: bookingSchedule,
+                              firebaseFirestoreBase: firebaseFirestoreBase,
+                             bookingDetail: bookingDetail
+
+                           ),
                         ],
                       )),
                 ],
@@ -196,32 +204,14 @@ class ServicePaid extends StatelessWidget {
       ),
     );
   }
-}
 
-class button extends StatefulWidget {
-  const button({Key? key}) : super(key: key);
 
-  @override
-  State<button> createState() => _buttonState();
-}
-
-class _buttonState extends State<button> {
-  UserChat? opponentUser;
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Future<void> loadPhysioTherapistAccount() async {
-    final firestoreDatabase =
-        Provider.of<FirebaseFirestoreBase>(context, listen: false);
-    UserChat? userChatResult =
-        await firestoreDatabase.getPhysioUser(physioID: 'physiotherapist');
-    opponentUser = userChatResult;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget button ({required PhysiotherapistModel physiotherapist,
+      required Schedule schedule,
+      required BookingSchedule bookingSchedule,
+      required FirebaseFirestoreBase firebaseFirestoreBase,
+    required BookingDetail bookingDetail
+  }){
     final auth = Provider.of<AuthBase>(context, listen: false);
     return Row(
       children: [
@@ -238,11 +228,11 @@ class _buttonState extends State<button> {
                       side: const BorderSide(color: Colors.white)),
                 )),
             onPressed: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) =>
-              //             const TimeResultPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                           BillChoosePage(physiotherapist: physiotherapist, schedule: schedule, bookingSchedule: bookingSchedule)));
             },
             child: const Text("Xem hóa đơn",
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
@@ -261,7 +251,7 @@ class _buttonState extends State<button> {
                       side: const BorderSide(color: Colors.white)),
                 )),
             onPressed: () async {
-              await loadPhysioTherapistAccount();
+              await loadPhysioTherapistAccount(firebaseFirestoreBase);
               await auth.checkUserExistInFirebase(sharedCurrentUser!);
 
               Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -273,11 +263,14 @@ class _buttonState extends State<button> {
                   return Provider<ChatProviderBase>(
                     create: (context) => ChatProvider(),
                     child: MessengerScreenPage(
+                      firebaseFirestoreBase: firebaseFirestoreBase,
                         oponentID: opponentUser!.id,
                         oponentAvartar: opponentUser!.photoUrl,
                         oponentNickName: opponentUser!.nickname,
                         userAvatar: sharedCurrentUser!.image,
-                        currentUserID: sharedCurrentUser!.userID!),
+                        currentUserID: sharedCurrentUser!.userID!,
+                      bookingDetail : bookingDetail
+                    ),
                   );
                 } else {
                   print('null');
@@ -296,4 +289,14 @@ class _buttonState extends State<button> {
       ],
     );
   }
+
+  Future<void> loadPhysioTherapistAccount(FirebaseFirestoreBase firebaseFirestoreBase) async {
+
+    UserChat? userChatResult =
+    await firebaseFirestoreBase.getPhysioUser(physioID: 'physiotherapist');
+    opponentUser = userChatResult;
+  }
+
 }
+
+
