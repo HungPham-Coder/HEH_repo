@@ -26,10 +26,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   static String appID = "1405b81aefdb475a94c00cc139ed7450";
    AgoraClient client = AgoraClient(
       agoraConnectionData: AgoraConnectionData(
-        username: "${sharedCurrentUser!.firstName}",
+        username: sharedCurrentUser!.firstName,
         tokenUrl: serverUrl,
         appId: appID,
-        channelName: "${VideoCallScreen.channelName}",
+        channelName: VideoCallScreen.channelName!,
       ));
 
   @override
