@@ -30,8 +30,7 @@ class MessengerScreenPage extends StatefulWidget {
       required this.userAvatar,
       required this.currentUserID,
       required this.firebaseFirestoreBase,
-        this.bookingDetail
-      })
+      this.bookingDetail})
       : super(key: key);
   final String oponentID;
   final String oponentAvartar;
@@ -39,7 +38,6 @@ class MessengerScreenPage extends StatefulWidget {
   final String? userAvatar;
   final String currentUserID;
   BookingDetail? bookingDetail;
-
 
   FirebaseFirestoreBase firebaseFirestoreBase;
   @override
@@ -65,7 +63,7 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
   late TransformationController transform;
   String token = "";
   bool isTokenExpiring = false;
-   String? channelName;
+  String? channelName;
   int tokenExpireTime = 3600;
   @override
   void initState() {
@@ -150,75 +148,75 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
               children: [
                 chatMessages.type == MessageType.text
                     ? messageBubble(
-                  chatContent: chatMessages.content,
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  margin: const EdgeInsets.only(right: 10, top: 2),
-                )
+                        chatContent: chatMessages.content,
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                        margin: const EdgeInsets.only(right: 10, top: 2),
+                      )
                     : chatMessages.type == MessageType.image
-                    ? Container(
-                  margin: const EdgeInsets.only(right: 10, top: 10),
-                  child: chatImage(
-                    imageSrc: chatMessages.content,
-                  ),
-                )
-                    : const SizedBox.shrink(),
+                        ? Container(
+                            margin: const EdgeInsets.only(right: 10, top: 10),
+                            child: chatImage(
+                              imageSrc: chatMessages.content,
+                            ),
+                          )
+                        : const SizedBox.shrink(),
                 isMessageSent(index)
                     ? Container(
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Image.network(
-                    widget.userAvatar!,
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (BuildContext ctx, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.red,
-                          value: loadingProgress.expectedTotalBytes !=
-                              null &&
-                              loadingProgress.expectedTotalBytes !=
-                                  null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                              : null,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      );
-                    },
-                    errorBuilder: (context, object, stackTrace) {
-                      return const Icon(
-                        Icons.account_circle,
-                        size: 35,
-                        color: Colors.lightGreenAccent,
-                      );
-                    },
-                  ),
-                )
+                        child: Image.network(
+                          widget.userAvatar!,
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (BuildContext ctx, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.red,
+                                value: loadingProgress.expectedTotalBytes !=
+                                            null &&
+                                        loadingProgress.expectedTotalBytes !=
+                                            null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, object, stackTrace) {
+                            return const Icon(
+                              Icons.account_circle,
+                              size: 35,
+                              color: Colors.lightGreenAccent,
+                            );
+                          },
+                        ),
+                      )
                     : Container(
-                  width: 35,
-                ),
+                        width: 35,
+                      ),
               ],
             ),
             isMessageSent(index)
                 ? Container(
-              margin: const EdgeInsets.only(right: 50, top: 6, bottom: 8),
-              child: Text(
-                DateFormat('dd MMM yyyy, hh:mm a').format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(chatMessages.timestamp),
-                  ),
-                ),
-                style: const TextStyle(
-                    color: Colors.blue,
-                    fontSize: 12,
-                    fontStyle: FontStyle.italic),
-              ),
-            )
+                    margin: const EdgeInsets.only(right: 50, top: 6, bottom: 8),
+                    child: Text(
+                      DateFormat('dd MMM yyyy, hh:mm a').format(
+                        DateTime.fromMillisecondsSinceEpoch(
+                          int.parse(chatMessages.timestamp),
+                        ),
+                      ),
+                      style: const TextStyle(
+                          color: Colors.blue,
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic),
+                    ),
+                  )
                 : const SizedBox.shrink(),
           ],
         );
@@ -230,75 +228,75 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 isMessageReceived(index)
-                // left side (received message)
+                    // left side (received message)
                     ? Container(
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Image.network(
-                    widget.oponentAvartar,
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (BuildContext ctx, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.blue,
-                          value: loadingProgress.expectedTotalBytes !=
-                              null &&
-                              loadingProgress.expectedTotalBytes !=
-                                  null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                              : null,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      );
-                    },
-                    errorBuilder: (context, object, stackTrace) {
-                      return const Icon(
-                        Icons.account_circle,
-                        size: 35,
-                        color: Colors.grey,
-                      );
-                    },
-                  ),
-                )
+                        child: Image.network(
+                          widget.oponentAvartar,
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (BuildContext ctx, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.blue,
+                                value: loadingProgress.expectedTotalBytes !=
+                                            null &&
+                                        loadingProgress.expectedTotalBytes !=
+                                            null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, object, stackTrace) {
+                            return const Icon(
+                              Icons.account_circle,
+                              size: 35,
+                              color: Colors.grey,
+                            );
+                          },
+                        ),
+                      )
                     : Container(
-                  width: 35,
-                ),
+                        width: 35,
+                      ),
                 chatMessages.type == MessageType.text
                     ? messageBubble(
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  chatContent: chatMessages.content,
-                  margin: const EdgeInsets.only(left: 10),
-                )
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                        chatContent: chatMessages.content,
+                        margin: const EdgeInsets.only(left: 10),
+                      )
                     : chatMessages.type == MessageType.image
-                    ? Container(
-                  margin: const EdgeInsets.only(left: 10, top: 10),
-                  child: chatImage(imageSrc: chatMessages.content),
-                )
-                    : const SizedBox.shrink(),
+                        ? Container(
+                            margin: const EdgeInsets.only(left: 10, top: 10),
+                            child: chatImage(imageSrc: chatMessages.content),
+                          )
+                        : const SizedBox.shrink(),
               ],
             ),
             isMessageReceived(index)
                 ? Container(
-              margin: const EdgeInsets.only(left: 50, top: 6, bottom: 8),
-              child: Text(
-                DateFormat('dd MMM yyyy, hh:mm a').format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(chatMessages.timestamp),
-                  ),
-                ),
-                style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                    fontStyle: FontStyle.italic),
-              ),
-            )
+                    margin: const EdgeInsets.only(left: 50, top: 6, bottom: 8),
+                    child: Text(
+                      DateFormat('dd MMM yyyy, hh:mm a').format(
+                        DateTime.fromMillisecondsSinceEpoch(
+                          int.parse(chatMessages.timestamp),
+                        ),
+                      ),
+                      style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic),
+                    ),
+                  )
                 : const SizedBox.shrink(),
           ],
         );
@@ -312,37 +310,37 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
     return Flexible(
       child: groupChatID.isNotEmpty
           ? StreamBuilder<QuerySnapshot>(
-          stream: ChatProvider().getChatMessage(groupChatID, _limit),
-          builder: (BuildContext context,
-              AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasData) {
-              listMessages = snapshot.data!.docs;
-              if (listMessages.isNotEmpty) {
-                return ListView.builder(
-                    padding: const EdgeInsets.all(10),
-                    itemCount: snapshot.data?.docs.length,
-                    reverse: true,
-                    controller: scrollController,
-                    itemBuilder: (context, index) =>
-                        buildItem(index, snapshot.data?.docs[index]));
-              } else {
-                return const Center(
-                  child: Text('Không có tin nhắn...'),
-                );
-              }
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.blue,
-                ),
-              );
-            }
-          })
+              stream: ChatProvider().getChatMessage(groupChatID, _limit),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  listMessages = snapshot.data!.docs;
+                  if (listMessages.isNotEmpty) {
+                    return ListView.builder(
+                        padding: const EdgeInsets.all(10),
+                        itemCount: snapshot.data?.docs.length,
+                        reverse: true,
+                        controller: scrollController,
+                        itemBuilder: (context, index) =>
+                            buildItem(index, snapshot.data?.docs[index]));
+                  } else {
+                    return const Center(
+                      child: Text('Không có tin nhắn...'),
+                    );
+                  }
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.blue,
+                    ),
+                  );
+                }
+              })
           : const Center(
-        child: CircularProgressIndicator(
-          color: Colors.lightBlueAccent,
-        ),
-      ),
+              child: CircularProgressIndicator(
+                color: Colors.lightBlueAccent,
+              ),
+            ),
     );
   }
 
@@ -356,14 +354,14 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
               children: [
                 IconButton(
                   onPressed: () async {
-                   // await setupVoiceSDKEngine();
-                   // await fetchToken(1, widget.bookingDetail!.bookingDetailID!, 2);
-                    VideoCallScreen.channelName = widget.bookingDetail!.bookingDetailID;
+                    // await setupVoiceSDKEngine();
+                    // await fetchToken(1, widget.bookingDetail!.bookingDetailID!, 2);
+                    VideoCallScreen.channelName =
+                        widget.bookingDetail!.bookingDetailID;
                     print(VideoCallScreen.channelName);
                     Navigator.of(context).push(MaterialPageRoute(
-
-                    builder: (context) =>  VideoCallScreen(),
-                  ));
+                      builder: (context) => VideoCallScreen(),
+                    ));
                   },
                   icon: const Icon(Icons.video_call),
                 )
@@ -378,23 +376,19 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
           backgroundColor: const Color.fromARGB(255, 46, 161, 226),
         ),
         body: SafeArea(
-
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              child: Column(
-                children: [
-                  buildListMessage(),
-
-                  buildMessageInput(),
-                ],
-              ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            child: Column(
+              children: [
+                buildListMessage(),
+                buildMessageInput(),
+              ],
             ),
-
+          ),
         ));
   }
 
   void readLocal() {
-    final chatProvider = Provider.of<ChatProviderBase>(context, listen: false);
     if (widget.currentUserID.isNotEmpty) {
       groupChatID = '${widget.currentUserID}';
     } else {
@@ -405,7 +399,7 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
         (Route<dynamic> route) => false,
       );
     }
-    chatProvider.upLoadFirestoreData(
+    ChatProvider().upLoadFirestoreData(
         FirestoreConstants.pathUserCollection,
         widget.currentUserID,
         {FirestoreConstants.chattingWith: widget.oponentID});
@@ -471,9 +465,9 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
   }
 
   void uploadImageFile() async {
-    final chatProvider = Provider.of<ChatProviderBase>(context, listen: false);
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-    UploadTask uploadTask = chatProvider.upLoadImageFile(imageFile!, fileName);
+    UploadTask uploadTask =
+        ChatProvider().upLoadImageFile(imageFile!, fileName);
     try {
       TaskSnapshot snapshot = await uploadTask;
       imageURL = await snapshot.ref.getDownloadURL();
@@ -492,15 +486,14 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
   Future<void> setupVoiceSDKEngine() async {
     //create an instance of the Agora engine
     agoraEngine = createAgoraRtcEngine();
-    await agoraEngine.initialize(const RtcEngineContext(
-        appId: appID
-    ));
+    await agoraEngine.initialize(const RtcEngineContext(appId: appID));
 
     // Register the event handler
     agoraEngine.registerEventHandler(
       RtcEngineEventHandler(
         onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
-          showMessage("Local user uid:${connection.localUid} joined the channel");
+          showMessage(
+              "Local user uid:${connection.localUid} joined the channel");
           setState(() {
             _isJoined = true;
           });
@@ -524,7 +517,8 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
 
   Future<void> fetchToken(int uid, String channelName, int tokenRole) async {
     // Prepare the Url
-    String url = '$serverUrl/rtc/$channelName/${tokenRole.toString()}/uid/${uid.toString()}?expiry=${tokenExpireTime.toString()}';
+    String url =
+        '$serverUrl/rtc/$channelName/${tokenRole.toString()}/uid/${uid.toString()}?expiry=${tokenExpireTime.toString()}';
 
     // Send the request
     final response = await http.get(Uri.parse(url));
@@ -535,7 +529,7 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
       String newToken = json['rtcToken'];
       debugPrint('Token Received: $newToken');
       // Use the token to join a channel or renew an expiring token
-      setToken(newToken,uid);
+      setToken(newToken, uid);
     } else {
       // If the server did not return an OK response,
       // then throw an exception.
@@ -543,6 +537,7 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
           'Failed to fetch a token. Make sure that your server URL is valid');
     }
   }
+
   void setToken(String newToken, int uid) async {
     token = newToken;
 

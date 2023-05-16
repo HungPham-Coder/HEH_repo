@@ -5,32 +5,31 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 
-
 class VideoCallScreen extends StatefulWidget {
-   VideoCallScreen({Key? key, }) : super(key: key);
- static String? channelName;
+  const VideoCallScreen({Key? key}) : super(key: key);
+  static String? channelName;
+
   @override
   State<VideoCallScreen> createState() => _VideoCallScreenState();
 }
 
 class _VideoCallScreenState extends State<VideoCallScreen> {
-
-  String? channelName;
   late RtcEngine engine;
   bool isTokenExpiring = false;
   int tokenRole = 1;
-  static String serverUrl = "https://agora-token-server-i5zg.onrender.com";
+  int tokenExpireTime = 45;
   String token = "";
-
-
+  static String channelName = "bb";
+  static String serverUrl = "https://agora-token-server-i5zg.onrender.com";
   static String appID = "1405b81aefdb475a94c00cc139ed7450";
-   AgoraClient client = AgoraClient(
+
+  final AgoraClient client = AgoraClient(
       agoraConnectionData: AgoraConnectionData(
-        username: "${sharedCurrentUser!.firstName}",
-        tokenUrl: serverUrl,
-        appId: appID,
-        channelName: "${VideoCallScreen.channelName}",
-      ));
+    username: sharedCurrentUser!.firstName,
+    tokenUrl: serverUrl,
+    appId: appID,
+    channelName: VideoCallScreen.channelName!,
+  ));
 
   @override
   void initState() {
@@ -40,18 +39,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   @override
   void dispose() {
-    // client.release();
-    // engine.leaveChannel();
+    engine.leaveChannel();
     super.dispose();
   }
 
   Future<void> initAgora() async {
-    // await engine.initialize(context as RtcEngineContext);
-    // engine = createAgoraRtcEngine();
-    // await engine.initialize(const RtcEngineContext(
-    //     appId: appID
-    // ));
-     await client.initialize();
+    await client.initialize();
   }
 
   @override
@@ -85,7 +78,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   Future<void> fetchToken(int uid, String channelName, int tokenRole) async {
     // Prepare the Url
     String url =
-        '$serverUrl/rtc/$channelName/${tokenRole.toString()}/uid/${uid.toString()}?expiry=${60.toString()}';
+        '$serverUrl/rtc/$channelName/${tokenRole.toString()}/uid/${uid.toString()}?expiry=${tokenExpireTime.toString()}';
 
     // Send the request
     final response = await http.get(Uri.parse(url));
@@ -119,7 +112,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
       await engine.joinChannel(
         token: token,
-        channelId: "bb",
+        channelId: channelName,
         // info: "",
         uid: 1,
         options: const ChannelMediaOptions(),

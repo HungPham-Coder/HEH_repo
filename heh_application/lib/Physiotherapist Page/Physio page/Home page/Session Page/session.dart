@@ -2,19 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Notification%20page/adviseAppoint.dart/adviseDetail.dart';
 import 'package:heh_application/Video%20call%20page/VideoCall.dart';
+import 'package:heh_application/Video%20call%20page/views/messenger_page.dart';
 import 'package:heh_application/models/booking_detail.dart';
+import 'package:heh_application/models/chat_model/user_chat.dart';
 import 'package:heh_application/services/call_api.dart';
+import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:heh_application/util/date_time_format.dart';
 
 class SessionPage extends StatefulWidget {
-  const SessionPage({Key? key}) : super(key: key);
-
+  SessionPage({Key? key, required this.firebaseFirestoreBase})
+      : super(key: key);
+  FirebaseFirestoreBase firebaseFirestoreBase;
   @override
   State<SessionPage> createState() => _SessionPageState();
 }
 
 class _SessionPageState extends State<SessionPage> {
-  Widget button({required VoidCallback press}) {
+  UserChat? currentUser;
+
+  Widget button({
+    required VoidCallback press,
+    required FirebaseFirestoreBase firebaseFirestoreBase,
+    required BookingDetail bookingDetail,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -47,9 +57,22 @@ class _SessionPageState extends State<SessionPage> {
                       borderRadius: BorderRadius.circular(15),
                       side: const BorderSide(color: Colors.white)),
                 )),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => VideoCallPage()));
+            onPressed: () async {
+              await loadPhysioTherapistAccount(firebaseFirestoreBase);
+
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return MessengerScreenPage(
+                  currentUserID: currentUser!.id,
+                  userAvatar: currentUser!.photoUrl,
+                  oponentID: bookingDetail.bookingSchedule!.signUpUser!.userID!,
+                  oponentNickName:
+                      bookingDetail.bookingSchedule!.signUpUser!.firstName!,
+                  oponentAvartar:
+                      bookingDetail.bookingSchedule!.signUpUser!.image!,
+                  firebaseFirestoreBase: firebaseFirestoreBase,
+                  bookingDetail: bookingDetail,
+                );
+              }));
             },
             child: const Text(
               "Tham gia",
@@ -63,6 +86,8 @@ class _SessionPageState extends State<SessionPage> {
 
   Widget ServicePaid(
       {required String icon,
+      required FirebaseFirestoreBase firebaseFirestoreBase,
+      required BookingDetail bookingDetail,
       name,
       time,
       bookedFor,
@@ -162,7 +187,11 @@ class _SessionPageState extends State<SessionPage> {
                             ],
                           ),
                           const SizedBox(height: 10),
-                          button(press: press),
+                          button(
+                            bookingDetail: bookingDetail,
+                            press: press,
+                            firebaseFirestoreBase: firebaseFirestoreBase,
+                          ),
                         ],
                       )),
                 ],
@@ -178,7 +207,7 @@ class _SessionPageState extends State<SessionPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          "Danh sách buổi tư vấn",
+          "Danh sách buổi trị liệu",
           style: TextStyle(fontSize: 23),
         ),
         elevation: 10,
@@ -222,6 +251,9 @@ class _SessionPageState extends State<SessionPage> {
                                 .timeEnd);
 
                             return ServicePaid(
+                              bookingDetail: snapshot.data![index],
+                              firebaseFirestoreBase:
+                                  widget.firebaseFirestoreBase,
                               icon:
                                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
                               name:
@@ -268,5 +300,12 @@ class _SessionPageState extends State<SessionPage> {
         ),
       ),
     );
+  }
+
+  Future<void> loadPhysioTherapistAccount(
+      FirebaseFirestoreBase firebaseFirestoreBase) async {
+    UserChat? userChatResult =
+        await firebaseFirestoreBase.getPhysioUser(physioID: 'physiotherapist');
+    currentUser = userChatResult;
   }
 }

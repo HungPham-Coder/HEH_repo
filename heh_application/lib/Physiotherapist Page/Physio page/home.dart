@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Home%20page/Advise%20page/appointment.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Home%20page/Session%20Page/session.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/messenger.dart';
+import 'package:heh_application/services/firebase_firestore.dart';
+import 'package:provider/provider.dart';
 
 class PhysioHomePage extends StatefulWidget {
   const PhysioHomePage({Key? key}) : super(key: key);
@@ -13,6 +15,8 @@ class PhysioHomePage extends StatefulWidget {
 class _PhysioHomePageState extends State<PhysioHomePage> {
   @override
   Widget build(BuildContext context) {
+    final firestoreDatabase =
+        Provider.of<FirebaseFirestoreBase>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -46,7 +50,8 @@ class _PhysioHomePageState extends State<PhysioHomePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const SessionPage()));
+                        builder: (context) => SessionPage(
+                            firebaseFirestoreBase: firestoreDatabase)));
               },
             ),
             HomeMenu(

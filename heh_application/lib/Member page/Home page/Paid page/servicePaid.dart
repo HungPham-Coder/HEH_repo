@@ -19,7 +19,8 @@ import 'package:provider/provider.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 
 class ServicePaidPage extends StatefulWidget {
-   ServicePaidPage({Key? key, required this.firebaseFirestoreBase}) : super(key: key);
+  ServicePaidPage({Key? key, required this.firebaseFirestoreBase})
+      : super(key: key);
   FirebaseFirestoreBase firebaseFirestoreBase;
   @override
   State<ServicePaidPage> createState() => _ServicePaidPageState();
@@ -71,20 +72,22 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
                                 .schedule!.slot!.timeEnd);
                         String end = DateFormat("HH:mm").format(tempEnd);
                         return ServicePaid(
-                          icon:
-                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
-                          name:
-                              "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
-                          date: "$day",
-                          time: "$start - $end",
-                          bookedFor:
-                              "${snapshot.data![index].bookingSchedule!.subProfile!.relationship!.relationName}",
-                          bookingSchedule: snapshot.data![index].bookingSchedule!,
-                          physiotherapist: snapshot.data![index].bookingSchedule!.schedule!.physiotherapist!,
-                          schedule: snapshot.data![index].bookingSchedule!.schedule!,
-                          firebaseFirestoreBase: widget.firebaseFirestoreBase,
-                          bookingDetail: snapshot.data![index]
-                        );
+                            icon:
+                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                            name:
+                                "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                            date: "$day",
+                            time: "$start - $end",
+                            bookedFor:
+                                "${snapshot.data![index].bookingSchedule!.subProfile!.relationship!.relationName}",
+                            bookingSchedule:
+                                snapshot.data![index].bookingSchedule!,
+                            physiotherapist: snapshot.data![index]
+                                .bookingSchedule!.schedule!.physiotherapist!,
+                            schedule: snapshot
+                                .data![index].bookingSchedule!.schedule!,
+                            firebaseFirestoreBase: widget.firebaseFirestoreBase,
+                            bookingDetail: snapshot.data![index]);
                       },
                     );
                   } else {
@@ -99,13 +102,18 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
       )),
     );
   }
-  Widget ServicePaid ({required String icon,name,time,bookedFor,date,
-    required PhysiotherapistModel physiotherapist,
-    required Schedule schedule,
-    required BookingSchedule bookingSchedule,
-    required FirebaseFirestoreBase firebaseFirestoreBase,
-    required BookingDetail bookingDetail
-  }) {
+
+  Widget ServicePaid(
+      {required String icon,
+      name,
+      time,
+      bookedFor,
+      date,
+      required PhysiotherapistModel physiotherapist,
+      required Schedule schedule,
+      required BookingSchedule bookingSchedule,
+      required FirebaseFirestoreBase firebaseFirestoreBase,
+      required BookingDetail bookingDetail}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: Column(
@@ -189,13 +197,12 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
                             ],
                           ),
                           const SizedBox(height: 10),
-                           button(schedule: schedule,
-                               physiotherapist: physiotherapist,
-                               bookingSchedule: bookingSchedule,
+                          button(
+                              schedule: schedule,
+                              physiotherapist: physiotherapist,
+                              bookingSchedule: bookingSchedule,
                               firebaseFirestoreBase: firebaseFirestoreBase,
-                             bookingDetail: bookingDetail
-
-                           ),
+                              bookingDetail: bookingDetail),
                         ],
                       )),
                 ],
@@ -205,13 +212,12 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
     );
   }
 
-
-  Widget button ({required PhysiotherapistModel physiotherapist,
+  Widget button(
+      {required PhysiotherapistModel physiotherapist,
       required Schedule schedule,
       required BookingSchedule bookingSchedule,
       required FirebaseFirestoreBase firebaseFirestoreBase,
-    required BookingDetail bookingDetail
-  }){
+      required BookingDetail bookingDetail}) {
     final auth = Provider.of<AuthBase>(context, listen: false);
     return Row(
       children: [
@@ -231,8 +237,10 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                           BillChoosePage(physiotherapist: physiotherapist, schedule: schedule, bookingSchedule: bookingSchedule)));
+                      builder: (context) => BillChoosePage(
+                          physiotherapist: physiotherapist,
+                          schedule: schedule,
+                          bookingSchedule: bookingSchedule)));
             },
             child: const Text("Xem hóa đơn",
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
@@ -263,14 +271,13 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
                   return Provider<ChatProviderBase>(
                     create: (context) => ChatProvider(),
                     child: MessengerScreenPage(
-                      firebaseFirestoreBase: firebaseFirestoreBase,
+                        firebaseFirestoreBase: firebaseFirestoreBase,
                         oponentID: opponentUser!.id,
                         oponentAvartar: opponentUser!.photoUrl,
                         oponentNickName: opponentUser!.nickname,
                         userAvatar: sharedCurrentUser!.image,
                         currentUserID: sharedCurrentUser!.userID!,
-                      bookingDetail : bookingDetail
-                    ),
+                        bookingDetail: bookingDetail),
                   );
                 } else {
                   print('null');
@@ -290,13 +297,10 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
     );
   }
 
-  Future<void> loadPhysioTherapistAccount(FirebaseFirestoreBase firebaseFirestoreBase) async {
-
+  Future<void> loadPhysioTherapistAccount(
+      FirebaseFirestoreBase firebaseFirestoreBase) async {
     UserChat? userChatResult =
-    await firebaseFirestoreBase.getPhysioUser(physioID: 'physiotherapist');
+        await firebaseFirestoreBase.getPhysioUser(physioID: 'physiotherapist');
     opponentUser = userChatResult;
   }
-
 }
-
-
