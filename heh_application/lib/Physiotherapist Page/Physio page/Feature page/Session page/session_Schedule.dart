@@ -128,13 +128,10 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
         child: Column(
           children: [
             TableCalendar(
-<<<<<<< HEAD
-              focusedDay: _focusedDay,
-              firstDay: DateTime.now(),
-=======
+
               focusedDay: _selectedDay,
               firstDay: DateTime(2000),
->>>>>>> e0eeacd1223b250bd003599f6c2a902bb1b02ba4
+
               lastDay: DateTime(2099),
               startingDayOfWeek: StartingDayOfWeek.monday,
               calendarBuilders: CalendarBuilders(
