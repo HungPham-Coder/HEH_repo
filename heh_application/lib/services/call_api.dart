@@ -519,7 +519,7 @@ class CallAPI {
 
   }
 
-  Future<List<Physiotherapist>> getAllPhysiotherapist() async {
+  Future<List<PhysiotherapistModel>> getAllPhysiotherapist() async {
     var url = Uri.parse('${link}/api/Physiotherapist');
     // var url = Uri.https('localhost:7166', 'api/Physiotherapist');
     final headers = {
@@ -529,8 +529,8 @@ class CallAPI {
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
-      List<Physiotherapist> list = List<Physiotherapist>.from(
-          jsonResult.map((model) => Physiotherapist.fromMap(model)));
+      List<PhysiotherapistModel> list = List<PhysiotherapistModel>.from(
+          jsonResult.map((model) => PhysiotherapistModel.fromMap(model)));
       if (list == null) {
         throw Exception('Physiotherapist List null');
       } else {
@@ -541,7 +541,7 @@ class CallAPI {
     }
   }
 
-  Future<Physiotherapist> getPhysiotherapistByUserID(String id) async {
+  Future<PhysiotherapistModel> getPhysiotherapistByUserID(String id) async {
     var url = Uri.parse(
         '${link}/api/Physiotherapist/GetPhysiotherapistByUserID?userID=$id');
     // var url = Uri.https('localhost:7166', 'api/Physiotherapist');
@@ -551,13 +551,13 @@ class CallAPI {
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
-      return Physiotherapist.fromMap(json.decode(response.body));
+      return PhysiotherapistModel.fromMap(json.decode(response.body));
     } else {
       throw Exception('Failed to load Physiotherapist');
     }
   }
 
-  Future<List<Physiotherapist>> getAllActivePhysiotherapist() async {
+  Future<List<PhysiotherapistModel>> getAllActivePhysiotherapist() async {
     var url =
         Uri.parse('${link}/api/Physiotherapist/GetAllActivePhysiotherapist');
     // var url = Uri.https('localhost:7166', 'api/Physiotherapist');
@@ -568,8 +568,8 @@ class CallAPI {
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
-      List<Physiotherapist> list = List<Physiotherapist>.from(
-          jsonResult.map((model) => Physiotherapist.fromMap(model)));
+      List<PhysiotherapistModel> list = List<PhysiotherapistModel>.from(
+          jsonResult.map((model) => PhysiotherapistModel.fromMap(model)));
       if (list == null) {
         throw Exception('Active Physiotherapist List null');
       } else {

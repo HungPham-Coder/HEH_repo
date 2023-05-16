@@ -1,6 +1,6 @@
 import 'package:heh_application/models/sign_up_user.dart';
 
-class Physiotherapist {
+class PhysiotherapistModel {
   String physiotherapistID;
   String? skill;
   String? specialize;
@@ -8,22 +8,22 @@ class Physiotherapist {
   SignUpUser? signUpUser;
   int scheduleStatus;
 
-  Physiotherapist(
+  PhysiotherapistModel(
       {required this.physiotherapistID,
       this.skill,
       this.specialize,
       required this.scheduleStatus,
       this.userID,
       this.signUpUser});
-  factory Physiotherapist.fromMap(Map<String, dynamic> json) {
+  factory PhysiotherapistModel.fromMap(Map<String, dynamic> json) {
     if (json['user'] == null) {
-      return Physiotherapist(
+      return PhysiotherapistModel(
           physiotherapistID: json['physiotherapistID'],
           scheduleStatus: json['scheduleStatus'],
           skill: json['skill'],
           specialize: json['specialize']);
     } else {
-      return Physiotherapist(
+      return PhysiotherapistModel(
           physiotherapistID: json['physiotherapistID'],
           userID: json['userID'],
           signUpUser: SignUpUser.fromMap(json['user'], ''),
