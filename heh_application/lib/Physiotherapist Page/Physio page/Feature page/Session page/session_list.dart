@@ -38,16 +38,17 @@ class _SessionListPageState extends State<SessionListPage> {
                       itemCount: snapshot.data!.length,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        return ServicePaid(
-                          bookingDetail: snapshot.data![index],
-                          icon:
-                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
-                          name:
-                              "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
-                          status: snapshot.data![index].longtermStatus == 0
-                              ? "Chờ"
-                              : "Đã được lên lịch",
-                        );
+                        if (snapshot.data![index].longtermStatus == 0){
+                          return ServicePaid(
+                            bookingDetail: snapshot.data![index],
+                            icon:
+                            "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
+                            name:
+                            "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
+                            status: "Chờ"
+                          );
+                        }
+
                       },
                     );
                   } else {

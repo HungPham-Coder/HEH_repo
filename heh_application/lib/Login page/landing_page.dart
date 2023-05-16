@@ -26,7 +26,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 ResultLogin? sharedResultLogin;
 SignUpUser? sharedCurrentUser;
 MedicalRecord? sharedMedicalRecord;
-Physiotherapist? sharedPhysiotherapist;
+PhysiotherapistModel? sharedPhysiotherapist;
 ExerciseResource? sharedExerciseResource;
 Schedule? schedule;
 Problem1? sharedProblem;

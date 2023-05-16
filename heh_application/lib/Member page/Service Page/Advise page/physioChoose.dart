@@ -29,11 +29,11 @@ class _PhysioChoosePageState extends State<PhysioChoosePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            FutureBuilder<List<Physiotherapist>>(
+            FutureBuilder<List<PhysiotherapistModel>>(
                 future: CallAPI().getAllActivePhysiotherapist(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    List<Physiotherapist> listPhysio = [];
+                    List<PhysiotherapistModel> listPhysio = [];
                     snapshot.data!.forEach((element) {
                       if (sharedMedicalRecord!.problem!
                           .contains(element.skill!)) {

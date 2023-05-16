@@ -70,6 +70,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final firestoreDatabase =
+    Provider.of<FirebaseFirestoreBase>(context, listen: false);
     final auth = Provider.of<AuthBase>(context, listen: false);
     return WillPopScope(
         onWillPop: () => _onWillPop(context),
@@ -115,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const ServicePaidPage()));
+                            builder: (context) =>  ServicePaidPage(firebaseFirestoreBase: firestoreDatabase,)));
                   },
                 ),
                 // HomeMenu(

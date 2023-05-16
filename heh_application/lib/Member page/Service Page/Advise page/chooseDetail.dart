@@ -11,7 +11,7 @@ import '../../../models/sub_profile.dart';
 
 class ChooseDetailPage extends StatefulWidget {
   ChooseDetailPage({Key? key, required this.physiotherapist}) : super(key: key);
-  Physiotherapist physiotherapist;
+  PhysiotherapistModel physiotherapist;
   @override
   State<ChooseDetailPage> createState() => _ChooseDetailPageState();
 }

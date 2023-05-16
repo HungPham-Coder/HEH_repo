@@ -8,7 +8,7 @@ import '../../../models/physiotherapist.dart';
 
 class PhysioCertificatePage extends StatefulWidget {
   PhysioCertificatePage({Key? key, this.physiotherapist}) : super(key: key);
-  Physiotherapist? physiotherapist;
+  PhysiotherapistModel? physiotherapist;
   @override
   State<PhysioCertificatePage> createState() => _PhysioCertificatePageState();
 }
@@ -26,7 +26,7 @@ class _PhysioCertificatePageState extends State<PhysioCertificatePage> {
       body: SingleChildScrollView(
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: FutureBuilder<Physiotherapist>(
+            child: FutureBuilder<PhysiotherapistModel>(
                 future: CallAPI()
                     .getPhysiotherapistByUserID(sharedCurrentUser!.userID!),
                 builder: (context, snapshot) {

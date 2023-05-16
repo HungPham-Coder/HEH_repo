@@ -7,7 +7,7 @@ class Schedule {
   String slotID;
   Slot? slot;
   String physiotherapistID;
-  Physiotherapist? physiotherapist;
+  PhysiotherapistModel? physiotherapist;
   String? typeOfSlotID;
   TypeOfSlot? typeOfSlot;
   String? description;
@@ -49,7 +49,7 @@ class Schedule {
         slotID: json['slotID'],
         // slot: Slot.fromMap(json['slot']),
         physiotherapistID: json['physiotherapistID'],
-        physiotherapist: Physiotherapist.fromMap(json['physiotherapistDetail']),
+        physiotherapist: PhysiotherapistModel.fromMap(json['physiotherapistDetail']),
 
         description: json['description'],
         physioBookingStatus: json['physioBookingStatus'],
@@ -61,7 +61,7 @@ class Schedule {
         slotID: json['slotID'],
         slot: Slot.fromMap(json['slot']),
         physiotherapistID: json['physiotherapistID'],
-        physiotherapist: Physiotherapist.fromMap(json['physiotherapistDetail']),
+        physiotherapist: PhysiotherapistModel.fromMap(json['physiotherapistDetail']),
         typeOfSlotID: json['typeOfSlotID'],
         typeOfSlot: TypeOfSlot.fromMap(json['typeOfSlot']),
         description: json['description'],

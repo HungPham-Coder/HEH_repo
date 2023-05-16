@@ -19,7 +19,7 @@ class BillChoosePage extends StatefulWidget {
       required this.schedule,
       required this.bookingSchedule})
       : super(key: key);
-  Physiotherapist physiotherapist;
+  PhysiotherapistModel physiotherapist;
   Schedule schedule;
   BookingSchedule? bookingSchedule;
   @override
