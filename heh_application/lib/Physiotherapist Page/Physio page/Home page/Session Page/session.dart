@@ -63,11 +63,11 @@ class _SessionPageState extends State<SessionPage> {
 
   Widget ServicePaid(
       {required String icon,
-        name,
-        time,
-        bookedFor,
-        date,
-        required VoidCallback press}) {
+      name,
+      time,
+      bookedFor,
+      date,
+      required VoidCallback press}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
@@ -188,8 +188,12 @@ class _SessionPageState extends State<SessionPage> {
         child: Column(
           children: [
             FutureBuilder<List<BookingDetail>>(
-                future: CallAPI().getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                    sharedPhysiotherapist!.physiotherapistID, 'Trị liệu dài hạn',3,1),
+                future: CallAPI()
+                    .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                        sharedPhysiotherapist!.physiotherapistID,
+                        'Trị liệu dài hạn',
+                        3,
+                        1),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.isNotEmpty) {
@@ -219,13 +223,13 @@ class _SessionPageState extends State<SessionPage> {
 
                             return ServicePaid(
                               icon:
-                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
                               name:
-                              "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                                  "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
                               date: "$day",
                               time: "$start - $end",
                               bookedFor:
-                              "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
+                                  "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
                               press: () {
                                 Navigator.push(
                                     context,
@@ -238,13 +242,25 @@ class _SessionPageState extends State<SessionPage> {
                             );
                           });
                     } else {
-                      return Center(
-                        child: Text("Hiện tại chưa có ai đặt list empty"),
+                      return Container(
+                        padding: const EdgeInsets.symmetric(vertical: 280),
+                        child: const Center(
+                          child: Text(
+                            "Hiện tại không có lịch đặt hẹn.",
+                            style: TextStyle(fontSize: 18, color: Colors.grey),
+                          ),
+                        ),
                       );
                     }
                   } else {
-                    return Center(
-                      child: Text("Hiện tại chưa có ai đặt "),
+                    return Container(
+                      padding: const EdgeInsets.symmetric(vertical: 280),
+                      child: const Center(
+                        child: Text(
+                          "Hiện tại không có lịch đặt hẹn.",
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        ),
+                      ),
                     );
                   }
                 }),

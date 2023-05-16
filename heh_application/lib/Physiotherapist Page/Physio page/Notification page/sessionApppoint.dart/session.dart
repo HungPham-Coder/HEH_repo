@@ -30,44 +30,71 @@ class _SessionAppointmentPageState extends State<SessionAppointmentPage> {
             children: [
               const SizedBox(height: 10),
               FutureBuilder<List<BookingDetail>>(
-                  future: CallAPI().getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                      sharedPhysiotherapist!.physiotherapistID,
-                      'Trị liệu dài hạn',3,1),
+                  future: CallAPI()
+                      .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                          sharedPhysiotherapist!.physiotherapistID,
+                          'Trị liệu dài hạn',
+                          3,
+                          1),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.isNotEmpty){
+                      if (snapshot.data!.isNotEmpty) {
                         return ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: snapshot.data!.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              String start = DateTimeFormat.formateTime(snapshot.data![index].bookingSchedule!
-                                  .schedule!.slot!.timeStart);
-                              String end = DateTimeFormat.formateTime(snapshot.data![index].bookingSchedule!
-                                  .schedule!.slot!.timeEnd);
+                              String start = DateTimeFormat.formateTime(snapshot
+                                  .data![index]
+                                  .bookingSchedule!
+                                  .schedule!
+                                  .slot!
+                                  .timeStart);
+                              String end = DateTimeFormat.formateTime(snapshot
+                                  .data![index]
+                                  .bookingSchedule!
+                                  .schedule!
+                                  .slot!
+                                  .timeEnd);
                               return SessionMenu(
                                 icon:
-                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
+                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
                                 name:
-                                "${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
+                                    "${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
                                 press: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              SessionDetailPage(bookingSchedule: snapshot.data![index].bookingSchedule)));
+                                              SessionDetailPage(
+                                                  bookingSchedule: snapshot
+                                                      .data![index]
+                                                      .bookingSchedule)));
                                 },
                                 time: "Khung giờ đặt: $start' - $end",
                               );
                             });
+                      } else {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(vertical: 280),
+                          child: const Center(
+                            child: Text(
+                              "Hiện tại không có lịch đặt hẹn.",
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.grey),
+                            ),
+                          ),
+                        );
                       }
-                      else {
-                        return Center(child: Text('Hiện tại chưa có ai đặt list empty'),);
-                      }
-
                     } else {
-                      return Center(
-                        child: Text("Hiện tại chưa có ai đặt "),
+                      return Container(
+                        padding: const EdgeInsets.symmetric(vertical: 280),
+                        child: const Center(
+                          child: Text(
+                            "Hiện tại không có lịch đặt hẹn.",
+                            style: TextStyle(fontSize: 18, color: Colors.grey),
+                          ),
+                        ),
                       );
                     }
                   }),

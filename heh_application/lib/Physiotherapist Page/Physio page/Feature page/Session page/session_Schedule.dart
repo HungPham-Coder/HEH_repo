@@ -46,7 +46,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
   CalendarFormat _format = CalendarFormat.month;
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
-  DateTime today = DateTime.now();
+  // DateTime today = DateTime.now();
   // final DateTime _firstDay = today.subtract(const Duration(days: 30));
 
   void addSlot(List<Schedule> list) {
@@ -128,13 +128,8 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
         child: Column(
           children: [
             TableCalendar(
-<<<<<<< HEAD
-              focusedDay: _focusedDay,
-              firstDay: DateTime.now(),
-=======
               focusedDay: _selectedDay,
               firstDay: DateTime(2000),
->>>>>>> e0eeacd1223b250bd003599f6c2a902bb1b02ba4
               lastDay: DateTime(2099),
               startingDayOfWeek: StartingDayOfWeek.monday,
               calendarBuilders: CalendarBuilders(
@@ -158,8 +153,14 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                   _format = format;
                 });
               },
+              onPageChanged: (focusedDay) {
+                _focusedDay = focusedDay;
+              },
               calendarFormat: _format,
               daysOfWeekVisible: true,
+              selectedDayPredicate: (day) {
+                return isSameDay(_selectedDay, day);
+              },
               onDaySelected: (selectedDay, focusedDay) {
                 setState(() {
                   _selectedDay = selectedDay;
@@ -176,52 +177,48 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                   shape: BoxShape.circle,
                 ),
               ),
-              selectedDayPredicate: (day) {
-                return isSameDay(_selectedDay, day);
-              },
               headerStyle: const HeaderStyle(
                   formatButtonVisible: false,
                   titleCentered: true,
                   formatButtonShowsNext: true),
             ),
-            ..._getEvents(_selectedDay)
-                .map((BookingDetail e) {
-                  String start = DateTimeFormat.formateTime(e.bookingSchedule!.schedule!.slot!.timeStart);
-                  String end = DateTimeFormat.formateTime(e.bookingSchedule!.schedule!.slot!.timeEnd);
-                  return SessionScheduleMenu(
-                      name:
-                          "Người điều trị: ${e.bookingSchedule!.subProfile!.signUpUser!.firstName}",
-                      time: "Khung giờ: ${start}-${end}",
-                      icon:
-                          "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbooking.png?alt=media&token=aa78656d-2651-42a4-810e-07c273cdfe5a",
-                      buttonPress: () {
-                        String datefmt =
-                            DateFormat("dd-MM-yyyy").format(_selectedDay);
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  title: const Text("Tạo lịch"),
-                                  content: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        Time(datefmt),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, 'Hủy'),
-                                      child: const Text("Hủy"),
-                                    ),
-                                    TextButton(
-                                        onPressed: () {},
-                                        child: const Text("Tạo")),
-                                  ],
-                                ));
-                      },
-                    );
-                }),
+            ..._getEvents(_selectedDay).map((BookingDetail e) {
+              String start = DateTimeFormat.formateTime(
+                  e.bookingSchedule!.schedule!.slot!.timeStart);
+              String end = DateTimeFormat.formateTime(
+                  e.bookingSchedule!.schedule!.slot!.timeEnd);
+              return SessionScheduleMenu(
+                name:
+                    "Người điều trị: ${e.bookingSchedule!.subProfile!.signUpUser!.firstName}",
+                time: "Khung giờ: ${start}-${end}",
+                icon:
+                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbooking.png?alt=media&token=aa78656d-2651-42a4-810e-07c273cdfe5a",
+                buttonPress: () {
+                  String datefmt =
+                      DateFormat("dd-MM-yyyy").format(_selectedDay);
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            title: const Text("Tạo lịch"),
+                            content: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Time(datefmt),
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'Hủy'),
+                                child: const Text("Hủy"),
+                              ),
+                              TextButton(
+                                  onPressed: () {}, child: const Text("Tạo")),
+                            ],
+                          ));
+                },
+              );
+            }),
           ],
         ),
       ),
@@ -278,11 +275,12 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                         'Trị liệu dài hạn');
                                 //add slot
                                 Slot slot = Slot(
-                                    timeStart: startAdd!,
-                                    timeEnd: endAdd!,
-                                    slotName:
-                                        "Trị Liệu dài hạn cho ${widget.bookingDetail!.bookingSchedule!.subProfile!.subName}",
-                                    available: true);
+                                  timeStart: startAdd!,
+                                  timeEnd: endAdd!,
+                                  slotName:
+                                      "Trị Liệu dài hạn cho ${widget.bookingDetail!.bookingSchedule!.subProfile!.subName}",
+                                  available: true,
+                                );
                                 dynamic result = await CallAPI().AddSlot(slot);
                                 //check add slot thành công hay không
                                 if (addSlotStatus == 400) {
@@ -365,13 +363,11 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                               _timeStart.clear();
                               _timeEnd.clear();
                               print(_selectedDay);
-
                             },
                             child: const Text("Tạo")),
                       ],
                     );
                   }));
-
         },
       ),
     );
@@ -464,69 +460,4 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
       ],
     );
   }
-  // Widget Time(String? date) {
-  //   if (date != null) {
-  //     return Column(
-  //       children: [
-  //         Row(
-  //           children: const [
-  //             Text("Bạn muốn đặt khung giờ nào?"),
-  //             Text(" *", style: TextStyle(color: Colors.red)),
-  //           ],
-  //         ),
-  //         const SizedBox(
-  //           height: 5,
-  //         ),
-  //         SizedBox(
-  //           width: MediaQuery.of(context).size.width,
-  //           height: 50,
-  //           child: FutureBuilder<List<Schedule>>(
-  //               future: CallAPI().GetAllSlotTypeNotAssignedByDateAndPhysioID(
-  //                   date, sharedPhysiotherapist!.physiotherapistID),
-  //               builder: (context, snapshot) {
-  //                 if (snapshot.hasData) {
-  //                   addSlot(snapshot.data!);
-  //                   return DropdownButtonFormField<String>(
-  //                     value: selectedTime,
-  //                     items: _time
-  //                         .map((relationship) => DropdownMenuItem<String>(
-  //                             value: relationship,
-  //                             child: Padding(
-  //                               padding:
-  //                                   const EdgeInsets.symmetric(horizontal: 10),
-  //                               child: Text(
-  //                                 relationship,
-  //                                 style: const TextStyle(fontSize: 13),
-  //                               ),
-  //                             )))
-  //                         .toList(),
-  //                     onChanged: (relationship) => setState(() {
-  //                       selectedTime = relationship;
-  //                       print(selectedTime);
-  //                       var timeSplit = selectedTime!.trim().split('-');
-  //                       String start = timeSplit[0].trim();
-  //                       String end = timeSplit[1].trim();
-  //                       snapshot.data!.forEach((element) {
-  //                         if (element.slot!.timeStart.contains(start) &&
-  //                             element.slot!.timeEnd.contains(end)) {
-  //                           setState(() {
-  //                             schedule = element;
-  //                           });
-  //                         }
-  //                       });
-  //                     }),
-  //                   );
-  //                 } else {
-  //                   return const Center(
-  //                     child: CircularProgressIndicator(),
-  //                   );
-  //                 }
-  //               }),
-  //         )
-  //       ],
-  //     );
-  //   } else {
-  //     return Container();
-  //   }
-  // }
 }

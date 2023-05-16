@@ -36,7 +36,7 @@ class _SessionDetailPageState extends State<SessionDetailPage> {
               children: [
                 Padding(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black),
@@ -63,17 +63,21 @@ class _SessionDetailPageState extends State<SessionDetailPage> {
                                         fontWeight: FontWeight.w500))),
                             const SizedBox(height: 20),
                             information(
-                                name: "Tên người đặt: ", info: "${widget.bookingSchedule!.signUpUser!.firstName}"),
+                                name: "Tên người đặt: ",
+                                info:
+                                    "${widget.bookingSchedule!.signUpUser!.firstName}"),
                             padding(),
                             information(
                                 name: "Tên người được điều trị: ",
-                                info: "${widget.bookingSchedule!.subProfile!.subName}"),
+                                info:
+                                    "${widget.bookingSchedule!.subProfile!.subName}"),
                             padding(),
                             information(
-                                name: "Buổi điều trị: ", info: "${widget.bookingSchedule!.schedule!.slot!.slotName}"),
+                                name: "Buổi điều trị: ",
+                                info:
+                                    "${widget.bookingSchedule!.schedule!.slot!.slotName}"),
                             padding(),
-                            information(
-                                name: "Ngày điều trị: ", info: "$date"),
+                            information(name: "Ngày điều trị: ", info: "$date"),
                             padding(),
                             information(
                                 name: "Thời gian bắt đầu: ", info: "$start"),
@@ -83,20 +87,20 @@ class _SessionDetailPageState extends State<SessionDetailPage> {
                             FutureBuilder<MedicalRecord?>(
                                 future: CallAPI()
                                     .getMedicalRecordBySubProfileID(
-                                    widget.bookingSchedule!.subProfileID),
+                                        widget.bookingSchedule!.subProfileID),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     return Column(
                                       children: [
+                                        padding(),
                                         information(
                                             name: "Tình trạng: ",
-                                            info:
-                                            "${snapshot.data!.problem}"),
+                                            info: "${snapshot.data!.problem}"),
                                         padding(),
                                         information(
                                             name: "Hoạt động khó khăn: ",
                                             info:
-                                            "${snapshot.data!.difficulty}"),
+                                                "${snapshot.data!.difficulty}"),
                                         padding(),
                                         information(
                                             name: "Chấn thương: ",
@@ -108,8 +112,7 @@ class _SessionDetailPageState extends State<SessionDetailPage> {
                                         padding(),
                                         information(
                                             name: "Thuốc đang sử dụng: ",
-                                            info:
-                                            "${snapshot.data!.medicine}"),
+                                            info: "${snapshot.data!.medicine}"),
                                         const SizedBox(height: 10),
                                       ],
                                     );

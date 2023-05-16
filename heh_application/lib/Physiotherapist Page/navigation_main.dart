@@ -50,20 +50,21 @@ class _PhyNavigation_barState extends State<PhyNavigation_bar> {
             });
           },
           type: BottomNavigationBarType.fixed,
-          items: <BottomNavigationBarItem>[
-            const BottomNavigationBarItem(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
                 icon: Icon(Icons.home), label: "Trang chủ"),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
                 icon: Icon(Icons.featured_play_list), label: "Tính năng"),
             BottomNavigationBarItem(
-                icon: Stack(children: const [
-                  Badge(
-                    child: Icon(Icons.notifications),
-                    smallSize: 7,
-                  )
-                ]),
+                icon: Icon(Icons.notifications),
+                // Stack(children: const [
+                //   Badge(
+                //     child:
+                //     smallSize: 7,
+                //   )
+                // ]),
                 label: "Thông báo"),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
                 icon: Icon(Icons.settings), label: "Cài đặt"),
           ]),
     );

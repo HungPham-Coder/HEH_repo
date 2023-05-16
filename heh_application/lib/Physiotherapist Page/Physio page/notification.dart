@@ -35,7 +35,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 count: count,
                 icon:
                     "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvise.png?alt=media&token=73296749-85c7-415c-9287-eb044d23d6a1",
-                text: "Tư vấn một buổi",
+                text: "Tư vấn trị liệu",
                 press: () {
                   setState(() {
                     isLabelVisible = false;
@@ -52,7 +52,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 count: "2",
                 icon:
                     "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphysio.png?alt=media&token=dcc89b01-2c15-4808-87eb-4a2ecc9667a3",
-                text: "Điều trị lâu dài",
+                text: "Trị liệu dài hạn",
                 press: () {
                   Navigator.push(
                       context,

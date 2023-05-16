@@ -30,9 +30,12 @@ class _AdviseAppointmentPageState extends State<AdviseAppointmentPage> {
             children: [
               const SizedBox(height: 10),
               FutureBuilder<List<BookingDetail>>(
-                  future: CallAPI().getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                      sharedPhysiotherapist!.physiotherapistID,
-                      'Tư vấn trị liệu',1,-1),
+                  future: CallAPI()
+                      .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                          sharedPhysiotherapist!.physiotherapistID,
+                          'Tư vấn trị liệu',
+                          1,
+                          -1),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.isNotEmpty) {
@@ -74,13 +77,26 @@ class _AdviseAppointmentPageState extends State<AdviseAppointmentPage> {
                               );
                             });
                       } else {
-                        return const Center(
-                          child: Text("Hiện tại chưa có ai đặt list empty"),
+                        return Container(
+                          padding: const EdgeInsets.symmetric(vertical: 280),
+                          child: const Center(
+                            child: Text(
+                              "Hiện tại không có lịch đặt hẹn.",
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.grey),
+                            ),
+                          ),
                         );
                       }
                     } else {
-                      return const Center(
-                        child: Text("Hiện tại chưa có ai đặt "),
+                      return Container(
+                        padding: const EdgeInsets.symmetric(vertical: 280),
+                        child: const Center(
+                          child: Text(
+                            "Hiện tại không có lịch đặt hẹn.",
+                            style: TextStyle(fontSize: 18, color: Colors.grey),
+                          ),
+                        ),
                       );
                     }
                   }),
