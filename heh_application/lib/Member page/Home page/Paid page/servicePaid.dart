@@ -277,7 +277,7 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
                         oponentNickName: opponentUser!.nickname,
                         userAvatar: sharedCurrentUser!.image,
                         currentUserID: sharedCurrentUser!.userID!,
-                        bookingDetail: bookingDetail),
+                        bookingDetail: bookingDetail, groupChatID: sharedCurrentUser!.userID!,),
                   );
                 } else {
                   print('null');
