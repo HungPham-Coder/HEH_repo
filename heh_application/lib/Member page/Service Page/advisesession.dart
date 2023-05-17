@@ -3,8 +3,8 @@ import 'package:heh_application/Member%20page/Service%20Page/Advise%20page/choos
 import 'package:heh_application/Member%20page/Service%20Page/Advise%20page/physioChoose.dart';
 
 class AdviseSession extends StatefulWidget {
-  const AdviseSession({Key? key}) : super(key: key);
-
+   AdviseSession({Key? key, required this.typeName}) : super(key: key);
+  String typeName;
   @override
   State<AdviseSession> createState() => _AdviseSessionState();
 }
@@ -34,7 +34,7 @@ class _AdviseSessionState extends State<AdviseSession> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const PhysioChoosePage()));
+                        builder: (context) =>  PhysioChoosePage(typeName: widget.typeName,)));
               },
             ),
             AdviseMenu(

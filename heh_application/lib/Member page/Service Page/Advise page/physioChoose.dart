@@ -5,8 +5,8 @@ import 'package:heh_application/models/physiotherapist.dart';
 import 'package:heh_application/services/call_api.dart';
 
 class PhysioChoosePage extends StatefulWidget {
-  const PhysioChoosePage({Key? key}) : super(key: key);
-
+   PhysioChoosePage({Key? key, required this.typeName}) : super(key: key);
+  String typeName;
   @override
   State<PhysioChoosePage> createState() => _PhysioChoosePageState();
 }
@@ -68,6 +68,7 @@ class _PhysioChoosePageState extends State<PhysioChoosePage> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 ChooseDetailPage(
+                                                  typeName: widget.typeName,
                                                   physiotherapist:
                                                       listPhysio[index],
                                                 )));
