@@ -85,7 +85,7 @@ class _PhysiotherapistState extends State<Physiotherapist> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const AdviseSession()));
+                                      builder: (context) =>  AdviseSession(typeName: snapshot.data![index].typeName,)));
                             },
                           );
                         }
