@@ -5,7 +5,9 @@ import 'package:heh_application/Member%20page/Service%20Page/advisesession.dart'
 import 'package:heh_application/Member%20page/Messenger%20page/messenger_page.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 import 'package:heh_application/models/chat_model/user_chat.dart';
+import 'package:heh_application/models/type_of_slot.dart';
 import 'package:heh_application/services/auth.dart';
+import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/chat_provider.dart';
 import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:provider/provider.dart';
@@ -64,16 +66,52 @@ class _PhysiotherapistState extends State<Physiotherapist> {
           children: [
             const SizedBox(height: 20),
             const Text("Bạn đang cần tim đến dịch vụ của chúng tôi?"),
-            PhysiptherapistMenu(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvise.png?alt=media&token=73296749-85c7-415c-9287-eb044d23d6a1",
-              text: "Tư vấn một buổi",
-              press: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AdviseSession()));
-              },
+            FutureBuilder <List<TypeOfSlot>>(
+              future: CallAPI().getAllTypeOfSlot(),
+              builder: (context, snapshot)  {
+                if (snapshot.hasData){
+                  if (snapshot.data!.length > 0){
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index)  {
+                        if (snapshot.data![index].typeName == "Tư vấn trị liệu"){
+                          return  PhysiptherapistMenu(
+                            icon:
+                            "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvise.png?alt=media&token=73296749-85c7-415c-9287-eb044d23d6a1",
+                            text: "${snapshot.data![index].typeName}",
+                            press: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const AdviseSession()));
+                            },
+                          );
+                        }
+                        else {
+                          return Container();
+                        }
+
+                      }
+                    );
+                  }
+                  else {
+                    print("a");
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                }
+                else {
+
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+              }
             ),
             PhysiptherapistMenu(
               icon:

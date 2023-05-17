@@ -742,7 +742,7 @@ class CallAPI {
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
-      print(response.body);
+
       Iterable jsonResult = json.decode(response.body);
       List<Schedule> list = List<Schedule>.from(
           jsonResult.map((model) => Schedule.fromMap(model)));
@@ -756,6 +756,8 @@ class CallAPI {
       throw Exception('Failed to load Schedule List');
     }
   }
+
+
 
   Future<List<Schedule>?> getallSlotByPhysiotherapistIDAndTypeOfSlot(
       String physiotherapistID, String typeOfSlot) async {
@@ -1137,6 +1139,9 @@ class CallAPI {
       if (list == null) {
         throw Exception('TypeOfSlot List null');
       } else {
+        list.forEach((element) {
+         print(element.typeName) ;
+        });
         return list;
       }
     } else {
