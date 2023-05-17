@@ -1,12 +1,10 @@
 import 'dart:io';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
-import 'package:heh_application/Member%20page/Profile%20page/setting.dart';
 import 'package:heh_application/constant/firestore_constant.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 import 'package:heh_application/services/auth.dart';
@@ -215,9 +213,10 @@ class _InformationPageState extends State<InformationPage> {
                           password: sharedCurrentUser!.password,
                         );
                         CallAPI().updateUserbyUID(signUpUser);
-                        await auth.upLoadFirestoreData(FirestoreConstants.pathUserCollection,
+                        await auth.upLoadFirestoreData(
+                            FirestoreConstants.pathUserCollection,
                             sharedCurrentUser!.userID!,
-                            {"nickname":signUpUser.firstName});
+                            {"nickname": signUpUser.firstName});
                         final snackBar = SnackBar(
                           content: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -537,8 +536,10 @@ class _InformationPageState extends State<InformationPage> {
                       await getImage();
 
                       await CallAPI().updateUserbyUID(sharedCurrentUser!);
-                      await auth.upLoadFirestoreData(FirestoreConstants.pathUserCollection,
-                          sharedCurrentUser!.userID!, {"photoUrl":sharedCurrentUser!.image!});
+                      await auth.upLoadFirestoreData(
+                          FirestoreConstants.pathUserCollection,
+                          sharedCurrentUser!.userID!,
+                          {"photoUrl": sharedCurrentUser!.image!});
                     },
                     child: SvgPicture.network(
                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcamera.svg?alt=media&token=afa6a202-304e-45af-8df5-870126316135",
