@@ -10,8 +10,9 @@ import 'package:intl/intl.dart';
 import '../../../models/sub_profile.dart';
 
 class ChooseDetailPage extends StatefulWidget {
-  ChooseDetailPage({Key? key, required this.physiotherapist}) : super(key: key);
+  ChooseDetailPage({Key? key, required this.physiotherapist, required this.typeName}) : super(key: key);
   PhysiotherapistModel physiotherapist;
+  String typeName;
   @override
   State<ChooseDetailPage> createState() => _ChooseDetailPageState();
 }
@@ -132,7 +133,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
             FutureBuilder<List<Schedule>?>(
                 future: CallAPI().getallSlotByPhysiotherapistIDAndTypeOfSlot(
                     widget.physiotherapist.physiotherapistID,
-                    'Tư vấn trị liệu'),
+                    widget.typeName),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     int count = 0;

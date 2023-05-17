@@ -193,8 +193,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 future: CallAPI().getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
                     sharedPhysiotherapist!.physiotherapistID, 'Tư vấn trị liệu',1,-1),
                 builder: (context, snapshot) {
+
                   if (snapshot.hasData) {
-                    if (snapshot.data!.isNotEmpty) {
+                    if (snapshot.data!.length > 0) {
                       return ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: snapshot.data!.length,
@@ -244,7 +245,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         padding: const EdgeInsets.symmetric(vertical: 280),
                         child: const Center(
                           child: Text(
-                            "Hiện tại không có lịch đặt hẹn.",
+                            "Hiện tại không có lịch đặt hẹn. 1",
                             style: TextStyle(fontSize: 18, color: Colors.grey),
                           ),
                         ),
