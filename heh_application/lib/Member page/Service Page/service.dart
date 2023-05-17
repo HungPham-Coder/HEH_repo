@@ -78,7 +78,7 @@ class _PhysiotherapistState extends State<Physiotherapist> {
             PhysiptherapistMenu(
               icon:
                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcare.png?alt=media&token=0ce5dd58-bcaf-45a8-b277-05eaad8b89b8",
-              text: "Chăm sóc khách hàng",
+              text: "Hỗ trợ tư vấn",
               press: () async {
                 await loadPhysioTherapistAccount();
                 await auth.checkUserExistInFirebase(sharedCurrentUser!);
@@ -99,7 +99,6 @@ class _PhysiotherapistState extends State<Physiotherapist> {
                           currentUserID: sharedCurrentUser!.userID!),
                     );
                   } else {
-
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
