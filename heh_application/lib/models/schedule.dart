@@ -43,7 +43,8 @@ class Schedule {
         physioBookingStatus: json['physioBookingStatus'],
       );
     }
-    else if (json['typeOfSlot'] == null || json['slot'] == null){
+
+    else if (json['typeOfSlot'] == null && json['slot'] == null){
       return Schedule(
         scheduleID: json['scheduleID'],
         slotID: json['slotID'],
@@ -51,6 +52,17 @@ class Schedule {
         physiotherapistID: json['physiotherapistID'],
         physiotherapist: PhysiotherapistModel.fromMap(json['physiotherapistDetail']),
 
+        description: json['description'],
+        physioBookingStatus: json['physioBookingStatus'],
+      );
+    }
+    else if (json['typeOfSlot'] == null) {
+      return Schedule(
+        scheduleID: json['scheduleID'],
+        slotID: json['slotID'],
+        slot: Slot.fromMap(json['slot']),
+        physiotherapistID: json['physiotherapistID'],
+        physiotherapist: PhysiotherapistModel.fromMap(json['physiotherapistDetail']),
         description: json['description'],
         physioBookingStatus: json['physioBookingStatus'],
       );

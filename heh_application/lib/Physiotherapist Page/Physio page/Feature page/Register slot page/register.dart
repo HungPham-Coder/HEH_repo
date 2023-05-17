@@ -15,7 +15,7 @@ class PhysioRegisterSlotPage extends StatefulWidget {
 }
 
 class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
-  bool check = true;
+  bool check = false;
   final TextEditingController _date = TextEditingController();
   final TextEditingController _des = TextEditingController();
   String? dayStr;
@@ -64,8 +64,9 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
             Time(),
             button(),
             const SizedBox(height: 10),
-            check == false && _date.text == "" && slotList!.length == 0
-                ? Center(
+            check == false && _date.text == "" && slotList == null
+                ?
+            Center(
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 150),
                       child: Text(
@@ -165,15 +166,14 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                           ],
                         ))
                     : Center(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 150),
-                          child: Text(
-                            "Hiện tại đã hết slot có thể đăng ký",
-                            style: TextStyle(
-                                color: Colors.grey[500], fontSize: 16),
-                          ),
-                        ),
-                      )
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 150),
+                child: Text(
+                  "Ngày ${_date.text} đã hết slot để đăng ký ",
+                  style: TextStyle(color: Colors.grey[500], fontSize: 16),
+                ),
+              ),
+            )
           ],
         ),
       ),
