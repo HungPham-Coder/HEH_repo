@@ -1,7 +1,7 @@
 import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
-import 'package:heh_application/Member%20page/email2.dart';
+// import 'package:heh_application/Member%20page/email2.dart';
 
 import '../SignUp Page/otp.dart';
 
@@ -57,12 +57,12 @@ class _EmailState extends State<Email> {
                             ));
                           }
 
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Email1(
-                                        myauth: myauth,
-                                      )));
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => Email1(
+                          //               myauth: myauth,
+                          //             )));
                         },
                         child: const Text("Send OTP")),
                   ],

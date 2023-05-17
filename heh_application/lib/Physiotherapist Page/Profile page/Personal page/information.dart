@@ -305,6 +305,7 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
         ),
         const SizedBox(height: 5),
         TextFormField(
+          readOnly: true,
           initialValue: sharedCurrentUser!.email,
           // controller: _email,
           obscureText: obscureText,

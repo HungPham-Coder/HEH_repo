@@ -1,6 +1,7 @@
 import 'package:email_otp/email_otp.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:heh_application/ForgotPassword%20Page/otp.dart';
 import 'package:heh_application/ForgotPassword%20Page/renewPass,.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
@@ -92,8 +93,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("Mã OTP đã gửi đến email của bạn."),
                   ));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OTPPage(
+                        email: _emailController.text,
+                        myauth: myauth,
+                      ),
+                    ),
+                  );
                 });
-
               } else {
                 setState(() {
                   choose = false;
@@ -101,46 +110,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     content: Text("Xin lỗi, gửi OTP thất bại."),
                   ));
                 });
-
               }
             },
             child: const Text("Gửi OTP")),
-        Visibility(
-          visible: choose,
-          child: Card(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: TextFormField(
-                      controller: _OTPController,
-                      decoration:
-                          const InputDecoration(hintText: "Điền mã OTP")),
-                ),
-                ElevatedButton(
-                    onPressed: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const renewPass()));
-                      if (await myauth.verifyOTP(otp: _OTPController.text) ==
-                          true) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Thành công"),
-                        ));
-                      } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Thất bại"),
-                        ));
-                      }
-                    },
-                    child: const Text("Xác thực")),
-              ],
-            ),
-          ),
-        )
       ],
     );
   }

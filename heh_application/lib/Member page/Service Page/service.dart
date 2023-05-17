@@ -66,53 +66,46 @@ class _PhysiotherapistState extends State<Physiotherapist> {
           children: [
             const SizedBox(height: 20),
             const Text("Bạn đang cần tim đến dịch vụ của chúng tôi?"),
-            FutureBuilder <List<TypeOfSlot>>(
-              future: CallAPI().getAllTypeOfSlot(),
-              builder: (context, snapshot)  {
-                if (snapshot.hasData){
-                  if (snapshot.data!.length > 0){
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index)  {
-                        if (snapshot.data![index].typeName == "Tư vấn trị liệu"){
-                          return  PhysiptherapistMenu(
-                            icon:
-                            "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvise.png?alt=media&token=73296749-85c7-415c-9287-eb044d23d6a1",
-                            text: "${snapshot.data![index].typeName}",
-                            press: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const AdviseSession()));
-                            },
-                          );
-                        }
-                        else {
-                          return Container();
-                        }
-
-                      }
-                    );
-                  }
-                  else {
-                    print("a");
+            FutureBuilder<List<TypeOfSlot>>(
+                future: CallAPI().getAllTypeOfSlot(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.length > 0) {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            if (snapshot.data![index].typeName ==
+                                "Tư vấn trị liệu") {
+                              return PhysiptherapistMenu(
+                                icon:
+                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvise.png?alt=media&token=73296749-85c7-415c-9287-eb044d23d6a1",
+                                text: "${snapshot.data![index].typeName}",
+                                press: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const AdviseSession()));
+                                },
+                              );
+                            } else {
+                              return Container();
+                            }
+                          });
+                    } else {
+                      print("a");
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  } else {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
                   }
-
-                }
-                else {
-
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-              }
-            ),
+                }),
             PhysiptherapistMenu(
               icon:
                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcare.png?alt=media&token=0ce5dd58-bcaf-45a8-b277-05eaad8b89b8",
