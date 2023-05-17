@@ -70,7 +70,7 @@ class _SessionPageState extends State<SessionPage> {
                   oponentAvartar:
                       bookingDetail.bookingSchedule!.signUpUser!.image!,
                   firebaseFirestoreBase: firebaseFirestoreBase,
-                  bookingDetail: bookingDetail,
+                  bookingDetail: bookingDetail, groupChatID: bookingDetail.bookingSchedule!.signUpUser!.userID!,
                 );
               }));
             },

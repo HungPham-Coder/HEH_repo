@@ -8,8 +8,9 @@ import 'package:heh_application/services/firebase_firestore.dart';
 import 'chat_page.dart';
 
 class PhysioMessengerPage extends StatefulWidget {
-  const PhysioMessengerPage({Key? key}) : super(key: key);
-
+  PhysioMessengerPage({Key? key, required this.firestoreBase})
+      : super(key: key);
+  FirebaseFirestoreBase firestoreBase;
   @override
   State<PhysioMessengerPage> createState() => _PhysioMessengerPageState();
 }
@@ -70,11 +71,13 @@ class _PhysioMessengerPageState extends State<PhysioMessengerPage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => ChatPage(
-                          peerId: signUpUser.id,
-                          peerAvatar: signUpUser.photoUrl,
-                          peerNickname: signUpUser.nickname,
+                          oponentID: signUpUser.id,
+                          oponentAvartar: signUpUser.photoUrl,
+                          oponentNickName: signUpUser.nickname,
                           userAvatar: sharedCurrentUser!.image!,
-                          currentUserID: sharedCurrentUser!.userID!,
+                          currentUserID: "physiotherapist",
+                          groupChatID: signUpUser.id,
+                          firebaseFirestoreBase: widget.firestoreBase,
                         )));
           },
           child: ListTile(

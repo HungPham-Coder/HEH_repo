@@ -59,10 +59,11 @@ class _PhysioHomePageState extends State<PhysioHomePage> {
                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcare.png?alt=media&token=0ce5dd58-bcaf-45a8-b277-05eaad8b89b8",
               text: "Hỗ trợ tư vấn",
               press: () {
+               final firestoreFirebase = Provider.of<FirebaseFirestoreBase>(context, listen: false);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const PhysioMessengerPage()));
+                        builder: (context) =>  PhysioMessengerPage(firestoreBase: firestoreFirebase,)));
               },
             ),
           ],

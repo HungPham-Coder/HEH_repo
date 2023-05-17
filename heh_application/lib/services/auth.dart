@@ -32,6 +32,8 @@ abstract class AuthBase {
   Future<bool> checkUserExistInFirebaseLogIn (String email);
   Future<SignUpUser> getCurrentUser(ResultLogin resultLogin);
   Future<void> signInAnonymously();
+  Future<void> upLoadFirestoreData(
+      String collectionPath, String docPath, Map<String, dynamic> dataUpdate);
   User? get currenUser;
   // Stream<ResultLogin> get userLoginStream;
   // Stream<SignUpUser> get userSignUpStream;
@@ -311,6 +313,16 @@ class Auth implements AuthBase {
   //   // userSignUpStream.listen((event) {print('${event.firstName} auth');});
   //
   // }
+
+  @override
+  Future<void> upLoadFirestoreData(
+      String collectionPath, String docPath, Map<String, dynamic> dataUpdate) {
+    // TODO: implement upLoadFirestoreData
+    return _firestore
+        .collection(collectionPath)
+        .doc(docPath)
+        .update(dataUpdate);
+  }
 
 // TODO: implement userSignUpStream
 }

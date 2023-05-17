@@ -7,11 +7,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Profile%20page/setting.dart';
+import 'package:heh_application/constant/firestore_constant.dart';
 import 'package:heh_application/models/sign_up_user.dart';
+import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/chat_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 final TextEditingController _date = TextEditingController();
 final TextEditingController _firstName = TextEditingController();
@@ -93,6 +96,7 @@ class _InformationPageState extends State<InformationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context, listen: false);
     DateTime tempDob =
         new DateFormat("yyyy-MM-dd").parse(sharedCurrentUser!.dob!);
     String dob = DateFormat("dd-MM-yyyy").format(tempDob);
@@ -211,7 +215,9 @@ class _InformationPageState extends State<InformationPage> {
                           password: sharedCurrentUser!.password,
                         );
                         CallAPI().updateUserbyUID(signUpUser);
-
+                        await auth.upLoadFirestoreData(FirestoreConstants.pathUserCollection,
+                            sharedCurrentUser!.userID!,
+                            {"nickname":signUpUser.firstName});
                         final snackBar = SnackBar(
                           content: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -497,6 +503,7 @@ class _InformationPageState extends State<InformationPage> {
   }
 
   Widget avatar() {
+    final auth = Provider.of<AuthBase>(context, listen: false);
     return Center(
       child: SizedBox(
         height: 115,
@@ -530,6 +537,8 @@ class _InformationPageState extends State<InformationPage> {
                       await getImage();
 
                       await CallAPI().updateUserbyUID(sharedCurrentUser!);
+                      await auth.upLoadFirestoreData(FirestoreConstants.pathUserCollection,
+                          sharedCurrentUser!.userID!, {"photoUrl":sharedCurrentUser!.image!});
                     },
                     child: SvgPicture.network(
                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcamera.svg?alt=media&token=afa6a202-304e-45af-8df5-870126316135",
