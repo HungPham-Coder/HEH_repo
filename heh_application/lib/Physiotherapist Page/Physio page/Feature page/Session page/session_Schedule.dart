@@ -197,8 +197,15 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
 
                   String datefmt = DateFormat("yyyy-MM-dd").format(_selectedDay);
                   DateTime dateCreate = new DateFormat("yyyy-MM-dd").parse(datefmt);
-                  _timeStart.text = start;
-                  _timeEnd.text = end;
+                  setState(() {
+                    _timeStart.text = start;
+                    _timeEnd.text = end;
+                    startTime = "${datefmt}T${start}:00";
+                    endTime = "${datefmt}T${end}:00";
+                    startCompare = "$datefmt $start";
+                    endCompare = "$datefmt $end";
+                  });
+
                   showDialog(
                       context: context,
                       builder: (context) =>
@@ -214,8 +221,16 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                               ),
                               actions: [
                                 TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, 'Hủy'),
+                                  onPressed: () {
+
+                                    Navigator.pop(context, 'Hủy');
+                                    _timeStart.clear();
+                                    _timeEnd.clear();
+                                    setState(() {
+                                      visibleCheckAfter = false;
+                                      visibleAdd = false;
+                                    });
+                                  },
                                   child: const Text("Hủy"),
                                 ),
                                 TextButton(
@@ -272,8 +287,9 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                               });
 
                                             }
-                                          }
                                           Navigator.pop(context);
+                                          }
+
                                         }
 
 
