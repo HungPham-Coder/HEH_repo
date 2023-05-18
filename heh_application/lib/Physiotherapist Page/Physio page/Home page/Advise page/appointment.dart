@@ -245,7 +245,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         padding: const EdgeInsets.symmetric(vertical: 280),
                         child: const Center(
                           child: Text(
-                            "Hiện tại không có lịch đặt hẹn. 1",
+                            "Hiện tại không có lịch đặt hẹn",
                             style: TextStyle(fontSize: 18, color: Colors.grey),
                           ),
                         ),

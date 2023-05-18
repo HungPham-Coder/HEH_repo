@@ -602,8 +602,8 @@ class CallAPI {
     }
   }
 
-  Future<dynamic> AddSlot(Slot slot) async {
-    var url = Uri.parse('${link}/api/Slot/Create');
+  Future<dynamic> AddLongTermSlotByPhysioID(Slot slot, String physioID) async {
+    var url = Uri.parse('${link}/api/Slot/AddLongTermSlotByPhysioID?physioID=$physioID');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
 
     final body = jsonEncode({
@@ -784,10 +784,10 @@ class CallAPI {
     }
   }
 
-  Future<List<Slot>> getallSlotByDateAndPhysioID(
+  Future<List<Slot>> GetShortTermSlotByDateAndPhysioID(
       String date, String physioID) async {
     var url = Uri.parse(
-        '${link}/api/Slot/GetByDateAndPhysioID/$date?physioID=$physioID');
+        '${link}/api/Slot/GetShortTermSlotByDateAndPhysioID/$date?physioID=$physioID');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",

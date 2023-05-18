@@ -94,10 +94,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
                                     "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
                                 subName: subName,
                                 time: "$start - $end",
-                                status:
-                                    snapshot.data![index].shorttermStatus == 3
-                                        ? 'xong'
-                                        : 'chưa xong',
+                                status: 'xong',
                                 press: () {
                                   String bookingScheduleID =
                                       snapshot.data![index].bookingScheduleID;

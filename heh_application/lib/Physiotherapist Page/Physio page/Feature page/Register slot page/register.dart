@@ -32,18 +32,18 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
     // getInitSlotList(dayStr!);
     super.initState();
   }
-
-  void getInitSlotList(String date) async {
-
-
-   slotList = await CallAPI().getallSlotByDateAndPhysioID(
-        date, sharedPhysiotherapist!.physiotherapistID);
-
-    if (slotList == null) {
-    }
-    else {
-    }
-  }
+  //
+  // void getInitSlotList(String date) async {
+  //
+  //
+  //  slotList = await CallAPI().getallSlotByDateAndPhysioID(
+  //       date, sharedPhysiotherapist!.physiotherapistID);
+  //
+  //   if (slotList == null) {
+  //   }
+  //   else {
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +247,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
             if (_date.text != '') {
               DateTime day = new DateFormat('dd-MM-yyyy').parse(_date.text);
               dayStr = DateFormat('yyyy-MM-ddTHH:mm:ss').format(day);
-              slotList = await CallAPI().getallSlotByDateAndPhysioID(
+              slotList = await CallAPI().GetShortTermSlotByDateAndPhysioID(
                   dayStr!, sharedPhysiotherapist!.physiotherapistID);
               if (slotList!.isNotEmpty) {
                 setState(() {
@@ -320,7 +320,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                     physioBookingStatus: false);
                 Schedule scheduleAdd = await CallAPI().AddSchedule(schedule);
                 if (scheduleAdd != null) {
-                  slotList = await CallAPI().getallSlotByDateAndPhysioID(
+                  slotList = await CallAPI().GetShortTermSlotByDateAndPhysioID(
                       dayStr!, sharedPhysiotherapist!.physiotherapistID);
                   setState(() {
                     registerResult = 'Đăng Ký Thành Công';
