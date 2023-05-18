@@ -45,7 +45,7 @@ class _AdviseSessionState extends State<AdviseSession> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const ChooseTimePage()));
+                        builder: (context) =>  ChooseTimePage(typeName: widget.typeName,)));
               },
             ),
           ],
