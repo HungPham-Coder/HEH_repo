@@ -195,6 +195,8 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                           onPressed: () async {
                                             if (selectedSubName ==
                                                 "- Chọn -") {
+
+
                                               Navigator.pop(context, 'Ok');
                                             } else {
                                               BookingSchedule bookingSchedule =

@@ -10,8 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class ChooseTimePage extends StatefulWidget {
-  const ChooseTimePage({Key? key}) : super(key: key);
-
+   ChooseTimePage({Key? key, required this.typeName}) : super(key: key);
+  String typeName;
   @override
   State<ChooseTimePage> createState() => _ChooseTimePageState();
 }
@@ -247,7 +247,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
               height: 50,
               child: FutureBuilder<List<Slot>>(
                   future: CallAPI()
-                      .GetAllSlotByDateAndTypeOfSlot(date, 'Tư vấn trị liệu'),
+                      .GetAllSlotByDateAndTypeOfSlot(date, widget.typeName),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       addSlot(snapshot.data!);

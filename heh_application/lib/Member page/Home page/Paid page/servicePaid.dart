@@ -28,13 +28,14 @@ class _ServicePaidPageState extends State<ServicePaidPage> {
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: const Text(
-            "Tài khoản của bạn",
+            "Dịch vụ đã đăng ký",
             style: TextStyle(fontSize: 23),
           ),
           bottom: const TabBar(
             tabs: [
               Tab(text: "Tư vấn trị liệu"),
               Tab(text: "Trị liệu dài hạn"),
+
             ],
           ),
           elevation: 10,
