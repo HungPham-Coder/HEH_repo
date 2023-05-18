@@ -62,7 +62,7 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
                       fit: StackFit.expand,
                       children: [
                         CircleAvatar(
-                            backgroundColor: Color.fromARGB(255, 220, 220, 220),
+                            backgroundColor: Colors.white,
                             backgroundImage: NetworkImage(
                                 sharedCurrentUser!.image.toString())),
                         Positioned(

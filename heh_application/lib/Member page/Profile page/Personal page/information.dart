@@ -512,6 +512,7 @@ class _InformationPageState extends State<InformationPage> {
           fit: StackFit.expand,
           children: [
             CircleAvatar(
+              backgroundColor: Colors.white,
               backgroundImage: NetworkImage(sharedCurrentUser!.image!),
             ),
             Positioned(
