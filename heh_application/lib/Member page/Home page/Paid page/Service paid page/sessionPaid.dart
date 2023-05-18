@@ -18,19 +18,28 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 
-class AdvicePaidPage extends StatefulWidget {
-  AdvicePaidPage({Key? key, required this.firebaseFirestoreBase})
+class SessionPaidPage extends StatefulWidget {
+  SessionPaidPage({Key? key, required this.firebaseFirestoreBase})
       : super(key: key);
   FirebaseFirestoreBase firebaseFirestoreBase;
   @override
-  State<AdvicePaidPage> createState() => _AdvicePaidPageState();
+  State<SessionPaidPage> createState() => _SessionPaidPageState();
 }
 
-class _AdvicePaidPageState extends State<AdvicePaidPage> {
+class _SessionPaidPageState extends State<SessionPaidPage> {
   UserChat? opponentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text(
+          "Danh sách buổi trị liệu",
+          style: TextStyle(fontSize: 20),
+        ),
+        elevation: 10,
+        backgroundColor: const Color.fromARGB(255, 46, 161, 226),
+      ),
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -87,7 +96,7 @@ class _AdvicePaidPageState extends State<AdvicePaidPage> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 300),
                           child: Text(
-                            "Bạn chưa đăng ký dịch vụ nào",
+                            "Bạn chưa đăng ký dịch vụ Trị Liệu nào.",
                             style: TextStyle(
                                 color: Colors.grey[500], fontSize: 16),
                           ),

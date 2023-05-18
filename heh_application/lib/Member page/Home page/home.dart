@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:heh_application/Exercise%20Page/category.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
-import 'package:heh_application/Member%20page/Home%20page/Paid%20page/servicePaid.dart';
+import 'package:heh_application/Member%20page/Home%20page/Paid%20page/Service%20paid%20page/advicePaid.dart';
+import 'package:heh_application/Member%20page/Home%20page/Paid%20page/Service%20paid%20page/sessionPaid.dart';
 import 'package:heh_application/Member%20page/email.dart';
 import 'package:heh_application/SignUp%20Page/otp.dart';
 
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final firestoreDatabase =
-    Provider.of<FirebaseFirestoreBase>(context, listen: false);
+        Provider.of<FirebaseFirestoreBase>(context, listen: false);
     final auth = Provider.of<AuthBase>(context, listen: false);
     return WillPopScope(
         onWillPop: () => _onWillPop(context),
@@ -100,6 +100,32 @@ class _HomePageState extends State<HomePage> {
                 ),
                 HomeMenu(
                   icon:
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvisor.png?alt=media&token=dae71db1-2f53-404e-92de-46838ceff9c6",
+                  text: "Tham gia buổi tư vấn",
+                  press: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AdvicePaidPage(
+                                  firebaseFirestoreBase: firestoreDatabase,
+                                )));
+                  },
+                ),
+                HomeMenu(
+                  icon:
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fplan.png?alt=media&token=2356eeaa-f224-4b1f-ad5f-f0cb34f2e922",
+                  text: "Tham gia buổi trị liệu",
+                  press: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SessionPaidPage(
+                                  firebaseFirestoreBase: firestoreDatabase,
+                                )));
+                  },
+                ),
+                HomeMenu(
+                  icon:
                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fexercise.png?alt=media&token=f299c936-6f81-41e5-8448-bc587873bc67",
                   text: "Bài tập trị liệu",
                   press: () {
@@ -107,17 +133,6 @@ class _HomePageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const CategoryPage()));
-                  },
-                ),
-                HomeMenu(
-                  icon:
-                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
-                  text: "Dịch vụ đã đăng ký",
-                  press: () async {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>  ServicePaidPage(firebaseFirestoreBase: firestoreDatabase,)));
                   },
                 ),
                 // HomeMenu(
