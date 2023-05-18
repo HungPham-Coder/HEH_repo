@@ -254,8 +254,8 @@ class CallAPI {
     }
   }
 
-  Future<List<BookingDetail>> getAllBookingDetailByUserID(String userID) async {
-    var url = Uri.parse('${link}/api/BookingDetail/GetByUserId?userID=$userID');
+  Future<List<BookingDetail>> getAllBookingDetailByUserIDAndTypeOfSlot(String userID,String typeOfSlot) async {
+    var url = Uri.parse('${link}/api/BookingDetail/GetByUserIDAndTypeOfSlot?userID=$userID&typeOfSlot=$typeOfSlot');
     // var url = Uri.https('localhost:7166', 'api/BookingDetail');
     final headers = {
       "Accept": "application/json",
@@ -626,6 +626,7 @@ class CallAPI {
 
       addSlotStatus = 400;
       Iterable jsonResult = json.decode(response.body);
+
       List<Slot> list = List<Slot>.from(
           jsonResult.map((model) => Slot.fromMap(model)));
       if (list == null) {
@@ -704,6 +705,40 @@ class CallAPI {
     if (response.statusCode == 200) {
     } else {
       throw Exception('Failed to load Schedule');
+    }
+  }
+
+  Future<dynamic> updateSlot(Slot slot, String physioID) async {
+    var url = Uri.parse('${link}/api/Slot?physioID=$physioID');
+    // var url = Uri.https('localhost:7166', 'api/Schedule');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    final body = jsonEncode({
+      "slotID": slot.slotID,
+      "slotName": slot.slotName,
+      "timeStart": slot.timeStart,
+      "timeEnd": slot.timeEnd,
+      "available": slot.available,
+      "isDeleted": false,
+    });
+    var response = await http.put(url, headers: headers, body: body);
+    if (response.statusCode == 200) {
+      updateSlotStatus = 200;
+      return Slot.fromMap(json.decode(response.body));
+    } else {
+      print(response.body);
+      updateSlotStatus = 400;
+      Iterable jsonResult = json.decode(response.body);
+
+      List<Slot> list = List<Slot>.from(
+          jsonResult.map((model) => Slot.fromMap(model)));
+      if (list == null) {
+        throw Exception('Slot List null');
+      } else {
+        return list;
+      }
     }
   }
 
