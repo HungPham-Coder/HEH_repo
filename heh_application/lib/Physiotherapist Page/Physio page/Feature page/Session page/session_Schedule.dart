@@ -281,7 +281,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                       "Trị Liệu dài hạn cho ${widget.bookingDetail!.bookingSchedule!.subProfile!.subName}",
                                   available: true,
                                 );
-                                dynamic result = await CallAPI().AddSlot(slot);
+                                dynamic result = await CallAPI().AddLongTermSlotByPhysioID(slot, sharedPhysiotherapist!.physiotherapistID);
                                 //check add slot thành công hay không
                                 if (addSlotStatus == 400) {
                                   setState(() {
