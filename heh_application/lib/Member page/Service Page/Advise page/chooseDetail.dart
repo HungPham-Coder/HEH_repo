@@ -172,7 +172,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                               notify: notify,
                               icon:
                                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
-                              name: snapshot.data![index].slot!.slotName,
+                              name: snapshot.data![index].slot!.slotName!,
                               time: "Khung giờ: ",
                               timeStart: '$start',
                               timeEnd: '$end',

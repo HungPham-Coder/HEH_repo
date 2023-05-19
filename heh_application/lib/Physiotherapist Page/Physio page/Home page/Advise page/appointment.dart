@@ -201,51 +201,66 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           itemCount: snapshot.data!.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            String day = DateTimeFormat.formatDate(snapshot
-                                .data![index]
-                                .bookingSchedule!
-                                .schedule!
-                                .slot!
-                                .timeStart);
-                            String start = DateTimeFormat.formateTime(snapshot
-                                .data![index]
-                                .bookingSchedule!
-                                .schedule!
-                                .slot!
-                                .timeStart);
-                            String end = DateTimeFormat.formateTime(snapshot
-                                .data![index]
-                                .bookingSchedule!
-                                .schedule!
-                                .slot!
-                                .timeEnd);
+                            if (snapshot.data![index].shorttermStatus! < 3) {
 
-                            return ServicePaid(
-                              icon:
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
-                              name:
-                                  "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
-                              date: "$day",
-                              time: "$start - $end",
-                              bookedFor:
-                                  "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
-                              press: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => AdviseDetailPage(
-                                            bookingSchedule: snapshot
-                                                .data![index]
-                                                .bookingSchedule)));
-                              },
-                            );
+                              String day = DateTimeFormat.formatDate(snapshot
+                                  .data![index]
+                                  .bookingSchedule!
+                                  .schedule!
+                                  .slot!
+                                  .timeStart);
+                              String start = DateTimeFormat.formateTime(snapshot
+                                  .data![index]
+                                  .bookingSchedule!
+                                  .schedule!
+                                  .slot!
+                                  .timeStart);
+                              String end = DateTimeFormat.formateTime(snapshot
+                                  .data![index]
+                                  .bookingSchedule!
+                                  .schedule!
+                                  .slot!
+                                  .timeEnd);
+
+                              return ServicePaid(
+                                icon:
+                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                                name:
+                                "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                                date: "$day",
+                                time: "$start - $end",
+                                bookedFor:
+                                "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
+                                press: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => AdviseDetailPage(
+                                              bookingSchedule: snapshot
+                                                  .data![index]
+                                                  .bookingSchedule)));
+                                },
+                              );
+                            }
+                            else {
+                              return Container(
+                                padding: const EdgeInsets.symmetric(vertical: 280),
+                                child: const Center(
+                                  child: Text(
+                                    "Hiện tại không có lịch đặt hẹn",
+                                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                                  ),
+                                ),
+                              );
+                            }
+
                           });
                     } else {
                       return Container(
                         padding: const EdgeInsets.symmetric(vertical: 280),
                         child: const Center(
                           child: Text(
-                            "Hiện tại không có lịch đặt hẹn. 1",
+                            "Hiện tại không có lịch đặt hẹn",
                             style: TextStyle(fontSize: 18, color: Colors.grey),
                           ),
                         ),

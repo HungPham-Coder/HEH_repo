@@ -1,10 +1,6 @@
-
-
-
-
 class Slot {
   String? slotID;
-  String slotName;
+  String? slotName;
 
   String timeStart;
   String timeEnd;
@@ -15,7 +11,7 @@ class Slot {
       required this.timeStart,
       required this.timeEnd,
 
-      required this.slotName,
+       this.slotName,
       required this.available
       });
 

@@ -19,9 +19,10 @@ import 'package:provider/provider.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 
 class SessionPaidPage extends StatefulWidget {
-  SessionPaidPage({Key? key, required this.firebaseFirestoreBase})
+  SessionPaidPage({Key? key, required this.firebaseFirestoreBase, required this.typeName})
       : super(key: key);
   FirebaseFirestoreBase firebaseFirestoreBase;
+  String typeName;
   @override
   State<SessionPaidPage> createState() => _SessionPaidPageState();
 }
@@ -47,7 +48,7 @@ class _SessionPaidPageState extends State<SessionPaidPage> {
           children: [
             FutureBuilder<List<BookingDetail>>(
                 future: CallAPI()
-                    .getAllBookingDetailByUserID(sharedCurrentUser!.userID!),
+                    .getAllBookingDetailByUserIDAndTypeOfSlot(sharedCurrentUser!.userID!,widget.typeName),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length > 0) {
@@ -96,7 +97,7 @@ class _SessionPaidPageState extends State<SessionPaidPage> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 300),
                           child: Text(
-                            "Bạn chưa đăng ký dịch vụ Trị Liệu nào.",
+                            "Bạn chưa đăng ký dịch vụ ${widget.typeName.toLowerCase()} nào",
                             style: TextStyle(
                                 color: Colors.grey[500], fontSize: 16),
                           ),
@@ -104,10 +105,7 @@ class _SessionPaidPageState extends State<SessionPaidPage> {
                       );
                     }
                   } else {
-                    return const Center(
-                      child: Text(
-                          'Hiện tại bạn đang chưa đăng ký bất kỳ lịch nào'),
-                    );
+                    return  Container();
                   }
                 }),
           ],

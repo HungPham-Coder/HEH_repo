@@ -13,7 +13,7 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../../common_widget/menu_listview.dart';
 
 int addSlotStatus = 200;
-
+int updateSlotStatus = 200;
 class SessionRegisterPage extends StatefulWidget {
   SessionRegisterPage({Key? key, this.bookingDetail, this.listDetail})
       : super(key: key);
@@ -30,8 +30,8 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
 
   String? startCompare;
   String? endCompare;
-  String? startAdd;
-  String? endAdd;
+  String? startTime;
+  String? endTime;
 
   final List<String> _time = [
     "- Chọn khung giờ -",
@@ -71,7 +71,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
     if (widget.bookingDetail != null) {
       widget.listDetail!.forEach(
         (element) {
-          if (element.longtermStatus == 1) {
+          if (element.longtermStatus! >= 0) {
             DateTime dateTemp = new DateFormat("yyyy-MM-dd")
                 .parse(element.bookingSchedule!.schedule!.slot!.timeStart);
             if (selectedEvents[dateTemp] == null) {
@@ -182,40 +182,124 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                   titleCentered: true,
                   formatButtonShowsNext: true),
             ),
-            ..._getEvents(_selectedDay).map((BookingDetail e) {
+            ..._getEvents(_selectedDay).map((BookingDetail bookingDetail) {
               String start = DateTimeFormat.formateTime(
-                  e.bookingSchedule!.schedule!.slot!.timeStart);
+                  bookingDetail.bookingSchedule!.schedule!.slot!.timeStart);
               String end = DateTimeFormat.formateTime(
-                  e.bookingSchedule!.schedule!.slot!.timeEnd);
+                  bookingDetail.bookingSchedule!.schedule!.slot!.timeEnd);
               return SessionScheduleMenu(
                 name:
-                    "Người điều trị: ${e.bookingSchedule!.subProfile!.signUpUser!.firstName}",
+                    "Người điều trị: ${bookingDetail.bookingSchedule!.subProfile!.signUpUser!.firstName}",
                 time: "Khung giờ: ${start}-${end}",
                 icon:
                     "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbooking.png?alt=media&token=aa78656d-2651-42a4-810e-07c273cdfe5a",
                 buttonPress: () {
-                  String datefmt =
-                      DateFormat("dd-MM-yyyy").format(_selectedDay);
+
+                  String datefmt = DateFormat("yyyy-MM-dd").format(_selectedDay);
+                  DateTime dateCreate = new DateFormat("yyyy-MM-dd").parse(datefmt);
+                  setState(() {
+                    _timeStart.text = start;
+                    _timeEnd.text = end;
+                    startTime = "${datefmt}T${start}:00";
+                    endTime = "${datefmt}T${end}:00";
+                    startCompare = "$datefmt $start";
+                    endCompare = "$datefmt $end";
+                  });
+
                   showDialog(
                       context: context,
-                      builder: (context) => AlertDialog(
-                            title: const Text("Tạo lịch"),
-                            content: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Time(datefmt),
-                                ],
+                      builder: (context) =>
+                          StatefulBuilder(builder: (context, setState) {
+                            return AlertDialog(
+                              title: const Text("Cập nhật lịch"),
+                              content: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Time(datefmt),
+                                  ],
+                                 ),
                               ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, 'Hủy'),
-                                child: const Text("Hủy"),
-                              ),
-                              TextButton(
-                                  onPressed: () {}, child: const Text("Tạo")),
-                            ],
-                          ));
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+
+                                    Navigator.pop(context, 'Hủy');
+                                    _timeStart.clear();
+                                    _timeEnd.clear();
+                                    setState(() {
+                                      visibleCheckAfter = false;
+                                      visibleAdd = false;
+                                    });
+                                  },
+                                  child: const Text("Hủy"),
+                                ),
+                                TextButton(
+                                    onPressed: () async {
+                                      //compare start và end
+                                      DateTime start =
+                                          DateTime.parse(startCompare!);
+                                      DateTime end =
+                                          DateTime.parse(endCompare!);
+                                      if (start.compareTo(end) >= 0) {
+                                        setState(() {
+                                          visibleAdd = false;
+                                          visibleCheckAfter = true;
+                                        });
+                                        // Navigator.pop(context);
+                                        // return Time(datefmt);
+                                      } else {
+                                        setState(() {
+                                          visibleCheckAfter = false;
+                                        });
+
+                                        //update slot
+                                        Slot slot = Slot(
+                                          slotID: bookingDetail.bookingSchedule!.schedule!.slotID,
+                                          timeStart: startTime!,
+                                          timeEnd: endTime!,
+                                          available: true,
+                                        );
+                                        dynamic result = await CallAPI()
+                                            .updateSlot(
+                                                slot,
+                                                sharedPhysiotherapist!
+                                                    .physiotherapistID);
+                                        //check update slot thành công hay không
+                                        if (updateSlotStatus == 400) {
+                                          setState(() {
+                                            listSlotDup = result;
+                                            visibleAdd = true;
+                                          });
+
+                                          print(listSlotDup!.length);
+                                        } else {
+                                          setState(() {
+                                            visibleAdd = false;
+                                          });
+                                         Slot slot = result;
+                                            if (slot != null) {
+                                              //update event của lịch hiện tại
+                                              selectedEvents[dateCreate]!.forEach((element) {
+                                                if (element == bookingDetail){
+                                                  element.bookingSchedule!.schedule!.slot!.timeStart = startTime!;
+                                                  element.bookingSchedule!.schedule!.slot!.timeEnd = endTime!;
+                                                }
+                                              });
+
+                                            }
+                                          Navigator.pop(context);
+                                          }
+
+                                        }
+
+
+                                      _timeStart.clear();
+                                      _timeEnd.clear();
+                                    },
+                                    child: const Text("Cập nhật")),
+                              ],
+                            );
+                          }));
                 },
               );
             }),
@@ -229,145 +313,151 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
           DateTime dateCreate = new DateFormat("yyyy-MM-dd").parse(datefmt);
           showDialog(
               context: context,
-              builder: (context) =>
-                  StatefulBuilder(builder: (context, setState) {
-                    return AlertDialog(
-                      title: const Text("Tạo lịch dài hạn"),
-                      content: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Time(datefmt),
-                          ],
-                        ),
+              builder: (context) {
+                return StatefulBuilder(builder: (context, setState) {
+                  return AlertDialog(
+                    title: const Text("Tạo lịch dài hạn"),
+                    content: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Time(datefmt),
+                        ],
                       ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context, 'Hủy');
-                            _timeStart.clear();
-                            _timeEnd.clear();
-                            setState(() {
-                              visibleCheckAfter = false;
-                              visibleAdd = false;
-                            });
-                          },
-                          child: const Text("Hủy"),
-                        ),
-                        TextButton(
-                            onPressed: () async {
-                              //compare start và end
-                              DateTime start = DateTime.parse(startCompare!);
-                              DateTime end = DateTime.parse(endCompare!);
-                              if (start.compareTo(end) >= 0) {
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, 'Hủy');
+                          _timeStart.clear();
+                          _timeEnd.clear();
+                          setState(() {
+                            visibleCheckAfter = false;
+                            visibleAdd = false;
+                          });
+                        },
+                        child: const Text("Hủy"),
+                      ),
+                      TextButton(
+                          onPressed: () async {
+                            //compare start và end
+                            DateTime start = DateTime.parse(startCompare!);
+                            DateTime end = DateTime.parse(endCompare!);
+                            if (start.compareTo(end) >= 0) {
+                              setState(() {
+                                visibleAdd = false;
+                                visibleCheckAfter = true;
+                              });
+                              // Navigator.pop(context);
+                              // return Time(datefmt);
+                            } else {
+                              setState(() {
+                                visibleCheckAfter = false;
+                              });
+                              //get Type of slot
+                              TypeOfSlot typeOfSlot = await CallAPI()
+                                  .GetTypeOfSlotByTypeName('Trị liệu dài hạn');
+                              //add slot
+                              Slot slot = Slot(
+                                timeStart: startTime!,
+                                timeEnd: endTime!,
+                                slotName:
+                                    "Trị Liệu dài hạn cho ${widget.bookingDetail!.bookingSchedule!.subProfile!.subName}",
+                                available: true,
+                              );
+                              dynamic result = await CallAPI()
+                                  .AddLongTermSlotByPhysioID(slot,
+                                      sharedPhysiotherapist!.physiotherapistID);
+                              //check add slot thành công hay không
+                              if (addSlotStatus == 400) {
                                 setState(() {
-                                  visibleAdd = false;
-                                  visibleCheckAfter = true;
+                                  listSlotDup = result;
+                                  visibleAdd = true;
                                 });
-                                // Navigator.pop(context);
-                                // return Time(datefmt);
+
+                                print(listSlotDup!.length);
                               } else {
                                 setState(() {
-                                  visibleCheckAfter = false;
+                                  visibleAdd = false;
                                 });
-                                //get Type of slot
-                                TypeOfSlot typeOfSlot = await CallAPI()
-                                    .GetTypeOfSlotByTypeName(
-                                        'Trị liệu dài hạn');
-                                //add slot
-                                Slot slot = Slot(
-                                  timeStart: startAdd!,
-                                  timeEnd: endAdd!,
-                                  slotName:
-                                      "Trị Liệu dài hạn cho ${widget.bookingDetail!.bookingSchedule!.subProfile!.subName}",
-                                  available: true,
-                                );
-                                dynamic result = await CallAPI().AddSlot(slot);
-                                //check add slot thành công hay không
-                                if (addSlotStatus == 400) {
-                                  setState(() {
-                                    listSlotDup = result;
-                                    visibleAdd = true;
-                                  });
+                                Slot slot = result;
+                                //add schedule
+                                Schedule schedule = Schedule(
+                                    slotID: slot.slotID!,
+                                    physiotherapistID: sharedPhysiotherapist!
+                                        .physiotherapistID,
+                                    typeOfSlotID: typeOfSlot.typeOfSlotID,
+                                    description: "Slot Trị liệu dài hạn",
+                                    physioBookingStatus: true);
+                                Schedule addSchedule =
+                                    await CallAPI().AddSchedule(schedule);
+                                //check add schedule
+                                if (addSchedule != null) {
+                                  //add booking detail
+                                  BookingSchedule bookingSchedule =
+                                      BookingSchedule(
+                                          userID:
+                                              widget.bookingDetail!
+                                                  .bookingSchedule!.userID,
+                                          subProfileID:
+                                              widget
+                                                  .bookingDetail!
+                                                  .bookingSchedule!
+                                                  .subProfileID,
+                                          scheduleID: addSchedule.scheduleID!,
+                                          dateBooking:
+                                              DateFormat(
+                                                      "yyyy-MM-dd")
+                                                  .format(DateTime.now()),
+                                          timeBooking:
+                                              DateFormat("yyyy-MM-ddTHH:mm:ss")
+                                                  .format(DateTime.now()));
+                                  BookingSchedule? bookingScheduleAdd =
+                                      await CallAPI()
+                                          .addBookingSchedule(bookingSchedule);
+                                  //add booking detail
+                                  BookingDetail bookingDetail = BookingDetail(
+                                      bookingScheduleID: bookingScheduleAdd!
+                                          .bookingScheduleID!,
+                                      shorttermStatus: 3,
+                                      longtermStatus: 1,
+                                      videoCallRoom: "Mới add");
 
-                                  print(listSlotDup!.length);
-                                } else {
-                                  setState(() {
-                                    visibleAdd = false;
-                                  });
-                                  Slot slot = result;
-                                  //add schedule
-                                  Schedule schedule = Schedule(
-                                      slotID: slot.slotID!,
-                                      physiotherapistID: sharedPhysiotherapist!
-                                          .physiotherapistID,
-                                      typeOfSlotID: typeOfSlot.typeOfSlotID,
-                                      description: "Slot Trị liệu dài hạn",
-                                      physioBookingStatus: true);
-                                  Schedule addSchedule =
-                                      await CallAPI().AddSchedule(schedule);
-                                  //check add schedule
-                                  if (addSchedule != null) {
-                                    //add booking detail
-                                    BookingSchedule bookingSchedule =
-                                        BookingSchedule(
-                                            userID:
-                                                widget.bookingDetail!
-                                                    .bookingSchedule!.userID,
-                                            subProfileID:
-                                                widget
-                                                    .bookingDetail!
-                                                    .bookingSchedule!
-                                                    .subProfileID,
-                                            scheduleID: addSchedule.scheduleID!,
-                                            dateBooking:
-                                                DateFormat("yyyy-MM-dd")
-                                                    .format(DateTime.now()),
-                                            timeBooking: DateFormat(
-                                                    "yyyy-MM-ddTHH:mm:ss")
-                                                .format(DateTime.now()));
-                                    BookingSchedule? bookingScheduleAdd =
-                                        await CallAPI().addBookingSchedule(
-                                            bookingSchedule);
-                                    //add booking detail
-                                    BookingDetail bookingDetail = BookingDetail(
-                                        bookingScheduleID: bookingScheduleAdd!
-                                            .bookingScheduleID!,
-                                        shorttermStatus: 3,
-                                        longtermStatus: 1,
-                                        videoCallRoom: "Mới add");
-
-                                    BookingDetail bookingDetailAdd =
-                                        await CallAPI()
-                                            .addBookingDetail(bookingDetail);
-                                    //check add booking detail
-                                    if (bookingDetailAdd != null) {
-                                      //get booking detail vừa mới add
-                                      BookingDetail bookingDetailGet =
-                                          await CallAPI().getBookingDetailByID(
-                                              bookingDetailAdd
-                                                  .bookingDetailID!);
-                                      if (selectedEvents[dateCreate] != null) {
-                                        selectedEvents[dateCreate]!
-                                            .add(bookingDetailGet);
-                                      } else {
-                                        selectedEvents[dateCreate] = [
-                                          bookingDetailGet
-                                        ];
-                                      }
+                                  BookingDetail bookingDetailAdd =
+                                      await CallAPI()
+                                          .addBookingDetail(bookingDetail);
+                                  widget.bookingDetail!.longtermStatus = 1;
+                                  await CallAPI().updateBookingDetailStatus(
+                                      widget.bookingDetail!);
+                                  //check add booking detail
+                                  if (bookingDetailAdd != null) {
+                                    //get booking detail vừa mới add
+                                    BookingDetail bookingDetailGet =
+                                        await CallAPI().getBookingDetailByID(
+                                            bookingDetailAdd.bookingDetailID!);
+                                    if (selectedEvents[dateCreate] != null) {
+                                      selectedEvents[dateCreate]!
+                                          .add(bookingDetailGet);
+                                    } else {
+                                      selectedEvents[dateCreate] = [
+                                        bookingDetailGet
+                                      ];
                                     }
                                   }
                                 }
+                                Navigator.pop(context);
                               }
+                            }
 
-                              Navigator.pop(context);
-                              _timeStart.clear();
-                              _timeEnd.clear();
-                              print(_selectedDay);
-                            },
-                            child: const Text("Tạo")),
-                      ],
-                    );
-                  }));
+                            _timeStart.clear();
+                            _timeEnd.clear();
+                          },
+                          child: const Text("Tạo")),
+                    ],
+                  );
+                });
+              });
+          setState(() {});
+          return;
         },
       ),
     );
@@ -423,7 +513,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                     final text = selectedTime.format(context);
                     setState(() {
                       startCompare = '$date $text';
-                      startAdd = '${date}T$text';
+                      startTime = '${date}T$text:00';
                       _timeStart.text = text;
                     });
                   }
@@ -451,7 +541,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
               final text = selectedTime.format(context);
               setState(() {
                 endCompare = '$date $text';
-                endAdd = '${date}T$text';
+                endTime = '${date}T$text:00';
                 _timeEnd.text = text;
               });
             }
