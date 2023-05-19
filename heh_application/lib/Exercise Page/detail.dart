@@ -29,14 +29,6 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           "Bài tập cụ thể",
           style: TextStyle(fontSize: 23),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                showSearch(context: context, delegate: MySearchDelegate());
-              },
-              icon: const Icon(Icons.search)),
-        ],
-        centerTitle: true,
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),
@@ -54,7 +46,6 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                       shrinkWrap: true,
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-
                         return MenuListView(
                           icon:
                               "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbackache.png?alt=media&token=d725e1f5-c106-41f7-9ee5-ade77c464a54",

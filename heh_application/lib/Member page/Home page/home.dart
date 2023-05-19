@@ -3,7 +3,7 @@ import 'package:heh_application/Exercise%20Page/category.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Home%20page/Paid%20page/Service%20paid%20page/advicePaid.dart';
 import 'package:heh_application/Member%20page/Home%20page/Paid%20page/Service%20paid%20page/sessionPaid.dart';
-import 'package:heh_application/Member%20page/email.dart';
+import 'package:heh_application/Member%20page/Home%20page/feedback.dart';
 import 'package:heh_application/SignUp%20Page/otp.dart';
 
 import 'package:heh_application/models/chat_model/user_chat.dart';
@@ -133,6 +133,17 @@ class _HomePageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const CategoryPage()));
+                  },
+                ),
+                HomeMenu(
+                  icon:
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fexercise.png?alt=media&token=f299c936-6f81-41e5-8448-bc587873bc67",
+                  text: "Feedback",
+                  press: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const FeedbackPage()));
                   },
                 ),
                 // HomeMenu(

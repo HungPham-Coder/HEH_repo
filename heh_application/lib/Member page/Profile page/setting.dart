@@ -1,8 +1,9 @@
+import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:heh_application/Change%20password/otpchange.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Personal%20page/personal.dart';
-import 'package:heh_application/Member%20page/Profile%20page/changePass.dart';
 
 import 'package:heh_application/Member%20page/Profile%20page/history.dart';
 import 'package:heh_application/main.dart';
@@ -27,6 +28,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  EmailOTP myauth = EmailOTP();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,11 +104,42 @@ class _SettingPageState extends State<SettingPage> {
             icon:
                 "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Freset.svg?alt=media&token=f574651a-977a-4eea-a07d-61fe296f5505",
             text: "Đặt lại mật khẩu",
-            press: () {
+            press: () async {
+              myauth.setConfig(
+                  appEmail: "me@rohitchouhan.com",
+                  appName: "Email OTP",
+                  userEmail: sharedCurrentUser!.email,
+                  otpLength: 6,
+                  otpType: OTPType.digitsOnly);
+              if (await myauth.sendOTP() == true) {
+                setState(() {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Mã OTP đã gửi đến email của bạn."),
+                  ));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OTPChangePage(
+                        email: sharedCurrentUser!.email,
+                        myauth: myauth,
+                      ),
+                    ),
+                  );
+                });
+              } else {
+                setState(() {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Xin lỗi, gửi OTP thất bại."),
+                  ));
+                });
+              }
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const ChangePassword()));
+                      builder: (context) => OTPChangePage(
+                            email: sharedCurrentUser!.email,
+                            myauth: myauth,
+                          )));
             },
           ),
           ProfileMenu(

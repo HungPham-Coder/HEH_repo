@@ -24,6 +24,8 @@ class ExerciseResources extends StatefulWidget {
 }
 
 class _ExerciseResourcesState extends State<ExerciseResources> {
+  bool isSelected = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,12 +33,15 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
         appBar: AppBar(
           actions: [
             IconButton(
-                onPressed: () {
-                  showSearch(context: context, delegate: MySearchDelegate());
-                },
-                icon: const Icon(Icons.search)),
+              icon: Icon(isSelected ? Icons.favorite_border : Icons.favorite,
+                  color: isSelected ? Colors.white : Colors.red, size: 30),
+              onPressed: () {
+                setState(() {
+                  isSelected = !isSelected;
+                });
+              },
+            ),
           ],
-          centerTitle: true,
           title: const Text(
             // widget.exerciseDetail!.detailName!,
             "Các loại tài nguyên",
@@ -82,7 +87,6 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
                                       MaterialPageRoute(builder: (context) {
                                     print(exerciseResource);
                                     if (widget.detailID != null) {
-
                                       return ExerciseResourcesDetail(
                                         resourceID: widget.detailID,
                                         // exerciseResource: exerciseResource,

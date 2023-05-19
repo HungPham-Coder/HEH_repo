@@ -408,15 +408,11 @@ class _LoginPageState extends State<LoginPage> {
           image: user.photoURL);
 
       if (checkUserExistInPostgre == false) {
-
-
         await CallAPI().callRegisterAPI(signUpUser);
         // else {
         //   LoginPage();
         // }
-      } else {
-
-      }
+      } else {}
       ResultLogin resultLogin = ResultLogin(
           userID: email,
           firstName: user.displayName,

@@ -96,7 +96,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => OTPPage(
+                      builder: (context) => OTPForgotPage(
                         email: _emailController.text,
                         myauth: myauth,
                       ),

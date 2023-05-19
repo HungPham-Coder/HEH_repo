@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/login.dart';
+import 'package:heh_application/Member%20page/navigation_main.dart';
 
-class renewForgotPass extends StatefulWidget {
-  const renewForgotPass({Key? key}) : super(key: key);
+class renewChangePass extends StatefulWidget {
+  const renewChangePass({Key? key}) : super(key: key);
 
   @override
-  State<renewForgotPass> createState() => _renewForgotPassState();
+  State<renewChangePass> createState() => _renewChangePassState();
 }
 
-class _renewForgotPassState extends State<renewForgotPass> {
+class _renewChangePassState extends State<renewChangePass> {
   final TextEditingController _oldPassword = TextEditingController();
   final TextEditingController _newPassword = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
@@ -55,8 +56,8 @@ class _renewForgotPassState extends State<renewForgotPass> {
                 shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20))))),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoginPage()));
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => Navigation_Bar()));
             },
             child: Container(
               child: const Text("Thay đổi mật khẩu",

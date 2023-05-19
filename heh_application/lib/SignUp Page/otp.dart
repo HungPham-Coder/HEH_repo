@@ -66,10 +66,18 @@ class _OTPPageState extends State<OTPPage> {
               Center(
                 child: ElevatedButton(
                     onPressed: () async {
+                      _otp = text1.text +
+                          text2.text +
+                          text3.text +
+                          text4.text +
+                          text5.text +
+                          text6.text;
+                      print(_otp);
+
                       if (await widget.myauth.verifyOTP(otp: _otp) == true) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
-                          content: Text("OTP is verified"),
+                          content: Text("OTP đúng."),
                         ));
 
                         Navigator.push(
@@ -82,16 +90,6 @@ class _OTPPageState extends State<OTPPage> {
                           content: Text("Sai OTP. Vui lòng nhập lại."),
                         ));
                       }
-
-                      setState(() {
-                        _otp = text1.text +
-                            text2.text +
-                            text3.text +
-                            text4.text +
-                            text5.text +
-                            text6.text;
-                        print(_otp);
-                      });
                     },
                     child: const Icon(Icons.arrow_forward_ios_outlined)),
               ),

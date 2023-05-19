@@ -215,7 +215,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             }
                             SignUpUser signUpUser = SignUpUser(
                               image:
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fperson.png?alt=media&token=c5c521dc-2f27-4fb9-ba76-b0241c2dfe19",
+                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FavatarIcon.png?alt=media&token=790e190a-1559-4272-b4c8-213fbc0d7f89",
                               firstName: _firstName.text,
                               email: _email.text,
                               phone: _phone.text,

@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:heh_application/ForgotPassword%20Page/renewPass,.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 
-class OTPPage extends StatefulWidget {
-  OTPPage({
+class OTPForgotPage extends StatefulWidget {
+  OTPForgotPage({
     Key? key,
     required this.email,
     required this.myauth,
@@ -15,10 +15,10 @@ class OTPPage extends StatefulWidget {
   EmailOTP myauth = EmailOTP();
 
   @override
-  State<OTPPage> createState() => _OTPPageState();
+  State<OTPForgotPage> createState() => _OTPForgotPageState();
 }
 
-class _OTPPageState extends State<OTPPage> {
+class _OTPForgotPageState extends State<OTPForgotPage> {
   final TextEditingController text1 = TextEditingController();
   final TextEditingController text2 = TextEditingController();
   final TextEditingController text3 = TextEditingController();
@@ -67,33 +67,30 @@ class _OTPPageState extends State<OTPPage> {
               Center(
                 child: ElevatedButton(
                     onPressed: () async {
+                      _otp = text1.text +
+                          text2.text +
+                          text3.text +
+                          text4.text +
+                          text5.text +
+                          text6.text;
+                      print(_otp);
                       print(widget.myauth);
                       if (await widget.myauth.verifyOTP(otp: _otp) == true) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
-                          content: Text("OTP is verified"),
+                          content: Text("OTP đúng."),
                         ));
 
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => renewPass()));
+                                builder: (context) => renewForgotPass()));
                       } else {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text("Sai OTP. Vui lòng nhập lại."),
                         ));
                       }
-
-                      setState(() {
-                        _otp = text1.text +
-                            text2.text +
-                            text3.text +
-                            text4.text +
-                            text5.text +
-                            text6.text;
-                        print(_otp);
-                      });
                     },
                     child: const Icon(Icons.arrow_forward_ios_outlined)),
               ),

@@ -24,13 +24,6 @@ class _CategoryPageState extends State<CategoryPage> {
           "Bài tập trị liệu",
           style: TextStyle(fontSize: 23),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                showSearch(context: context, delegate: MySearchDelegate());
-              },
-              icon: const Icon(Icons.search)),
-        ],
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),
