@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Exercise%20Page/category.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
-import 'package:heh_application/Member%20page/Home%20page/Paid%20page/Service%20paid%20page/advicePaid.dart';
-import 'package:heh_application/Member%20page/Home%20page/Paid%20page/Service%20paid%20page/sessionPaid.dart';
+import 'package:heh_application/Member%20page/Home%20page/Paid%20page/advicePaid.dart';
+import 'package:heh_application/Member%20page/Home%20page/Paid%20page/sessionPaid.dart';
+
 import 'package:heh_application/Member%20page/Home%20page/feedback.dart';
 import 'package:heh_application/SignUp%20Page/otp.dart';
 
@@ -101,69 +102,67 @@ class _HomePageState extends State<HomePage> {
                       )),
                 ),
 
-                FutureBuilder <List<TypeOfSlot>>(
-                  future: CallAPI().getAllTypeOfSlot(),
-                  builder:(context, snapshot)  {
-                    if (snapshot.hasData){
-                      if (snapshot.data!.length > 0){
-                        return ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index)  {
-                            if (snapshot.data![index].typeName != "Tư vấn trị liệu 1 buổi")
-                              {
-                                return HomeMenu(
-                                  icon:
-                                  snapshot.data![index].typeName == "Tư vấn trị liệu"?
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvisor.png?alt=media&token=dae71db1-2f53-404e-92de-46838ceff9c6"
-                                  :"https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fplan.png?alt=media&token=2356eeaa-f224-4b1f-ad5f-f0cb34f2e922",
-                                  text: "Tham gia buổi ${snapshot.data![index].typeName}",
-                                  press: () async {
-                                    if (snapshot.data![index].typeName == "Tư vấn trị liệu"){
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => AdvicePaidPage(
-                                                  firebaseFirestoreBase: firestoreDatabase,
-                                                  typeName: snapshot.data![index].typeName
-                                              )));
-                                    }
-                                    else {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => SessionPaidPage(
-                                                  firebaseFirestoreBase: firestoreDatabase,
-                                                  typeName: snapshot.data![index].typeName
-                                              )));
-                                    }
-
-                                  },
-                                );
-                              }
-                            else {
-                              return Container();
-                            }
-
-                          }
-                        );
-                      }
-                      else {
+                FutureBuilder<List<TypeOfSlot>>(
+                    future: CallAPI().getAllTypeOfSlot(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data!.length > 0) {
+                          return ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                if (snapshot.data![index].typeName !=
+                                    "Tư vấn trị liệu 1 buổi") {
+                                  return HomeMenu(
+                                    icon: snapshot.data![index].typeName ==
+                                            "Tư vấn trị liệu"
+                                        ? "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvisor.png?alt=media&token=dae71db1-2f53-404e-92de-46838ceff9c6"
+                                        : "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fplan.png?alt=media&token=2356eeaa-f224-4b1f-ad5f-f0cb34f2e922",
+                                    text:
+                                        "Tham gia buổi ${snapshot.data![index].typeName}",
+                                    press: () async {
+                                      if (snapshot.data![index].typeName ==
+                                          "Tư vấn trị liệu") {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AdvicePaidPage(
+                                                        firebaseFirestoreBase:
+                                                            firestoreDatabase,
+                                                        typeName: snapshot
+                                                            .data![index]
+                                                            .typeName)));
+                                      } else {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SessionPaidPage(
+                                                        firebaseFirestoreBase:
+                                                            firestoreDatabase,
+                                                        typeName: snapshot
+                                                            .data![index]
+                                                            .typeName)));
+                                      }
+                                    },
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              });
+                        } else {
+                          return Center(
+                            child: Text("Type of slot rỗng"),
+                          );
+                        }
+                      } else {
                         return Center(
-                          child: Text("Type of slot rỗng"),
+                          child: Text("Load type of slot loi"),
                         );
                       }
-
-                    }
-                    else {
-                      return Center(
-                        child: Text("Load type of slot loi"),
-                      );
-                    }
-
-                  }
-                ),
+                    }),
 
                 HomeMenu(
                   icon:

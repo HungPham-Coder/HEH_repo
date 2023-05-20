@@ -86,17 +86,6 @@ class _ExerciseResourcesDetailState extends State<ExerciseResourcesDetail> {
       return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
-            actions: [
-              IconButton(
-                icon: Icon(isSelected ? Icons.favorite_border : Icons.favorite,
-                    color: isSelected ? Colors.white : Colors.red, size: 30),
-                onPressed: () {
-                  setState(() {
-                    isSelected = !isSelected;
-                  });
-                },
-              ),
-            ],
             title: Text(
               widget.resourceName!,
               style: const TextStyle(

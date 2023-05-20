@@ -298,8 +298,8 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                             });
                             //gửi mã OTP
                             myauth.setConfig(
-                                appEmail: "me@rohitchouhan.com",
-                                appName: "Email OTP",
+                                appEmail: "hungppmse140153@fpt.edu.vn",
+                                appName: "Health care and Healing system",
                                 userEmail: widget.signUpUser.email,
                                 otpLength: 6,
                                 otpType: OTPType.digitsOnly);

@@ -3,20 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:heh_application/Change%20password/otpchange.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
+import 'package:heh_application/Member%20page/Home%20page/favorite.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Personal%20page/personal.dart';
-
-import 'package:heh_application/Member%20page/Profile%20page/history.dart';
-import 'package:heh_application/main.dart';
-import 'package:heh_application/models/sign_up_user.dart';
-
 import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/call_api.dart';
-
 import 'package:heh_application/services/stream_test.dart';
-import 'package:image_picker/image_picker.dart';
-
 import 'package:provider/provider.dart';
-
 import '../../services/auth.dart';
 import 'Family page/family.dart';
 
@@ -94,10 +86,12 @@ class _SettingPageState extends State<SettingPage> {
           ProfileMenu(
             icon:
                 "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fhistory.svg?alt=media&token=13ed285f-0a27-4ee5-b984-bd73d5f15ac8",
-            text: "Lịch sử giao dịch",
+            text: "Dịch vụ chưa thanh toán",
             press: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const HistoryPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const UnPaidServicePage()));
             },
           ),
           ProfileMenu(
@@ -106,8 +100,8 @@ class _SettingPageState extends State<SettingPage> {
             text: "Đặt lại mật khẩu",
             press: () async {
               myauth.setConfig(
-                  appEmail: "me@rohitchouhan.com",
-                  appName: "Email OTP",
+                  appEmail: "hungppmse140153@fpt.edu.vn",
+                  appName: "Health care and Healing system",
                   userEmail: sharedCurrentUser!.email,
                   otpLength: 6,
                   otpType: OTPType.digitsOnly);

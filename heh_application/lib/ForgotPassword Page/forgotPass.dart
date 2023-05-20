@@ -82,8 +82,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         ElevatedButton(
             onPressed: () async {
               myauth.setConfig(
-                  appEmail: "me@rohitchouhan.com",
-                  appName: "Email OTP",
+                  appEmail: "hungppmse140153@fpt.edu.vn",
+                  appName: "Health care and Healing system",
                   userEmail: _emailController.text,
                   otpLength: 6,
                   otpType: OTPType.digitsOnly);
