@@ -13,6 +13,7 @@ import 'package:heh_application/services/call_api.dart';
 
 import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../common_widget/menu_listview.dart';
 
@@ -176,6 +177,9 @@ class _HomePageState extends State<HomePage> {
                             builder: (context) => const CategoryPage()));
                   },
                 ),
+                TextButton(onPressed: () async {
+                  await launchUrl(Uri.parse("https://www.google.com"),mode: LaunchMode.externalApplication);
+                }, child: Text("Text"))
                 // HomeMenu(
                 //   icon:
                 //       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
