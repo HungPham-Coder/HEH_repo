@@ -7,16 +7,12 @@ class ExerciseResourcesDetail extends StatefulWidget {
   ExerciseResourcesDetail(
       {Key? key,
       // this.exerciseDetail,
-      this.imageURL,
-      this.resourceName,
-      this.description,
-      this.videoURL,
+
       this.exerciseResource,
-      required this.resourceID})
+     })
       : super(key: key);
-  // ExerciseDetail1? exerciseDetail;
-  List<ExerciseResource>? exerciseResource;
-  String? resourceID, imageURL, resourceName, description, videoURL;
+  ExerciseResource? exerciseResource;
+
   @override
   State<ExerciseResourcesDetail> createState() =>
       _ExerciseResourcesDetailState();
@@ -53,7 +49,7 @@ class _ExerciseResourcesDetailState extends State<ExerciseResourcesDetail> {
 
   void initPlayer() async {
     // widget.exerciseResource!.forEach((element) {
-    _vidController = VideoPlayerController.network(widget.videoURL!);
+    _vidController = VideoPlayerController.network(widget.exerciseResource!.videoURL!);
     _vidController.addListener(() {
       setState(() {});
     });
@@ -71,11 +67,7 @@ class _ExerciseResourcesDetailState extends State<ExerciseResourcesDetail> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.exerciseResource != null ||
-        widget.imageURL == null ||
-        widget.description == null ||
-        widget.resourceName == null ||
-        widget.videoURL == null) {
+    if (widget.exerciseResource == null) {
       return Scaffold(
         body: Container(
           child: const Center(
@@ -86,19 +78,19 @@ class _ExerciseResourcesDetailState extends State<ExerciseResourcesDetail> {
       return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
-            actions: [
-              IconButton(
-                icon: Icon(isSelected ? Icons.favorite_border : Icons.favorite,
-                    color: isSelected ? Colors.white : Colors.red, size: 30),
-                onPressed: () {
-                  setState(() {
-                    isSelected = !isSelected;
-                  });
-                },
-              ),
-            ],
+            // actions: [
+            //   IconButton(
+            //     icon: Icon(isSelected ? Icons.favorite_border : Icons.favorite,
+            //         color: isSelected ? Colors.white : Colors.red, size: 30),
+            //     onPressed: () {
+            //       setState(() {
+            //         isSelected = !isSelected;
+            //       });
+            //     },
+            //   ),
+            // ],
             title: Text(
-              widget.resourceName!,
+              widget.exerciseResource!.exerciseDetail1!.detailName!,
               style: const TextStyle(
                 fontSize: 18,
                 color: Colors.white,
@@ -126,11 +118,11 @@ class _ExerciseResourcesDetailState extends State<ExerciseResourcesDetail> {
                             ),
                           ),
                           Text(
-                            widget.description!,
+                            widget.exerciseResource!.exerciseDetail1!.description,
                             style: const TextStyle(fontSize: 16),
                           ),
                           const SizedBox(height: 10),
-                          Container(child: Image.network(widget.imageURL!)),
+                          Container(child: Image.network(widget.exerciseResource!.imageURL!)),
                           const SizedBox(height: 10),
                           Padding(
                             padding: const EdgeInsets.symmetric(
