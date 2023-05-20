@@ -67,8 +67,12 @@ dependencies:
   shared_preferences: ^2.0.15
   table_calendar: ^3.0.6
   crypto: ^3.0.3
+
   flutter_rating_bar: ^4.0.1
   
+
+  url_launcher: ^6.1.11
+
 dev_dependencies:
 
   flutter_test:
