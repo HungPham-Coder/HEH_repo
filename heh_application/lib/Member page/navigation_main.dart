@@ -45,7 +45,7 @@ class _Navigation_BarState extends State<Navigation_Bar> {
   List<Widget> pageList = <Widget>[
     const HomePage(),
     const Physiotherapist(),
-    const UnPaidServicePage(),
+    const FavoritePage(),
     const SettingPage(),
   ];
 

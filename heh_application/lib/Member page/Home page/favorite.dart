@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:heh_application/Exercise%20Page/resource.dart';
 import 'package:heh_application/common_widget/menu_listview.dart';
 
-class UnPaidServicePage extends StatefulWidget {
-  const UnPaidServicePage({Key? key}) : super(key: key);
+class FavoritePage extends StatefulWidget {
+  const FavoritePage({Key? key}) : super(key: key);
 
   @override
-  State<UnPaidServicePage> createState() => _UnPaidServicePageState();
+  State<FavoritePage> createState() => _FavoritePageState();
 }
 
-class _UnPaidServicePageState extends State<UnPaidServicePage> {
+class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

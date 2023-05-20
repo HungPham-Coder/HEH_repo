@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 import 'dart:convert';
 import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/success.dart';
 import 'package:heh_application/models/booking_detail.dart';
@@ -6,6 +11,8 @@ import 'package:heh_application/services/call_api.dart';
 import 'package:flutter/services.dart';
 
 import 'package:crypto/crypto.dart';
+import 'package:heh_application/services/chat_provider.dart';
+import 'package:image_picker/image_picker.dart';
 // import 'package:lottie/lottie.dart';
 
 // enum paymentGroup { male, female, others }
@@ -23,6 +30,10 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
   void initState() {
     super.initState();
   }
+
+  File? imageFile;
+  bool isLoading = false;
+  String imageUrl = "";
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +79,11 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Người thanh toán: "),
+                            const Text("Người thanh toán: "),
                             Text(
                                 "${widget.bookingDetail!.bookingSchedule!.signUpUser!.firstName}",
-                                style: TextStyle(fontWeight: FontWeight.w600)),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600)),
                           ],
                         ),
                         Padding(
@@ -89,9 +101,9 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                               children: [
                                 Text(
                                     "${widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.price}",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600)),
-                                Text(" VNĐ",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600)),
+                                const Text(" VNĐ",
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600)),
                               ],
@@ -118,7 +130,7 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FQR.jpg?alt=media&token=cf838750-d192-44cf-831d-4cf7fc0d1802",
                 )
               ])),
-          SizedBox(
+          const SizedBox(
             height: 130,
           )
         ],
@@ -133,11 +145,11 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text("Số tiền:"),
+                  const Text("Số tiền:"),
                   Text(
                       "${widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.price}",
-                      style: TextStyle(fontWeight: FontWeight.w600)),
-                  Text(" VND"),
+                      style: const TextStyle(fontWeight: FontWeight.w600)),
+                  const Text(" VND"),
                 ],
               ),
               const SizedBox(height: 10),
@@ -196,7 +208,48 @@ class choose extends StatefulWidget {
 }
 
 class _chooseState extends State<choose> {
-  // paymentGroup _genderValue = paymentGroup.male;
+  File? imageFile;
+  bool isLoading = false;
+  String imageUrl =
+      "https://t3.ftcdn.net/jpg/02/18/26/20/360_F_218262069_OCqHqqKWlwVeZWB8pn32WVFkoZCbWiel.jpg";
+
+  Future getImage() async {
+    ImagePicker imagePicker = ImagePicker();
+    XFile? pickedFile;
+    pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      imageFile = File(pickedFile.path);
+      if (imageFile != null) {
+        setState(() {
+          isLoading = true;
+        });
+        await uploadImageFile();
+      }
+    }
+  }
+
+  Future<void> uploadImageFile() async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    UploadTask uploadTask =
+        ChatProvider().upLoadImageFile(imageFile!, fileName);
+    try {
+      TaskSnapshot snapshot = await uploadTask;
+      imageUrl = await snapshot.ref.getDownloadURL();
+
+      setState(() {
+        // imageUrl = imageUrl;
+        // sharedCurrentUser!.setImage = imageUrl;
+        // print(sharedCurrentUser!.image);
+        isLoading = false;
+      });
+    } on FirebaseException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      Fluttertoast.showToast(msg: e.message ?? e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -208,15 +261,43 @@ class _chooseState extends State<choose> {
           const SizedBox(height: 10),
           const Text("Hình thức thanh toán",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          //   child: Center(
-          //     child: Image.network(
-          //       widget.icon,
-          //     ),
-          //   ),
-          // ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Center(
+              child: Image.network(
+                widget.icon,
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text(
+                "Hình ảnh hóa đơn",
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              ElevatedButton(
+                  onPressed: () async {
+                    await getImage();
+                  },
+                  child: const Text(
+                    "Chọn",
+                    style: TextStyle(fontSize: 16),
+                  )),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Center(
+              child: Image.network(
+                imageUrl,
+              ),
+            ),
+          ),
         ],
       ),
     );

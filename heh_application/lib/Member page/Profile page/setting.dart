@@ -91,7 +91,7 @@ class _SettingPageState extends State<SettingPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const UnPaidServicePage()));
+                      builder: (context) => const FavoritePage()));
             },
           ),
           ProfileMenu(
