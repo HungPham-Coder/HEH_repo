@@ -21,7 +21,7 @@ import 'package:heh_application/models/slot.dart';
 import 'package:heh_application/models/slot.dart';
 import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/models/type_of_slot.dart';
-import 'package:heh_application/models/user_exercise.dart';
+import 'package:heh_application/models/favorite_exercise.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/feedback.dart';
@@ -207,6 +207,47 @@ class CallAPI {
       }
     } else {
       throw Exception('Failed to load exercise detail list');
+    }
+  }
+  Future<bool> AddFavoriteExercise(FavoriteExercise favoriteExercise) async {
+    var url = Uri.parse('${link}/api/FavoriteExercise/Create');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+    final body = jsonEncode({
+      "userID": favoriteExercise.userID,
+      "exerciseDetailID": favoriteExercise.exerciseDetailID,
+      "isDeleted" : false,
+    });
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.post(url, body: body, headers: headers);
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      print(response.body);
+
+      return false;
+    }
+  }
+  Future<bool> DeleteFavoriteExerciseByExerciseDetailIDAndUserID(String detailID, String userID) async {
+    var url = Uri.parse('${link}/api/FavoriteExercise/DeleteByExerciseDetailIDAndUserID?detailID=$detailID&userID=$userID');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.delete(url,  headers: headers);
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      print(response.body);
+      return false;
     }
   }
 
@@ -420,6 +461,30 @@ class CallAPI {
     } else {
       print(response.body);
       throw Exception('Failed to update MeidicalRecord');
+    }
+  }
+
+  Future<void> updateExerciseDetail(
+      ExerciseDetail1 exerciseDetail1) async {
+    var url = Uri.parse('${link}/api/ExerciseDetail');
+    // var url = Uri.https('localhost:7166', 'api/Schedule');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    final body = jsonEncode({
+      "exerciseDetailID": exerciseDetail1.exerciseDetailID,
+      "exerciseID": exerciseDetail1.exerciseID,
+      "detailName": exerciseDetail1.detailName,
+      "set": exerciseDetail1.set,
+      "description": exerciseDetail1.description,
+      "favoriteStatus": exerciseDetail1.favoriteStatus,
+    });
+    var response = await http.put(url, headers: headers, body: body);
+    if (response.statusCode == 200) {
+    } else {
+      print(response.body);
+      throw Exception('Failed to update Exercise Detail');
     }
   }
 
@@ -1184,8 +1249,8 @@ class CallAPI {
     }
   }
 
-  Future<List<UserExercise>> getAllUserExercise() async {
-    var url = Uri.parse('${link}/api/UserExercise');
+  Future<List<FavoriteExercise>> getAllFavoriteExercise() async {
+    var url = Uri.parse('${link}/api/FavoriteExercise');
     // var url = Uri.https('localhost:7166', 'api/UserExercise');
     final headers = {
       "Accept": "application/json",
@@ -1194,15 +1259,15 @@ class CallAPI {
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
-      List<UserExercise> list = List<UserExercise>.from(
-          jsonResult.map((model) => UserExercise.fromMap(model)));
+      List<FavoriteExercise> list = List<FavoriteExercise>.from(
+          jsonResult.map((model) => FavoriteExercise.fromMap(model)));
       if (list == null) {
-        throw Exception('UserExercise List null');
+        throw Exception('Favorite Exercise List null');
       } else {
         return list;
       }
     } else {
-      throw Exception('Failed to load UserExercise');
+      throw Exception('Failed to load Favorite Exercise list');
     }
   }
 

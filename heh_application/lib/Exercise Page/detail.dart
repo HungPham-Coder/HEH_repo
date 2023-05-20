@@ -51,26 +51,17 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                               "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbackache.png?alt=media&token=d725e1f5-c106-41f7-9ee5-ade77c464a54",
                           text: "${snapshot.data![index].detailName}",
                           press: () async {
-                            List<ExerciseDetail1> exerciseDetailList =
-                                await CallAPI().getExerciseDetailByExerciseID(
-                                    snapshot.data![index].exerciseID);
-                            List<ExerciseResource> exerciseResource =
-                                await CallAPI()
-                                    .getExerciseResourceByExerciseDetailID(
-                                        snapshot.data![index].exerciseDetailID);
+
+
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              if (exerciseDetailList != null) {
+
                                 return ExerciseResources(
-                                  detailID: widget.exerciseID!,
+
                                   exerciseDetail: snapshot.data![index],
                                   // exerciseResource: exerciseResource,
                                 );
-                              } else {
-                                return ExerciseResources(
-                                  detailID: widget.exerciseID!,
-                                );
-                              }
+
                             }));
                           },
                         );

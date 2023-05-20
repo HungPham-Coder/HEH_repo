@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Exercise%20Page/resourceDetail.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/common_widget/menu_listview.dart';
 import 'package:heh_application/models/exercise_model/exercise_detail.dart';
 import 'package:heh_application/models/exercise_resource.dart';
+import 'package:heh_application/models/favorite_exercise.dart';
 import 'package:heh_application/services/call_api.dart';
 
 import '../common_widget/search_delegate.dart';
@@ -10,15 +12,14 @@ import '../common_widget/search_delegate.dart';
 class ExerciseResources extends StatefulWidget {
   ExerciseResources({
     Key? key,
-    this.detailID,
+
     this.exerciseDetail,
-    this.exerciseResource,
   }) : super(key: key);
 
-  String? detailID;
+
   ExerciseDetail1? exerciseDetail;
   // List<ExerciseResource>? exerciseResource;
-  ExerciseResource? exerciseResource;
+
   @override
   State<ExerciseResources> createState() => _ExerciseResourcesState();
 }
@@ -33,12 +34,31 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
         appBar: AppBar(
           actions: [
             IconButton(
-              icon: Icon(isSelected ? Icons.favorite_border : Icons.favorite,
-                  color: isSelected ? Colors.white : Colors.red, size: 30),
-              onPressed: () {
-                setState(() {
-                  isSelected = !isSelected;
-                });
+              icon: Icon(
+                  widget.exerciseDetail!.favoriteStatus == 0
+                      ? Icons.favorite_border
+                      : Icons.favorite,
+                  color: widget.exerciseDetail!.favoriteStatus == 0
+                      ? Colors.white
+                      : Colors.red,
+                  size: 30),
+              onPressed: () async {
+                if (widget.exerciseDetail!.favoriteStatus == 0) {
+                  setState(() {
+                    widget.exerciseDetail!.favoriteStatus = 1;
+                  });
+                  FavoriteExercise favoriteExercise = FavoriteExercise(
+                    exerciseDetailID: widget.exerciseDetail!.exerciseDetailID,
+                    userID: sharedCurrentUser!.userID!,
+                  );
+                  await CallAPI().AddFavoriteExercise(favoriteExercise);
+                } else {
+                  setState(() {
+                    widget.exerciseDetail!.favoriteStatus = 0;
+                  });
+                  await CallAPI().DeleteFavoriteExerciseByExerciseDetailIDAndUserID(widget.exerciseDetail!.exerciseDetailID, sharedCurrentUser!.userID!);
+                }
+                await CallAPI().updateExerciseDetail(widget.exerciseDetail!);
               },
             ),
           ],
@@ -78,30 +98,14 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
                                   //     await CallAPI()
                                   //         .getExerciseDetailByExerciseID(widget
                                   //             .exerciseDetail!.exerciseID);
-                                  List<ExerciseResource> exerciseResource =
-                                      await CallAPI()
-                                          .getExerciseResourceByExerciseDetailID(
-                                              snapshot.data![index]
-                                                  .exerciseDetailID);
+
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    print(exerciseResource);
-                                    if (widget.detailID != null) {
+
                                       return ExerciseResourcesDetail(
-                                        resourceID: widget.detailID,
-                                        // exerciseResource: exerciseResource,
-                                        imageURL:
-                                            snapshot.data![index].imageURL!,
-                                        description:
-                                            widget.exerciseDetail!.description,
-                                        resourceName:
-                                            snapshot.data![index].resourceName,
-                                        videoURL:
-                                            snapshot.data![index].videoURL,
+                                        exerciseResource: snapshot.data![index],
                                       );
-                                    } else {
-                                      return CircularProgressIndicator();
-                                    }
+
                                   }));
                                 },
                               );

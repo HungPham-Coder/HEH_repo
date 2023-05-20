@@ -20,7 +20,7 @@ class ExerciseResource {
     return ExerciseResource(
         exerciseResourceID: json['exerciseResourceID'],
         exerciseDetailID: json['exerciseDetailID'],
-        exerciseDetail1: json['ExerciseDetail'],
+        exerciseDetail1: ExerciseDetail1.fromMap(json['exerciseDetail']),
         resourceName: json['resourceName'],
         imageURL: json['imageURL'],
         videoURL: json['videoURL']);

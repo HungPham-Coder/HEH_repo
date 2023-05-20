@@ -7,6 +7,7 @@ class ExerciseDetail1 {
   String? detailName;
   String? set;
   String description;
+  int favoriteStatus;
   ExerciseDetail1({
     required this.exerciseDetailID,
     required this.exerciseID,
@@ -14,13 +15,16 @@ class ExerciseDetail1 {
     required this.description,
     this.set,
     this.detailName,
+    required this.favoriteStatus
   });
   factory ExerciseDetail1.fromMap(Map<String, dynamic> json) {
     return ExerciseDetail1(
         exerciseDetailID: json['exerciseDetailID'],
         exerciseID: json['exerciseID'],
+        exercise: Exercise.fromMap(json['exercise']),
         detailName: json['detailName'],
         set: json['set'],
-        description: json['description'],);
+        description: json['description'],
+    favoriteStatus: json['favoriteStatus']);
   }
 }
