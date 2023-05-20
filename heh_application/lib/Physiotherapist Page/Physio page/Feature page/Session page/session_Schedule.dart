@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../common_widget/menu_listview.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 int addSlotStatus = 200;
 int updateSlotStatus = 200;
 class SessionRegisterPage extends StatefulWidget {

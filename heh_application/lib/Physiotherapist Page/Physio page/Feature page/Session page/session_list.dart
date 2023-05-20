@@ -44,6 +44,7 @@ class _SessionListPageState extends State<SessionListPage> {
                             snapshot.data![index].longtermStatus != 0) {
                           return Container();
                         } else {
+
                           return ServicePaid(
                               bookingDetail: snapshot.data![index],
                               icon:
