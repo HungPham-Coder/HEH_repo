@@ -102,9 +102,10 @@ class _InformationPageState extends State<InformationPage> {
     return Scaffold(
         body: SingleChildScrollView(
             child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 40),
       child: Column(
         children: [
+          const SizedBox(height: 20),
           avatar(),
           const SizedBox(height: 20),
           fullName(label: "Họ và Tên"),
@@ -213,17 +214,6 @@ class _InformationPageState extends State<InformationPage> {
                           password: sharedCurrentUser!.password,
                         );
                         CallAPI().updateUserbyUID(signUpUser);
-
-                        // SubProfile subProfile = SubProfile(
-                        //     userID: sharedCurrentUser!.userID,
-                        //     relationID: widget.listSubProfile!.relationID,
-                        //     subName: widget.listSubProfile!.subName,
-                        //     profileID: widget.listSubProfile!.profileID,
-                        //     relationship: widget.listSubProfile!.relationship,
-                        //     dob: dob,
-                        //     signUpUser: signUpUser);
-                        // CallAPI().updateSubprofile(subProfile);
-
                         await auth.upLoadFirestoreData(
                             FirestoreConstants.pathUserCollection,
                             sharedCurrentUser!.userID!,
@@ -299,15 +289,15 @@ class _InformationPageState extends State<InformationPage> {
               obscureText: obscureText,
               keyboardType: TextInputType.name,
               controller: _firstName..text = sharedCurrentUser!.firstName!,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                   // hintStyle: const TextStyle(color: Colors.black),
                   // hintText: sharedCurrentUser!.firstName,
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
                   ),
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey))),
               validator: (value) {
                 if (value!.isEmpty) {
@@ -349,15 +339,15 @@ class _InformationPageState extends State<InformationPage> {
               keyboardType: TextInputType.streetAddress,
               controller: _address..text = sharedCurrentUser!.address!,
               obscureText: obscureText,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                   // hintStyle: const TextStyle(color: Colors.black),
                   // hintText: sharedCurrentUser!.address,
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
                   ),
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey))),
               validator: (value) {
                 if (value!.isEmpty) {
@@ -442,15 +432,15 @@ class _InformationPageState extends State<InformationPage> {
                 controller: _email..text = sharedCurrentUser!.email!,
                 obscureText: obscureText,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                    hintStyle: TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                    hintStyle: const TextStyle(color: Colors.black),
                     // hintText: sharedCurrentUser!.email,
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                    enabledBorder: OutlineInputBorder(
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
                     ),
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey))),
                 validator: (email) {
                   if (email != null && !EmailValidator.validate(email)) {
@@ -491,15 +481,15 @@ class _InformationPageState extends State<InformationPage> {
             keyboardType: TextInputType.phone,
             controller: _phone..text = sharedCurrentUser!.phone!,
             obscureText: obscureText,
-            decoration: const InputDecoration(
-                hintStyle: TextStyle(color: Colors.black),
+            decoration: InputDecoration(
+                hintStyle: const TextStyle(color: Colors.black),
                 // hintText: sharedCurrentUser!.phone,
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                enabledBorder: OutlineInputBorder(
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey),
                 ),
-                border: OutlineInputBorder(
+                border: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey))),
             validator: (value) {
               if (value!.isEmpty) {
