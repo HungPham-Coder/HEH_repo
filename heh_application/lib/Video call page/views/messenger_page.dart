@@ -538,8 +538,8 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
               ],
             )
           ],
-          title: const Text(
-            "Chăm sóc khách hàng",
+          title: Text(
+            widget.oponentNickName,
             style: TextStyle(fontSize: 18),
           ),
           elevation: 10,
