@@ -8,10 +8,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Family%20page/family.dart';
 import 'package:heh_application/Member%20page/Profile%20page/setting.dart';
+import 'package:heh_application/constant/firestore_constant.dart';
+import 'package:heh_application/models/sign_up_user.dart';
+import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/chat_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 final TextEditingController _date = TextEditingController();
 final TextEditingController _firstName = TextEditingController();
@@ -93,6 +97,7 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context, listen: false);
     DateTime tempDob =
         new DateFormat("yyyy-MM-dd").parse(sharedCurrentUser!.dob!);
     String dob = DateFormat("dd-MM-yyyy").format(tempDob);
@@ -188,7 +193,7 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                     padding: const EdgeInsets.only(top: 20),
                     child: MaterialButton(
                       height: 50,
-                      onPressed: () {
+                      onPressed: () async {
                         // SignUpUser signUpUser = SignUpUser(
                         //     firstName: _firstName.text,
                         //     lastName: _lastName.text,
@@ -198,6 +203,45 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                         //     gender: _genderValue.index,
                         //     dob: _date.text);
                         // signUp(signUpUser);
+                        bool gender = false;
+                        if (_genderValue.index == 0) {
+                          gender = true;
+                        } else if (_genderValue == 1) {
+                          gender = false;
+                        }
+                        SignUpUser signUpUser = SignUpUser(
+                          userID: sharedCurrentUser!.userID,
+                          image: imageUrl,
+                          firstName: _firstName.text,
+                          email: _email.text,
+                          phone: _phone.text,
+                          address: _address.text,
+                          gender: gender,
+                          dob: dob,
+                          password: sharedCurrentUser!.password,
+                        );
+                        CallAPI().updateUserbyUID(signUpUser);
+                        await auth.upLoadFirestoreData(
+                            FirestoreConstants.pathUserCollection,
+                            sharedCurrentUser!.userID!,
+                            {"nickname": signUpUser.firstName});
+                        final snackBar = SnackBar(
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: const [
+                              Text(
+                                "Thành công",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          backgroundColor: Colors.green,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(

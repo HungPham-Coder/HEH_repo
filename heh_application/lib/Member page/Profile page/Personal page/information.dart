@@ -84,6 +84,7 @@ class _InformationPageState extends State<InformationPage> {
         print(sharedCurrentUser!.image);
         isLoading = false;
       });
+      await CallAPI().updateUserbyUID(sharedCurrentUser!);
     } on FirebaseException catch (e) {
       setState(() {
         isLoading = false;
@@ -203,8 +204,8 @@ class _InformationPageState extends State<InformationPage> {
                         }
                         SignUpUser signUpUser = SignUpUser(
                           userID: sharedCurrentUser!.userID,
-                          image: imageUrl,
                           firstName: _firstName.text,
+                          image: sharedCurrentUser!.image,
                           email: _email.text,
                           phone: _phone.text,
                           address: _address.text,
@@ -217,6 +218,10 @@ class _InformationPageState extends State<InformationPage> {
                             FirestoreConstants.pathUserCollection,
                             sharedCurrentUser!.userID!,
                             {"nickname": signUpUser.firstName});
+                        SignUpUser? user = await CallAPI().getUserById(sharedResultLogin!.userID!);
+                        setState(() {
+                          sharedCurrentUser = user;
+                        });
                         final snackBar = SnackBar(
                           content: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -282,10 +287,10 @@ class _InformationPageState extends State<InformationPage> {
               textCapitalization: TextCapitalization.words,
               obscureText: obscureText,
               keyboardType: TextInputType.name,
-              controller: _firstName,
+              controller: _firstName..text = sharedCurrentUser!.firstName!,
               decoration: InputDecoration(
-                  hintStyle: const TextStyle(color: Colors.black),
-                  hintText: sharedCurrentUser!.firstName,
+                  // hintStyle: const TextStyle(color: Colors.black),
+                  // hintText: sharedCurrentUser!.firstName,
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                   enabledBorder: const OutlineInputBorder(
@@ -331,11 +336,11 @@ class _InformationPageState extends State<InformationPage> {
               // initialValue: sharedCurrentUser!.address,
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.streetAddress,
-              controller: _address,
+              controller: _address..text =sharedCurrentUser!.address!,
               obscureText: obscureText,
               decoration: InputDecoration(
-                  hintStyle: const TextStyle(color: Colors.black),
-                  hintText: sharedCurrentUser!.address,
+                  // hintStyle: const TextStyle(color: Colors.black),
+                  // hintText: sharedCurrentUser!.address,
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                   enabledBorder: const OutlineInputBorder(
@@ -423,12 +428,12 @@ class _InformationPageState extends State<InformationPage> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: TextFormField(
                 readOnly: true,
-                controller: _email,
+                controller: _email..text=sharedCurrentUser!.email!,
                 obscureText: obscureText,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                     hintStyle: const TextStyle(color: Colors.black),
-                    hintText: sharedCurrentUser!.email,
+                    // hintText: sharedCurrentUser!.email,
                     contentPadding:
                         const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                     enabledBorder: const OutlineInputBorder(
@@ -473,11 +478,11 @@ class _InformationPageState extends State<InformationPage> {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: TextFormField(
             keyboardType: TextInputType.phone,
-            controller: _phone,
+            controller: _phone..text = sharedCurrentUser!.phone!,
             obscureText: obscureText,
             decoration: InputDecoration(
                 hintStyle: const TextStyle(color: Colors.black),
-                hintText: sharedCurrentUser!.phone,
+                // hintText: sharedCurrentUser!.phone,
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                 enabledBorder: const OutlineInputBorder(
@@ -513,7 +518,7 @@ class _InformationPageState extends State<InformationPage> {
           children: [
             CircleAvatar(
               backgroundColor: Colors.white,
-              backgroundImage: NetworkImage(sharedCurrentUser!.image!),
+              backgroundImage: NetworkImage(sharedCurrentUser!.image == null ?  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2F360_F_84671939_jxymoYZO8Oeacc3JRBDE8bSXBWj0ZfA9.jpg?alt=media&token=86b0417c-4b47-4207-8c1f-eea21242c91a":sharedCurrentUser!.image! ),
             ),
             Positioned(
               right: -12,

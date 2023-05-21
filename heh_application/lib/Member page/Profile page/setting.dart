@@ -48,7 +48,7 @@ class _SettingPageState extends State<SettingPage> {
               // ignore: prefer_const_literals_to_create_immutables
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage(sharedCurrentUser!.image!),
+                  backgroundImage: NetworkImage(sharedCurrentUser!.image == null ?  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2F360_F_84671939_jxymoYZO8Oeacc3JRBDE8bSXBWj0ZfA9.jpg?alt=media&token=86b0417c-4b47-4207-8c1f-eea21242c91a":sharedCurrentUser!.image! ),
                 ),
               ],
             ),
