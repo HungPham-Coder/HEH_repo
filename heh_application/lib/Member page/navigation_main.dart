@@ -54,7 +54,7 @@ class _Navigation_BarState extends State<Navigation_Bar> {
     return Scaffold(
       body: FutureBuilder<MedicalRecord?>(
           future: CallAPI().getMedicalRecordByUserIDAndRelationName(
-              sharedCurrentUser!.userID!),
+              sharedCurrentUser!.userID!,"Tôi"),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               sharedMedicalRecord = snapshot.data!;

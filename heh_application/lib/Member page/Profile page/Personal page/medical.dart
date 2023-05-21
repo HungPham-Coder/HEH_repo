@@ -54,6 +54,9 @@ class _MedicalPageState extends State<MedicalPage> {
 
   @override
   Widget build(BuildContext context) {
+    _selectedProblems.forEach((element) {
+      print(element!.name);
+    });
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -114,13 +117,6 @@ class _MedicalPageState extends State<MedicalPage> {
                                 onConfirm: (values) {
                                   setState(() {
                                     _selectedProblems = values;
-                                    int counter = 0;
-
-                                    _selectedProblems.forEach((element) {
-                                      if (element!.name.contains("Khác")) {
-                                        counter++;
-                                      }
-                                    });
                                   });
                                 },
                                 chipDisplay:
@@ -189,21 +185,25 @@ class _MedicalPageState extends State<MedicalPage> {
                             height: 50,
                             onPressed: () async {
                               String problem = '';
-                              if (_selectedProblems.length > 1) {
-                                _selectedProblems.forEach((element) {
-                                  if (element != _selectedProblems.last) {
-                                    problem += '${element!.name}, ';
-                                  } else {
-                                    problem += '${element!.name} ';
-                                  }
-                                });
-                                print("State 1");
-                              } else {
-                                _selectedProblems.forEach((element) {
-                                  problem = '${element!.name}';
-                                });
-                                print("State 2");
+                              if (_selectedProblems.length > 0) {
+                                if (_selectedProblems.length > 1) {
+                                  _selectedProblems.forEach((element) {
+                                    if (element != _selectedProblems.last) {
+                                      problem += '${element!.name}, ';
+                                    } else {
+                                      problem += '${element!.name} ';
+                                    }
+                                  });
+                                } else {
+                                  _selectedProblems.forEach((element) {
+                                    problem = '${element!.name}';
+                                  });
+                                }
                               }
+                              else {
+                                problem = sharedMedicalRecord!.problem!;
+                              }
+
                               print("problem: ${problem}");
 
                               MedicalRecord medicalRecord = MedicalRecord(
@@ -216,30 +216,87 @@ class _MedicalPageState extends State<MedicalPage> {
                                 injury: _injury.text,
                                 medicine: _medicine.text,
                               );
+                              //update medical record
                               CallAPI().updateMedicalRecordbysubIDandMedicalID(
                                   medicalRecord);
                               MedicalRecord? medical = await CallAPI()
                                   .updateMedicalRecord(medicalRecord);
-
-                              _selectedProblems.forEach((elementSelected) {
-                                _listCategory.forEach((element) async {
-                                  if (elementSelected!.name ==
-                                      element.categoryName) {
-                                    Problem1 problem1 = Problem1(
-                                      // problemID: sharedProblem!.problemID,
-                                      categoryID: element.categoryID,
-                                      medicalRecordID:
-                                          medical!.medicalRecordID!,
-                                    );
-                                    print(
-                                        "medicalID: ${medical.medicalRecordID!}");
-                                    await CallAPI().updateProblem(problem1);
-                                    // print(
-                                    //     "problem1: ${sharedProblem!.problemID}");
-                                  }
+                              // update problem
+                              if (_selectedProblems.length > 0){
+                                //listDB
+                                List<Problem1>? listProblem = await CallAPI()
+                                    .getProblemByMedicalRecordID(
+                                    sharedMedicalRecord!.medicalRecordID!);
+                                //listAdd
+                                List<Problem1>? listAddProblem = [] ;
+                                //listDelete
+                                List<Problem1>? listDeleteProblem = [] ;
+                                //List User Choose
+                                List<Problem1> listOutput = [];
+                                _selectedProblems.forEach((elementSelected) {
+                                  _listCategory.forEach((element) async {
+                                    if (elementSelected!.name ==
+                                        element.categoryName) {
+                                      Problem1 problem1 = Problem1(
+                                        // problemID: sharedProblem!.problemID,
+                                        categoryID: element.categoryID,
+                                        medicalRecordID:
+                                        medical!.medicalRecordID!,
+                                      );
+                                      listOutput.add(problem1);
+                                    }
+                                  });
                                 });
-                              });
-                            },
+                                if (listOutput.length > 0){
+                                  for (var out in listOutput){
+                                    int count = 0;
+                                    for (var item in listProblem!){
+                                      if (out.categoryID == item.categoryID){
+                                        // problem được lưu trong db đã có và trùng với problem user nhập vào
+                                        //problem có trong db và có trong kết quả thì giữ nguyên
+                                        count ++ ;
+                                      }
+
+                                    }
+                                    if (count == 0) {
+                                      // add những problem có trong kết quả nhưng không có trong db
+                                      listAddProblem.add(out);
+                                    }
+                                  }
+                                  for (var item in listProblem!){
+                                    int count = 0;
+                                    for (var out in listOutput){
+                                      if (out.categoryID == item.categoryID){
+                                        // problem được lưu trong db đã có và trùng với problem user nhập vào
+                                        //problem có trong db và có trong kết quả thì giữ nguyên
+                                        count ++ ;
+                                      }
+
+                                    }
+                                    if (count == 0) {
+                                      // delete những problem có trong db nhưng không có trong output
+                                      listDeleteProblem.add(item);
+                                    }
+                                  }
+                                  if (listAddProblem != null) {
+                                    for (var item in listAddProblem) {
+                                      await CallAPI().addProblem(item);
+                                    }
+                                  }
+                                  if (listDeleteProblem != null){
+                                    for (var item in listDeleteProblem) {
+                                      await CallAPI().DeleteProblem(item.problemID!);
+                                    }
+                                  }
+
+                                }
+                              }
+
+                                MedicalRecord? medicalUpdate = await CallAPI().getMedicalRecordByUserIDAndRelationName(sharedCurrentUser!.userID!, "Tôi");
+                               setState(() {
+                                 sharedMedicalRecord = medicalUpdate;
+                               });
+                              },
                             color: const Color.fromARGB(255, 46, 161, 226),
                             elevation: 0,
                             shape: RoundedRectangleBorder(
@@ -270,44 +327,6 @@ class _MedicalPageState extends State<MedicalPage> {
     );
   }
 }
-
-// Widget problem({label, obscureText = false}) {
-//   return Column(
-//     children: <Widget>[
-//       Row(
-//         children: <Widget>[
-//           Text(
-//             label,
-//             style: const TextStyle(
-//                 fontSize: 15,
-//                 fontWeight: FontWeight.w400,
-//                 color: Colors.black87),
-//           ),
-//           const Text(
-//             " *",
-//             style: TextStyle(color: Colors.red),
-//           ),
-//         ],
-//       ),
-//       const SizedBox(height: 5),
-//       TextFormField(
-//         // initialValue: problem,
-//         obscureText: obscureText,
-//         controller: _problem,
-//         decoration: InputDecoration(
-//             hintText: sharedMedicalRecord!.problem,
-//             contentPadding:
-//                 const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-//             enabledBorder: const OutlineInputBorder(
-//               borderSide: BorderSide(color: Colors.grey),
-//             ),
-//             border: const OutlineInputBorder(
-//                 borderSide: BorderSide(color: Colors.grey))),
-//       ),
-//       const SizedBox(height: 10)
-//     ],
-//   );
-// }
 
 Widget difficult({label, obscureText = false}) {
   return Column(

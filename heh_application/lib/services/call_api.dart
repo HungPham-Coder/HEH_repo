@@ -251,6 +251,25 @@ class CallAPI {
     }
   }
 
+  Future<bool> DeleteProblem(String problemID) async {
+    var url = Uri.parse('${link}/api/Problem/$problemID');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.delete(url,  headers: headers);
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      print(response.body);
+      return false;
+    }
+  }
+
   Future<List<CategoryModel>> getAllCategory() async {
     var url = Uri.parse('${link}/api/Category');
     // var url = Uri.https('localhost:7166', 'api/Category');
@@ -489,9 +508,9 @@ class CallAPI {
   }
 
   Future<MedicalRecord?> getMedicalRecordByUserIDAndRelationName(
-      String userID) async {
+      String userID, String relationName) async {
     var url = Uri.parse(
-        '${link}/api/MedicalRecord/GetByRelationNameAndUserID?relationName=Tôi&userID=$userID');
+        '${link}/api/MedicalRecord/GetByRelationNameAndUserID?relationName=$relationName&userID=$userID');
     // var url = Uri.https('localhost:7166', 'api/MedicalRecord');
     final headers = {
       "Accept": "application/json",
@@ -1109,6 +1128,27 @@ class CallAPI {
       throw Exception('Failed to load SubProfile List');
     }
   }
+  Future<List<Problem1>?> getProblemByMedicalRecordID(String medicalRecordID) async {
+    var url = Uri.parse('${link}/api/Problem/GetByMedicalRecordID?medicalRecordID=$medicalRecordID');
+    // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      Iterable jsonResult = json.decode(response.body);
+      List<Problem1> list = List<Problem1>.from(
+          jsonResult.map((model) => Problem1.FromMap(model)));
+
+      if (list == null) {
+      } else {
+        return list;
+      }
+    } else {
+      throw Exception('Failed to load Problem List');
+    }
+  }
 
   Future<SubProfile> getSubProfileBySubNameAndUserID(
       String subName, String userID) async {
@@ -1327,6 +1367,7 @@ class CallAPI {
     final body = jsonEncode({
       "categoryID": problem.categoryID,
       "medicalRecordID": problem.medicalRecordID,
+      "isDeleted" : false
     });
     final headers = {
       "Accept": "application/json",

@@ -284,18 +284,31 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                             MedicalRecord? medical = await CallAPI()
                                 .createMedicalRecord(medicalRecord);
                             //Create problem
-                            _selectedProblems.forEach((elementSelected) {
-                              _listCategory.forEach((element) async {
+                            List<Problem1>? listAddProblem = [] ;
+                            _selectedProblems.forEach((elementSelected)  {
+                              _listCategory.forEach((element)   {
                                 if (elementSelected!.name ==
                                     element.categoryName) {
                                   Problem1 problem1 = Problem1(
                                       categoryID: element.categoryID,
                                       medicalRecordID:
                                           medical!.medicalRecordID!);
-                                  await CallAPI().addProblem(problem1);
+
+
+                                  listAddProblem.add(problem1);
                                 }
                               });
                             });
+                            if (listAddProblem.length > 0){
+                              for (var element in listAddProblem){
+
+                                await CallAPI().addProblem(element);
+                              }
+                            }
+                            else {
+                              print ("List loi");
+                            }
+
                             //gửi mã OTP
                             myauth.setConfig(
                                 appEmail: "hungppmse140153@fpt.edu.vn",
