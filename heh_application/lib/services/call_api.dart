@@ -209,6 +209,7 @@ class CallAPI {
       throw Exception('Failed to load exercise detail list');
     }
   }
+
   Future<bool> AddFavoriteExercise(FavoriteExercise favoriteExercise) async {
     var url = Uri.parse('${link}/api/FavoriteExercise/Create');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
@@ -216,7 +217,7 @@ class CallAPI {
     final body = jsonEncode({
       "userID": favoriteExercise.userID,
       "exerciseDetailID": favoriteExercise.exerciseDetailID,
-      "isDeleted" : false,
+      "isDeleted": false,
     });
     final headers = {
       "Accept": "application/json",
@@ -232,16 +233,18 @@ class CallAPI {
       return false;
     }
   }
-  Future<bool> DeleteFavoriteExerciseByExerciseDetailIDAndUserID(String detailID, String userID) async {
-    var url = Uri.parse('${link}/api/FavoriteExercise/DeleteByExerciseDetailIDAndUserID?detailID=$detailID&userID=$userID');
-    // var url = Uri.https('localhost:7166', 'api/User/Register');
 
+  Future<bool> DeleteFavoriteExerciseByExerciseDetailIDAndUserID(
+      String detailID, String userID) async {
+    var url = Uri.parse(
+        '${link}/api/FavoriteExercise/DeleteByExerciseDetailIDAndUserID?detailID=$detailID&userID=$userID');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
 
     final headers = {
       "Accept": "application/json",
       "content-type": "application/json"
     };
-    var response = await http.delete(url,  headers: headers);
+    var response = await http.delete(url, headers: headers);
 
     if (response.statusCode == 200) {
       return true;
@@ -255,12 +258,11 @@ class CallAPI {
     var url = Uri.parse('${link}/api/Problem/$problemID');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
 
-
     final headers = {
       "Accept": "application/json",
       "content-type": "application/json"
     };
-    var response = await http.delete(url,  headers: headers);
+    var response = await http.delete(url, headers: headers);
 
     if (response.statusCode == 200) {
       return true;
@@ -314,8 +316,10 @@ class CallAPI {
     }
   }
 
-  Future<List<BookingDetail>> getAllBookingDetailByUserIDAndTypeOfSlot(String userID,String typeOfSlot) async {
-    var url = Uri.parse('${link}/api/BookingDetail/GetByUserIDAndTypeOfSlot?userID=$userID&typeOfSlot=$typeOfSlot');
+  Future<List<BookingDetail>> getAllBookingDetailByUserIDAndTypeOfSlot(
+      String userID, String typeOfSlot) async {
+    var url = Uri.parse(
+        '${link}/api/BookingDetail/GetByUserIDAndTypeOfSlot?userID=$userID&typeOfSlot=$typeOfSlot');
     // var url = Uri.https('localhost:7166', 'api/BookingDetail');
     final headers = {
       "Accept": "application/json",
@@ -483,8 +487,7 @@ class CallAPI {
     }
   }
 
-  Future<void> updateExerciseDetail(
-      ExerciseDetail1 exerciseDetail1) async {
+  Future<void> updateExerciseDetail(ExerciseDetail1 exerciseDetail1) async {
     var url = Uri.parse('${link}/api/ExerciseDetail');
     // var url = Uri.https('localhost:7166', 'api/Schedule');
     final headers = {
@@ -573,7 +576,6 @@ class CallAPI {
     if (response.statusCode == 200) {
       return MedicalRecord.fromMap(json.decode(response.body));
     } else {}
-
   }
 
   Future<MedicalRecord?> updateMedicalRecord(
@@ -600,7 +602,6 @@ class CallAPI {
     if (response.statusCode == 200) {
       return MedicalRecord.fromMap(json.decode(response.body));
     } else {}
-
   }
 
   Future<List<PhysiotherapistModel>> getAllPhysiotherapist() async {
@@ -687,7 +688,8 @@ class CallAPI {
   }
 
   Future<dynamic> AddLongTermSlotByPhysioID(Slot slot, String physioID) async {
-    var url = Uri.parse('${link}/api/Slot/AddLongTermSlotByPhysioID?physioID=$physioID');
+    var url = Uri.parse(
+        '${link}/api/Slot/AddLongTermSlotByPhysioID?physioID=$physioID');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
 
     final body = jsonEncode({
@@ -707,12 +709,11 @@ class CallAPI {
       addSlotStatus = 200;
       return Slot.fromMap(json.decode(response.body));
     } else {
-
       addSlotStatus = 400;
       Iterable jsonResult = json.decode(response.body);
 
-      List<Slot> list = List<Slot>.from(
-          jsonResult.map((model) => Slot.fromMap(model)));
+      List<Slot> list =
+          List<Slot>.from(jsonResult.map((model) => Slot.fromMap(model)));
       if (list == null) {
         throw Exception('Slot List null');
       } else {
@@ -728,7 +729,7 @@ class CallAPI {
     final body = jsonEncode({
       "slotID": schedule.slotID,
       "physiotherapistID": schedule.physiotherapistID,
-      "typeOfSlotID" : schedule.typeOfSlotID,
+      "typeOfSlotID": schedule.typeOfSlotID,
       "description": schedule.description,
       "physioBookingStatus": schedule.physioBookingStatus
     });
@@ -816,8 +817,8 @@ class CallAPI {
       updateSlotStatus = 400;
       Iterable jsonResult = json.decode(response.body);
 
-      List<Slot> list = List<Slot>.from(
-          jsonResult.map((model) => Slot.fromMap(model)));
+      List<Slot> list =
+          List<Slot>.from(jsonResult.map((model) => Slot.fromMap(model)));
       if (list == null) {
         throw Exception('Slot List null');
       } else {
@@ -861,7 +862,6 @@ class CallAPI {
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
-
       Iterable jsonResult = json.decode(response.body);
       List<Schedule> list = List<Schedule>.from(
           jsonResult.map((model) => Schedule.fromMap(model)));
@@ -875,8 +875,6 @@ class CallAPI {
       throw Exception('Failed to load Schedule List');
     }
   }
-
-
 
   Future<List<Schedule>?> getallSlotByPhysiotherapistIDAndTypeOfSlot(
       String physiotherapistID, String typeOfSlot) async {
@@ -941,8 +939,8 @@ class CallAPI {
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
-      List<Schedule> list =
-          List<Schedule>.from(jsonResult.map((model) => Schedule.fromMap(model)));
+      List<Schedule> list = List<Schedule>.from(
+          jsonResult.map((model) => Schedule.fromMap(model)));
 
       if (list == null) {
         throw Exception('Schedule List null');
@@ -1083,8 +1081,30 @@ class CallAPI {
     if (response.statusCode == 200) {
       return SubProfile.fromMap(json.decode(response.body));
     } else {
-
       throw Exception("failed to add subprofile");
+    }
+  }
+
+  Future<void> updateSubprofile(SubProfile subProfile) async {
+    var url = Uri.parse('${link}/api/User');
+    // var url = Uri.https('localhost:7166', 'api/Schedule');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    final body = jsonEncode({
+      "userID": subProfile.userID,
+      "profileID": subProfile.profileID,
+      "relationId": subProfile.relationID,
+      "subName": subProfile.subName,
+      "dateOfBirth": subProfile.dob,
+      "isDeleted": false
+    });
+    var response = await http.put(url, headers: headers, body: body);
+    if (response.statusCode == 200) {
+    } else {
+      print(response.body);
+      throw Exception('Failed to update subProfile');
     }
   }
 
@@ -1102,7 +1122,6 @@ class CallAPI {
     if (response.statusCode == 200) {
       return TypeOfSlot.fromMap(json.decode(response.body));
     } else {
-
       throw Exception("failed to add subprofile");
     }
   }
@@ -1128,8 +1147,11 @@ class CallAPI {
       throw Exception('Failed to load SubProfile List');
     }
   }
-  Future<List<Problem1>?> getProblemByMedicalRecordID(String medicalRecordID) async {
-    var url = Uri.parse('${link}/api/Problem/GetByMedicalRecordID?medicalRecordID=$medicalRecordID');
+
+  Future<List<Problem1>?> getProblemByMedicalRecordID(
+      String medicalRecordID) async {
+    var url = Uri.parse(
+        '${link}/api/Problem/GetByMedicalRecordID?medicalRecordID=$medicalRecordID');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
@@ -1280,7 +1302,7 @@ class CallAPI {
         throw Exception('TypeOfSlot List null');
       } else {
         list.forEach((element) {
-         print(element.typeName) ;
+          print(element.typeName);
         });
         return list;
       }
@@ -1354,9 +1376,7 @@ class CallAPI {
     if (response.statusCode == 200) {
       return BookingDetail.fromMap(json.decode(response.body));
     } else {
-
       throw Exception('Failed to add BookingDetail');
-
     }
   }
 
@@ -1367,7 +1387,7 @@ class CallAPI {
     final body = jsonEncode({
       "categoryID": problem.categoryID,
       "medicalRecordID": problem.medicalRecordID,
-      "isDeleted" : false
+      "isDeleted": false
     });
     final headers = {
       "Accept": "application/json",
@@ -1378,7 +1398,6 @@ class CallAPI {
     if (response.statusCode == 200) {
       return Problem1.FromMap(json.decode(response.body));
     } else {}
-
   }
 
   Future<Problem1?> updateProblem(Problem1 problem) async {
@@ -1399,7 +1418,6 @@ class CallAPI {
     if (response.statusCode == 200) {
       return Problem1.FromMap(json.decode(response.body));
     } else {}
-
   }
 
   Future<String> addNotification(NotificationModel notification) async {

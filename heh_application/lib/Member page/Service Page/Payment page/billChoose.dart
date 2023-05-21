@@ -41,8 +41,9 @@ class _BillChoosePageState extends State<BillChoosePage> {
     DateTime tempTimeEnd = new DateFormat("yyyy-MM-ddTHH:mm:ss")
         .parse(widget.schedule.slot!.timeEnd);
     timeEnd = DateFormat("HH:mm").format(tempTimeEnd);
-
   }
+
+  final value = NumberFormat("###,###,###");
 
   @override
   void initState() {
@@ -121,7 +122,8 @@ class _BillChoosePageState extends State<BillChoosePage> {
                         padding(),
                         information(
                             name: "Số tiền: ",
-                            info: '${widget.schedule.typeOfSlot!.price} VND'),
+                            info:
+                                '${value.format(widget.schedule.typeOfSlot!.price.toInt())} VNĐ'),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -169,20 +171,24 @@ class _BillChoosePageState extends State<BillChoosePage> {
                               side: const BorderSide(color: Colors.white)),
                         )),
                     onPressed: () async {
-                     BookingSchedule? bookingScheduleAdd = await CallAPI().addBookingSchedule(widget.bookingSchedule!);
-                      BookingSchedule bookingSchedule = await CallAPI().getBookingScheduleByID(bookingScheduleAdd!.bookingScheduleID!);
+                      BookingSchedule? bookingScheduleAdd = await CallAPI()
+                          .addBookingSchedule(widget.bookingSchedule!);
+                      BookingSchedule bookingSchedule = await CallAPI()
+                          .getBookingScheduleByID(
+                              bookingScheduleAdd!.bookingScheduleID!);
                       BookingDetail bookingDetail = BookingDetail(
-                        bookingScheduleID: bookingScheduleAdd.bookingScheduleID!,
-                        bookingSchedule:bookingSchedule,
-                        shorttermStatus: 0,
-                        longtermStatus: -1
-                      );
-
+                          bookingScheduleID:
+                              bookingScheduleAdd.bookingScheduleID!,
+                          bookingSchedule: bookingSchedule,
+                          shorttermStatus: 0,
+                          longtermStatus: -1);
 
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>  PaymentTimePage(bookingDetail: bookingDetail,)));
+                              builder: (context) => PaymentTimePage(
+                                    bookingDetail: bookingDetail,
+                                  )));
                     },
                     child: const Text(
                       "Thanh toán",

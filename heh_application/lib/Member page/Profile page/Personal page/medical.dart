@@ -9,7 +9,7 @@ import '../../../models/exercise_model/category.dart';
 import '../../../services/call_api.dart';
 
 final TextEditingController _problem = TextEditingController();
-final TextEditingController _difficult = TextEditingController();
+final TextEditingController _difficulty = TextEditingController();
 final TextEditingController _injury = TextEditingController();
 final TextEditingController _curing = TextEditingController();
 final TextEditingController _medicine = TextEditingController();
@@ -199,8 +199,7 @@ class _MedicalPageState extends State<MedicalPage> {
                                     problem = '${element!.name}';
                                   });
                                 }
-                              }
-                              else {
+                              } else {
                                 problem = sharedMedicalRecord!.problem!;
                               }
 
@@ -212,7 +211,7 @@ class _MedicalPageState extends State<MedicalPage> {
                                 subProfileID: sharedMedicalRecord!.subProfileID,
                                 problem: problem,
                                 curing: _curing.text,
-                                difficulty: _difficult.text,
+                                difficulty: _difficulty.text,
                                 injury: _injury.text,
                                 medicine: _medicine.text,
                               );
@@ -222,15 +221,15 @@ class _MedicalPageState extends State<MedicalPage> {
                               MedicalRecord? medical = await CallAPI()
                                   .updateMedicalRecord(medicalRecord);
                               // update problem
-                              if (_selectedProblems.length > 0){
+                              if (_selectedProblems.length > 0) {
                                 //listDB
                                 List<Problem1>? listProblem = await CallAPI()
                                     .getProblemByMedicalRecordID(
-                                    sharedMedicalRecord!.medicalRecordID!);
+                                        sharedMedicalRecord!.medicalRecordID!);
                                 //listAdd
-                                List<Problem1>? listAddProblem = [] ;
+                                List<Problem1>? listAddProblem = [];
                                 //listDelete
-                                List<Problem1>? listDeleteProblem = [] ;
+                                List<Problem1>? listDeleteProblem = [];
                                 //List User Choose
                                 List<Problem1> listOutput = [];
                                 _selectedProblems.forEach((elementSelected) {
@@ -241,37 +240,35 @@ class _MedicalPageState extends State<MedicalPage> {
                                         // problemID: sharedProblem!.problemID,
                                         categoryID: element.categoryID,
                                         medicalRecordID:
-                                        medical!.medicalRecordID!,
+                                            medical!.medicalRecordID!,
                                       );
                                       listOutput.add(problem1);
                                     }
                                   });
                                 });
-                                if (listOutput.length > 0){
-                                  for (var out in listOutput){
+                                if (listOutput.length > 0) {
+                                  for (var out in listOutput) {
                                     int count = 0;
-                                    for (var item in listProblem!){
-                                      if (out.categoryID == item.categoryID){
+                                    for (var item in listProblem!) {
+                                      if (out.categoryID == item.categoryID) {
                                         // problem được lưu trong db đã có và trùng với problem user nhập vào
                                         //problem có trong db và có trong kết quả thì giữ nguyên
-                                        count ++ ;
+                                        count++;
                                       }
-
                                     }
                                     if (count == 0) {
                                       // add những problem có trong kết quả nhưng không có trong db
                                       listAddProblem.add(out);
                                     }
                                   }
-                                  for (var item in listProblem!){
+                                  for (var item in listProblem!) {
                                     int count = 0;
-                                    for (var out in listOutput){
-                                      if (out.categoryID == item.categoryID){
+                                    for (var out in listOutput) {
+                                      if (out.categoryID == item.categoryID) {
                                         // problem được lưu trong db đã có và trùng với problem user nhập vào
                                         //problem có trong db và có trong kết quả thì giữ nguyên
-                                        count ++ ;
+                                        count++;
                                       }
-
                                     }
                                     if (count == 0) {
                                       // delete những problem có trong db nhưng không có trong output
@@ -283,20 +280,22 @@ class _MedicalPageState extends State<MedicalPage> {
                                       await CallAPI().addProblem(item);
                                     }
                                   }
-                                  if (listDeleteProblem != null){
+                                  if (listDeleteProblem != null) {
                                     for (var item in listDeleteProblem) {
-                                      await CallAPI().DeleteProblem(item.problemID!);
+                                      await CallAPI()
+                                          .DeleteProblem(item.problemID!);
                                     }
                                   }
-
                                 }
                               }
 
-                                MedicalRecord? medicalUpdate = await CallAPI().getMedicalRecordByUserIDAndRelationName(sharedCurrentUser!.userID!, "Tôi");
-                               setState(() {
-                                 sharedMedicalRecord = medicalUpdate;
-                               });
-                              },
+                              MedicalRecord? medicalUpdate = await CallAPI()
+                                  .getMedicalRecordByUserIDAndRelationName(
+                                      sharedCurrentUser!.userID!, "Tôi");
+                              setState(() {
+                                sharedMedicalRecord = medicalUpdate;
+                              });
+                            },
                             color: const Color.fromARGB(255, 46, 161, 226),
                             elevation: 0,
                             shape: RoundedRectangleBorder(
@@ -349,18 +348,17 @@ Widget difficult({label, obscureText = false}) {
       const SizedBox(height: 5),
       TextFormField(
         // initialValue: dificult,
-        controller: _difficult,
+        controller: _difficulty..text = sharedMedicalRecord!.difficulty!,
         obscureText: obscureText,
-        decoration: InputDecoration(
-            hintStyle: const TextStyle(color: Colors.black),
-            hintText: sharedMedicalRecord!.difficulty,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: const OutlineInputBorder(
+        decoration: const InputDecoration(
+            hintStyle: TextStyle(color: Colors.black),
+            // hintText: sharedMedicalRecord!.difficulty,
+            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey),
             ),
-            border: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey))),
+            border:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.grey))),
       ),
       const SizedBox(height: 10)
     ],
@@ -388,18 +386,17 @@ Widget injury({label, obscureText = false}) {
       const SizedBox(height: 5),
       TextFormField(
         // initialValue: injury,
-        controller: _injury,
+        controller: _injury..text = sharedMedicalRecord!.injury!,
         obscureText: obscureText,
-        decoration: InputDecoration(
-            hintStyle: const TextStyle(color: Colors.black),
-            hintText: sharedMedicalRecord!.injury,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: const OutlineInputBorder(
+        decoration: const InputDecoration(
+            // hintStyle: const TextStyle(color: Colors.black),
+            // hintText: sharedMedicalRecord!.injury,
+            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey),
             ),
-            border: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey))),
+            border:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.grey))),
       ),
       const SizedBox(height: 10)
     ],
@@ -427,18 +424,17 @@ Widget curing({label, obscureText = false}) {
       const SizedBox(height: 5),
       TextFormField(
         // initialValue: curing,
-        controller: _curing,
+        controller: _curing..text = sharedMedicalRecord!.curing!,
         obscureText: obscureText,
-        decoration: InputDecoration(
-            hintStyle: const TextStyle(color: Colors.black),
-            hintText: sharedMedicalRecord!.curing,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: const OutlineInputBorder(
+        decoration: const InputDecoration(
+            // hintStyle: const TextStyle(color: Colors.black),
+            // hintText: sharedMedicalRecord!.curing,
+            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey),
             ),
-            border: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey))),
+            border:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.grey))),
       ),
       const SizedBox(height: 15)
     ],
@@ -466,18 +462,17 @@ Widget medicine({label, obscureText = false}) {
       const SizedBox(height: 5),
       TextFormField(
         // initialValue: medicine,
-        controller: _medicine,
+        controller: _medicine..text = sharedMedicalRecord!.medicine!,
         obscureText: obscureText,
-        decoration: InputDecoration(
-            hintStyle: const TextStyle(color: Colors.black),
-            hintText: sharedMedicalRecord!.medicine,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: const OutlineInputBorder(
+        decoration: const InputDecoration(
+            hintStyle: TextStyle(color: Colors.black),
+            // hintText: sharedMedicalRecord!.medicine,
+            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey),
             ),
-            border: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey))),
+            border:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.grey))),
       ),
       const SizedBox(height: 0)
     ],

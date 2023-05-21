@@ -266,10 +266,10 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
         ),
         const SizedBox(height: 5),
         TextFormField(
-          initialValue: sharedCurrentUser!.firstName,
+          // initialValue: sharedCurrentUser!.firstName,
           obscureText: obscureText,
 
-          // controller: _firstName,
+          controller: _firstName..text = sharedCurrentUser!.firstName!,
 
           decoration: const InputDecoration(
               // hintText: 'Họ và Tên',
@@ -306,8 +306,8 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
         const SizedBox(height: 5),
         TextFormField(
           readOnly: true,
-          initialValue: sharedCurrentUser!.email,
-          // controller: _email,
+          // initialValue: sharedCurrentUser!.email,
+          controller: _email..text = sharedCurrentUser!.email!,
           obscureText: obscureText,
           decoration: const InputDecoration(
               hintText: 'Email',
@@ -343,7 +343,8 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
         ),
         const SizedBox(height: 5),
         TextFormField(
-          initialValue: sharedCurrentUser!.phone,
+          // initialValue: sharedCurrentUser!.phone,
+          controller: _phone..text = sharedCurrentUser!.phone!,
           keyboardType: TextInputType.phone,
           obscureText: obscureText,
           decoration: const InputDecoration(

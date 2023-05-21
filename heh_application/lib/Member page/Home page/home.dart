@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                         if (snapshot.data!.length > 0) {
                           return ListView.builder(
                               itemCount: snapshot.data!.length,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 if (snapshot.data![index].typeName !=
@@ -154,12 +154,12 @@ class _HomePageState extends State<HomePage> {
                                 }
                               });
                         } else {
-                          return Center(
+                          return const Center(
                             child: Text("Type of slot rỗng"),
                           );
                         }
                       } else {
-                        return Center(
+                        return const Center(
                           child: Text("Load type of slot loi"),
                         );
                       }

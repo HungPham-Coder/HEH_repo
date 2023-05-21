@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Family%20page/information.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Family%20page/medical.dart';
+import 'package:heh_application/models/sub_profile.dart';
 
 class FamilyPersonalPage extends StatefulWidget {
-  const FamilyPersonalPage({Key? key}) : super(key: key);
+  FamilyPersonalPage({Key? key, required this.listSubProfile})
+      : super(key: key);
+
+  SubProfile? listSubProfile;
 
   @override
   State<FamilyPersonalPage> createState() => _FamilyPersonalPageState();
@@ -32,8 +36,10 @@ class _FamilyPersonalPageState extends State<FamilyPersonalPage> {
               elevation: 10,
               backgroundColor: const Color.fromARGB(255, 46, 161, 226),
             ),
-            body: const TabBarView(
-                children: [FamilyInformationPage(), FamilyMedicalPage()])),
+            body: TabBarView(children: [
+              FamilyInformationPage(listSubProfile: widget.listSubProfile),
+              FamilyMedicalPage(listSubProfile: widget.listSubProfile)
+            ])),
       ),
     );
   }

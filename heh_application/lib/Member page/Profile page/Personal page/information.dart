@@ -102,10 +102,9 @@ class _InformationPageState extends State<InformationPage> {
     return Scaffold(
         body: SingleChildScrollView(
             child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
       child: Column(
         children: [
-          const SizedBox(height: 20),
           avatar(),
           const SizedBox(height: 20),
           fullName(label: "Họ và Tên"),
@@ -214,11 +213,23 @@ class _InformationPageState extends State<InformationPage> {
                           password: sharedCurrentUser!.password,
                         );
                         CallAPI().updateUserbyUID(signUpUser);
+
+                        // SubProfile subProfile = SubProfile(
+                        //     userID: sharedCurrentUser!.userID,
+                        //     relationID: widget.listSubProfile!.relationID,
+                        //     subName: widget.listSubProfile!.subName,
+                        //     profileID: widget.listSubProfile!.profileID,
+                        //     relationship: widget.listSubProfile!.relationship,
+                        //     dob: dob,
+                        //     signUpUser: signUpUser);
+                        // CallAPI().updateSubprofile(subProfile);
+
                         await auth.upLoadFirestoreData(
                             FirestoreConstants.pathUserCollection,
                             sharedCurrentUser!.userID!,
                             {"nickname": signUpUser.firstName});
-                        SignUpUser? user = await CallAPI().getUserById(sharedResultLogin!.userID!);
+                        SignUpUser? user = await CallAPI()
+                            .getUserById(sharedResultLogin!.userID!);
                         setState(() {
                           sharedCurrentUser = user;
                         });
@@ -288,15 +299,15 @@ class _InformationPageState extends State<InformationPage> {
               obscureText: obscureText,
               keyboardType: TextInputType.name,
               controller: _firstName..text = sharedCurrentUser!.firstName!,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   // hintStyle: const TextStyle(color: Colors.black),
                   // hintText: sharedCurrentUser!.firstName,
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  enabledBorder: const OutlineInputBorder(
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
                   ),
-                  border: const OutlineInputBorder(
+                  border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey))),
               validator: (value) {
                 if (value!.isEmpty) {
@@ -336,17 +347,17 @@ class _InformationPageState extends State<InformationPage> {
               // initialValue: sharedCurrentUser!.address,
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.streetAddress,
-              controller: _address..text =sharedCurrentUser!.address!,
+              controller: _address..text = sharedCurrentUser!.address!,
               obscureText: obscureText,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   // hintStyle: const TextStyle(color: Colors.black),
                   // hintText: sharedCurrentUser!.address,
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  enabledBorder: const OutlineInputBorder(
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
                   ),
-                  border: const OutlineInputBorder(
+                  border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey))),
               validator: (value) {
                 if (value!.isEmpty) {
@@ -428,18 +439,18 @@ class _InformationPageState extends State<InformationPage> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: TextFormField(
                 readOnly: true,
-                controller: _email..text=sharedCurrentUser!.email!,
+                controller: _email..text = sharedCurrentUser!.email!,
                 obscureText: obscureText,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                    hintStyle: const TextStyle(color: Colors.black),
+                decoration: const InputDecoration(
+                    hintStyle: TextStyle(color: Colors.black),
                     // hintText: sharedCurrentUser!.email,
                     contentPadding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                    enabledBorder: const OutlineInputBorder(
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
                     ),
-                    border: const OutlineInputBorder(
+                    border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey))),
                 validator: (email) {
                   if (email != null && !EmailValidator.validate(email)) {
@@ -480,15 +491,15 @@ class _InformationPageState extends State<InformationPage> {
             keyboardType: TextInputType.phone,
             controller: _phone..text = sharedCurrentUser!.phone!,
             obscureText: obscureText,
-            decoration: InputDecoration(
-                hintStyle: const TextStyle(color: Colors.black),
+            decoration: const InputDecoration(
+                hintStyle: TextStyle(color: Colors.black),
                 // hintText: sharedCurrentUser!.phone,
                 contentPadding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                enabledBorder: const OutlineInputBorder(
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey),
                 ),
-                border: const OutlineInputBorder(
+                border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey))),
             validator: (value) {
               if (value!.isEmpty) {
@@ -518,7 +529,9 @@ class _InformationPageState extends State<InformationPage> {
           children: [
             CircleAvatar(
               backgroundColor: Colors.white,
-              backgroundImage: NetworkImage(sharedCurrentUser!.image == null ?  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2F360_F_84671939_jxymoYZO8Oeacc3JRBDE8bSXBWj0ZfA9.jpg?alt=media&token=86b0417c-4b47-4207-8c1f-eea21242c91a":sharedCurrentUser!.image! ),
+              backgroundImage: NetworkImage(sharedCurrentUser!.image == null
+                  ? "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2F360_F_84671939_jxymoYZO8Oeacc3JRBDE8bSXBWj0ZfA9.jpg?alt=media&token=86b0417c-4b47-4207-8c1f-eea21242c91a"
+                  : sharedCurrentUser!.image!),
             ),
             Positioned(
               right: -12,

@@ -4,6 +4,7 @@ import 'package:heh_application/Member%20page/Profile%20page/Family%20Page/famil
 import 'package:heh_application/models/exercise_model/category.dart';
 import 'package:heh_application/models/medical_record.dart';
 import 'package:heh_application/models/problem.dart';
+import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
@@ -20,7 +21,8 @@ final TextEditingController _curing = TextEditingController();
 final TextEditingController _medicine = TextEditingController();
 
 class FamilyMedicalPage extends StatefulWidget {
-  const FamilyMedicalPage({Key? key}) : super(key: key);
+  FamilyMedicalPage({Key? key, required this.listSubProfile}) : super(key: key);
+  SubProfile? listSubProfile;
 
   @override
   State<FamilyMedicalPage> createState() => _FamilyMedicalPageState();
@@ -266,198 +268,156 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
       ),
     );
   }
-}
 
-// Widget problem({label, obscureText = false}) {
-//   return Column(
-//     children: <Widget>[
-//       Row(
-//         children: <Widget>[
-//           Text(
-//             label,
-//             style: const TextStyle(
-//                 fontSize: 15,
-//                 fontWeight: FontWeight.w400,
-//                 color: Colors.black87),
-//           ),
-//           const Text(
-//             " *",
-//             style: TextStyle(color: Colors.red),
-//           ),
-//         ],
-//       ),
-//       const SizedBox(height: 5),
-//       TextFormField(
-//         // initialValue: problem,
-//         obscureText: obscureText,
-//         controller: _problem,
-//         decoration: InputDecoration(
-//             hintText: sharedMedicalRecord!.problem,
-//             contentPadding:
-//                 const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-//             enabledBorder: const OutlineInputBorder(
-//               borderSide: BorderSide(color: Colors.grey),
-//             ),
-//             border: const OutlineInputBorder(
-//                 borderSide: BorderSide(color: Colors.grey))),
-//       ),
-//       const SizedBox(height: 10)
-//     ],
-//   );
-// }
-
-Widget difficult({label, obscureText = false}) {
-  return Column(
-    children: <Widget>[
-      Row(
-        children: <Widget>[
-          Text(
-            label,
-            style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: Colors.black87),
-          ),
-          const Text(
-            " *",
-            style: TextStyle(color: Colors.red),
-          ),
-        ],
-      ),
-      const SizedBox(height: 5),
-      TextFormField(
-        // initialValue: dificult,
-        controller: _difficult,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-            hintStyle: const TextStyle(color: Colors.black),
-            hintText: sharedMedicalRecord!.difficulty,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
+  Widget difficult({label, obscureText = false}) {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              label,
+              style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black87),
             ),
-            border: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey))),
-      ),
-      const SizedBox(height: 10)
-    ],
-  );
-}
-
-Widget injury({label, obscureText = false}) {
-  return Column(
-    children: <Widget>[
-      Row(
-        children: <Widget>[
-          Text(
-            label,
-            style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: Colors.black87),
-          ),
-          const Text(
-            " *",
-            style: TextStyle(color: Colors.red),
-          ),
-        ],
-      ),
-      const SizedBox(height: 5),
-      TextFormField(
-        // initialValue: injury,
-        controller: _injury,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-            hintStyle: const TextStyle(color: Colors.black),
-            hintText: sharedMedicalRecord!.injury,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
+            const Text(
+              " *",
+              style: TextStyle(color: Colors.red),
             ),
-            border: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey))),
-      ),
-      const SizedBox(height: 10)
-    ],
-  );
-}
+          ],
+        ),
+        const SizedBox(height: 5),
+        TextFormField(
+          // initialValue: dificult,
+          controller: _difficult..text = sharedMedicalRecord!.difficulty!,
+          obscureText: obscureText,
+          decoration: const InputDecoration(
+              // hintStyle: TextStyle(color: Colors.black),
+              // hintText: sharedMedicalRecord!.difficulty,
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
+        ),
+        const SizedBox(height: 10)
+      ],
+    );
+  }
 
-Widget curing({label, obscureText = false}) {
-  return Column(
-    children: <Widget>[
-      Row(
-        children: <Widget>[
-          Text(
-            label,
-            style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: Colors.black87),
-          ),
-          const Text(
-            " *",
-            style: TextStyle(color: Colors.red),
-          ),
-        ],
-      ),
-      const SizedBox(height: 5),
-      TextFormField(
-        // initialValue: curing,
-        controller: _curing,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-            hintStyle: const TextStyle(color: Colors.black),
-            hintText: sharedMedicalRecord!.curing,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
+  Widget injury({label, obscureText = false}) {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              label,
+              style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black87),
             ),
-            border: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey))),
-      ),
-      const SizedBox(height: 15)
-    ],
-  );
-}
+            const Text(
+              " *",
+              style: TextStyle(color: Colors.red),
+            ),
+          ],
+        ),
+        const SizedBox(height: 5),
+        TextFormField(
+          // initialValue: injury,
+          controller: _injury..text = sharedMedicalRecord!.injury!,
+          obscureText: obscureText,
+          decoration: const InputDecoration(
+              // hintStyle: const TextStyle(color: Colors.black),
+              // hintText: sharedMedicalRecord!.injury,
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
+        ),
+        const SizedBox(height: 10)
+      ],
+    );
+  }
 
-Widget medicine({label, obscureText = false}) {
-  return Column(
-    children: <Widget>[
-      Row(
-        children: <Widget>[
-          Text(
-            label,
-            style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: Colors.black87),
-          ),
-          const Text(
-            " *",
-            style: TextStyle(color: Colors.red),
-          ),
-        ],
-      ),
-      const SizedBox(height: 5),
-      TextFormField(
-        // initialValue: medicine,
-        controller: _medicine,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-            hintStyle: const TextStyle(color: Colors.black),
-            hintText: sharedMedicalRecord!.medicine,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
+  Widget curing({label, obscureText = false}) {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              label,
+              style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black87),
             ),
-            border: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey))),
-      ),
-      const SizedBox(height: 0)
-    ],
-  );
+            const Text(
+              " *",
+              style: TextStyle(color: Colors.red),
+            ),
+          ],
+        ),
+        const SizedBox(height: 5),
+        TextFormField(
+          // initialValue: curing,
+          controller: _curing..text = sharedMedicalRecord!.curing!,
+          obscureText: obscureText,
+          decoration: const InputDecoration(
+              // hintStyle: const TextStyle(color: Colors.black),
+              // hintText: sharedMedicalRecord!.curing,
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
+        ),
+        const SizedBox(height: 15)
+      ],
+    );
+  }
+
+  Widget medicine({label, obscureText = false}) {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              label,
+              style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black87),
+            ),
+            const Text(
+              " *",
+              style: TextStyle(color: Colors.red),
+            ),
+          ],
+        ),
+        const SizedBox(height: 5),
+        TextFormField(
+          // initialValue: medicine,
+          controller: _medicine..text = sharedMedicalRecord!.medicine!,
+          obscureText: obscureText,
+          decoration: const InputDecoration(
+              // hintStyle: const TextStyle(color: Colors.black),
+              // hintText: sharedMedicalRecord!.medicine,
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
+        ),
+        const SizedBox(height: 0)
+      ],
+    );
+  }
 }

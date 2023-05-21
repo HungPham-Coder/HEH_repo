@@ -9,8 +9,8 @@ class TypeOfSlot {
       required this.price});
   factory TypeOfSlot.fromMap(Map<String, dynamic> json) {
     return TypeOfSlot(
-        typeOfSlotID: json['typeOfSlotID'], typeName: json['typeName'],
-      price: json['price']
-    );
+        typeOfSlotID: json['typeOfSlotID'],
+        typeName: json['typeName'],
+        price: json['price']);
   }
 }

@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
 import 'package:heh_application/services/chat_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 // import 'package:lottie/lottie.dart';
 
 // enum paymentGroup { male, female, others }
@@ -34,7 +35,7 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
   File? imageFile;
   bool isLoading = false;
   String imageUrl = "";
-
+  final value = NumberFormat("###,###,###");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +101,13 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                             Row(
                               children: [
                                 Text(
-                                    "${widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.price}",
+                                    value.format(widget
+                                        .bookingDetail!
+                                        .bookingSchedule!
+                                        .schedule!
+                                        .typeOfSlot!
+                                        .price
+                                        .toInt()),
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w600)),
                                 const Text(" VNĐ",
@@ -147,7 +154,9 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                 children: [
                   const Text("Số tiền:"),
                   Text(
-                      "${widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.price}",
+                      value.format(widget.bookingDetail!.bookingSchedule!
+                          .schedule!.typeOfSlot!.price
+                          .toInt()),
                       style: const TextStyle(fontWeight: FontWeight.w600)),
                   const Text(" VND"),
                 ],

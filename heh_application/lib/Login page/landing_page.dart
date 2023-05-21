@@ -15,6 +15,7 @@ import 'package:heh_application/models/problem.dart';
 import 'package:heh_application/models/result_login.dart';
 import 'package:heh_application/models/schedule.dart';
 import 'package:heh_application/models/sign_up_user.dart';
+import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:heh_application/welcome.dart';
@@ -30,6 +31,7 @@ PhysiotherapistModel? sharedPhysiotherapist;
 ExerciseResource? sharedExerciseResource;
 Schedule? schedule;
 Problem1? sharedProblem;
+SubProfile? sharedSubprofile;
 
 class LandingPage extends StatefulWidget {
   LandingPage({Key? key, this.msg}) : super(key: key);

@@ -51,8 +51,10 @@ class _FamilyPageState extends State<FamilyPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const FamilyPersonalPage()));
+                                builder: (context) => FamilyPersonalPage(
+                                      listSubProfile:
+                                          widget.listSubProfile![index],
+                                    )));
                       },
                     );
                   }),

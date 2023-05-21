@@ -20,6 +20,9 @@ class Problem {
 }
 
 class _PhysioCertificatePageState extends State<PhysioCertificatePage> {
+  final TextEditingController _specialize = TextEditingController();
+  final TextEditingController _skill = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,78 +144,78 @@ class _PhysioCertificatePageState extends State<PhysioCertificatePage> {
       ),
     );
   }
-}
 
-Widget specialize({label, obscureText = false, String? specialize}) {
-  return Column(
-    children: <Widget>[
-      Row(
-        children: <Widget>[
-          Text(
-            label,
-            style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: Colors.black87),
-          ),
-          const Text(
-            " *",
-            style: TextStyle(color: Colors.red),
-          ),
-        ],
-      ),
-      const SizedBox(height: 5),
-      TextFormField(
-        initialValue: specialize,
-        obscureText: obscureText,
-        // controller: _firstName,
-        decoration: const InputDecoration(
-            hintText: 'Chuyên môn',
-            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
+  Widget specialize({label, obscureText = false, String? specialize}) {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              label,
+              style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black87),
             ),
-            border:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.grey))),
-      ),
-      const SizedBox(height: 10)
-    ],
-  );
-}
+            const Text(
+              " *",
+              style: TextStyle(color: Colors.red),
+            ),
+          ],
+        ),
+        const SizedBox(height: 5),
+        TextFormField(
+          // initialValue: specialize,
+          obscureText: obscureText,
+          controller: _specialize..text = specialize!,
+          decoration: const InputDecoration(
+              hintText: 'Chuyên môn',
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
+        ),
+        const SizedBox(height: 10)
+      ],
+    );
+  }
 
-Widget skill({label, obscureText = false, String? skill}) {
-  return Column(
-    children: <Widget>[
-      Row(
-        children: <Widget>[
-          Text(
-            label,
-            style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: Colors.black87),
-          ),
-          const Text(
-            " *",
-            style: TextStyle(color: Colors.red),
-          ),
-        ],
-      ),
-      const SizedBox(height: 5),
-      TextFormField(
-        initialValue: skill,
-        // controller: _email,
-        obscureText: obscureText,
-        decoration: const InputDecoration(
-            hintText: 'Kỹ năng',
-            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey),
+  Widget skill({label, obscureText = false, String? skill}) {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              label,
+              style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black87),
             ),
-            border:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.grey))),
-      ),
-      const SizedBox(height: 10)
-    ],
-  );
+            const Text(
+              " *",
+              style: TextStyle(color: Colors.red),
+            ),
+          ],
+        ),
+        const SizedBox(height: 5),
+        TextFormField(
+          // initialValue: skill,
+          controller: _skill..text = skill!,
+          obscureText: obscureText,
+          decoration: const InputDecoration(
+              hintText: 'Kỹ năng',
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
+        ),
+        const SizedBox(height: 10)
+      ],
+    );
+  }
 }
