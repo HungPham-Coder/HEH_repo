@@ -99,6 +99,7 @@ class _InformationPageState extends State<InformationPage> {
     DateTime tempDob =
         new DateFormat("yyyy-MM-dd").parse(sharedCurrentUser!.dob!);
     String dob = DateFormat("dd-MM-yyyy").format(tempDob);
+    String dobChange = DateFormat("yyyy-MM-dd").format(tempDob);
     return Scaffold(
         body: SingleChildScrollView(
             child: Padding(
@@ -147,7 +148,7 @@ class _InformationPageState extends State<InformationPage> {
                     if (pickeddate != null) {
                       _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
                       // print(_date.text);
-                      dob = DateFormat('yyyy-MM-dd').format(pickeddate);
+                      dobChange = DateFormat('yyyy-MM-dd').format(pickeddate);
                       age = today.year - pickeddate.year;
                       print(age);
                       // print(dob);
@@ -209,7 +210,7 @@ class _InformationPageState extends State<InformationPage> {
                           phone: _phone.text,
                           address: _address.text,
                           gender: gender,
-                          dob: dob,
+                          dob: dobChange,
                           password: sharedCurrentUser!.password,
                         );
                         CallAPI().updateUserbyUID(signUpUser);
