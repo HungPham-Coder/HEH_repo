@@ -37,7 +37,7 @@ class _InformationPageState extends State<InformationPage> {
   String? dob;
   DateTime today = DateTime.now();
   late int age;
-
+  String? firstName = sharedCurrentUser!.firstName;
   @override
   void initState() {
     super.initState();
@@ -298,7 +298,11 @@ class _InformationPageState extends State<InformationPage> {
               textCapitalization: TextCapitalization.words,
               obscureText: obscureText,
               keyboardType: TextInputType.name,
-              controller: _firstName..text = sharedCurrentUser!.firstName!,
+              controller: _firstName..text = firstName!,
+              onChanged: (value) {
+                firstName = value;
+
+              },
               decoration: const InputDecoration(
                   // hintStyle: const TextStyle(color: Colors.black),
                   // hintText: sharedCurrentUser!.firstName,
