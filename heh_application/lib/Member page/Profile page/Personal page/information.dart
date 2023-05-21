@@ -37,7 +37,7 @@ class _InformationPageState extends State<InformationPage> {
   String? dob;
   DateTime today = DateTime.now();
   late int age;
-
+  String? firstName = sharedCurrentUser!.firstName;
   @override
   void initState() {
     super.initState();
@@ -99,6 +99,7 @@ class _InformationPageState extends State<InformationPage> {
     DateTime tempDob =
         new DateFormat("yyyy-MM-dd").parse(sharedCurrentUser!.dob!);
     String dob = DateFormat("dd-MM-yyyy").format(tempDob);
+    String dobChange = DateFormat("yyyy-MM-dd").format(tempDob);
     return Scaffold(
         body: SingleChildScrollView(
             child: Padding(
@@ -148,7 +149,7 @@ class _InformationPageState extends State<InformationPage> {
                     if (pickeddate != null) {
                       _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
                       // print(_date.text);
-                      dob = DateFormat('yyyy-MM-dd').format(pickeddate);
+                      dobChange = DateFormat('yyyy-MM-dd').format(pickeddate);
                       age = today.year - pickeddate.year;
                       print(age);
                       // print(dob);
@@ -210,7 +211,7 @@ class _InformationPageState extends State<InformationPage> {
                           phone: _phone.text,
                           address: _address.text,
                           gender: gender,
-                          dob: dob,
+                          dob: dobChange,
                           password: sharedCurrentUser!.password,
                         );
                         CallAPI().updateUserbyUID(signUpUser);
@@ -288,8 +289,11 @@ class _InformationPageState extends State<InformationPage> {
               textCapitalization: TextCapitalization.words,
               obscureText: obscureText,
               keyboardType: TextInputType.name,
-              controller: _firstName..text = sharedCurrentUser!.firstName!,
-              decoration: InputDecoration(
+              controller: _firstName..text = firstName!,
+              onChanged: (value) {
+                firstName = value;
+              },
+              decoration: const InputDecoration(
                   // hintStyle: const TextStyle(color: Colors.black),
                   // hintText: sharedCurrentUser!.firstName,
                   contentPadding:
