@@ -9,7 +9,9 @@ import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Family%20page/family.dart';
 import 'package:heh_application/Member%20page/Profile%20page/setting.dart';
 import 'package:heh_application/constant/firestore_constant.dart';
+import 'package:heh_application/models/relationship.dart';
 import 'package:heh_application/models/sign_up_user.dart';
+import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/chat_provider.dart';
@@ -26,8 +28,9 @@ final TextEditingController _phone = TextEditingController();
 enum genderGroup { male, female }
 
 class FamilyInformationPage extends StatefulWidget {
-  const FamilyInformationPage({Key? key}) : super(key: key);
-
+  FamilyInformationPage({Key? key, required this.listSubProfile})
+      : super(key: key);
+  SubProfile? listSubProfile;
   @override
   State<FamilyInformationPage> createState() => _FamilyInformationPageState();
 }
@@ -40,6 +43,12 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
   String? dob;
   DateTime today = DateTime.now();
   late int age;
+
+  final List<String> _relationships = [
+    "- Chọn -",
+  ];
+
+  String selectedRelationship = "- Chọn -";
 
   @override
   void initState() {
@@ -104,14 +113,10 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
     return Scaffold(
         body: SingleChildScrollView(
             child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
       child: Column(
         children: <Widget>[
-          avatar(),
           fullName(label: "Họ và Tên"),
-          email(label: "Email"),
-          address(label: "Địa chỉ"),
-          gender(),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -157,6 +162,58 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
               ),
             ],
           ),
+          const SizedBox(height: 10),
+          Row(
+            children: const [
+              Text("Mối quan hệ"),
+              Text(" *", style: TextStyle(color: Colors.red)),
+            ],
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 60,
+              // child: SizedBox(
+              child: FutureBuilder<List<Relationship>>(
+                  future: CallAPI().getAllRelationship(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (_relationships.length == 1) {
+                        snapshot.data!.forEach((element) {
+                          String field = "${element.relationName}";
+                          _relationships.add(field);
+                        });
+                        print("Co data");
+                      }
+                      return DropdownButtonFormField<String>(
+                        decoration: const InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 1, color: Colors.grey))),
+                        value: selectedRelationship,
+                        items: _relationships
+                            .map((relationship) => DropdownMenuItem<String>(
+                                value: relationship,
+                                child: Text(
+                                  relationship,
+                                  style: const TextStyle(fontSize: 15),
+                                )))
+                            .toList(),
+                        onChanged: (relationship) => setState(() {
+                          selectedRelationship = relationship!;
+                        }),
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  })
+
+              // ),
+              ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -221,6 +278,7 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                           password: sharedCurrentUser!.password,
                         );
                         CallAPI().updateUserbyUID(signUpUser);
+
                         await auth.upLoadFirestoreData(
                             FirestoreConstants.pathUserCollection,
                             sharedCurrentUser!.userID!,
@@ -241,11 +299,6 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                           backgroundColor: Colors.green,
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FamilyPage()));
                       },
                       color: const Color.fromARGB(255, 46, 161, 226),
                       elevation: 0,
@@ -267,54 +320,6 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
         ],
       ),
     )));
-  }
-
-  Widget avatar() {
-    return Center(
-      child: SizedBox(
-        height: 115,
-        width: 115,
-        child: Stack(
-          clipBehavior: Clip.none,
-          fit: StackFit.expand,
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(sharedCurrentUser!.image!),
-            ),
-            Positioned(
-              right: -12,
-              bottom: 0,
-              child: SizedBox(
-                height: 46,
-                width: 46,
-                child: TextButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xfff5f6f9)),
-                        padding: MaterialStateProperty.all(EdgeInsets.zero),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              side: const BorderSide(
-                                  color: Color.fromARGB(255, 46, 161, 226))),
-                        )),
-                    onPressed: () async {
-                      await getImage();
-
-                      await CallAPI().updateUserbyUID(sharedCurrentUser!);
-                    },
-                    child: SvgPicture.network(
-                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcamera.svg?alt=media&token=afa6a202-304e-45af-8df5-870126316135",
-                      width: 20,
-                      height: 20,
-                    )),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget fullName({label, input, obscureText = false}) {
@@ -343,16 +348,16 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
               textCapitalization: TextCapitalization.words,
               obscureText: obscureText,
               keyboardType: TextInputType.name,
-              controller: _firstName,
-              decoration: InputDecoration(
-                  hintStyle: const TextStyle(color: Colors.black),
-                  hintText: sharedCurrentUser!.firstName,
+              controller: _firstName..text = widget.listSubProfile!.subName,
+              decoration: const InputDecoration(
+                  // hintStyle: const TextStyle(color: Colors.black),
+                  // hintText: sharedCurrentUser!.firstName,
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  enabledBorder: const OutlineInputBorder(
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
                   ),
-                  border: const OutlineInputBorder(
+                  border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey))),
               validator: (value) {
                 if (value!.isEmpty) {
@@ -362,150 +367,6 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                 }
               },
             )),
-        const SizedBox(height: 10)
-      ],
-    );
-  }
-
-  Widget address({label, obscureText = false}) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(
-              label,
-              style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black87),
-            ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
-          ],
-        ),
-        const SizedBox(height: 5),
-        Form(
-            autovalidateMode: AutovalidateMode.disabled,
-            child: TextFormField(
-              // initialValue: sharedCurrentUser!.address,
-              textCapitalization: TextCapitalization.words,
-              keyboardType: TextInputType.streetAddress,
-              controller: _address,
-              obscureText: obscureText,
-              decoration: InputDecoration(
-                  hintStyle: const TextStyle(color: Colors.black),
-                  hintText: sharedCurrentUser!.address,
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                  ),
-                  border: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey))),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return null;
-                } else {
-                  return null;
-                }
-              },
-            )),
-        const SizedBox(height: 10)
-      ],
-    );
-  }
-
-  Widget gender() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: const <Widget>[
-            Text(
-              "Giới tính ",
-              style: TextStyle(fontSize: 15),
-            ),
-            Text(
-              "*",
-              style: TextStyle(fontSize: 15, color: Colors.red),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            const Text("Nam"),
-            Radio(
-              value: genderGroup.male,
-              groupValue: _genderValue,
-              onChanged: (genderGroup? value) {
-                setState(() {
-                  _genderValue = value!;
-                });
-              },
-            ),
-            const Text("Nữ"),
-            Radio(
-                value: genderGroup.female,
-                groupValue: _genderValue,
-                onChanged: (genderGroup? value) {
-                  setState(() {
-                    _genderValue = value!;
-                  });
-                }),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget email({label, obscureText = false}) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(
-              label,
-              style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black87),
-            ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
-          ],
-        ),
-        const SizedBox(height: 5),
-        Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: TextFormField(
-                readOnly: true,
-                controller: _email,
-                obscureText: obscureText,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                    hintStyle: const TextStyle(color: Colors.black),
-                    hintText: sharedCurrentUser!.email,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                    ),
-                    border: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey))),
-                validator: (email) {
-                  if (email != null && !EmailValidator.validate(email)) {
-                    return "Nhập đúng email";
-                  } else if (email!.isEmpty) {
-                    return "Vui lòng nhập email!";
-                  } else {
-                    return null;
-                  }
-                })),
         const SizedBox(height: 10)
       ],
     );
