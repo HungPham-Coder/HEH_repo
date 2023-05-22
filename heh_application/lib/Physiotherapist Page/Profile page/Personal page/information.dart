@@ -22,6 +22,10 @@ class PhysioInformationPage extends StatefulWidget {
 }
 
 class _PhysioInformationPageState extends State<PhysioInformationPage> {
+  String? firstName = sharedCurrentUser!.firstName;
+  String? addresses = sharedCurrentUser!.address;
+  String? emails = sharedCurrentUser!.email;
+  String? phones = sharedCurrentUser!.phone;
   genderGroup _genderValue = genderGroup.male;
 
   @override
@@ -247,6 +251,7 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
   }
 
   Widget fullName({label, obscureText = false}) {
+    RegExp regExp = RegExp(r'^[^\d]*$');
     return Column(
       children: <Widget>[
         Row(
@@ -268,7 +273,13 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
         TextFormField(
           // initialValue: sharedCurrentUser!.firstName,
           obscureText: obscureText,
-
+          validator: (value) {
+            if (value!.isEmpty) {
+              return "Hãy nhập Họ và Tên của bạn.";
+            } else if (!regExp.hasMatch(value)) {
+              return "Hãy nhập đúng tên";
+            }
+          },
           controller: _firstName..text = sharedCurrentUser!.firstName!,
 
           decoration: const InputDecoration(
@@ -342,19 +353,35 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
           ],
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          // initialValue: sharedCurrentUser!.phone,
-          controller: _phone..text = sharedCurrentUser!.phone!,
-          keyboardType: TextInputType.phone,
-          obscureText: obscureText,
-          decoration: const InputDecoration(
-              hintText: 'Số điện thoại',
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
+        Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: TextFormField(
+            keyboardType: TextInputType.phone,
+            controller: _phone..text = phones!,
+            onChanged: (value) {
+              phones = value;
+            },
+            obscureText: obscureText,
+            decoration: const InputDecoration(
+                hintStyle: TextStyle(color: Colors.black),
+                // hintText: sharedCurrentUser!.phone,
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey))),
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Hãy nhập số điện thoại";
+              } else if (value.length < 10 || value.length > 10) {
+                return "Hãy nhập đúng số điện thoại";
+              } else {
+                return null;
+              }
+            },
+          ),
         ),
         const SizedBox(height: 10)
       ],

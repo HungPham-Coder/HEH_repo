@@ -1108,6 +1108,23 @@ class CallAPI {
     }
   }
 
+  Future<SubProfile?> getSubprofileUserById(String id) async {
+    var url = Uri.parse('${link}/api/SubProfile/GetByUserId/$id');
+    // var url = Uri.https('localhost:7166', 'api/User/getById/$id');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+    } else {
+      print("response body");
+      print(response.statusCode);
+      return null;
+    }
+  }
+
   Future<TypeOfSlot> GetTypeOfSlotByTypeName(String typeName) async {
     var url =
         Uri.parse('${link}/api/TypeOfSlot/GetByTypeName?typeName=$typeName');

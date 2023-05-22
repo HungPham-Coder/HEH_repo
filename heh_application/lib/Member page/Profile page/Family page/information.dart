@@ -284,11 +284,12 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                             sharedCurrentUser!.userID!,
                             {"nickname": signUpUser.firstName});
                         final snackBar = SnackBar(
+                          duration: const Duration(seconds: 1),
                           content: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: const [
                               Text(
-                                "Thành công",
+                                "Cập nhật thành công",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -323,6 +324,7 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
   }
 
   Widget fullName({label, input, obscureText = false}) {
+    RegExp regExp = RegExp(r'^[^\d]*$');
     return Column(
       children: <Widget>[
         Row(
@@ -361,9 +363,9 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                       borderSide: BorderSide(color: Colors.grey))),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return null;
-                } else {
-                  return null;
+                  return "Hãy nhập Họ và Tên của bạn.";
+                } else if (!regExp.hasMatch(value)) {
+                  return "Hãy nhập đúng tên";
                 }
               },
             )),

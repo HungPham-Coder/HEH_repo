@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/constant/firestore_constant.dart';
 import 'package:heh_application/models/sign_up_user.dart';
+import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/chat_provider.dart';
@@ -37,7 +38,12 @@ class _InformationPageState extends State<InformationPage> {
   String? dob;
   DateTime today = DateTime.now();
   late int age;
+
   String? firstName = sharedCurrentUser!.firstName;
+  String? addresses = sharedCurrentUser!.address;
+  String? emails = sharedCurrentUser!.email;
+  String? phones = sharedCurrentUser!.phone;
+
   @override
   void initState() {
     super.initState();
@@ -103,7 +109,7 @@ class _InformationPageState extends State<InformationPage> {
     return Scaffold(
         body: SingleChildScrollView(
             child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
       child: Column(
         children: [
           const SizedBox(height: 20),
@@ -215,6 +221,18 @@ class _InformationPageState extends State<InformationPage> {
                           password: sharedCurrentUser!.password,
                         );
                         CallAPI().updateUserbyUID(signUpUser);
+
+                        SubProfile subProfile = SubProfile(
+                          relationID: sharedSubprofile!.relationID,
+                          subName: _firstName.text,
+                          dob: dobChange,
+                          userID: sharedCurrentUser!.userID,
+                          profileID: sharedSubprofile!.profileID,
+                          // relationship: sharedSubprofile!.relationship,
+                          // signUpUser: signUpUser,
+                        );
+                        CallAPI().updateSubprofile(subProfile);
+
                         await auth.upLoadFirestoreData(
                             FirestoreConstants.pathUserCollection,
                             sharedCurrentUser!.userID!,
@@ -264,6 +282,7 @@ class _InformationPageState extends State<InformationPage> {
   }
 
   Widget fullName({label, input, obscureText = false}) {
+    RegExp regExp = RegExp(r'^[^\d]*$');
     return Column(
       children: <Widget>[
         Row(
@@ -297,17 +316,17 @@ class _InformationPageState extends State<InformationPage> {
                   // hintStyle: const TextStyle(color: Colors.black),
                   // hintText: sharedCurrentUser!.firstName,
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  enabledBorder: const OutlineInputBorder(
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
                   ),
-                  border: const OutlineInputBorder(
+                  border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey))),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return null;
-                } else {
-                  return null;
+                  return "Hãy nhập Họ và Tên của bạn.";
+                } else if (!regExp.hasMatch(value)) {
+                  return "Hãy nhập đúng tên";
                 }
               },
             )),
@@ -328,10 +347,6 @@ class _InformationPageState extends State<InformationPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
           ],
         ),
         const SizedBox(height: 5),
@@ -341,17 +356,20 @@ class _InformationPageState extends State<InformationPage> {
               // initialValue: sharedCurrentUser!.address,
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.streetAddress,
-              controller: _address..text = sharedCurrentUser!.address!,
+              controller: _address..text = addresses!,
+              onChanged: (value) {
+                addresses = value;
+              },
               obscureText: obscureText,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   // hintStyle: const TextStyle(color: Colors.black),
                   // hintText: sharedCurrentUser!.address,
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  enabledBorder: const OutlineInputBorder(
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
                   ),
-                  border: const OutlineInputBorder(
+                  border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey))),
               validator: (value) {
                 if (value!.isEmpty) {
@@ -422,10 +440,6 @@ class _InformationPageState extends State<InformationPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
           ],
         ),
         const SizedBox(height: 5),
@@ -433,18 +447,21 @@ class _InformationPageState extends State<InformationPage> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: TextFormField(
                 readOnly: true,
-                controller: _email..text = sharedCurrentUser!.email!,
+                controller: _email..text = emails!,
+                onChanged: (value) {
+                  emails = value;
+                },
                 obscureText: obscureText,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                    hintStyle: const TextStyle(color: Colors.black),
+                decoration: const InputDecoration(
+                    hintStyle: TextStyle(color: Colors.black),
                     // hintText: sharedCurrentUser!.email,
                     contentPadding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                    enabledBorder: const OutlineInputBorder(
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
                     ),
-                    border: const OutlineInputBorder(
+                    border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey))),
                 validator: (email) {
                   if (email != null && !EmailValidator.validate(email)) {
@@ -483,17 +500,20 @@ class _InformationPageState extends State<InformationPage> {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: TextFormField(
             keyboardType: TextInputType.phone,
-            controller: _phone..text = sharedCurrentUser!.phone!,
+            controller: _phone..text = phones!,
+            onChanged: (value) {
+              phones = value;
+            },
             obscureText: obscureText,
-            decoration: InputDecoration(
-                hintStyle: const TextStyle(color: Colors.black),
+            decoration: const InputDecoration(
+                hintStyle: TextStyle(color: Colors.black),
                 // hintText: sharedCurrentUser!.phone,
                 contentPadding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                enabledBorder: const OutlineInputBorder(
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey),
                 ),
-                border: const OutlineInputBorder(
+                border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey))),
             validator: (value) {
               if (value!.isEmpty) {
