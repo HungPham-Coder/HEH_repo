@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/choose_form.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Family%20page/signupMed.dart';
@@ -70,43 +69,6 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                 height: 20,
               ),
               fullName(label: "Họ và Tên"),
-              email(label: "Email"),
-              phone(label: "Số điện thoại"),
-              Row(
-                children: const <Widget>[
-                  Text(
-                    "Giới tính ",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  Text(
-                    "*",
-                    style: TextStyle(fontSize: 15, color: Colors.red),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  const Text("Nam"),
-                  Radio(
-                      value: genderGroup.male,
-                      groupValue: _genderValue,
-                      onChanged: (genderGroup? value) {
-                        setState(() {
-                          _genderValue = value!;
-                        });
-                      }),
-                  const Text("Nữ"),
-                  Radio(
-                      value: genderGroup.female,
-                      groupValue: _genderValue,
-                      onChanged: (genderGroup? value) {
-                        setState(() {
-                          _genderValue = value!;
-                        });
-                      }),
-                ],
-              ),
               const SizedBox(height: 10),
               Row(
                 children: const [
@@ -184,34 +146,8 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                   // ),
                   ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Container(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: MaterialButton(
-                          height: 50,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const ChooseForm()));
-                          },
-                          color: Colors.grey[400],
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Text(
-                            "Hủy",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      )),
                   Container(
                       padding: const EdgeInsets.symmetric(horizontal: 0),
                       child: Container(
@@ -285,79 +221,6 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
           controller: _firstName,
           decoration: const InputDecoration(
               hintText: 'Họ và Tên',
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
-        ),
-        const SizedBox(height: 10)
-      ],
-    );
-  }
-
-  Widget email({label, obscureText = false}) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(
-              label,
-              style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black87),
-            ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
-          ],
-        ),
-        const SizedBox(height: 5),
-        TextField(
-          controller: _email,
-          obscureText: obscureText,
-          decoration: const InputDecoration(
-              hintText: 'Email',
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
-        ),
-        const SizedBox(height: 10)
-      ],
-    );
-  }
-
-  Widget phone({label, obscureText = false}) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(
-              label,
-              style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black87),
-            ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
-          ],
-        ),
-        const SizedBox(height: 5),
-        TextFormField(
-          keyboardType: TextInputType.phone,
-          controller: _phone,
-          obscureText: obscureText,
-          decoration: const InputDecoration(
-              hintText: 'Số điện thoại',
               contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
