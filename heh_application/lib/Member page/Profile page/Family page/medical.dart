@@ -166,30 +166,6 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                           padding: const EdgeInsets.only(top: 10, bottom: 10),
                           child: MaterialButton(
                             height: 50,
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            color: Colors.grey[400],
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Text(
-                              "Hủy",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        )),
-                    Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 0),
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
-                          child: MaterialButton(
-                            height: 50,
                             onPressed: () async {
                               String problem = '';
                               if (_selectedProblems.length > 1) {
