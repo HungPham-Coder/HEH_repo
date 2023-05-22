@@ -177,11 +177,12 @@ class _BillChoosePageState extends State<BillChoosePage> {
                           .getBookingScheduleByID(
                               bookingScheduleAdd!.bookingScheduleID!);
                       BookingDetail bookingDetail = BookingDetail(
-                          bookingScheduleID:
-                              bookingScheduleAdd.bookingScheduleID!,
-                          bookingSchedule: bookingSchedule,
-                          shorttermStatus: 0,
-                          longtermStatus: -1);
+                        bookingScheduleID:
+                            bookingScheduleAdd.bookingScheduleID!,
+                        bookingSchedule: bookingSchedule,
+                        shorttermStatus: 0,
+                        longtermStatus: -1,
+                      );
 
                       Navigator.push(
                           context,

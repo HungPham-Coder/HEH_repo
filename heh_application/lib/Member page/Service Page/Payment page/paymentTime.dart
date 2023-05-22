@@ -134,8 +134,11 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
               child: Column(children: [
                 choose(
                   icon:
-                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FQR.jpg?alt=media&token=cf838750-d192-44cf-831d-4cf7fc0d1802",
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FQR3.jpg?alt=media&token=cd4a5333-227b-491a-8365-a5334d2a491d",
                 )
+                //   icon:
+                //       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FQR.jpg?alt=media&token=cf838750-d192-44cf-831d-4cf7fc0d1802",
+                // )
               ])),
           const SizedBox(
             height: 130,
@@ -220,7 +223,7 @@ class _chooseState extends State<choose> {
   File? imageFile;
   bool isLoading = false;
   String imageUrl =
-      "https://t3.ftcdn.net/jpg/02/18/26/20/360_F_218262069_OCqHqqKWlwVeZWB8pn32WVFkoZCbWiel.jpg";
+      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fwhite.jpg?alt=media&token=992ffa5a-dd2b-4ff4-bf8f-285be1da997d";
 
   Future getImage() async {
     ImagePicker imagePicker = ImagePicker();

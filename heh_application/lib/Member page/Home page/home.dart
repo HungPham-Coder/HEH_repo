@@ -177,17 +177,17 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
 
-                HomeMenu(
-                  icon:
-                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fexercise.png?alt=media&token=f299c936-6f81-41e5-8448-bc587873bc67",
-                  text: "Feedback",
-                  press: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const FeedbackPage()));
-                  },
-                ),
+                // HomeMenu(
+                //   icon:
+                //       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fexercise.png?alt=media&token=f299c936-6f81-41e5-8448-bc587873bc67",
+                //   text: "Feedback",
+                //   press: () {
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //             builder: (context) => const FeedbackPage()));
+                //   },
+                // ),
 
                 // TextButton(onPressed: () async {
                 //   await launchUrl(Uri.parse("https://www.google.com"),mode: LaunchMode.externalApplication);

@@ -12,6 +12,7 @@ import 'package:heh_application/models/exercise_resource.dart';
 import 'package:heh_application/models/login_user.dart';
 import 'package:heh_application/models/medical_record.dart';
 import 'package:heh_application/models/notification.dart';
+import 'package:heh_application/models/payment.dart';
 import 'package:heh_application/models/physiotherapist.dart';
 import 'package:heh_application/models/relationship.dart';
 import 'package:heh_application/models/result_login.dart';
@@ -1190,7 +1191,6 @@ class CallAPI {
     }
   }
 
-
   Future<List<SubProfile>?> getallSubProfileByUserIdAndSlotID(
       String userId, String slotID) async {
     var url = Uri.parse(
@@ -1486,6 +1486,29 @@ class CallAPI {
     } else {
       print(response.body);
       throw Exception('Failed to seen notification');
+    }
+  }
+
+  Future<String> callVNPayGW(PaymentModel paymentModel) async {
+    var url = Uri.parse('${link}/api/Payment/callVNPayGW');
+
+    final body = jsonEncode({
+      "orderId": paymentModel.orderId,
+      "amount": paymentModel.amount,
+      "email": paymentModel.email,
+    });
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.post(url, body: body, headers: headers);
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      print(response.body);
+
+      return response.body;
     }
   }
 }
