@@ -7,7 +7,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/constant/firestore_constant.dart';
 import 'package:heh_application/models/sign_up_user.dart';
-import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/chat_provider.dart';
@@ -38,12 +37,7 @@ class _InformationPageState extends State<InformationPage> {
   String? dob;
   DateTime today = DateTime.now();
   late int age;
-
   String? firstName = sharedCurrentUser!.firstName;
-  String? addresses = sharedCurrentUser!.address;
-  String? emails = sharedCurrentUser!.email;
-  String? phones = sharedCurrentUser!.phone;
-
   @override
   void initState() {
     super.initState();
@@ -112,7 +106,6 @@ class _InformationPageState extends State<InformationPage> {
       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
       child: Column(
         children: [
-          const SizedBox(height: 20),
           avatar(),
           const SizedBox(height: 20),
           fullName(label: "Họ và Tên"),
@@ -174,11 +167,39 @@ class _InformationPageState extends State<InformationPage> {
                     padding: const EdgeInsets.only(top: 20),
                     child: MaterialButton(
                       height: 50,
+                      onPressed: () {
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const SettingPage()));
+                        Navigator.pop(context);
+                      },
+                      color: Colors.grey[400],
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Text(
+                        "Hủy",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )),
+              Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: MaterialButton(
+                      height: 50,
                       onPressed: () async {
                         bool gender = false;
                         if (_genderValue.index == 0) {
                           gender = true;
-                        } else if (_genderValue == 1) {
+                        } else if (_genderValue.index == 1) {
                           gender = false;
                         }
                         SignUpUser signUpUser = SignUpUser(
@@ -194,16 +215,15 @@ class _InformationPageState extends State<InformationPage> {
                         );
                         CallAPI().updateUserbyUID(signUpUser);
 
-                        SubProfile subProfile = SubProfile(
-                          relationID: sharedSubprofile!.relationID,
-                          subName: _firstName.text,
-                          dob: dobChange,
-                          userID: sharedCurrentUser!.userID,
-                          profileID: sharedSubprofile!.profileID,
-                          // relationship: sharedSubprofile!.relationship,
-                          // signUpUser: signUpUser,
-                        );
-                        CallAPI().updateSubprofile(subProfile);
+                        // SubProfile subProfile = SubProfile(
+                        //     userID: sharedCurrentUser!.userID,
+                        //     relationID: widget.listSubProfile!.relationID,
+                        //     subName: widget.listSubProfile!.subName,
+                        //     profileID: widget.listSubProfile!.profileID,
+                        //     relationship: widget.listSubProfile!.relationship,
+                        //     dob: dob,
+                        //     signUpUser: signUpUser);
+                        // CallAPI().updateSubprofile(subProfile);
 
                         await auth.upLoadFirestoreData(
                             FirestoreConstants.pathUserCollection,
@@ -254,7 +274,6 @@ class _InformationPageState extends State<InformationPage> {
   }
 
   Widget fullName({label, input, obscureText = false}) {
-    RegExp regExp = RegExp(r'^[^\d]*$');
     return Column(
       children: <Widget>[
         Row(
@@ -283,6 +302,7 @@ class _InformationPageState extends State<InformationPage> {
               controller: _firstName..text = firstName!,
               onChanged: (value) {
                 firstName = value;
+
               },
               decoration: const InputDecoration(
                   // hintStyle: const TextStyle(color: Colors.black),
@@ -296,9 +316,9 @@ class _InformationPageState extends State<InformationPage> {
                       borderSide: BorderSide(color: Colors.grey))),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return "Hãy nhập Họ và Tên của bạn.";
-                } else if (!regExp.hasMatch(value)) {
-                  return "Hãy nhập đúng tên";
+                  return null;
+                } else {
+                  return null;
                 }
               },
             )),
@@ -319,6 +339,10 @@ class _InformationPageState extends State<InformationPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
+            const Text(
+              " *",
+              style: TextStyle(color: Colors.red),
+            ),
           ],
         ),
         const SizedBox(height: 5),
@@ -328,10 +352,7 @@ class _InformationPageState extends State<InformationPage> {
               // initialValue: sharedCurrentUser!.address,
               textCapitalization: TextCapitalization.words,
               keyboardType: TextInputType.streetAddress,
-              controller: _address..text = addresses!,
-              onChanged: (value) {
-                addresses = value;
-              },
+              controller: _address..text = sharedCurrentUser!.address!,
               obscureText: obscureText,
               decoration: const InputDecoration(
                   // hintStyle: const TextStyle(color: Colors.black),
@@ -412,6 +433,10 @@ class _InformationPageState extends State<InformationPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
+            const Text(
+              " *",
+              style: TextStyle(color: Colors.red),
+            ),
           ],
         ),
         const SizedBox(height: 5),
@@ -419,10 +444,7 @@ class _InformationPageState extends State<InformationPage> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: TextFormField(
                 readOnly: true,
-                controller: _email..text = emails!,
-                onChanged: (value) {
-                  emails = value;
-                },
+                controller: _email..text = sharedCurrentUser!.email!,
                 obscureText: obscureText,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
@@ -472,10 +494,7 @@ class _InformationPageState extends State<InformationPage> {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: TextFormField(
             keyboardType: TextInputType.phone,
-            controller: _phone..text = phones!,
-            onChanged: (value) {
-              phones = value;
-            },
+            controller: _phone..text = sharedCurrentUser!.phone!,
             obscureText: obscureText,
             decoration: const InputDecoration(
                 hintStyle: TextStyle(color: Colors.black),

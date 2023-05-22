@@ -250,28 +250,21 @@ class ScheduleMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: duplicate_ignore
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        child:
-            // style: ButtonStyle(
-            //     backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-            //     padding: MaterialStateProperty.all(
-            //         const EdgeInsets.symmetric(horizontal: 10, vertical: 15)),
-            //     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            //       RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(10),
-            //           side: const BorderSide(
-            //               color: Color.fromARGB(255, 46, 161, 226), width: 2)),
-            //     )),
-            // onPressed: press,
-            Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            border: Border.all(
-                color: const Color.fromARGB(255, 46, 161, 226), width: 2),
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-          ),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      child: TextButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              padding: MaterialStateProperty.all(
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 15)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(
+                        color: Color.fromARGB(255, 46, 161, 226), width: 2)),
+              )),
+          onPressed: press,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -312,8 +305,8 @@ class ScheduleMenu extends StatelessWidget {
                     ],
                   )),
             ],
-          ),
-        ));
+          )),
+    );
   }
 }
 

@@ -262,7 +262,8 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget fullName({label, obscureText = false}) {
-    RegExp regExp = RegExp(r'^[^\d]*$');
+    // String patttern = "'[\x5F]+|[a-z]|[0-9]";
+    // RegExp regExp = new RegExp(patttern);
     return Column(
       children: <Widget>[
         Row(
@@ -286,13 +287,13 @@ class _SignUpPageState extends State<SignUpPage> {
           child: TextFormField(
             // textCapitalization: TextCapitalization.characters,
             keyboardType: TextInputType.name,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return "Hãy nhập Họ và Tên của bạn.";
-              } else if (!regExp.hasMatch(value)) {
-                return "Hãy nhập đúng tên";
-              }
-            },
+            // validator: (value) {
+            //   if (value!.isEmpty) {
+            //     return "Hãy nhập Họ và Tên của bạn.";
+            //   } else if (!regExp.hasMatch(value)) {
+            //     return "Hãy nhập đúng tên";
+            //   }
+            // },
             obscureText: obscureText,
             controller: _firstName,
             decoration: const InputDecoration(
@@ -397,7 +398,7 @@ class _SignUpPageState extends State<SignUpPage> {
               if (value!.isEmpty) {
                 return "Hãy nhập số điện thoại";
               } else if (value.length < 10 || value.length > 10) {
-                return "Số điện thoải phải có 10 số";
+                return "Hãy nhập đúng số điện thoại";
               } else {
                 return null;
               }
@@ -420,6 +421,10 @@ class _SignUpPageState extends State<SignUpPage> {
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
+            ),
+            const Text(
+              " *",
+              style: TextStyle(color: Colors.red),
             ),
           ],
         ),
@@ -461,39 +466,26 @@ class _SignUpPageState extends State<SignUpPage> {
           ],
         ),
         const SizedBox(height: 5),
-        Form(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: TextFormField(
-            onChanged: (value) {
-              value = _password.text;
-            },
-            validator: (value) {
-              if (value!.isEmpty) {
-                return "Hãy nhập mật khẩu";
-              } else if (value.length < 6) {
-                return "Mật khẩu phải ít nhất 6 ký tự";
-              }
-            },
-            controller: _password,
-            obscureText: isObscure,
-            decoration: InputDecoration(
-                suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isObscure = !isObscure;
-                      });
-                    },
-                    icon: Icon(
-                        isObscure ? Icons.visibility_off : Icons.visibility)),
-                hintText: 'Mật khẩu',
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                border: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey))),
-          ),
+        TextFormField(
+          controller: _password,
+          obscureText: isObscure,
+          decoration: InputDecoration(
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isObscure = !isObscure;
+                    });
+                  },
+                  icon: Icon(
+                      isObscure ? Icons.visibility_off : Icons.visibility)),
+              hintText: 'Mật khẩu',
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              border: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
         ),
         const SizedBox(height: 15)
       ],
@@ -519,39 +511,26 @@ class _SignUpPageState extends State<SignUpPage> {
           ],
         ),
         const SizedBox(height: 5),
-        Form(
-          autovalidateMode: AutovalidateMode.always,
-          child: TextFormField(
-            controller: _confirmPassword,
-            obscureText: isObscure1,
-            onChanged: (value) {
-              value = _confirmPassword.text;
-            },
-            validator: (value) {
-              if (value != _password.text) {
-                return "Mật khẩu xác thực không trùng với mật khẩu";
-              } else {
-                return null;
-              }
-            },
-            decoration: InputDecoration(
-                suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isObscure1 = !isObscure1;
-                      });
-                    },
-                    icon: Icon(
-                        isObscure1 ? Icons.visibility_off : Icons.visibility)),
-                hintText: 'Mật khẩu xác thực',
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                border: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey))),
-          ),
+        TextFormField(
+          controller: _confirmPassword,
+          obscureText: isObscure1,
+          decoration: InputDecoration(
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isObscure1 = !isObscure1;
+                    });
+                  },
+                  icon: Icon(
+                      isObscure1 ? Icons.visibility_off : Icons.visibility)),
+              hintText: 'Mật khẩu xác thực',
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              border: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
         ),
         const SizedBox(height: 0)
       ],

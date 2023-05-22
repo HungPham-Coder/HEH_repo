@@ -58,6 +58,7 @@ class _Navigation_BarState extends State<Navigation_Bar> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               sharedMedicalRecord = snapshot.data!;
+
               return pageList[pageIndex];
             } else {
               return Container();

@@ -22,10 +22,6 @@ class PhysioInformationPage extends StatefulWidget {
 }
 
 class _PhysioInformationPageState extends State<PhysioInformationPage> {
-  String? firstName = sharedCurrentUser!.firstName;
-  String? addresses = sharedCurrentUser!.address;
-  String? emails = sharedCurrentUser!.email;
-  String? phones = sharedCurrentUser!.phone;
   genderGroup _genderValue = genderGroup.male;
 
   @override
@@ -187,6 +183,33 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
                     child: MaterialButton(
                       height: 50,
                       onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SettingPage()));
+                      },
+                      color: Colors.grey[400],
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Text(
+                        "Hủy",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )),
+              Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: MaterialButton(
+                      height: 50,
+                      onPressed: () {
                         // SignUpUser signUpUser = SignUpUser(
                         //     firstName: _firstName.text,
                         //     lastName: _lastName.text,
@@ -224,7 +247,6 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
   }
 
   Widget fullName({label, obscureText = false}) {
-    RegExp regExp = RegExp(r'^[^\d]*$');
     return Column(
       children: <Widget>[
         Row(
@@ -246,13 +268,7 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
         TextFormField(
           // initialValue: sharedCurrentUser!.firstName,
           obscureText: obscureText,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return "Hãy nhập Họ và Tên của bạn.";
-            } else if (!regExp.hasMatch(value)) {
-              return "Hãy nhập đúng tên";
-            }
-          },
+
           controller: _firstName..text = sharedCurrentUser!.firstName!,
 
           decoration: const InputDecoration(
@@ -326,35 +342,19 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
           ],
         ),
         const SizedBox(height: 5),
-        Form(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: TextFormField(
-            keyboardType: TextInputType.phone,
-            controller: _phone..text = phones!,
-            onChanged: (value) {
-              phones = value;
-            },
-            obscureText: obscureText,
-            decoration: const InputDecoration(
-                hintStyle: TextStyle(color: Colors.black),
-                // hintText: sharedCurrentUser!.phone,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey))),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return "Hãy nhập số điện thoại";
-              } else if (value.length < 10 || value.length > 10) {
-                return "Hãy nhập đúng số điện thoại";
-              } else {
-                return null;
-              }
-            },
-          ),
+        TextFormField(
+          // initialValue: sharedCurrentUser!.phone,
+          controller: _phone..text = sharedCurrentUser!.phone!,
+          keyboardType: TextInputType.phone,
+          obscureText: obscureText,
+          decoration: const InputDecoration(
+              hintText: 'Số điện thoại',
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
         ),
         const SizedBox(height: 10)
       ],

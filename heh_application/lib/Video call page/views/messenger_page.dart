@@ -530,7 +530,7 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
                         widget.bookingDetail!.bookingDetailID;
                     print(VideoCallScreen.channelName);
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const VideoCallScreen(),
+                      builder: (context) => VideoCallScreen(),
                     ));
                   },
                   icon: const Icon(Icons.video_call),
@@ -538,8 +538,8 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
               ],
             )
           ],
-          title: const Text(
-            "Nhắn tin",
+          title: Text(
+            widget.oponentNickName,
             style: TextStyle(fontSize: 18),
           ),
           elevation: 10,

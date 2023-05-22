@@ -1,16 +1,13 @@
 import 'dart:io';
 
-import 'package:email_validator/email_validator.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
-import 'package:heh_application/Member%20page/Profile%20page/Family%20page/family.dart';
-import 'package:heh_application/Member%20page/Profile%20page/setting.dart';
-import 'package:heh_application/constant/firestore_constant.dart';
+
 import 'package:heh_application/models/relationship.dart';
-import 'package:heh_application/models/sign_up_user.dart';
+
 import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
@@ -21,16 +18,14 @@ import 'package:provider/provider.dart';
 
 final TextEditingController _date = TextEditingController();
 final TextEditingController _firstName = TextEditingController();
-final TextEditingController _address = TextEditingController();
-final TextEditingController _email = TextEditingController();
-final TextEditingController _phone = TextEditingController();
+
 
 enum genderGroup { male, female }
 
 class FamilyInformationPage extends StatefulWidget {
-  FamilyInformationPage({Key? key, required this.listSubProfile})
+  FamilyInformationPage({Key? key, required this.subProfile})
       : super(key: key);
-  SubProfile? listSubProfile;
+  SubProfile? subProfile;
   @override
   State<FamilyInformationPage> createState() => _FamilyInformationPageState();
 }
@@ -40,15 +35,15 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
   File? imageFile;
   bool isLoading = false;
   String imageUrl = "";
-  String? dob;
   DateTime today = DateTime.now();
   late int age;
-
+  String firstName = sharedSubprofile!.subName;
+  String selectedRelationship = sharedSubprofile!.relationship!.relationName;
   final List<String> _relationships = [
     "- Chọn -",
   ];
 
-  String selectedRelationship = "- Chọn -";
+
 
   @override
   void initState() {
@@ -106,10 +101,13 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
 
   @override
   Widget build(BuildContext context) {
+
+
     final auth = Provider.of<AuthBase>(context, listen: false);
     DateTime tempDob =
         new DateFormat("yyyy-MM-dd").parse(sharedCurrentUser!.dob!);
     String dob = DateFormat("dd-MM-yyyy").format(tempDob);
+    String dobChange = DateFormat("yyyy-MM-dd").format(tempDob);
     return Scaffold(
         body: SingleChildScrollView(
             child: Padding(
@@ -151,8 +149,9 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                         lastDate: DateTime(2030));
                     if (pickeddate != null) {
                       _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
+                      dob = _date.text;
                       // print(_date.text);
-                      dob = DateFormat('yyyy-MM-dd').format(pickeddate);
+                      dobChange = DateFormat('yyyy-MM-dd').format(pickeddate);
                       age = today.year - pickeddate.year;
                       print(age);
                       // print(dob);
@@ -203,6 +202,7 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                             .toList(),
                         onChanged: (relationship) => setState(() {
                           selectedRelationship = relationship!;
+                          print(selectedRelationship);
                         }),
                       );
                     } else {
@@ -223,6 +223,30 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                     padding: const EdgeInsets.only(top: 20),
                     child: MaterialButton(
                       height: 50,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      color: Colors.grey[400],
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Text(
+                        "Hủy",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )),
+              Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: MaterialButton(
+                      height: 50,
                       onPressed: () async {
                         // SignUpUser signUpUser = SignUpUser(
                         //     firstName: _firstName.text,
@@ -233,36 +257,43 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                         //     gender: _genderValue.index,
                         //     dob: _date.text);
                         // signUp(signUpUser);
-                        bool gender = false;
-                        if (_genderValue.index == 0) {
-                          gender = true;
-                        } else if (_genderValue == 1) {
-                          gender = false;
-                        }
-                        SignUpUser signUpUser = SignUpUser(
+                        // bool gender = false;
+                        // if (_genderValue.index == 0) {
+                        //   gender = true;
+                        // } else if (_genderValue == 1) {
+                        //   gender = false;
+                        // }
+                        print(selectedRelationship);
+                       Relationship relationship = await CallAPI().getRelationByRelationName(selectedRelationship);
+                        SubProfile sub = SubProfile(
+                          profileID: widget.subProfile!.profileID,
                           userID: sharedCurrentUser!.userID,
-                          image: imageUrl,
-                          firstName: _firstName.text,
-                          email: _email.text,
-                          phone: _phone.text,
-                          address: _address.text,
-                          gender: gender,
-                          dob: dob,
-                          password: sharedCurrentUser!.password,
+                          relationID: relationship.relationId,
+                          subName: _firstName.text,
+                          dob: dobChange,
                         );
-                        CallAPI().updateUserbyUID(signUpUser);
 
-                        await auth.upLoadFirestoreData(
-                            FirestoreConstants.pathUserCollection,
-                            sharedCurrentUser!.userID!,
-                            {"nickname": signUpUser.firstName});
+                        await CallAPI().updateSubprofile(sub);
+                        SubProfile subPro = await CallAPI().getSubProfileBySubNameAndUserID(_firstName.text, sharedCurrentUser!.userID!);
+                        setState(() {
+                          sharedSubprofile = subPro;
+                          if (sharedSubprofile!.relationship!.relationName == "Tôi") {
+                            sharedCurrentUser!.firstName = subPro.subName;
+                            sharedCurrentUser!.dob = subPro.dob;
+                          }
+
+                        });
+                        await CallAPI().updateUserbyUID(sharedCurrentUser!);
+                        // await auth.upLoadFirestoreData(
+                        //     FirestoreConstants.pathUserCollection,
+                        //     sharedCurrentUser!.userID!,
+                        //     {"nickname": signUpUser.firstName});
                         final snackBar = SnackBar(
-                          duration: const Duration(seconds: 1),
                           content: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: const [
                               Text(
-                                "Cập nhật thành công",
+                                "Thành công",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -297,7 +328,6 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
   }
 
   Widget fullName({label, input, obscureText = false}) {
-    RegExp regExp = RegExp(r'^[^\d]*$');
     return Column(
       children: <Widget>[
         Row(
@@ -323,7 +353,12 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
               textCapitalization: TextCapitalization.words,
               obscureText: obscureText,
               keyboardType: TextInputType.name,
-              controller: _firstName..text = widget.listSubProfile!.subName,
+              controller: _firstName..text = firstName,
+              onChanged: (value) {
+                setState(() {
+                  firstName = value;
+                });
+              },
               decoration: const InputDecoration(
                   // hintStyle: const TextStyle(color: Colors.black),
                   // hintText: sharedCurrentUser!.firstName,
@@ -336,9 +371,9 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                       borderSide: BorderSide(color: Colors.grey))),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return "Hãy nhập Họ và Tên của bạn.";
-                } else if (!regExp.hasMatch(value)) {
-                  return "Hãy nhập đúng tên";
+                  return null;
+                } else {
+                  return null;
                 }
               },
             )),

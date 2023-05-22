@@ -5,7 +5,7 @@ import 'package:heh_application/models/physiotherapist.dart';
 import 'package:heh_application/services/call_api.dart';
 
 class PhysioChoosePage extends StatefulWidget {
-  PhysioChoosePage({Key? key, required this.typeName}) : super(key: key);
+   PhysioChoosePage({Key? key, required this.typeName}) : super(key: key);
   String typeName;
   @override
   State<PhysioChoosePage> createState() => _PhysioChoosePageState();
@@ -42,6 +42,7 @@ class _PhysioChoosePageState extends State<PhysioChoosePage> {
                         print(sharedMedicalRecord!.problem);
                       }
                     });
+
 
                     if (listPhysio != null) {
                       return Column(

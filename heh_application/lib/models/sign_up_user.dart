@@ -5,7 +5,7 @@ class SignUpUser {
   final String? userID;
   final String? password;
   final String? email;
-  final String? firstName;
+   String? firstName;
   final String? lastName;
   final String? address;
   String? _image;
@@ -16,7 +16,7 @@ class SignUpUser {
     _image = value;
   }
 
-  final String? dob;
+   String? dob;
   final String? phone;
   final bool? gender;
   String? roleID;
