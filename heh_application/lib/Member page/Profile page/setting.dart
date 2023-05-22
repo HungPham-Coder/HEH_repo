@@ -87,7 +87,10 @@ class _SettingPageState extends State<SettingPage> {
                   MaterialPageRoute(
                       builder: (context) => FamilyPage(
 
-                          ))).then((value) => onGoBack());
+                          ),
+                    settings: const RouteSettings(
+                      name: "/familySignUp",
+                    ),)).then((value) => onGoBack());
             },
           ),
           ProfileMenu(

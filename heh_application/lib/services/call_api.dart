@@ -1071,7 +1071,9 @@ class CallAPI {
     final body = jsonEncode({
       "userID": subProfile.userID,
       "relationId": subProfile.relationID,
-      "subName": subProfile.subName
+      "subName": subProfile.subName,
+      "dateOfBirth":subProfile.dob,
+      "isDeleted" :false
     });
     final headers = {
       "Accept": "application/json",
