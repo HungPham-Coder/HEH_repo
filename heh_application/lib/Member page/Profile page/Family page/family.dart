@@ -34,59 +34,63 @@ class _FamilyPageState extends State<FamilyPage> {
           child: Column(
             children: [
               // const SizedBox(height: 20),
-              FutureBuilder <List<SubProfile>?>(
-                future: CallAPI().getallSubProfileByUserId(sharedCurrentUser!.userID!),
-                builder: (context, snapshot)  {
-                  if (snapshot.hasData){
-                    if (snapshot.data!.length > 0) {
-                      return ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            DateTime tempDate = new DateFormat("yyyy-MM-dd")
-                                .parse(snapshot.data![index].signUpUser!.dob!);
-                            int age = DateTime.now().year - tempDate.year;
-                            return ProfileMenu(
-                              icon:
-                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fperson.svg?alt=media&token=7bef043d-fdb5-4c5b-bb2e-644ee7682345",
-                              name:
-                              "${snapshot.data![index].signUpUser!.firstName}",
-                              relationship:
-                              "${snapshot.data![index].relationship!.relationName} - ",
-                              text: "$age tuổi",
-                              press: () async{
+              FutureBuilder<List<SubProfile>?>(
+                  future: CallAPI()
+                      .getallSubProfileByUserId(sharedCurrentUser!.userID!),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.length > 0) {
+                        return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              DateTime tempDate = new DateFormat("yyyy-MM-dd")
+                                  .parse(
+                                      snapshot.data![index].dob!);
 
-                                MedicalRecord? medicalRecord = await CallAPI().getMedicalRecordBySubProfileID(snapshot.data![index].profileID!);
-                                setState(() {
-                                  sharedSubprofile = snapshot.data![index];
-                                });
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => FamilyPersonalPage(
-                                          subProfile: snapshot.data![index],
-                                          medicalRecord: medicalRecord,
-                                        ))).then((value) {
-                                          setState(() {
+                              int age = DateTime.now().year - tempDate.year;
 
-                                          });
-                                });
-                              },
-                            );
-                          });
+                              return ProfileMenu(
+                                icon:
+                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fperson.svg?alt=media&token=7bef043d-fdb5-4c5b-bb2e-644ee7682345",
+                                name:
+                                    "${snapshot.data![index].subName}",
+                                relationship:
+                                    "${snapshot.data![index].relationship!.relationName} - ",
+                                text: "$age tuổi",
+                                press: () async {
+                                  MedicalRecord? medicalRecord = await CallAPI()
+                                      .getMedicalRecordBySubProfileID(
+                                          snapshot.data![index].profileID!);
+                                  setState(() {
+                                    sharedSubprofile = snapshot.data![index];
+                                  });
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              FamilyPersonalPage(
+                                                subProfile:
+                                                    snapshot.data![index],
+                                                medicalRecord: medicalRecord,
+                                              ))).then((value) {
+                                    setState(() {});
+                                  });
+                                },
+                              );
+                            });
+                      } else {
+                        return Center(
+                          child: Container(),
+                        );
+                      }
+                    } else {
+                      return Center(
+                        child: Container(),
+                      );
                     }
-                    else {
-                      return Center(child: Container(),);
-                    }
-
-                  }
-                  else {
-                    return Center(child: Container(),);
-                  }
-
-                }
-              ),
+                  }),
             ],
           ),
         ),
@@ -95,7 +99,13 @@ class _FamilyPageState extends State<FamilyPage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const SignUpFamilyPage()));
+                  builder: (context) => const SignUpFamilyPage(),
+
+                )).then((value) {
+                  setState(() {
+
+                  });
+            });
           },
           child: const Icon(Icons.add),
         ));

@@ -217,30 +217,30 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: MaterialButton(
-                      height: 50,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      color: Colors.grey[400],
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Text(
-                        "Hủy",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  )),
+              // Container(
+              //     padding: const EdgeInsets.symmetric(horizontal: 0),
+              //     child: Container(
+              //       padding: const EdgeInsets.only(top: 20),
+              //       child: MaterialButton(
+              //         height: 50,
+              //         onPressed: () {
+              //           Navigator.pop(context);
+              //         },
+              //         color: Colors.grey[400],
+              //         elevation: 0,
+              //         shape: RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(10),
+              //         ),
+              //         child: const Text(
+              //           "Hủy",
+              //           style: TextStyle(
+              //             fontWeight: FontWeight.w600,
+              //             fontSize: 18,
+              //             color: Colors.white,
+              //           ),
+              //         ),
+              //       ),
+              //     )),
               Container(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: Container(
@@ -248,21 +248,6 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                     child: MaterialButton(
                       height: 50,
                       onPressed: () async {
-                        // SignUpUser signUpUser = SignUpUser(
-                        //     firstName: _firstName.text,
-                        //     lastName: _lastName.text,
-                        //     phone: _phone.text,
-                        //     password: _password.text,
-                        //     email: _email.text,
-                        //     gender: _genderValue.index,
-                        //     dob: _date.text);
-                        // signUp(signUpUser);
-                        // bool gender = false;
-                        // if (_genderValue.index == 0) {
-                        //   gender = true;
-                        // } else if (_genderValue == 1) {
-                        //   gender = false;
-                        // }
                         print(selectedRelationship);
                        Relationship relationship = await CallAPI().getRelationByRelationName(selectedRelationship);
                         SubProfile sub = SubProfile(
@@ -284,10 +269,6 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
 
                         });
                         await CallAPI().updateUserbyUID(sharedCurrentUser!);
-                        // await auth.upLoadFirestoreData(
-                        //     FirestoreConstants.pathUserCollection,
-                        //     sharedCurrentUser!.userID!,
-                        //     {"nickname": signUpUser.firstName});
                         final snackBar = SnackBar(
                           content: Row(
                             mainAxisAlignment: MainAxisAlignment.start,

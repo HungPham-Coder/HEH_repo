@@ -306,7 +306,7 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                               }
                             }
                             else {
-                              print ("List loi");
+                              print ("Add problem loi");
                             }
 
                             //gửi mã OTP

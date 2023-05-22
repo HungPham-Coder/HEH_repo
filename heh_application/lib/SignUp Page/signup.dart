@@ -59,118 +59,105 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Column(
-                children: <Widget>[
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "Hãy tham gia cùng chúng tôi!",
-                    style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                  ),
-                ],
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Hãy tham gia cùng chúng tôi!",
+                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
               ),
               const SizedBox(
                 height: 20,
               ),
+              fullName(label: "Họ và Tên"),
+              email(label: "Email"),
+              phone(label: "Số điện thoại"),
+              address(label: "Địa chỉ"),
               Column(
-                children: <Widget>[
-                  fullName(label: "Họ và Tên"),
-                  email(label: "Email"),
-                  phone(label: "Số điện thoại"),
-                  address(label: "Địa chỉ"),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: const <Widget>[
-                          Text(
-                            "Giới tính ",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          Text(
-                            "*",
-                            style: TextStyle(fontSize: 15, color: Colors.red),
-                          ),
-                        ],
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: const <Widget>[
+                      Text(
+                        "Giới tính ",
+                        style: TextStyle(fontSize: 15),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          const Text("Nam"),
-                          Radio(
-                              value: genderGroup.male,
-                              groupValue: _genderValue,
-                              onChanged: (genderGroup? value) {
-                                setState(() {
-                                  _genderValue = value!;
-                                });
-                              }),
-                          const Text("Nữ"),
-                          Radio(
-                              value: genderGroup.female,
-                              groupValue: _genderValue,
-                              onChanged: (genderGroup? value) {
-                                setState(() {
-                                  _genderValue = value!;
-                                });
-                              }),
-                        ],
+                      Text(
+                        "*",
+                        style: TextStyle(fontSize: 15, color: Colors.red),
                       ),
                     ],
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Row(children: const [
-                        Text("Ngày sinh "),
-                        Text("*", style: TextStyle(color: Colors.red))
-                      ]),
-                      Form(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        child: TextFormField(
-                          readOnly: true,
-                          controller: _date,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Không được để trống ngày sinh!";
-                            } else if (age < 18) {
-                              return "Tuổi phải trên 18.";
-                            } else {
-                              return null;
-                            }
-                          },
-                          decoration: const InputDecoration(
-                            hoverColor: Colors.black,
-                            hintText: "Ngày sinh",
-                          ),
-                          onTap: () async {
-                            DateTime? pickeddate = await showDatePicker(
-                                context: context,
-                                initialDate: today,
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime(2030));
-                            if (pickeddate != null) {
-                              _date.text =
-                                  DateFormat('dd-MM-yyyy').format(pickeddate);
-                              // print(_date.text);
-                              dob = DateFormat('yyyy-MM-dd').format(pickeddate);
-                              age = today.year - pickeddate.year;
-                              print(age);
-                              // print(dob);
-                            }
-                          },
-                        ),
-                      ),
+                      const Text("Nam"),
+                      Radio(
+                          value: genderGroup.male,
+                          groupValue: _genderValue,
+                          onChanged: (genderGroup? value) {
+                            setState(() {
+                              _genderValue = value!;
+                            });
+                          }),
+                      const Text("Nữ"),
+                      Radio(
+                          value: genderGroup.female,
+                          groupValue: _genderValue,
+                          onChanged: (genderGroup? value) {
+                            setState(() {
+                              _genderValue = value!;
+                            });
+                          }),
                     ],
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  password(label: "Mật khẩu"),
-                  confirmPassword(label: "Xác thực lại mật khẩu"),
                 ],
               ),
+              Row(children: const [
+                Text("Ngày sinh "),
+                Text("*", style: TextStyle(color: Colors.red))
+              ]),
+              Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: TextFormField(
+                  readOnly: true,
+                  controller: _date,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Không được để trống ngày sinh!";
+                    } else if (age < 18) {
+                      return "Tuổi phải trên 18.";
+                    } else {
+                      return null;
+                    }
+                  },
+                  decoration: const InputDecoration(
+                    hoverColor: Colors.black,
+                    hintText: "Ngày sinh",
+                  ),
+                  onTap: () async {
+                    DateTime? pickeddate = await showDatePicker(
+                        context: context,
+                        initialDate: today,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2030));
+                    if (pickeddate != null) {
+                      _date.text =
+                          DateFormat('dd-MM-yyyy').format(pickeddate);
+                      // print(_date.text);
+                      dob = DateFormat('yyyy-MM-dd').format(pickeddate);
+                      age = today.year - pickeddate.year;
+                      print(age);
+                      // print(dob);
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              password(label: "Mật khẩu"),
+              confirmPassword(label: "Xác thực lại mật khẩu"),
               Row(
                 children: [
                   Container(

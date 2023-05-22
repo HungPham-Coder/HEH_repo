@@ -88,54 +88,50 @@ class _MedicalPageState extends State<MedicalPage> {
                       color: Colors.grey,
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      FutureBuilder<List<CategoryModel>>(
-                          future: CallAPI().getAllCategory(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              addProblem(snapshot.data!);
-                              return MultiSelectBottomSheetField<Problem?>(
-                                isDismissible: true,
-                                confirmText: const Text("Chấp nhận",
-                                    style: TextStyle(fontSize: 18)),
-                                cancelText: const Text("Hủy",
-                                    style: TextStyle(fontSize: 18)),
-                                title: const Text("Tình trạng của bạn"),
-                                buttonText: Text(
-                                  sharedMedicalRecord!.problem!,
-                                  overflow: TextOverflow.clip,
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 13),
-                                ),
-                                items: _problems
-                                    .map((e) =>
-                                        MultiSelectItem<Problem?>(e, e.name))
-                                    .toList(),
-                                listType: MultiSelectListType.CHIP,
-                                searchable: true,
-                                onConfirm: (values) {
-                                  setState(() {
-                                    _selectedProblems = values;
-                                  });
+                  child: FutureBuilder<List<CategoryModel>>(
+                      future: CallAPI().getAllCategory(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          addProblem(snapshot.data!);
+                          return MultiSelectBottomSheetField<Problem?>(
+                            isDismissible: true,
+                            confirmText: const Text("Chấp nhận",
+                                style: TextStyle(fontSize: 18)),
+                            cancelText: const Text("Hủy",
+                                style: TextStyle(fontSize: 18)),
+                            title: const Text("Tình trạng của bạn"),
+                            buttonText: Text(
+                              sharedMedicalRecord!.problem!,
+                              overflow: TextOverflow.clip,
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 13),
+                            ),
+                            items: _problems
+                                .map(
+                                    (e) => MultiSelectItem<Problem?>(e, e.name))
+                                .toList(),
+                            listType: MultiSelectListType.CHIP,
+                            searchable: true,
+                            onConfirm: (values) {
+                              setState(() {
+                                _selectedProblems = values;
+                              });
+                            },
+                            chipDisplay:
+                                MultiSelectChipDisplay(onTap: (values) {
+                              setState(
+                                () {
+                                  _itemChange(values!, false);
                                 },
-                                chipDisplay:
-                                    MultiSelectChipDisplay(onTap: (values) {
-                                  setState(
-                                    () {
-                                      _itemChange(values!, false);
-                                    },
-                                  );
-                                }),
                               );
-                            } else {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                          }),
-                    ],
-                  ),
+                            }),
+                          );
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      }),
                 ),
                 const SizedBox(height: 20),
                 difficult(
@@ -153,30 +149,30 @@ class _MedicalPageState extends State<MedicalPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 0),
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 10, bottom: 10),
-                          child: MaterialButton(
-                            height: 50,
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            color: Colors.grey[400],
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Text(
-                              "Hủy",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        )),
+                    // Container(
+                    //     padding: const EdgeInsets.symmetric(horizontal: 0),
+                    //     child: Container(
+                    //       padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    //       child: MaterialButton(
+                    //         height: 50,
+                    //         onPressed: () {
+                    //           Navigator.pop(context);
+                    //         },
+                    //         color: Colors.grey[400],
+                    //         elevation: 0,
+                    //         shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(10),
+                    //         ),
+                    //         child: const Text(
+                    //           "Hủy",
+                    //           style: TextStyle(
+                    //             fontWeight: FontWeight.w600,
+                    //             fontSize: 18,
+                    //             color: Colors.white,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     )),
                     Container(
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         child: Container(
