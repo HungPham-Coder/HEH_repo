@@ -1087,6 +1087,28 @@ class CallAPI {
       throw Exception("failed to add subprofile");
     }
   }
+  Future<dynamic> ChangePassword(SignUpUser signUpUser, String oldPass, String newPass) async {
+    var url = Uri.parse('${link}/api/User/ChangePassword');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+    final body = jsonEncode({
+      "id": signUpUser.userID,
+      "oldPassword": oldPass,
+      "newPassword": newPass,
+    });
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.post(url, body: body, headers: headers);
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return json.decode(response.body);
+    }
+  }
+
 
   Future<void> updateSubprofile(SubProfile subProfile) async {
     var url = Uri.parse('${link}/api/SubProfile');

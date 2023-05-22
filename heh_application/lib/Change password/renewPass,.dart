@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Login%20page/login.dart';
 import 'package:heh_application/Member%20page/navigation_main.dart';
+import 'package:heh_application/services/call_api.dart';
 
 class renewChangePass extends StatefulWidget {
   const renewChangePass({Key? key}) : super(key: key);
@@ -37,13 +39,16 @@ class _renewChangePassState extends State<renewChangePass> {
         ),
         body: Container(
           padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              oldPassword(label: "Nhập mật khẩu cũ"),
-              newPassword(label: "Nhập mật khẩu mới"),
-              confirmPassword(label: "Nhập lại mật khẩu mới"),
-              confirm(),
-            ],
+          child: Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Column(
+              children: [
+                oldPassword(label: "Nhập mật khẩu cũ"),
+                newPassword(label: "Nhập mật khẩu mới"),
+                confirmPassword(label: "Nhập lại mật khẩu mới"),
+                confirm(),
+              ],
+            ),
           ),
         ));
   }
@@ -55,9 +60,32 @@ class _renewChangePassState extends State<renewChangePass> {
             style: const ButtonStyle(
                 shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20))))),
-            onPressed: () {
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => Navigation_Bar()));
+            onPressed: () async {
+
+              dynamic result =  await CallAPI().ChangePassword(sharedCurrentUser!, _oldPassword.text, _newPassword.text);
+              if (result = true){
+                final snackBar = SnackBar(
+                  content: Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "Đổi pass thành công",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  backgroundColor: Colors.green,
+                );
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(snackBar);
+              }
+              else {
+                print (result);
+              }
             },
             child: Container(
               child: const Text("Thay đổi mật khẩu",
@@ -130,6 +158,11 @@ class _renewChangePassState extends State<renewChangePass> {
         ),
         const SizedBox(height: 5),
         TextFormField(
+          validator: (value) {
+            if (value!.length < 6 && value != '') {
+              return 'Password phải dài hơn 6 ký tự';
+            }
+          },
           controller: _newPassword,
           obscureText: isObscure,
           decoration: InputDecoration(
@@ -177,6 +210,11 @@ class _renewChangePassState extends State<renewChangePass> {
         TextFormField(
           controller: _confirmPassword,
           obscureText: isObscure1,
+          validator: (value) {
+            if (value != _newPassword.text && value != ''){
+              return 'Mật Khẩu xác thực phải trùng mật khẩu mới';
+            }
+          },
           decoration: InputDecoration(
               suffixIcon: IconButton(
                   onPressed: () {

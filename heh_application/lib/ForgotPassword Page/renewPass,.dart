@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Login%20page/login.dart';
+import 'package:heh_application/services/call_api.dart';
 
 class renewForgotPass extends StatefulWidget {
   const renewForgotPass({Key? key}) : super(key: key);
@@ -39,7 +41,7 @@ class _renewForgotPassState extends State<renewForgotPass> {
           child: Column(
             children: [
               oldPassword(label: "Nhập mật khẩu cũ"),
-              newPassword(label: "Nhập mật khẩu mới"),
+              newPassword(label: "Nhập mật khẩu mới "),
               confirmPassword(label: "Nhập lại mật khẩu mới"),
               confirm(),
             ],
@@ -54,9 +56,8 @@ class _renewForgotPassState extends State<renewForgotPass> {
             style: const ButtonStyle(
                 shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20))))),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoginPage()));
+            onPressed: () async {
+
             },
             child: Container(
               child: const Text("Thay đổi mật khẩu",
