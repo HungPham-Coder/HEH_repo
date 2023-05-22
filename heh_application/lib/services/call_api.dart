@@ -1086,7 +1086,7 @@ class CallAPI {
   }
 
   Future<void> updateSubprofile(SubProfile subProfile) async {
-    var url = Uri.parse('${link}/api/User');
+    var url = Uri.parse('${link}/api/SubProfile');
     // var url = Uri.https('localhost:7166', 'api/Schedule');
     final headers = {
       "Accept": "application/json",
@@ -1189,6 +1189,7 @@ class CallAPI {
       throw Exception('Failed to load SubProfile ');
     }
   }
+
 
   Future<List<SubProfile>?> getallSubProfileByUserIdAndSlotID(
       String userId, String slotID) async {

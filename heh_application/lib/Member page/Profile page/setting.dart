@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,6 +23,12 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   EmailOTP myauth = EmailOTP();
+  FutureOr onGoBack (){
+    setState(() {
+      
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +73,7 @@ class _SettingPageState extends State<SettingPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const PersonalPage()));
+                      builder: (context) => const PersonalPage())).then((value) => onGoBack());
             },
           ),
           ProfileMenu(
@@ -73,14 +81,13 @@ class _SettingPageState extends State<SettingPage> {
                 "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Ffamily.svg?alt=media&token=f6f01b99-6901-48be-9a69-798ea594bd77",
             text: "Thành viên gia đình",
             press: () async {
-              List<SubProfile>? listSubProfile = await CallAPI()
-                  .getallSubProfileByUserId(sharedCurrentUser!.userID!);
+
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => FamilyPage(
-                            listSubProfile: listSubProfile,
-                          )));
+
+                          ))).then((value) => onGoBack());
             },
           ),
           ProfileMenu(

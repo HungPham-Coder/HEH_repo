@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Family%20page/personalFam.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Family%20page/signup.dart';
+import 'package:heh_application/models/medical_record.dart';
+import 'package:heh_application/services/call_api.dart';
 import 'package:intl/intl.dart';
 
 import '../../../models/sub_profile.dart';
 
 class FamilyPage extends StatefulWidget {
-  FamilyPage({Key? key, this.listSubProfile}) : super(key: key);
-  List<SubProfile>? listSubProfile;
+  FamilyPage({Key? key}) : super(key: key);
+
   @override
   State<FamilyPage> createState() => _FamilyPageState();
 }
@@ -31,33 +34,59 @@ class _FamilyPageState extends State<FamilyPage> {
           child: Column(
             children: [
               // const SizedBox(height: 20),
-              ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: widget.listSubProfile!.length,
-                  itemBuilder: (context, index) {
-                    DateTime tempDate = new DateFormat("yyyy-MM-dd")
-                        .parse(widget.listSubProfile![index].signUpUser!.dob!);
-                    int age = DateTime.now().year - tempDate.year;
-                    return ProfileMenu(
-                      icon:
-                          "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fperson.svg?alt=media&token=7bef043d-fdb5-4c5b-bb2e-644ee7682345",
-                      name:
-                          "${widget.listSubProfile![index].signUpUser!.firstName}",
-                      relationship:
-                          "${widget.listSubProfile![index].relationship!.relationName} - ",
-                      text: "$age tuổi",
-                      press: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FamilyPersonalPage(
-                                      listSubProfile:
-                                          widget.listSubProfile![index],
-                                    )));
-                      },
-                    );
-                  }),
+              FutureBuilder <List<SubProfile>?>(
+                future: CallAPI().getallSubProfileByUserId(sharedCurrentUser!.userID!),
+                builder: (context, snapshot)  {
+                  if (snapshot.hasData){
+                    if (snapshot.data!.length > 0) {
+                      return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            DateTime tempDate = new DateFormat("yyyy-MM-dd")
+                                .parse(snapshot.data![index].signUpUser!.dob!);
+                            int age = DateTime.now().year - tempDate.year;
+                            return ProfileMenu(
+                              icon:
+                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fperson.svg?alt=media&token=7bef043d-fdb5-4c5b-bb2e-644ee7682345",
+                              name:
+                              "${snapshot.data![index].signUpUser!.firstName}",
+                              relationship:
+                              "${snapshot.data![index].relationship!.relationName} - ",
+                              text: "$age tuổi",
+                              press: () async{
+
+                                MedicalRecord? medicalRecord = await CallAPI().getMedicalRecordBySubProfileID(snapshot.data![index].profileID!);
+                                setState(() {
+                                  sharedSubprofile = snapshot.data![index];
+                                });
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => FamilyPersonalPage(
+                                          subProfile: snapshot.data![index],
+                                          medicalRecord: medicalRecord,
+                                        ))).then((value) {
+                                          setState(() {
+
+                                          });
+                                });
+                              },
+                            );
+                          });
+                    }
+                    else {
+                      return Center(child: Container(),);
+                    }
+
+                  }
+                  else {
+                    return Center(child: Container(),);
+                  }
+
+                }
+              ),
             ],
           ),
         ),
