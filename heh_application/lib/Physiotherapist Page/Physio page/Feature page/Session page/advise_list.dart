@@ -86,13 +86,13 @@ class _AdviseListPageState extends State<AdviseListPage> {
                                 .schedule!
                                 .slot!
                                 .timeEnd);
-                            if (snapshot.data![index].longtermStatus == -1){
+                            if (snapshot.data![index].longtermStatus == -1) {
                               return ServicePaid(
                                   icon:
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
+                                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
                                   date: "$date",
                                   name:
-                                  "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
+                                      "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
                                   subName: subName,
                                   time: "$start - $end",
                                   status: 'xong',
@@ -100,32 +100,30 @@ class _AdviseListPageState extends State<AdviseListPage> {
                                     String bookingScheduleID =
                                         snapshot.data![index].bookingScheduleID;
                                     BookingDetail bookingDetail = BookingDetail(
-                                        bookingDetailID: snapshot.data![index].bookingDetailID,
+                                        bookingDetailID: snapshot
+                                            .data![index].bookingDetailID,
                                         bookingScheduleID: bookingScheduleID,
                                         longtermStatus: 0,
                                         shorttermStatus: 3);
-                                    CallAPI()
-                                        .updateBookingDetailStatus(bookingDetail);
-                                    Navigator.pop(context);
-                                    setState(() {
+                                    CallAPI().updateBookingDetailStatus(
+                                        bookingDetail);
 
-                                    });
+                                    setState(() {});
+                                    Navigator.pop(context);
                                   },
                                   visible: visible);
-                            }
-                            else {
+                            } else {
                               return Center(
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 150),
-                                  child: Text(
-                                    "Hiện tại đã hết slot có thể đăng ký",
-                                    style: TextStyle(
-                                        color: Colors.grey[500], fontSize: 16),
-                                  ),
-                                ),
+                                    // padding: const EdgeInsets.symmetric(vertical: 150),
+                                    // child: Text(
+                                    //   "Hiện tại đã hết slot có thể đăng ký",
+                                    //   style: TextStyle(
+                                    //       color: Colors.grey[500], fontSize: 16),
+                                    // ),
+                                    ),
                               );
                             }
-
                           });
                     } else {
                       return Center(

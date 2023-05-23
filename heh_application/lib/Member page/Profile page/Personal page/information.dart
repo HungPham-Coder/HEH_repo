@@ -72,6 +72,7 @@ class _InformationPageState extends State<InformationPage> {
 
   Future<void> uploadImageFile() async {
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    final auth = Provider.of<AuthBase>(context, listen: false);
     UploadTask uploadTask =
         ChatProvider().upLoadImageFile(imageFile!, fileName);
     try {
@@ -84,7 +85,8 @@ class _InformationPageState extends State<InformationPage> {
         print(sharedCurrentUser!.image);
         isLoading = false;
       });
-      await CallAPI().updateUserbyUID(sharedCurrentUser!);
+
+
     } on FirebaseException catch (e) {
       setState(() {
         isLoading = false;
@@ -560,10 +562,14 @@ class _InformationPageState extends State<InformationPage> {
                       await getImage();
 
                       await CallAPI().updateUserbyUID(sharedCurrentUser!);
-                      await auth.upLoadFirestoreData(
-                          FirestoreConstants.pathUserCollection,
-                          sharedCurrentUser!.userID!,
-                          {"photoUrl": sharedCurrentUser!.image!});
+                      Map<String,dynamic>? firebaseData = await auth.getDocumentByID(sharedCurrentUser!.userID!);
+                      if (firebaseData != null) {
+                        await auth.upLoadFirestoreData(
+                            FirestoreConstants.pathUserCollection,
+                            sharedCurrentUser!.userID!,
+                            {"photoUrl": sharedCurrentUser!.image!});
+                      }
+
                     },
                     child: SvgPicture.network(
                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcamera.svg?alt=media&token=afa6a202-304e-45af-8df5-870126316135",

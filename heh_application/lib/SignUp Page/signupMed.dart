@@ -16,7 +16,7 @@ import '../models/exercise_model/category.dart';
 import '../models/problem.dart';
 import '../services/call_api.dart';
 
-class Problem {
+ class Problem {
   final String name;
 
   Problem({required this.name});
@@ -241,73 +241,7 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                         child: MaterialButton(
                           height: 50,
                           onPressed: () async {
-                            String problem = '';
-                            //get all problem
-                            if (_selectedProblems.length > 1) {
-                              _selectedProblems.forEach((element) {
-                                if (element != _selectedProblems.last) {
-                                  problem += '${element!.name}, ';
-                                } else {
-                                  problem += '${element!.name} ';
-                                }
-                              });
-                              print("ABBC");
-                            } else {
-                              _selectedProblems.forEach((element) {
-                                problem = '${element!.name}';
-                              });
-                              print("ABBC");
-                            }
-                            //Create user
-                            String userID = await CallAPI()
-                                .callRegisterAPI(widget.signUpUser);
 
-                            Relationship relationship = await CallAPI()
-                                .getRelationByRelationName("Tôi");
-                            //Create subProfile
-                            SubProfile subProfile = SubProfile(
-                                userID: userID,
-                                relationID: relationship.relationId,
-                                subName: widget.signUpUser.firstName!);
-
-                            SubProfile subProfile1 =
-                                await CallAPI().AddSubProfile(subProfile);
-                            //Create medical record
-                            MedicalRecord medicalRecord = MedicalRecord(
-                              subProfileID: subProfile1.profileID!,
-                              problem: problem,
-                              curing: _curing.text,
-                              difficulty: _difficult.text,
-                              injury: _injury.text,
-                              medicine: _medicine.text,
-                            );
-                            MedicalRecord? medical = await CallAPI()
-                                .createMedicalRecord(medicalRecord);
-                            //Create problem
-                            List<Problem1>? listAddProblem = [] ;
-                            _selectedProblems.forEach((elementSelected)  {
-                              _listCategory.forEach((element)   {
-                                if (elementSelected!.name ==
-                                    element.categoryName) {
-                                  Problem1 problem1 = Problem1(
-                                      categoryID: element.categoryID,
-                                      medicalRecordID:
-                                          medical!.medicalRecordID!);
-
-
-                                  listAddProblem.add(problem1);
-                                }
-                              });
-                            });
-                            if (listAddProblem.length > 0){
-                              for (var element in listAddProblem){
-
-                                await CallAPI().addProblem(element);
-                              }
-                            }
-                            else {
-                              print ("Add problem loi");
-                            }
 
                             //gửi mã OTP
                             myauth.setConfig(
@@ -333,8 +267,15 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => OTPPage(
+                                      curing: _curing.text,
+                                      difficulty: _difficult.text,
+                                      injury: _injury.text,
+                                      medicine: _medicine.text,
+                                      signUpUser: widget.signUpUser,
                                           email: widget.signUpUser.email,
                                           myauth: myauth,
+                                      selectedProblems: _selectedProblems,
+                                      listCategory: _listCategory,
                                         )));
                           },
                           color: const Color.fromARGB(255, 46, 161, 226),

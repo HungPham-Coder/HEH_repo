@@ -12,8 +12,10 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../common_widget/menu_listview.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 int addSlotStatus = 200;
 int updateSlotStatus = 200;
+
 class SessionRegisterPage extends StatefulWidget {
   SessionRegisterPage({Key? key, this.bookingDetail, this.listDetail})
       : super(key: key);
@@ -187,16 +189,34 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                   bookingDetail.bookingSchedule!.schedule!.slot!.timeStart);
               String end = DateTimeFormat.formateTime(
                   bookingDetail.bookingSchedule!.schedule!.slot!.timeEnd);
+              Color color;
+              bool visible = true;
+              print(bookingDetail.bookingSchedule!.subProfile!.subName);
+              print(widget.bookingDetail!.bookingSchedule!.subProfile!.subName);
+              if (widget.bookingDetail!.bookingSchedule!.signUpUser!.firstName ==
+                      bookingDetail.bookingSchedule!.signUpUser!.firstName &&
+                  widget.bookingDetail!.bookingSchedule!.subProfile!.subName ==
+                      bookingDetail.bookingSchedule!.subProfile!.subName) {
+               color =  Color.fromARGB(255, 46, 161, 226);
+               //  color = Colors.blue ;
+              }
+              else {
+                visible = false;
+                color =  Colors.green;
+              }
               return SessionScheduleMenu(
+                visible: visible,
+                color: color,
                 name:
                     "Người điều trị: ${bookingDetail.bookingSchedule!.subProfile!.signUpUser!.firstName}",
                 time: "Khung giờ: ${start}-${end}",
                 icon:
                     "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbooking.png?alt=media&token=aa78656d-2651-42a4-810e-07c273cdfe5a",
                 buttonPress: () {
-
-                  String datefmt = DateFormat("yyyy-MM-dd").format(_selectedDay);
-                  DateTime dateCreate = new DateFormat("yyyy-MM-dd").parse(datefmt);
+                  String datefmt =
+                      DateFormat("yyyy-MM-dd").format(_selectedDay);
+                  DateTime dateCreate =
+                      new DateFormat("yyyy-MM-dd").parse(datefmt);
                   setState(() {
                     _timeStart.text = start;
                     _timeEnd.text = end;
@@ -217,12 +237,11 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                   children: [
                                     Time(datefmt),
                                   ],
-                                 ),
+                                ),
                               ),
                               actions: [
                                 TextButton(
                                   onPressed: () {
-
                                     Navigator.pop(context, 'Hủy');
                                     _timeStart.clear();
                                     _timeEnd.clear();
@@ -254,7 +273,8 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
 
                                         //update slot
                                         Slot slot = Slot(
-                                          slotID: bookingDetail.bookingSchedule!.schedule!.slotID,
+                                          slotID: bookingDetail.bookingSchedule!
+                                              .schedule!.slotID,
                                           timeStart: startTime!,
                                           timeEnd: endTime!,
                                           available: true,
@@ -276,22 +296,28 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                           setState(() {
                                             visibleAdd = false;
                                           });
-                                         Slot slot = result;
-                                            if (slot != null) {
-                                              //update event của lịch hiện tại
-                                              selectedEvents[dateCreate]!.forEach((element) {
-                                                if (element == bookingDetail){
-                                                  element.bookingSchedule!.schedule!.slot!.timeStart = startTime!;
-                                                  element.bookingSchedule!.schedule!.slot!.timeEnd = endTime!;
-                                                }
-                                              });
-
-                                            }
-                                          Navigator.pop(context);
+                                          Slot slot = result;
+                                          if (slot != null) {
+                                            //update event của lịch hiện tại
+                                            selectedEvents[dateCreate]!
+                                                .forEach((element) {
+                                              if (element == bookingDetail) {
+                                                element
+                                                    .bookingSchedule!
+                                                    .schedule!
+                                                    .slot!
+                                                    .timeStart = startTime!;
+                                                element
+                                                    .bookingSchedule!
+                                                    .schedule!
+                                                    .slot!
+                                                    .timeEnd = endTime!;
+                                              }
+                                            });
                                           }
-
+                                          Navigator.pop(context);
                                         }
-
+                                      }
 
                                       _timeStart.clear();
                                       _timeEnd.clear();

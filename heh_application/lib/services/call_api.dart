@@ -1084,6 +1084,7 @@ class CallAPI {
     if (response.statusCode == 200) {
       return SubProfile.fromMap(json.decode(response.body));
     } else {
+      print(response.body);
       throw Exception("failed to add subprofile");
     }
   }
