@@ -251,25 +251,34 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       addSlot(snapshot.data!);
-                      return DropdownButtonFormField<String>(
-                        value: selectedTime,
-                        items: _time
-                            .map((relationship) => DropdownMenuItem<String>(
-                                value: relationship,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    relationship,
-                                    style: const TextStyle(fontSize: 13),
-                                  ),
-                                )))
-                            .toList(),
-                        onChanged: (relationship) => setState(() {
-                          selectedTime = relationship;
-                          print(selectedTime);
-                        }),
-                      );
+                      if (snapshot.data!.isNotEmpty) {
+                        return DropdownButtonFormField<String>(
+                          value: selectedTime,
+                          items: _time
+                              .map((relationship) => DropdownMenuItem<String>(
+                              value: relationship,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10),
+                                child: Text(
+                                  relationship,
+                                  style: const TextStyle(fontSize: 13),
+                                ),
+                              )))
+                              .toList(),
+                          onChanged: (relationship) => setState(() {
+                            selectedTime = relationship;
+                            print(selectedTime);
+                          }),
+                        );
+                      }
+                      else {
+                        return Center(
+                          child: Text("Đã hết slot có thể đặt", ),
+                        );
+                      }
+             
+                      
                     } else {
                       return const Center(
                         child: CircularProgressIndicator(),
