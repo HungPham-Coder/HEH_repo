@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/constant/firestore_constant.dart';
+import 'package:heh_application/models/error_model.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/auth.dart';
@@ -15,8 +16,6 @@ import 'package:heh_application/util/date_time_format.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-
 
 enum genderGroup { male, female }
 
@@ -33,7 +32,7 @@ class _InformationPageState extends State<InformationPage> {
   bool isLoading = false;
   String imageUrl = "";
   DateTime today = DateTime.now();
-   int age = 0;
+  int age = 0;
   String? firstNameTxt = sharedCurrentUser!.firstName;
   String? phoneTxt = sharedCurrentUser!.phone;
   String? addressTxt = sharedCurrentUser!.address;
@@ -44,6 +43,11 @@ class _InformationPageState extends State<InformationPage> {
   final TextEditingController _address = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _phone = TextEditingController();
+  bool validName = true;
+  bool validPhone = true;
+  bool validDOB = true;
+  List<ErrorModel>? list;
+  bool visible = false;
   @override
   void initState() {
     super.initState();
@@ -119,6 +123,13 @@ class _InformationPageState extends State<InformationPage> {
             address(label: "Địa chỉ"),
             gender(),
             dobWidget(),
+            Visibility(
+              visible: visible,
+              child: const Text(
+                "Hãy nhập đúng những field cần thiết",
+                style: TextStyle(fontSize: 15, color: Colors.red),
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -129,54 +140,150 @@ class _InformationPageState extends State<InformationPage> {
                       child: MaterialButton(
                         height: 50,
                         onPressed: () async {
-                         SubProfile subProfile = await CallAPI().getSubProfileBySubNameAndUserID(sharedCurrentUser!.firstName!, sharedCurrentUser!.userID!);
-                         subProfile.subName = _firstName.text;
-                         await CallAPI().updateSubprofile(subProfile);
-                          bool gender = false;
-                          if (_genderValue.index == 0) {
-                            gender = true;
-                          } else if (_genderValue.index == 1) {
-                            gender = false;
+                          if (list != null) {
+                            if (validPhone == false){
+                              setState(() {
+                                validPhone = true;
+                              });
+                            }
                           }
-                          SignUpUser signUpUser = SignUpUser(
-                            userID: sharedCurrentUser!.userID,
-                            firstName: _firstName.text,
-                            image: sharedCurrentUser!.image,
-                            email: _email.text,
-                            phone: _phone.text,
-                            address: _address.text,
-                            gender: gender,
-                            dob: dobChange,
-                            password: sharedCurrentUser!.password,
-                          );
-                        await CallAPI().updateUserbyUID(signUpUser);
+                          if (validPhone == true &&
+                              validDOB == true &&
+                              validName == true) {
+                            if (list != null) {
+                              setState(() {
+                                list = null;
+                              });
+                            }
+                            if (visible) {
+                              setState(() {
+                                visible = false;
+                              });
+                            }
+                            bool gender = false;
+                            if (_genderValue.index == 0) {
+                              gender = true;
+                            } else if (_genderValue.index == 1) {
+                              gender = false;
+                            }
 
-                          await auth.upLoadFirestoreData(
-                              FirestoreConstants.pathUserCollection,
-                              sharedCurrentUser!.userID!,
-                              {"nickname": signUpUser.firstName});
-                          SignUpUser? user = await CallAPI()
-                              .getUserById(sharedResultLogin!.userID!);
-                          setState(() {
-                            sharedCurrentUser = user;
-                          });
+                            SignUpUser signUpUser = SignUpUser(
+                              userID: sharedCurrentUser!.userID,
+                              firstName: _firstName.text,
+                              image: sharedCurrentUser!.image,
+                              email: _email.text,
+                              phone: _phone.text,
+                              address: _address.text,
+                              gender: gender,
+                              dob: dobChange,
+                              password: sharedCurrentUser!.password,
+                            );
+                            // check trùng sdt
+                            dynamic result = "Validate Pass";
+                            if (sharedCurrentUser!.phone != _phone.text) {
+                              result = await CallAPI()
+                                  .CheckRegisterMember(signUpUser);
+                            }
 
-                          final snackBar = SnackBar(
-                            content: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
-                                Text(
-                                  "Thành công",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500),
+                            if (result == "Validate Pass" || list == result) {
+                              //update subProfile relationName là tôi
+                              SubProfile subProfile = await CallAPI()
+                                  .getSubProfileBySubNameAndUserID(
+                                      sharedCurrentUser!.firstName!,
+                                      sharedCurrentUser!.userID!);
+                              subProfile.subName = _firstName.text;
+
+                              await CallAPI().updateSubprofile(subProfile);
+                              //update user
+                              await CallAPI().updateUserbyUID(signUpUser);
+                              //update firebase nếu có
+                              Map<String, dynamic>? firebaseData = await auth
+                                  .getDocumentByID(sharedCurrentUser!.userID!);
+                              if (firebaseData != null) {
+                                await auth.upLoadFirestoreData(
+                                    FirestoreConstants.pathUserCollection,
+                                    sharedCurrentUser!.userID!,
+                                    {"nickname": signUpUser.firstName});
+                              }
+                              //set state lại biến share với những gì đã cập nhật
+                              SignUpUser? user = await CallAPI()
+                                  .getUserById(sharedResultLogin!.userID!);
+                              setState(() {
+                                sharedCurrentUser = user;
+                              });
+                              final snackBar = SnackBar(
+                                content: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: const [
+                                    Text(
+                                      "Thành công",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            backgroundColor: Colors.green,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                backgroundColor: Colors.green,
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            } else {
+                              // nếu số điện thoại bị trùng
+                              setState(() {
+                                list = result;
+                              });
+                              if (list!.length == 1) {
+                                //update subProfile relationName là tôi
+                                SubProfile subProfile = await CallAPI()
+                                    .getSubProfileBySubNameAndUserID(
+                                    sharedCurrentUser!.firstName!,
+                                    sharedCurrentUser!.userID!);
+                                subProfile.subName = _firstName.text;
+
+                                await CallAPI().updateSubprofile(subProfile);
+                                //update user
+                                await CallAPI().updateUserbyUID(signUpUser);
+                                //update firebase nếu có
+                                Map<String, dynamic>? firebaseData = await auth
+                                    .getDocumentByID(sharedCurrentUser!.userID!);
+                                if (firebaseData != null) {
+                                  await auth.upLoadFirestoreData(
+                                      FirestoreConstants.pathUserCollection,
+                                      sharedCurrentUser!.userID!,
+                                      {"nickname": signUpUser.firstName});
+                                }
+                                //set state lại biến share với những gì đã cập nhật
+                                SignUpUser? user = await CallAPI()
+                                    .getUserById(sharedResultLogin!.userID!);
+                                setState(() {
+                                  sharedCurrentUser = user;
+                                });
+                                final snackBar = SnackBar(
+                                  content: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: const [
+                                      Text(
+                                        "Thành công",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
+                                  ),
+                                  backgroundColor: Colors.green,
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
+                            }
+                          } else {
+
+                            setState(() {
+                              visible = true;
+                            });
+                          }
                         },
                         color: const Color.fromARGB(255, 46, 161, 226),
                         elevation: 0,
@@ -202,6 +309,7 @@ class _InformationPageState extends State<InformationPage> {
   }
 
   Widget fullName({label, input, obscureText = false}) {
+    RegExp regExp = RegExp(r'^[a-zA-Z0-9]{1,100}$');
     return Column(
       children: <Widget>[
         Row(
@@ -240,9 +348,15 @@ class _InformationPageState extends State<InformationPage> {
                   borderSide: BorderSide(color: Colors.grey))),
           validator: (value) {
             if (value!.isEmpty) {
-              return null;
+              validName = false;
+              return "Hãy nhập Họ và Tên của bạn.";
+            } else if (!regExp.hasMatch(value)) {
+              validName = false;
+              return "Tên không được chứ ký tự đặc biệt như ?@#";
             } else {
-              return null;
+              if (value.isNotEmpty) {
+                validName = true;
+              }
             }
           },
         ),
@@ -262,10 +376,6 @@ class _InformationPageState extends State<InformationPage> {
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
-            ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
             ),
           ],
         ),
@@ -357,10 +467,6 @@ class _InformationPageState extends State<InformationPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
           ],
         ),
         const SizedBox(height: 5),
@@ -418,14 +524,16 @@ class _InformationPageState extends State<InformationPage> {
           keyboardType: TextInputType.phone,
           controller: _phone..text = phoneTxt!,
           onChanged: (value) {
+            if (list != null) {
+              list = null;
+            }
             phoneTxt = value;
           },
           obscureText: obscureText,
           decoration: const InputDecoration(
               hintStyle: TextStyle(color: Colors.black),
               // hintText: sharedCurrentUser!.phone,
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
               ),
@@ -433,11 +541,28 @@ class _InformationPageState extends State<InformationPage> {
                   borderSide: BorderSide(color: Colors.grey))),
           validator: (value) {
             if (value!.isEmpty) {
+              validPhone = false;
               return "Hãy nhập số điện thoại";
             } else if (value.length < 10 || value.length > 10) {
-              return "Hãy nhập đúng số điện thoại";
+              validPhone = false;
+              return "Độ dài số điện thoại là 10 số";
+            } else if (list != null) {
+              ErrorModel? error;
+              list!.forEach((element) {
+                if (element.error.contains("Số điện thoại")) {
+                  error = element;
+                }
+              });
+              if (error != null) {
+                validPhone = false;
+
+                return error!.error;
+              }
             } else {
-              return null;
+              if (value.isNotEmpty) {
+                print("a");
+                validPhone = true;
+              }
             }
           },
         ),
@@ -447,7 +572,7 @@ class _InformationPageState extends State<InformationPage> {
   }
 
   Widget dobWidget() {
-    DateTime dateTemp =  DateFormat("yyyy-MM-dd").parse(dobChange);
+    DateTime dateTemp = DateFormat("yyyy-MM-dd").parse(dobChange);
     age = today.year - dateTemp.year;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -460,8 +585,8 @@ class _InformationPageState extends State<InformationPage> {
               return "Không được để trống ngày sinh!";
             } else if (age < 18) {
               return "Tuổi phải trên 18.";
-            } else {
-              return null;
+            } else if (value.isNotEmpty) {
+              validDOB = true;
             }
           },
           decoration: const InputDecoration(

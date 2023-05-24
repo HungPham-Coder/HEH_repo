@@ -109,6 +109,7 @@ class _MedicalPageState extends State<MedicalPage> {
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 13),
                             ),
+
                             items: _problems
                                 .map(
                                     (e) => MultiSelectItem<Problem?>(e, e.name))
