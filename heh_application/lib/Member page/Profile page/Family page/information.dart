@@ -217,30 +217,7 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // Container(
-              //     padding: const EdgeInsets.symmetric(horizontal: 0),
-              //     child: Container(
-              //       padding: const EdgeInsets.only(top: 20),
-              //       child: MaterialButton(
-              //         height: 50,
-              //         onPressed: () {
-              //           Navigator.pop(context);
-              //         },
-              //         color: Colors.grey[400],
-              //         elevation: 0,
-              //         shape: RoundedRectangleBorder(
-              //           borderRadius: BorderRadius.circular(10),
-              //         ),
-              //         child: const Text(
-              //           "Hủy",
-              //           style: TextStyle(
-              //             fontWeight: FontWeight.w600,
-              //             fontSize: 18,
-              //             color: Colors.white,
-              //           ),
-              //         ),
-              //       ),
-              //     )),
+
               Container(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: Container(

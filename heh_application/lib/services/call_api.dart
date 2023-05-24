@@ -164,6 +164,30 @@ class CallAPI {
     }
   }
 
+  Future<bool> updatePhysio(PhysiotherapistModel physio) async {
+    var url = Uri.parse('${link}/api/Physiotherapist');
+    // var url = Uri.https('localhost:7166', 'api/Schedule');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    final body = jsonEncode({
+      "physiotherapistID": physio.physiotherapistID,
+      "userID": physio.userID,
+      "specialize": physio.specialize,
+      "skill": physio.skill,
+      "scheduleStatus": physio.scheduleStatus,
+      "isDeleted": false,
+    });
+    var response = await http.put(url, headers: headers, body: body);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      print(response.body);
+      throw Exception('Failed to update User');
+    }
+  }
+
   Future<List<Exercise>> getListExerciseByCategoryID(String categoryId) async {
     var url = Uri.parse('${link}/api/Exercise/GetByCategoryId/$categoryId');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
@@ -363,7 +387,7 @@ class CallAPI {
       Iterable jsonResult = json.decode(response.body);
       List<BookingDetail> list = List<BookingDetail>.from(
           jsonResult.map((model) => BookingDetail.fromMap(model)));
-      if (list == null) {
+      if (list.isEmpty) {
         throw Exception('BookingDetail List null');
       } else {
         return list;

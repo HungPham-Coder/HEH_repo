@@ -214,10 +214,7 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                         child: MaterialButton(
                           height: 50,
                           onPressed: () async {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const SignUpPage()));
+                            Navigator.pop(context);
                           },
                           color: Colors.grey[400],
                           elevation: 0,

@@ -2,19 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Notification%20page/adviseAppoint.dart/adviseDetail.dart';
 import 'package:heh_application/Video%20call%20page/VideoCall.dart';
+import 'package:heh_application/Video%20call%20page/views/messenger_page.dart';
 import 'package:heh_application/models/booking_detail.dart';
+import 'package:heh_application/models/chat_model/user_chat.dart';
 import 'package:heh_application/services/call_api.dart';
+import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:heh_application/util/date_time_format.dart';
 
 class AppointmentPage extends StatefulWidget {
-  const AppointmentPage({Key? key}) : super(key: key);
-
+   AppointmentPage({Key? key, required this.firebaseFirestoreBase}) : super(key: key);
+  FirebaseFirestoreBase firebaseFirestoreBase;
   @override
   State<AppointmentPage> createState() => _AppointmentPageState();
 }
 
 class _AppointmentPageState extends State<AppointmentPage> {
-  Widget button({required VoidCallback press}) {
+  UserChat? currentUser;
+  Widget button({
+    required VoidCallback press,
+    required FirebaseFirestoreBase firebaseFirestoreBase,
+    required BookingDetail bookingDetail,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -47,11 +55,22 @@ class _AppointmentPageState extends State<AppointmentPage> {
                       borderRadius: BorderRadius.circular(15),
                       side: const BorderSide(color: Colors.white)),
                 )),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const VideoCallPage()));
+            onPressed: () async {
+              await loadPhysioTherapistAccount(firebaseFirestoreBase);
+
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return MessengerScreenPage(
+                  currentUserID: currentUser!.id,
+                  userAvatar: currentUser!.photoUrl,
+                  oponentID: bookingDetail.bookingSchedule!.signUpUser!.userID!,
+                  oponentNickName:
+                  bookingDetail.bookingSchedule!.signUpUser!.firstName!,
+                  oponentAvartar:
+                  bookingDetail.bookingSchedule!.signUpUser!.image!,
+                  firebaseFirestoreBase: firebaseFirestoreBase,
+                  bookingDetail: bookingDetail, groupChatID: bookingDetail.bookingSchedule!.signUpUser!.userID!,
+                );
+              }));
             },
             child: const Text(
               "Tham gia",
@@ -63,13 +82,16 @@ class _AppointmentPageState extends State<AppointmentPage> {
     );
   }
 
+
   Widget ServicePaid(
       {required String icon,
-      name,
-      time,
-      bookedFor,
-      date,
-      required VoidCallback press}) {
+        required FirebaseFirestoreBase firebaseFirestoreBase,
+        required BookingDetail bookingDetail,
+        name,
+        time,
+        bookedFor,
+        date,
+        required VoidCallback press}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
@@ -164,7 +186,11 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             ],
                           ),
                           const SizedBox(height: 10),
-                          button(press: press),
+                          button(
+                            bookingDetail: bookingDetail,
+                            press: press,
+                            firebaseFirestoreBase: firebaseFirestoreBase,
+                          ),
                         ],
                       )),
                 ],
@@ -195,6 +221,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 builder: (context, snapshot) {
 
                   if (snapshot.hasData) {
+                    print(snapshot.data!.length);
                     if (snapshot.data!.length > 0) {
                       return ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
@@ -202,7 +229,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             if (snapshot.data![index].shorttermStatus! < 3) {
-
+                              print(index);
                               String day = DateTimeFormat.formatDate(snapshot
                                   .data![index]
                                   .bookingSchedule!
@@ -223,6 +250,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                   .timeEnd);
 
                               return ServicePaid(
+                                bookingDetail: snapshot.data![index],
+                                firebaseFirestoreBase:
+                                widget.firebaseFirestoreBase,
                                 icon:
                                 "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
                                 name:
@@ -244,13 +274,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             }
                             else {
                               return Container(
-                                padding: const EdgeInsets.symmetric(vertical: 280),
-                                child: const Center(
-                                  child: Text(
-                                    "Hiện tại không có lịch đặt hẹn",
-                                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                                  ),
-                                ),
+                                // padding: const EdgeInsets.symmetric(vertical: 280),
+                                // child: const Center(
+                                //   child: Text(
+                                //     "Hiện tại không có lịch đặt hẹn",
+                                //     style: TextStyle(fontSize: 18, color: Colors.grey),
+                                //   ),
+                                // ),
                               );
                             }
 
@@ -282,5 +312,11 @@ class _AppointmentPageState extends State<AppointmentPage> {
         ),
       ),
     );
+  }
+  Future<void> loadPhysioTherapistAccount(
+      FirebaseFirestoreBase firebaseFirestoreBase) async {
+    UserChat? userChatResult =
+    await firebaseFirestoreBase.getPhysioUser(physioID: 'physiotherapist');
+    currentUser = userChatResult;
   }
 }

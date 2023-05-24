@@ -7,18 +7,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/constant/firestore_constant.dart';
 import 'package:heh_application/models/sign_up_user.dart';
+import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/chat_provider.dart';
+import 'package:heh_application/util/date_time_format.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-final TextEditingController _date = TextEditingController();
-final TextEditingController _firstName = TextEditingController();
-final TextEditingController _address = TextEditingController();
-final TextEditingController _email = TextEditingController();
-final TextEditingController _phone = TextEditingController();
+
 
 enum genderGroup { male, female }
 
@@ -34,10 +32,18 @@ class _InformationPageState extends State<InformationPage> {
   File? imageFile;
   bool isLoading = false;
   String imageUrl = "";
-  String? dob;
   DateTime today = DateTime.now();
-  late int age;
-  String? firstName = sharedCurrentUser!.firstName;
+   int age = 0;
+  String? firstNameTxt = sharedCurrentUser!.firstName;
+  String? phoneTxt = sharedCurrentUser!.phone;
+  String? addressTxt = sharedCurrentUser!.address;
+  String dobChange = DateTimeFormat.formatDateSaveDB(sharedCurrentUser!.dob!);
+  String dob = DateTimeFormat.formatDate(sharedCurrentUser!.dob!);
+  final TextEditingController _date = TextEditingController();
+  final TextEditingController _firstName = TextEditingController();
+  final TextEditingController _address = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _phone = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -85,8 +91,6 @@ class _InformationPageState extends State<InformationPage> {
         print(sharedCurrentUser!.image);
         isLoading = false;
       });
-
-
     } on FirebaseException catch (e) {
       setState(() {
         isLoading = false;
@@ -98,179 +102,101 @@ class _InformationPageState extends State<InformationPage> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
-    DateTime tempDob =
-        new DateFormat("yyyy-MM-dd").parse(sharedCurrentUser!.dob!);
-    String dob = DateFormat("dd-MM-yyyy").format(tempDob);
-    String dobChange = DateFormat("yyyy-MM-dd").format(tempDob);
+
     return Scaffold(
         body: SingleChildScrollView(
             child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
-      child: Column(
-        children: [
-          avatar(),
-          const SizedBox(height: 20),
-          fullName(label: "Họ và Tên"),
-          email(label: "Email"),
-          phone(label: "Số điện thoại"),
-          address(label: "Địa chỉ"),
-          gender(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Row(children: const [
-                Text("Ngày sinh "),
-                Text("*", style: TextStyle(color: Colors.red))
-              ]),
-              Form(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: TextFormField(
-                  readOnly: true,
-                  controller: _date,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Không được để trống ngày sinh!";
-                    } else if (age < 18) {
-                      return "Tuổi phải trên 18.";
-                    } else {
-                      return null;
-                    }
-                  },
-                  decoration: InputDecoration(
-                    hintStyle: const TextStyle(color: Colors.black),
-                    hoverColor: Colors.black,
-                    hintText: dob,
-                  ),
-                  onTap: () async {
-                    DateTime? pickeddate = await showDatePicker(
-                        context: context,
-                        initialDate: today,
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime(2030));
-                    if (pickeddate != null) {
-                      _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
-                      // print(_date.text);
-                      dobChange = DateFormat('yyyy-MM-dd').format(pickeddate);
-                      age = today.year - pickeddate.year;
-                      print(age);
-                      // print(dob);
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // Container(
-              //     padding: const EdgeInsets.symmetric(horizontal: 0),
-              //     child: Container(
-              //       padding: const EdgeInsets.only(top: 20),
-              //       child: MaterialButton(
-              //         height: 50,
-              //         onPressed: () {
-              //           // Navigator.push(
-              //           //     context,
-              //           //     MaterialPageRoute(
-              //           //         builder: (context) => const SettingPage()));
-              //           Navigator.pop(context);
-              //         },
-              //         color: Colors.grey[400],
-              //         elevation: 0,
-              //         shape: RoundedRectangleBorder(
-              //           borderRadius: BorderRadius.circular(10),
-              //         ),
-              //         child: const Text(
-              //           "Hủy",
-              //           style: TextStyle(
-              //             fontWeight: FontWeight.w600,
-              //             fontSize: 18,
-              //             color: Colors.white,
-              //           ),
-              //         ),
-              //       ),
-              //     )),
-              Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: MaterialButton(
-                      height: 50,
-                      onPressed: () async {
-                        bool gender = false;
-                        if (_genderValue.index == 0) {
-                          gender = true;
-                        } else if (_genderValue.index == 1) {
-                          gender = false;
-                        }
-                        SignUpUser signUpUser = SignUpUser(
-                          userID: sharedCurrentUser!.userID,
-                          firstName: _firstName.text,
-                          image: sharedCurrentUser!.image,
-                          email: _email.text,
-                          phone: _phone.text,
-                          address: _address.text,
-                          gender: gender,
-                          dob: dobChange,
-                          password: sharedCurrentUser!.password,
-                        );
-                        CallAPI().updateUserbyUID(signUpUser);
+      child: Form(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: Column(
+          children: [
+            avatar(),
+            const SizedBox(height: 20),
+            fullName(label: "Họ và Tên"),
+            email(label: "Email"),
+            phone(label: "Số điện thoại"),
+            address(label: "Địa chỉ"),
+            gender(),
+            dobWidget(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: MaterialButton(
+                        height: 50,
+                        onPressed: () async {
+                         SubProfile subProfile = await CallAPI().getSubProfileBySubNameAndUserID(sharedCurrentUser!.firstName!, sharedCurrentUser!.userID!);
+                         subProfile.subName = _firstName.text;
+                         await CallAPI().updateSubprofile(subProfile);
+                          bool gender = false;
+                          if (_genderValue.index == 0) {
+                            gender = true;
+                          } else if (_genderValue.index == 1) {
+                            gender = false;
+                          }
+                          SignUpUser signUpUser = SignUpUser(
+                            userID: sharedCurrentUser!.userID,
+                            firstName: _firstName.text,
+                            image: sharedCurrentUser!.image,
+                            email: _email.text,
+                            phone: _phone.text,
+                            address: _address.text,
+                            gender: gender,
+                            dob: dobChange,
+                            password: sharedCurrentUser!.password,
+                          );
+                        await CallAPI().updateUserbyUID(signUpUser);
 
-                        // SubProfile subProfile = SubProfile(
-                        //     userID: sharedCurrentUser!.userID,
-                        //     relationID: widget.listSubProfile!.relationID,
-                        //     subName: widget.listSubProfile!.subName,
-                        //     profileID: widget.listSubProfile!.profileID,
-                        //     relationship: widget.listSubProfile!.relationship,
-                        //     dob: dob,
-                        //     signUpUser: signUpUser);
-                        // CallAPI().updateSubprofile(subProfile);
+                          await auth.upLoadFirestoreData(
+                              FirestoreConstants.pathUserCollection,
+                              sharedCurrentUser!.userID!,
+                              {"nickname": signUpUser.firstName});
+                          SignUpUser? user = await CallAPI()
+                              .getUserById(sharedResultLogin!.userID!);
+                          setState(() {
+                            sharedCurrentUser = user;
+                          });
 
-                        await auth.upLoadFirestoreData(
-                            FirestoreConstants.pathUserCollection,
-                            sharedCurrentUser!.userID!,
-                            {"nickname": signUpUser.firstName});
-                        SignUpUser? user = await CallAPI()
-                            .getUserById(sharedResultLogin!.userID!);
-                        setState(() {
-                          sharedCurrentUser = user;
-                        });
-                        final snackBar = SnackBar(
-                          content: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "Thành công",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
+                          final snackBar = SnackBar(
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Thành công",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+                            backgroundColor: Colors.green,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        },
+                        color: const Color.fromARGB(255, 46, 161, 226),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Text(
+                          "Cập nhật",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            color: Colors.white,
                           ),
-                          backgroundColor: Colors.green,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      },
-                      color: const Color.fromARGB(255, 46, 161, 226),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Text(
-                        "Cập nhật",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                          color: Colors.white,
                         ),
                       ),
-                    ),
-                  )),
-            ],
-          )
-        ],
+                    )),
+              ],
+            )
+          ],
+        ),
       ),
     )));
   }
@@ -294,36 +220,32 @@ class _InformationPageState extends State<InformationPage> {
           ],
         ),
         const SizedBox(height: 5),
-        Form(
-            autovalidateMode: AutovalidateMode.disabled,
-            child: TextFormField(
-              // initialValue: sharedCurrentUser!.firstName,
-              textCapitalization: TextCapitalization.words,
-              obscureText: obscureText,
-              keyboardType: TextInputType.name,
-              controller: _firstName..text = firstName!,
-              onChanged: (value) {
-                firstName = value;
-
-              },
-              decoration: const InputDecoration(
-                  // hintStyle: const TextStyle(color: Colors.black),
-                  // hintText: sharedCurrentUser!.firstName,
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                  ),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey))),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return null;
-                } else {
-                  return null;
-                }
-              },
-            )),
+        TextFormField(
+          // initialValue: sharedCurrentUser!.firstName,
+          textCapitalization: TextCapitalization.words,
+          obscureText: obscureText,
+          keyboardType: TextInputType.name,
+          controller: _firstName..text = firstNameTxt!,
+          onChanged: (value) {
+            firstNameTxt = value;
+          },
+          decoration: const InputDecoration(
+              // hintStyle: const TextStyle(color: Colors.black),
+              // hintText: sharedCurrentUser!.firstName,
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
+          validator: (value) {
+            if (value!.isEmpty) {
+              return null;
+            } else {
+              return null;
+            }
+          },
+        ),
         const SizedBox(height: 10)
       ],
     );
@@ -348,32 +270,32 @@ class _InformationPageState extends State<InformationPage> {
           ],
         ),
         const SizedBox(height: 5),
-        Form(
-            autovalidateMode: AutovalidateMode.disabled,
-            child: TextFormField(
-              // initialValue: sharedCurrentUser!.address,
-              textCapitalization: TextCapitalization.words,
-              keyboardType: TextInputType.streetAddress,
-              controller: _address..text = sharedCurrentUser!.address!,
-              obscureText: obscureText,
-              decoration: const InputDecoration(
-                  // hintStyle: const TextStyle(color: Colors.black),
-                  // hintText: sharedCurrentUser!.address,
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                  ),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey))),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return null;
-                } else {
-                  return null;
-                }
-              },
-            )),
+        TextFormField(
+          // initialValue: sharedCurrentUser!.address,
+          textCapitalization: TextCapitalization.words,
+          keyboardType: TextInputType.streetAddress,
+          controller: _address..text = addressTxt!,
+          onChanged: (value) {
+            addressTxt = value;
+          },
+          obscureText: obscureText,
+          decoration: const InputDecoration(
+              // hintStyle: const TextStyle(color: Colors.black),
+              // hintText: sharedCurrentUser!.address,
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
+          validator: (value) {
+            if (value!.isEmpty) {
+              return null;
+            } else {
+              return null;
+            }
+          },
+        ),
         const SizedBox(height: 10)
       ],
     );
@@ -492,34 +414,76 @@ class _InformationPageState extends State<InformationPage> {
           ],
         ),
         const SizedBox(height: 5),
-        Form(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: TextFormField(
-            keyboardType: TextInputType.phone,
-            controller: _phone..text = sharedCurrentUser!.phone!,
-            obscureText: obscureText,
-            decoration: const InputDecoration(
-                hintStyle: TextStyle(color: Colors.black),
-                // hintText: sharedCurrentUser!.phone,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey))),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return "Hãy nhập số điện thoại";
-              } else if (value.length < 10 || value.length > 10) {
-                return "Hãy nhập đúng số điện thoại";
-              } else {
-                return null;
-              }
-            },
-          ),
+        TextFormField(
+          keyboardType: TextInputType.phone,
+          controller: _phone..text = phoneTxt!,
+          onChanged: (value) {
+            phoneTxt = value;
+          },
+          obscureText: obscureText,
+          decoration: const InputDecoration(
+              hintStyle: TextStyle(color: Colors.black),
+              // hintText: sharedCurrentUser!.phone,
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
+          validator: (value) {
+            if (value!.isEmpty) {
+              return "Hãy nhập số điện thoại";
+            } else if (value.length < 10 || value.length > 10) {
+              return "Hãy nhập đúng số điện thoại";
+            } else {
+              return null;
+            }
+          },
         ),
         const SizedBox(height: 10)
+      ],
+    );
+  }
+
+  Widget dobWidget() {
+    DateTime dateTemp =  DateFormat("yyyy-MM-dd").parse(dobChange);
+    age = today.year - dateTemp.year;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        TextFormField(
+          readOnly: true,
+          controller: _date..text = dob,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return "Không được để trống ngày sinh!";
+            } else if (age < 18) {
+              return "Tuổi phải trên 18.";
+            } else {
+              return null;
+            }
+          },
+          decoration: const InputDecoration(
+            labelText: "Ngày sinh ",
+            hintStyle: TextStyle(color: Colors.black),
+            hoverColor: Colors.black,
+          ),
+          onTap: () async {
+            DateTime? pickeddate = await showDatePicker(
+                context: context,
+                initialDate: today,
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2030));
+            if (pickeddate != null) {
+              setState(() {
+                dob = DateFormat('dd-MM-yyyy').format(pickeddate);
+                dobChange = DateFormat('yyyy-MM-dd').format(pickeddate);
+                age = today.year - pickeddate.year;
+              });
+            }
+          },
+        ),
       ],
     );
   }
@@ -562,14 +526,14 @@ class _InformationPageState extends State<InformationPage> {
                       await getImage();
 
                       await CallAPI().updateUserbyUID(sharedCurrentUser!);
-                      Map<String,dynamic>? firebaseData = await auth.getDocumentByID(sharedCurrentUser!.userID!);
+                      Map<String, dynamic>? firebaseData = await auth
+                          .getDocumentByID(sharedCurrentUser!.userID!);
                       if (firebaseData != null) {
                         await auth.upLoadFirestoreData(
                             FirestoreConstants.pathUserCollection,
                             sharedCurrentUser!.userID!,
                             {"photoUrl": sharedCurrentUser!.image!});
                       }
-
                     },
                     child: SvgPicture.network(
                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcamera.svg?alt=media&token=afa6a202-304e-45af-8df5-870126316135",

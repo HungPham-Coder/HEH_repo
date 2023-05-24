@@ -611,8 +611,11 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
 
       ChatProvider().sendChatMessage(widget.groupChatID, content, type,
           widget.currentUserID, widget.oponentID);
-      scrollController.animateTo(0,
-          duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+      // scrollController.animateTo(0,
+      //     duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+      if (scrollController.hasClients){
+        scrollController.jumpTo(50.0);
+      }
     }
   }
 

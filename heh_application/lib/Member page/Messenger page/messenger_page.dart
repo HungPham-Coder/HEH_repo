@@ -392,8 +392,12 @@ class _MessengerPageState extends State<MessengerPage> {
       textEditingController.clear();
       ChatProvider().sendChatMessage(
           groupChatID, content, type, widget.currentUserID, widget.oponentID);
-      scrollController.animateTo(0,
-          duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+      // scrollController.animateTo(0,
+      //     duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+      if (scrollController.hasClients){
+        scrollController.jumpTo(50.0);
+      }
+
     } else {
       // Fluttertoast.showToast(
       //     msg: 'Nothing to send', backgroundColor: Colors.grey);

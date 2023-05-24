@@ -18,6 +18,7 @@ class _renewChangePassState extends State<renewChangePass> {
 
   bool isObscure = false;
   bool isObscure1 = false;
+  bool visible = false;
   @override
   void initState() {
     super.initState();
@@ -47,6 +48,7 @@ class _renewChangePassState extends State<renewChangePass> {
                 newPassword(label: "Nhập mật khẩu mới"),
                 confirmPassword(label: "Nhập lại mật khẩu mới"),
                 confirm(),
+                returnHome()
               ],
             ),
           ),
@@ -82,6 +84,9 @@ class _renewChangePassState extends State<renewChangePass> {
                 );
                 ScaffoldMessenger.of(context)
                     .showSnackBar(snackBar);
+                setState(() {
+                  visible = true;
+                });
               }
               else {
                 print (result);
@@ -114,6 +119,11 @@ class _renewChangePassState extends State<renewChangePass> {
         const SizedBox(height: 5),
         TextFormField(
           controller: _oldPassword,
+          validator: (value) {
+            if (value!.length < 6 && value != '') {
+              return 'Password phải dài hơn 6 ký tự';
+            }
+          },
           obscureText: isObscure,
           decoration: InputDecoration(
               suffixIcon: IconButton(
@@ -237,4 +247,22 @@ class _renewChangePassState extends State<renewChangePass> {
       ],
     );
   }
+  Widget returnHome (){
+    return Visibility(
+      visible: visible,
+      child: Container(
+          padding: const EdgeInsets.only(top: 10),
+          child: ElevatedButton(
+              style: const ButtonStyle(
+                  shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20))))),
+              onPressed: () async {
+                Navigator.popUntil(context, ModalRoute.withName('/landing'));
+              },
+              child: Container(
+                child: const Text("Trở về trang chủ",
+                    style: TextStyle(fontSize: 18)),
+              ))),
+    );
+}
 }
