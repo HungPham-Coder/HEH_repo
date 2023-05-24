@@ -25,7 +25,8 @@ class FamilySignUpMedicalPage extends StatefulWidget {
 class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
   List<Problem> _problems = [];
   List _selectedProblems = [];
-
+  bool validProblem = false ;
+  bool visible = false;
   late bool _visibility = false;
   TextEditingController _difficult = TextEditingController();
   TextEditingController _curing = TextEditingController();
@@ -108,6 +109,7 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                                 style: TextStyle(fontSize: 18)),
                             initialChildSize: 0.4,
                             title: const Text("Vấn đề của bạn"),
+
                             buttonText: const Text(
                               "Vấn đề của bạn",
                               style:
@@ -117,8 +119,12 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                                 .map((e) => MultiSelectItem(e, e.name))
                                 .toList(),
                             validator: (value) {
-                              if (_selectedProblems.length == 0) {
+                              if (_selectedProblems.isEmpty) {
+                                 validProblem = false;
                                 return "Hãy chọn vấn đề của bạn";
+                              }
+                              else {
+                                validProblem = true;
                               }
                             },
                             listType: MultiSelectListType.CHIP,
@@ -148,6 +154,13 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                 injury(label: "Anh/Chị đã gặp chấn thương gì?"),
                 curing(label: "Bệnh lý Anh/Chị đang điều trị kèm theo"),
                 medicine(label: "Thuốc đang sử dụng hiện tại"),
+                Visibility(
+                  visible: visible,
+                  child: const Text(
+                    "Hãy nhập đúng những field cần thiết",
+                    style: TextStyle(fontSize: 15, color: Colors.red),
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -158,84 +171,97 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                           child: MaterialButton(
                             height: 50,
                             onPressed: () async {
-                              String problem = '';
-                              if (_selectedProblems.length > 0) {
-                                if (_selectedProblems.length > 1) {
-                                  _selectedProblems.forEach((element) {
-                                    if (element != _selectedProblems.last) {
-                                      problem += '${element!.name}, ';
-                                    } else {
-                                      problem += '${element!.name} ';
-                                    }
-                                  });
-                                } else {
-                                  _selectedProblems.forEach((element) {
-                                    problem = '${element!.name}';
+                              if (validProblem == true) {
+                                if (visible == true) {
+                                  setState(() {
+                                    visible = false;
                                   });
                                 }
-                              }
-
-                              SubProfile subProfile = await CallAPI()
-                                  .AddSubProfile(widget.subProfile);
-                              if (subProfile != null) {
-                                MedicalRecord medicalRecord = MedicalRecord(
-                                    subProfileID: subProfile.profileID,
-                                    curing: _curing.text,
-                                    difficulty: _difficult.text,
-                                    injury: _injury.text,
-                                    medicine: _medicine.text,
-                                    problem: problem);
-                                MedicalRecord? medicalRecordAdd =
-                                    await CallAPI()
-                                        .createMedicalRecord(medicalRecord);
-                                if (medicalRecordAdd != null) {
-                                  //create Problem
-                                  List<Problem1>? listAddProblem = [] ;
-                                  _selectedProblems.forEach((elementSelected)  {
-                                    _listCategory.forEach((element)   {
-                                      if (elementSelected!.name ==
-                                          element.categoryName) {
-                                        Problem1 problem1 = Problem1(
-                                            categoryID: element.categoryID,
-                                            medicalRecordID:
-                                            medicalRecordAdd.medicalRecordID!);
-
-
-                                        listAddProblem.add(problem1);
+                                String problem = '';
+                                if (_selectedProblems.length > 0) {
+                                  if (_selectedProblems.length > 1) {
+                                    _selectedProblems.forEach((element) {
+                                      if (element != _selectedProblems.last) {
+                                        problem += '${element!.name}, ';
+                                      } else {
+                                        problem += '${element!.name} ';
                                       }
                                     });
-                                  });
-                                  if (listAddProblem.length > 0){
-                                    for (var element in listAddProblem){
+                                  } else {
+                                    _selectedProblems.forEach((element) {
+                                      problem = '${element!.name}';
+                                    });
+                                  }
+                                }
 
-                                      await CallAPI().addProblem(element);
+                                SubProfile subProfile = await CallAPI()
+                                    .AddSubProfile(widget.subProfile);
+                                if (subProfile != null) {
+                                  MedicalRecord medicalRecord = MedicalRecord(
+                                      subProfileID: subProfile.profileID,
+                                      curing: _curing.text,
+                                      difficulty: _difficult.text,
+                                      injury: _injury.text,
+                                      medicine: _medicine.text,
+                                      problem: problem);
+                                  MedicalRecord? medicalRecordAdd =
+                                  await CallAPI()
+                                      .createMedicalRecord(medicalRecord);
+                                  if (medicalRecordAdd != null) {
+                                    //create Problem
+                                    List<Problem1>? listAddProblem = [] ;
+                                    _selectedProblems.forEach((elementSelected)  {
+                                      _listCategory.forEach((element)   {
+                                        if (elementSelected!.name ==
+                                            element.categoryName) {
+                                          Problem1 problem1 = Problem1(
+                                              categoryID: element.categoryID,
+                                              medicalRecordID:
+                                              medicalRecordAdd.medicalRecordID!);
+
+
+                                          listAddProblem.add(problem1);
+                                        }
+                                      });
+                                    });
+                                    if (listAddProblem.length > 0){
+                                      for (var element in listAddProblem){
+
+                                        await CallAPI().addProblem(element);
+                                      }
                                     }
+                                    else {
+                                      print ("Add problem loi");
+                                    }
+                                    final snackBar = SnackBar(
+                                      content: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        children: const [
+                                          Text(
+                                            "Đăng ký Thành công",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ],
+                                      ),
+                                      backgroundColor: Colors.green,
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                    Navigator.popUntil(context,
+                                        ModalRoute.withName('/familySignUp'));
                                   }
-                                  else {
-                                    print ("Add problem loi");
-                                  }
-                                  final snackBar = SnackBar(
-                                    content: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: const [
-                                        Text(
-                                          "Đăng ký Thành công",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
-                                    backgroundColor: Colors.green,
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                  Navigator.popUntil(context,
-                                      ModalRoute.withName('/familySignUp'));
                                 }
                               }
+                              else {
+                                setState(() {
+                                  visible = true;
+                                });
+                              }
+
                             },
                             color: const Color.fromARGB(255, 46, 161, 226),
                             elevation: 0,
@@ -310,19 +336,12 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
+
           ],
         ),
         const SizedBox(height: 5),
         TextFormField(
-          validator: (value) {
-            if (value == '') {
-              return "Hãy nhập hoạt động khó khăn trong cuộc sống";
-            }
-          },
+
           controller: _difficult,
           obscureText: obscureText,
           decoration: const InputDecoration(
@@ -351,19 +370,12 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
+
           ],
         ),
         const SizedBox(height: 5),
         TextFormField(
-          validator: (value) {
-            if (value == '') {
-              return "Hãy nhập chấn thương đã gặp";
-            }
-          },
+
           controller: _injury,
           obscureText: obscureText,
           decoration: const InputDecoration(
@@ -392,19 +404,11 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
+
           ],
         ),
         const SizedBox(height: 5),
         TextFormField(
-          validator: (value) {
-            if (value == '') {
-              return "Hãy nhập bệnh lý đang điều trị";
-            }
-          },
           controller: _curing,
           obscureText: obscureText,
           decoration: const InputDecoration(
@@ -433,19 +437,11 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
+
           ],
         ),
         const SizedBox(height: 5),
         TextFormField(
-          validator: (value) {
-            if (value == '') {
-              return "Hãy nhập thuốc đang sử dụng hiện tại";
-            }
-          },
           controller: _medicine,
           obscureText: obscureText,
           decoration: const InputDecoration(

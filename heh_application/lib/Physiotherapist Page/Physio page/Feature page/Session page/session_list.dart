@@ -33,27 +33,49 @@ class _SessionListPageState extends State<SessionListPage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data!.isNotEmpty) {
+                    List<BookingDetail> listSort = [];
+                    snapshot.data!.forEach((element) {
+                    int count = 0;
+                      listSort.forEach((elementCmp) {
+                        if (element.bookingSchedule!.schedule!.typeOfSlot!
+                                    .typeName ==
+                                "Trị liệu dài hạn" &&
+                            element.bookingSchedule!.signUpUser!.firstName ==
+                                elementCmp
+                                    .bookingSchedule!.signUpUser!.firstName &&
+                            element.bookingSchedule!.subProfile!.subName ==
+                                elementCmp
+                                    .bookingSchedule!.subProfile!.subName) {
+                          count ++ ;
+                        }
+
+                      });
+                      if (count == 0)
+                        {
+                          listSort.add(element);
+                        }
+                    });
                     return ListView.builder(
                       shrinkWrap: true,
-                      itemCount: snapshot.data!.length,
+                      itemCount: listSort.length,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        if (snapshot.data![index].bookingSchedule!.schedule!
+                        if (listSort[index].bookingSchedule!.schedule!
                                     .typeOfSlot!.typeName ==
                                 "Tư vấn trị liệu" &&
-                            snapshot.data![index].longtermStatus != 0) {
+                            listSort[index].longtermStatus != 0) {
                           return Container();
                         } else {
-
                           return ServicePaid(
-                              bookingDetail: snapshot.data![index],
+                              bookingDetail: listSort[index],
+                              subName: listSort[index].bookingSchedule!.subProfile!.subName,
                               icon:
                                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
                               name:
-                                  "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
-                              status: snapshot.data![index].longtermStatus == 0
+                                  "${listSort[index].bookingSchedule!.signUpUser!.firstName}",
+                              status: listSort[index].longtermStatus == 0
                                   ? "Chờ"
-                                  : snapshot.data![index].longtermStatus == 1
+                                  : listSort[index].longtermStatus == 1
                                       ? "Đã được lên lịch"
                                       : "Đang điều trị");
                         }
@@ -94,7 +116,9 @@ class _SessionListPageState extends State<SessionListPage> {
       {required String icon,
       name,
       status,
-      required BookingDetail bookingDetail}) {
+      required BookingDetail bookingDetail,
+      required String subName
+      }) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -137,13 +161,18 @@ class _SessionListPageState extends State<SessionListPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            name,
+                            'Người đặt: $name',
                             style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black),
                           ),
                           const SizedBox(height: 10),
+                          Text(
+                            "Người điều trị: $subName ",
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
+
                           Row(
                             children: [
                               Text(
@@ -189,13 +218,22 @@ class _SessionListPageState extends State<SessionListPage> {
         onPressed: () async {
           List<BookingDetail>? listLongTerm =
               await CallAPI().getLongTermListByStatus(3);
+          List<BookingDetail> listLongTermSort = [];
+          listLongTerm!.forEach((element) {
+            if (element.bookingSchedule!.schedule!.typeOfSlot!.typeName ==
+                "Trị liệu dài hạn") {
+              listLongTermSort.add(element);
+            }
+          });
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => SessionRegisterPage(
                         bookingDetail: bookingDetail,
-                        listDetail: listLongTerm,
-                      )));
+                        listDetail: listLongTermSort,
+                      ))).then((value) {
+            setState(() {});
+          });
         },
         icon: const Icon(Icons.schedule));
   }

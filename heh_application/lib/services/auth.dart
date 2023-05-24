@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,7 +39,7 @@ abstract class AuthBase {
   // Stream<ResultLogin> get userLoginStream;
   // Stream<SignUpUser> get userSignUpStream;
   void dispose();
-
+  Future<Map<String,dynamic>?> getDocumentByID (String userID);
   Future<void> signOut(BuildContext context);
 }
 
@@ -98,7 +99,18 @@ class Auth implements AuthBase {
       //can not sign in
     }
   }
-
+  @override
+  Future<Map<String,dynamic>?> getDocumentByID (String userID) async {
+    final docRef = _firestore.collection("user").doc(userID);
+   docRef.get().then((value) {
+     Map<String,dynamic>? data = value.data();
+     return data;
+   },
+   onError: (e) {
+     return null;
+   }
+   );
+  }
   @override
   Future<User> signInWithFacebook() async {
     final fb = FacebookLogin();

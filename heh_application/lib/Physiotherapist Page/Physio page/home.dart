@@ -39,7 +39,7 @@ class _PhysioHomePageState extends State<PhysioHomePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const AppointmentPage()));
+                        builder: (context) =>  AppointmentPage(firebaseFirestoreBase: firestoreDatabase)));
               },
             ),
             HomeMenu(

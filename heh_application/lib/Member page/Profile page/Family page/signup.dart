@@ -25,6 +25,10 @@ class SignUpFamilyPage extends StatefulWidget {
 
 class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
   genderGroup _genderValue = genderGroup.male;
+  bool validName = false;
+  bool validDOB = false;
+  bool validRelationShip = false;
+  bool visible = false;
 
   final List<String> _relationships = [
     "- Chọn -",
@@ -55,43 +59,46 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(
-                  height: 20,
-                ),
-
-                Text(
-                  "Hãy tham gia cùng chúng tôi!",
-                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                fullName(label: "Họ và Tên"),
-                const SizedBox(height: 10),
-                Row(
-                  children: const [
-                    Text("Ngày sinh"),
-                    Text(" *", style: TextStyle(color: Colors.red)),
-                  ],
-                ),
-                const SizedBox(height: 5),
-                TextFormField(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Hãy tham gia cùng chúng tôi!",
+                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              fullName(label: "Họ và Tên"),
+              const SizedBox(height: 10),
+              Row(
+                children: const [
+                  Text("Ngày sinh"),
+                  Text(" *", style: TextStyle(color: Colors.red)),
+                ],
+              ),
+              const SizedBox(height: 5),
+              Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: TextFormField(
                   validator: (value) {
-                    if (value ==null){
+                    if (value!.isEmpty || _date.text == '') {
+                      validDOB = false;
                       return "Hãy nhập ngày sinh";
+                    }
+                    else {
+                      validDOB = true;
                     }
                   },
                   controller: _date,
                   readOnly: true,
-                  decoration: InputDecoration(
-                    hintStyle: const TextStyle(color: Colors.black),
+                  decoration:const InputDecoration(
+                    hintStyle:  TextStyle(color: Colors.black),
                     hoverColor: Colors.black,
-                    hintText: dob,
+                    // hintText: dob,
                   ),
                   onTap: () async {
                     DateTime? pickeddate = await showDatePicker(
@@ -102,85 +109,106 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                     if (pickeddate != null) {
                       setState(() {
                         age = DateTime.now().year - pickeddate.year;
-                        _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
+                        _date.text =
+                            DateFormat('dd-MM-yyyy').format(pickeddate);
                         dob = DateFormat('yyyy-MM-dd').format(pickeddate);
                       });
                     }
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: const [
-                    Text("Mối quan hệ"),
-                    Text(" *", style: TextStyle(color: Colors.red)),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 60,
-                    // child: SizedBox(
-                    child: FutureBuilder<List<Relationship>>(
-                        future: CallAPI().getAllRelationship(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            if (_relationships.length == 1) {
-                              snapshot.data!.forEach((element) {
-                                String field = "${element.relationName}";
-                                _relationships.add(field);
-                              });
-                              print("Co data");
-                            }
-                            return DropdownButtonFormField<String>(
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: const [
+                  Text("Mối quan hệ"),
+                  Text(" *", style: TextStyle(color: Colors.red)),
+                ],
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 60,
+                  // child: SizedBox(
+                  child: FutureBuilder<List<Relationship>>(
+                      future: CallAPI().getAllRelationship(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          if (_relationships.length == 1) {
+                            snapshot.data!.forEach((element) {
+                              String field = "${element.relationName}";
+                              _relationships.add(field);
+                            });
+                            print("Co data");
+                          }
+                          return Form(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            child: DropdownButtonFormField<String>(
                               decoration: const InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: 1, color: Colors.grey))),
                               value: selectedRelationship,
                               validator: (value) {
-                                if (value == "- Chọn -"){
+                                if (value == "- Chọn -") {
+                                  validRelationShip = false;
                                   return "Hãy Chọn mối quan hệ";
+                                }
+                                else {
+                                  validRelationShip = true;
                                 }
                               },
                               items: _relationships
-                                  .map((relationship) => DropdownMenuItem<String>(
-                                      value: relationship,
-                                      child: Text(
-                                        relationship,
-                                        style: const TextStyle(fontSize: 15),
-                                      )))
+                                  .map((relationship) =>
+                                      DropdownMenuItem<String>(
+                                          value: relationship,
+                                          child: Text(
+                                            relationship,
+                                            style:
+                                                const TextStyle(fontSize: 15),
+                                          )))
                                   .toList(),
                               onChanged: (relationship) => setState(() {
                                 selectedRelationship = relationship!;
                                 print(selectedRelationship);
                               }),
-                            );
-                          } else {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                        })
+                            ),
+                          );
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      })
 
-                    // ),
-                    ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 0),
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: MaterialButton(
-                            height: 50,
-                            onPressed: () async {
+                  // ),
+                  ),
+              Visibility(
+                visible: visible,
+                child: const Text(
+                  "Hãy nhập đúng những field cần thiết",
+                  style: TextStyle(fontSize: 15, color: Colors.red),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      child: Container(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: MaterialButton(
+                          height: 50,
+                          onPressed: () async {
+                            if (validRelationShip == true
+                            && validDOB == true
+                            && validName == true) {
                               Relationship relationship = await CallAPI()
                                   .getRelationByRelationName(
-                                      selectedRelationship);
+                                  selectedRelationship);
                               SubProfile subProfile = SubProfile(
                                   userID: sharedCurrentUser!.userID,
                                   relationID: relationship.relationId,
@@ -190,37 +218,46 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                           FamilySignUpMedicalPage(subProfile: subProfile,)));
-                            },
-                            color: const Color.fromARGB(255, 46, 161, 226),
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Text(
-                              "Tiếp Theo",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                                color: Colors.white,
-                              ),
+                                          FamilySignUpMedicalPage(
+                                            subProfile: subProfile,
+                                          )));
+                            }
+                            else {
+                              setState(() {
+                                visible = true;
+                              });
+                            }
+
+                          },
+                          color: const Color.fromARGB(255, 46, 161, 226),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Text(
+                            "Tiếp Theo",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                              color: Colors.white,
                             ),
                           ),
-                        )),
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                )
-              ],
-            ),
+                        ),
+                      )),
+                ],
+              ),
+              const SizedBox(
+                height: 30,
+              )
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget fullName({label, obscureText = false}) {
+  Widget fullName({label, input, obscureText = false}) {
+    RegExp regExp = RegExp(r'^[a-zA-Z0-9]{1,100}$');
     return Column(
       children: <Widget>[
         Row(
@@ -239,22 +276,37 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
           ],
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return "Không được để trống Họ và tên!";
-            }
-          },
-          obscureText: obscureText,
-          controller: _firstName,
-          decoration: const InputDecoration(
-              hintText: 'Họ và Tên',
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
+        Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: TextFormField(
+            // initialValue: sharedCurrentUser!.firstName,
+            textCapitalization: TextCapitalization.words,
+            obscureText: obscureText,
+            keyboardType: TextInputType.name,
+            controller: _firstName,
+            decoration: const InputDecoration(
+                // hintStyle: const TextStyle(color: Colors.black),
+                // hintText: sharedCurrentUser!.firstName,
+                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey))),
+            validator: (value) {
+              if (value!.isEmpty) {
+                validName = false;
+                return "Hãy nhập Họ và Tên của bạn.";
+              } else if (!regExp.hasMatch(value)) {
+                validName = false;
+                return "Tên không được chứ ký tự đặc biệt như ?@#";
+              } else {
+                if (value.isNotEmpty) {
+                  validName = true;
+                }
+              }
+            },
+          ),
         ),
         const SizedBox(height: 10)
       ],

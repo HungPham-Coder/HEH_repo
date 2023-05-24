@@ -53,7 +53,11 @@ class _FavoritePageState extends State<FavoritePage> {
                                               exerciseDetail: snapshot
                                                   .data![index]
                                                   .exerciseDetail1!,
-                                            )));
+                                            ))).then((value) {
+                                              setState(() {
+
+                                              });
+                                });
                               },
                             );
                           });

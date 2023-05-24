@@ -87,7 +87,7 @@ class _OTPChangePageState extends State<OTPChangePage> {
                           text4.text +
                           text5.text +
                           text6.text;
-                      print(_otp);
+
 
                       if (await widget.myauth.verifyOTP(otp: _otp) == true) {
                         ScaffoldMessenger.of(context)

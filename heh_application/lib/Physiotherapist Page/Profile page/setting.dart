@@ -63,7 +63,11 @@ class _PhysioSettingPageState extends State<PhysioSettingPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const PhysioPersonalPage()));
+                      builder: (context) => const PhysioPersonalPage())).then((value) {
+                        setState(() {
+
+                        });
+              });
             },
           ),
           ProfileMenu(

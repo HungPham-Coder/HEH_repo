@@ -514,10 +514,13 @@ class SessionScheduleMenu extends StatelessWidget {
     required this.name,
     required this.time,
     required this.buttonPress,
+    required this.color,
+    required this.visible
   }) : super(key: key);
-
+  Color color;
   final String icon, name, time;
   final VoidCallback buttonPress;
+  bool visible;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -525,7 +528,7 @@ class SessionScheduleMenu extends StatelessWidget {
       child: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 46, 161, 226),
+            color:  color,
             borderRadius: const BorderRadius.all(Radius.circular(15)),
             border: Border.all(color: Colors.black),
           ),
@@ -568,12 +571,15 @@ class SessionScheduleMenu extends StatelessWidget {
                       ),
                     ],
                   )),
-              TextButton(
-                  child: const Icon(
-                    Icons.edit,
-                    color: Colors.black,
-                  ),
-                  onPressed: buttonPress),
+              Visibility(
+                visible: visible,
+                child: TextButton(
+                    child: const Icon(
+                      Icons.edit,
+                      color: Colors.black,
+                    ),
+                    onPressed: buttonPress),
+              ),
             ],
           )),
     );

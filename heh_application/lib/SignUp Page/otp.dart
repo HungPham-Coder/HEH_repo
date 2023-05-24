@@ -2,16 +2,38 @@ import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
+import 'package:heh_application/SignUp%20Page/signupMed.dart';
+import 'package:heh_application/models/exercise_model/category.dart';
+import 'package:heh_application/models/medical_record.dart';
+import 'package:heh_application/models/problem.dart';
+import 'package:heh_application/models/relationship.dart';
+import 'package:heh_application/models/sign_up_user.dart';
+import 'package:heh_application/models/sub_profile.dart';
+import 'package:heh_application/services/call_api.dart';
 
 class OTPPage extends StatefulWidget {
-  OTPPage({
-    Key? key,
-    required this.email,
-    required this.myauth,
-  }) : super(key: key);
+  OTPPage(
+      {Key? key,
+      required this.email,
+      required this.myauth,
+      required this.selectedProblems,
+      required this.signUpUser,
+      required this.curing,
+      required this.difficulty,
+      required this.injury,
+      required this.medicine,
+      required this.listCategory})
+      : super(key: key);
 
   String? email;
   EmailOTP myauth = EmailOTP();
+  List<Problem?> selectedProblems;
+  SignUpUser signUpUser;
+  String curing;
+  String difficulty;
+  String injury;
+  String medicine;
+  List<CategoryModel> listCategory;
 
   @override
   State<OTPPage> createState() => _OTPPageState();
@@ -25,7 +47,7 @@ class _OTPPageState extends State<OTPPage> {
   final TextEditingController text5 = TextEditingController();
   final TextEditingController text6 = TextEditingController();
   String _otp = "";
-
+  bool visible = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,11 +101,87 @@ class _OTPPageState extends State<OTPPage> {
                             .showSnackBar(const SnackBar(
                           content: Text("OTP đúng."),
                         ));
+                        String problem = '';
+                        //get all problem
+                        if (widget.selectedProblems.length > 1) {
+                          widget.selectedProblems.forEach((element) {
+                            if (element != widget.selectedProblems.last) {
+                              problem += '${element!.name}, ';
+                            } else {
+                              problem += '${element!.name} ';
+                            }
+                          });
+                          print("ABBC");
+                        } else {
+                          widget.selectedProblems.forEach((element) {
+                            problem = '${element!.name}';
+                          });
+                          print("ABBC");
+                        }
+                        //Create user
+                        String userID =
+                            await CallAPI().callRegisterAPI(widget.signUpUser);
 
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LandingPage()));
+                        Relationship relationship =
+                            await CallAPI().getRelationByRelationName("Tôi");
+                        //Create subProfile
+                        SubProfile subProfile = SubProfile(
+                            userID: userID,
+                            relationID: relationship.relationId,
+                            subName: widget.signUpUser.firstName!,
+                            dob: widget.signUpUser.dob);
+
+                        SubProfile subProfile1 =
+                            await CallAPI().AddSubProfile(subProfile);
+                        //Create medical record
+                        MedicalRecord medicalRecord = MedicalRecord(
+                          subProfileID: subProfile1.profileID!,
+                          problem: problem,
+                          curing: widget.curing,
+                          difficulty: widget.difficulty,
+                          injury: widget.injury,
+                          medicine: widget.medicine,
+                        );
+                        MedicalRecord? medical =
+                            await CallAPI().createMedicalRecord(medicalRecord);
+                        //Create problem
+                        List<Problem1>? listAddProblem = [];
+                        widget.selectedProblems.forEach((elementSelected) {
+                          widget.listCategory.forEach((element) {
+                            if (elementSelected!.name == element.categoryName) {
+                              Problem1 problem1 = Problem1(
+                                  categoryID: element.categoryID,
+                                  medicalRecordID: medical!.medicalRecordID!);
+
+                              listAddProblem.add(problem1);
+                            }
+                          });
+                        });
+                        if (listAddProblem.length > 0) {
+                          for (var element in listAddProblem) {
+                            await CallAPI().addProblem(element);
+                          }
+                        } else {
+                          print("Add problem loi");
+                        }
+                        final snackBar = SnackBar(
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: const [
+                              Text(
+                                "Đăng Ký Thành công",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          backgroundColor: Colors.green,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        Navigator.popUntil(context, ModalRoute.withName('/landing'));
+
                       } else {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
@@ -94,6 +192,7 @@ class _OTPPageState extends State<OTPPage> {
                     child: const Icon(Icons.arrow_forward_ios_outlined)),
               ),
               const SizedBox(height: 10),
+
             ],
           )),
     );

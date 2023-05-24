@@ -30,7 +30,7 @@ class _PhysioChoosePageState extends State<PhysioChoosePage> {
           children: [
             const SizedBox(height: 20),
             FutureBuilder<List<PhysiotherapistModel>>(
-                future: CallAPI().getAllActivePhysiotherapist(),
+                future: CallAPI().getAllPhysiotherapist(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     List<PhysiotherapistModel> listPhysio = [];
@@ -54,25 +54,34 @@ class _PhysioChoosePageState extends State<PhysioChoosePage> {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: listPhysio.length,
                               itemBuilder: (context, index) {
+
                                 return PhysioChooseMenu(
                                   icon: listPhysio[index].signUpUser!.gender ==
-                                          true
+                                      true
                                       ? "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622"
                                       : "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2FPhysio.png?alt=media&token=30d7e2dc-5a5b-4637-bda5-7cc798b6104e",
                                   name:
-                                      listPhysio[index].signUpUser!.firstName!,
+                                  listPhysio[index].signUpUser!.firstName!,
                                   skill: 'Kỹ năng: ${listPhysio[index].skill!}',
-                                  press: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ChooseDetailPage(
-                                                  typeName: widget.typeName,
-                                                  physiotherapist:
-                                                      listPhysio[index],
-                                                )));
+                                  press: (){
+                                    if (listPhysio[index].scheduleStatus == 0) {
+                                      return null;
+                                    }
+                                    else {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ChooseDetailPage(
+                                                    typeName: widget.typeName,
+                                                    physiotherapist:
+                                                    listPhysio[index],
+                                                  )));
+                                    }
+
                                   },
+                                  visible: listPhysio[index].scheduleStatus == 0 ? true : false,
+                                  notify: listPhysio[index].scheduleStatus == 0 ? "Chuyên viên đang bận hết slot" : "",
                                 );
                               }),
                         ],
@@ -125,16 +134,19 @@ class Category extends StatelessWidget {
 }
 
 class PhysioChooseMenu extends StatelessWidget {
-  const PhysioChooseMenu({
+   PhysioChooseMenu({
     Key? key,
     required this.skill,
     required this.name,
     required this.icon,
-    required this.press,
+    required this.press, required this.notify,
+    required this.visible
   }) : super(key: key);
 
-  final String skill, icon, name;
+  final String skill, icon, name, notify;
   final VoidCallback? press;
+  bool visible ;
+
 
   @override
   Widget build(BuildContext context) {
@@ -200,6 +212,7 @@ class PhysioChooseMenu extends StatelessWidget {
                               skill,
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
+                            Visibility(visible: visible,child: Text(notify,style: Theme.of(context).textTheme.bodyMedium,))
                           ],
                         )),
                     const Padding(

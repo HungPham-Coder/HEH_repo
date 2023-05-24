@@ -5,6 +5,7 @@ import 'package:heh_application/models/booking_schedule.dart';
 import 'package:heh_application/models/physiotherapist.dart';
 import 'package:heh_application/models/schedule.dart';
 import 'package:heh_application/services/call_api.dart';
+import 'package:heh_application/util/date_time_format.dart';
 import 'package:intl/intl.dart';
 
 import '../../../models/sub_profile.dart';
@@ -156,6 +157,12 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                         shrinkWrap: true,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
+                          dynamic weekDay = new DateFormat("yyyy-MM-ddThh:mm:ss")
+                              .parse(snapshot.data![index].slot!.timeStart).weekday + 1;
+                          if (weekDay == 8) {
+                            weekDay = "Chủ Nhật";
+                          }
+                          String date = DateTimeFormat.formatDate(snapshot.data![index].slot!.timeStart);
                           DateTime tempStart =
                               new DateFormat("yyyy-MM-ddThh:mm:ss")
                                   .parse(snapshot.data![index].slot!.timeStart);
@@ -170,6 +177,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                               : notify = '';
                           return PhysioChooseMenu(
                               notify: notify,
+                              weekDay: "Thứ ${weekDay} Ngày $date",
                               icon:
                                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
                               name: snapshot.data![index].slot!.slotName!,
@@ -353,6 +361,7 @@ class PhysioChooseMenu extends StatelessWidget {
     required this.name,
     required this.icon,
     required this.press,
+    required this.weekDay,
     this.notify,
   }) : super(key: key);
 
@@ -362,7 +371,7 @@ class PhysioChooseMenu extends StatelessWidget {
   String timeStart, timeEnd;
   bool visible = false;
   double price;
-
+  String weekDay;
   @override
   Widget build(BuildContext context) {
     if (notify == '') {
@@ -429,6 +438,10 @@ class PhysioChooseMenu extends StatelessWidget {
                             // SizedBox(
                             //   height: 10,
                             // ),
+                            Text(
+                              weekDay,
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
                             Text(
                               '$time$timeStart - $timeEnd',
                               style: Theme.of(context).textTheme.bodyMedium,

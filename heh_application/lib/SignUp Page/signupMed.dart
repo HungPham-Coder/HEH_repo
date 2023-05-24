@@ -34,7 +34,9 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
   final TextEditingController _injury = TextEditingController();
   final TextEditingController _curing = TextEditingController();
   final TextEditingController _medicine = TextEditingController();
+  bool validProblem = false;
 
+  bool visible = false;
   EmailOTP myauth = EmailOTP();
 
   Future<void> signUp(SignUpUser signUpUser) async {
@@ -95,121 +97,111 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    children: const <Widget>[
-                      Text(
-                        "Anh/Chị đang gặp tình trạng gì?",
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black87),
-                      ),
-                      Text(
-                        " *",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ],
+              Row(
+                children: const <Widget>[
+                  Text(
+                    "Anh/Chị đang gặp tình trạng gì?",
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black87),
                   ),
-                  const SizedBox(height: 5),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        FutureBuilder<List<CategoryModel>>(
-                            future: CallAPI().getAllCategory(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                addProblem(snapshot.data!);
-                                return MultiSelectBottomSheetField<Problem?>(
-                                  confirmText: const Text("Chấp nhận",
-                                      style: TextStyle(fontSize: 18)),
-                                  cancelText: const Text("Hủy",
-                                      style: TextStyle(fontSize: 18)),
-                                  title: const Text("Tình trạng của bạn"),
-                                  buttonText: const Text(
-                                    "Tình trạng",
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 15),
-                                  ),
-                                  items: _problems
-                                      .map((e) =>
-                                          MultiSelectItem<Problem?>(e, e.name))
-                                      .toList(),
-                                  listType: MultiSelectListType.CHIP,
-                                  searchable: true,
-                                  onConfirm: (values) {
-                                    setState(() {
-                                      if (values != null) {
-                                        _selectedProblems = values;
-                                        int counter = 0;
-
-                                        _selectedProblems.forEach((element) {
-                                          if (element!.name.contains("Khác")) {
-                                            counter++;
-                                          }
-                                        });
-                                      } else {
-                                        Navigator.pop(context);
-                                      }
-
-                                      // if (counter > 0) {
-                                      //   _visibility = true;
-                                      // } else {
-                                      //   _visibility = false;
-                                      // }
-                                    });
-                                  },
-                                  chipDisplay:
-                                      MultiSelectChipDisplay(onTap: (values) {
-                                    setState(
-                                      () {
-                                        _itemChange(values!, false);
-                                        // int counter = 0;
-                                        // _selectedProblems.forEach((element) {
-                                        //   if (element!.name.contains("Khác")) {
-                                        //     counter++;
-                                        //   }
-                                        // }
-                                        // );
-                                        // if (counter == 0) {
-                                        //   _visibility = false;
-                                        // } else {
-                                        //   _visibility = true;
-                                        // }
-                                      },
-                                    );
-                                  }),
-                                );
-                              } else {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                            }),
-                      ],
-                    ),
+                  Text(
+                    " *",
+                    style: TextStyle(color: Colors.red),
                   ),
-                  // const SizedBox(height: 20),
-                  // Visibility(
-                  //   visible: _visibility,
-                  //   child: problem(label: "Khác"),
-                  // ),
-                  Text("data"),
-                  const SizedBox(height: 10),
-                  difficult(label: "Hoạt động khó khăn trong cuộc sống?"),
-                  injury(label: "Anh/Chị đã gặp chấn thương gì?"),
-                  curing(label: "Bệnh lý Anh/Chị đang điều trị kèm theo"),
-                  medicine(label: "Thuốc đang sử dụng hiện tại"),
                 ],
+              ),
+              const SizedBox(height: 5),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.grey,
+                  ),
+                ),
+                child: FutureBuilder<List<CategoryModel>>(
+                    future: CallAPI().getAllCategory(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        addProblem(snapshot.data!);
+                        return Form(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          child: MultiSelectBottomSheetField<Problem?>(
+                            confirmText: const Text("Chấp nhận",
+                                style: TextStyle(fontSize: 18)),
+                            cancelText: const Text("Hủy",
+                                style: TextStyle(fontSize: 18)),
+                            title: const Text("Tình trạng của bạn"),
+                            buttonText: const Text(
+                              "Tình trạng",
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 15),
+                            ),
+                            items: _problems
+                                .map(
+                                    (e) => MultiSelectItem<Problem?>(e, e.name))
+                                .toList(),
+                            listType: MultiSelectListType.CHIP,
+                            searchable: true,
+                            validator: (value) {
+                              if (_selectedProblems.isEmpty) {
+                                validProblem = false;
+                                return "Hãy chọn vấn đề của bạn";
+                              } else {
+                                validProblem = true;
+                              }
+                            },
+                            onConfirm: (values) {
+                              setState(() {
+                                _selectedProblems = values;
+                              });
+                            },
+                            chipDisplay:
+                                MultiSelectChipDisplay(onTap: (values) {
+                              setState(
+                                () {
+                                  _itemChange(values!, false);
+                                  // int counter = 0;
+                                  // _selectedProblems.forEach((element) {
+                                  //   if (element!.name.contains("Khác")) {
+                                  //     counter++;
+                                  //   }
+                                  // }
+                                  // );
+                                  // if (counter == 0) {
+                                  //   _visibility = false;
+                                  // } else {
+                                  //   _visibility = true;
+                                  // }
+                                },
+                              );
+                            }),
+                          ),
+                        );
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    }),
+              ),
+              // const SizedBox(height: 20),
+              // Visibility(
+              //   visible: _visibility,
+              //   child: problem(label: "Khác"),
+              // ),
+              const SizedBox(height: 10),
+              difficult(label: "Hoạt động khó khăn trong cuộc sống?"),
+              injury(label: "Anh/Chị đã gặp chấn thương gì?"),
+              curing(label: "Bệnh lý Anh/Chị đang điều trị kèm theo"),
+              medicine(label: "Thuốc đang sử dụng hiện tại"),
+              Visibility(
+                visible: visible,
+                child: const Text(
+                  "Hãy nhập đúng những field cần thiết",
+                  style: TextStyle(fontSize: 15, color: Colors.red),
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -221,10 +213,7 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                         child: MaterialButton(
                           height: 50,
                           onPressed: () async {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const SignUpPage()));
+                            Navigator.pop(context);
                           },
                           color: Colors.grey[400],
                           elevation: 0,
@@ -248,98 +237,51 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                         child: MaterialButton(
                           height: 50,
                           onPressed: () async {
-                            String problem = '';
-                            //get all problem
-                            if (_selectedProblems.length > 1) {
-                              _selectedProblems.forEach((element) {
-                                if (element != _selectedProblems.last) {
-                                  problem += '${element!.name}, ';
-                                } else {
-                                  problem += '${element!.name} ';
-                                }
-                              });
-                              print("ABBC");
-                            } else {
-                              _selectedProblems.forEach((element) {
-                                problem = '${element!.name}';
-                              });
-                              print("ABBC");
-                            }
-                            //Create user
-                            String userID = await CallAPI()
-                                .callRegisterAPI(widget.signUpUser);
+                            print(validProblem);
 
-                            Relationship relationship = await CallAPI()
-                                .getRelationByRelationName("Tôi");
-                            //Create subProfile
-                            SubProfile subProfile = SubProfile(
-                                userID: userID,
-                                relationID: relationship.relationId,
-                                subName: widget.signUpUser.firstName!);
-
-                            SubProfile subProfile1 =
-                                await CallAPI().AddSubProfile(subProfile);
-                            //Create medical record
-                            MedicalRecord medicalRecord = MedicalRecord(
-                              subProfileID: subProfile1.profileID!,
-                              problem: problem,
-                              curing: _curing.text,
-                              difficulty: _difficult.text,
-                              injury: _injury.text,
-                              medicine: _medicine.text,
-                            );
-                            MedicalRecord? medical = await CallAPI()
-                                .createMedicalRecord(medicalRecord);
-                            //Create problem
-                            List<Problem1>? listAddProblem = [];
-                            _selectedProblems.forEach((elementSelected) {
-                              _listCategory.forEach((element) {
-                                if (elementSelected!.name ==
-                                    element.categoryName) {
-                                  Problem1 problem1 = Problem1(
-                                      categoryID: element.categoryID,
-                                      medicalRecordID:
-                                          medical!.medicalRecordID!);
-
-                                  listAddProblem.add(problem1);
-                                }
+                            if (validProblem == true) {
+                              setState(() {
+                                visible = false;
                               });
-                            });
-                            if (listAddProblem.length > 0) {
-                              for (var element in listAddProblem) {
-                                await CallAPI().addProblem(element);
+                              //gửi mã OTP
+                              myauth.setConfig(
+                                  appEmail: "hungppmse140153@fpt.edu.vn",
+                                  appName: "Health care and Healing system",
+                                  userEmail: widget.signUpUser.email,
+                                  otpLength: 6,
+                                  otpType: OTPType.digitsOnly);
+                              if (await myauth.sendOTP() == true) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text("OTP đã được gửi."),
+                                ));
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text("Không gửi được OTP."),
+                                ));
                               }
-                            } else {
-                              print("Add problem loi");
-                            }
+                              print(myauth);
 
-                            //gửi mã OTP
-                            myauth.setConfig(
-                                appEmail: "hungppmse140153@fpt.edu.vn",
-                                appName: "Health care and Healing system",
-                                userEmail: widget.signUpUser.email,
-                                otpLength: 6,
-                                otpType: OTPType.digitsOnly);
-                            if (await myauth.sendOTP() == true) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text("OTP đã được gửi."),
-                              ));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => OTPPage(
+                                            curing: _curing.text,
+                                            difficulty: _difficult.text,
+                                            injury: _injury.text,
+                                            medicine: _medicine.text,
+                                            signUpUser: widget.signUpUser,
+                                            email: widget.signUpUser.email,
+                                            myauth: myauth,
+                                            selectedProblems: _selectedProblems,
+                                            listCategory: _listCategory,
+                                          )));
                             } else {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text("Không gửi được OTP."),
-                              ));
+                              setState(() {
+                                visible = true;
+                              });
                             }
-                            print(myauth);
-
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => OTPPage(
-                                          email: widget.signUpUser.email,
-                                          myauth: myauth,
-                                        )));
                           },
                           color: const Color.fromARGB(255, 46, 161, 226),
                           elevation: 0,
@@ -365,42 +307,6 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
     );
   }
 
-  // Widget problem({label, obscureText = false}) {
-  //   return Column(
-  //     children: <Widget>[
-  //       Row(
-  //         children: <Widget>[
-  //           Text(
-  //             label,
-  //             style: const TextStyle(
-  //                 fontSize: 15,
-  //                 fontWeight: FontWeight.w400,
-  //                 color: Colors.black87),
-  //           ),
-  //           const Text(
-  //             " *",
-  //             style: TextStyle(color: Colors.red),
-  //           ),
-  //         ],
-  //       ),
-  //       const SizedBox(height: 5),
-  //       TextFormField(
-  //         obscureText: obscureText,
-  //         // controller: _firstName,
-  //         decoration: const InputDecoration(
-  //             hintText: 'Vấn đề',
-  //             contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-  //             enabledBorder: OutlineInputBorder(
-  //               borderSide: BorderSide(color: Colors.grey),
-  //             ),
-  //             border: OutlineInputBorder(
-  //                 borderSide: BorderSide(color: Colors.grey))),
-  //       ),
-  //       const SizedBox(height: 10)
-  //     ],
-  //   );
-  // }
-
   Widget difficult({label, obscureText = false}) {
     return Column(
       children: <Widget>[
@@ -413,24 +319,33 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
           ],
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          controller: _difficult,
-          obscureText: obscureText,
-          decoration: const InputDecoration(
-              hintText: 'Hoạt động',
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
+        Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: TextFormField(
+            controller: _difficult,
+            // validator: (value) {
+            //   if (value!.isEmpty){
+            //     validDifficult = false;
+            //     return "Hãy nhập hoạt động khó khăn trong cuộc sống";
+            //   }
+            //   else {
+            //     validDifficult = true;
+            //   }
+            // },
+            obscureText: obscureText,
+            decoration: const InputDecoration(
+                hintText: 'Hoạt động',
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey))),
+          ),
         ),
         const SizedBox(height: 10)
       ],
@@ -452,17 +367,21 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
           ],
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          controller: _injury,
-          obscureText: obscureText,
-          decoration: const InputDecoration(
-              hintText: 'Chấn thương',
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
+        Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: TextFormField(
+            controller: _injury,
+            obscureText: obscureText,
+            decoration: const InputDecoration(
+                hintText: 'Chấn thương',
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey))),
+          ),
         ),
         const SizedBox(height: 10)
       ],
@@ -481,24 +400,33 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
           ],
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          controller: _curing,
-          obscureText: obscureText,
-          decoration: const InputDecoration(
-              hintText: 'Bệnh lý',
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
+        Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: TextFormField(
+            controller: _curing,
+            // validator: (value) {
+            //   if (value!.isEmpty){
+            //     validCuring = false;
+            //     return "Hãy nhập bệnh lý đang điều trị kèm theo";
+            //   }
+            //   else {
+            //     validCuring = true;
+            //   }
+            // },
+            obscureText: obscureText,
+            decoration: const InputDecoration(
+                hintText: 'Bệnh lý',
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey))),
+          ),
         ),
         const SizedBox(height: 15)
       ],
@@ -517,24 +445,33 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
           ],
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          controller: _medicine,
-          obscureText: obscureText,
-          decoration: const InputDecoration(
-              hintText: 'Thuốc',
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
+        Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: TextFormField(
+            controller: _medicine,
+            // validator: (value) {
+            //   if (value!.isEmpty){
+            //     validMedicine = false;
+            //     return "Hãy thuốc đang sử dụng hiện tại";
+            //   }
+            //   else {
+            //     validMedicine = true;
+            //   }
+            // },
+            obscureText: obscureText,
+            decoration: const InputDecoration(
+                hintText: 'Thuốc',
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey))),
+          ),
         ),
         const SizedBox(height: 0)
       ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/choose_form.dart';
 import 'package:heh_application/SignUp%20Page/signupMed.dart';
 import 'package:heh_application/main.dart';
+import 'package:heh_application/models/error_model.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:intl/intl.dart';
@@ -23,9 +24,16 @@ class _SignUpPageState extends State<SignUpPage> {
   String? dob;
   DateTime today = DateTime.now();
   late int age;
-
+  List<ErrorModel>? list;
   bool isObscure = false;
   bool isObscure1 = false;
+  bool validName = false;
+  bool validEmail = false;
+  bool validPhone = false;
+  bool validDOB = false;
+  bool validPassword = false;
+  bool validConfirmPass = false;
+  bool visible = false;
   @override
   void initState() {
     super.initState();
@@ -40,7 +48,6 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _address = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,8 +134,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       return "Không được để trống ngày sinh!";
                     } else if (age < 18) {
                       return "Tuổi phải trên 18.";
-                    } else {
-                      return null;
+                    }
+                    else if (value.isNotEmpty){
+
+                        validDOB = true;
+
                     }
                   },
                   decoration: const InputDecoration(
@@ -157,6 +167,16 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               password(label: "Mật khẩu"),
               confirmPassword(label: "Xác thực lại mật khẩu"),
+              const SizedBox(
+                height: 15,
+              ),
+              Visibility(
+                visible: visible,
+                child: const Text(
+                  "Hãy nhập đúng những field cần thiết",
+                  style: TextStyle(fontSize: 15, color: Colors.red),
+                ),
+              ),
               Row(
                 children: [
                   Container(
@@ -166,10 +186,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         child: MaterialButton(
                           height: 50,
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const ChooseForm()));
+                            Navigator.pop(context);
                           },
                           color: Colors.grey[400],
                           elevation: 0,
@@ -193,12 +210,28 @@ class _SignUpPageState extends State<SignUpPage> {
                         child: MaterialButton(
                           height: 50,
                           onPressed: () async {
+                            if (list != null) {
+                              if (validEmail == false ){
+                                setState(() {
+                                  validEmail = true;
+                                });
+                              }
+                              if (validPhone == false ){
+                                setState(() {
+                                  validPhone = true;
+                                });
+                              }
+                            }
+
+                            print(validEmail);
+                            print(validPhone);
                             bool gender = false;
                             if (_genderValue.index == 0) {
                               gender = true;
                             } else if (_genderValue == 1) {
                               gender = false;
                             }
+
                             SignUpUser signUpUser = SignUpUser(
                               image:
                                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FavatarIcon.png?alt=media&token=790e190a-1559-4272-b4c8-213fbc0d7f89",
@@ -211,14 +244,49 @@ class _SignUpPageState extends State<SignUpPage> {
                               password: _password.text,
                             );
 
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SignUpMedicalPage(
-                                  signUpUser: signUpUser,
-                                ),
-                              ),
-                            );
+                            if (validName == true &&
+                                validDOB == true&&
+                                validConfirmPass == true&&
+                                validPassword == true&&
+                                validPhone == true &&
+                                    validEmail == true) {
+                              if (list != null) {
+                                setState(() {
+                                  list =null;
+                                });
+
+                              }
+                              if (visible) {
+                                setState(() {
+                                  visible = false;
+                                });
+                              }
+                              dynamic result = await CallAPI()
+                                  .CheckRegisterMember(signUpUser);
+                              if (result ==
+                                  "Validate Pass") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SignUpMedicalPage(
+                                      signUpUser: signUpUser,
+                                    ),
+                                  ),
+                                );
+                              }
+                              else {
+                                setState(() {
+                                  list = result;
+                                });
+                              }
+                            }
+                            else {
+                              setState(() {
+                                visible = true;
+                              });
+                            }
+
+
                           },
                           color: const Color.fromARGB(255, 46, 161, 226),
                           elevation: 0,
@@ -248,8 +316,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget fullName({label, obscureText = false}) {
-    // String patttern = "'[\x5F]+|[a-z]|[0-9]";
-    // RegExp regExp = new RegExp(patttern);
+    RegExp regExp = RegExp(r'^[a-zA-Z0-9]{1,100}$');
     return Column(
       children: <Widget>[
         Row(
@@ -273,19 +340,30 @@ class _SignUpPageState extends State<SignUpPage> {
           child: TextFormField(
             // textCapitalization: TextCapitalization.characters,
             keyboardType: TextInputType.name,
-            // validator: (value) {
-            //   if (value!.isEmpty) {
-            //     return "Hãy nhập Họ và Tên của bạn.";
-            //   } else if (!regExp.hasMatch(value)) {
-            //     return "Hãy nhập đúng tên";
-            //   }
-            // },
+            validator: (value) {
+              if (value!.isEmpty) {
+                validName = false;
+                return "Hãy nhập Họ và Tên của bạn.";
+              } else if (!regExp.hasMatch(value)) {
+                validName = false;
+                return "Họ và Tên không được chứ ký tự đặc biệt như ?@#";
+              }
+
+              else {
+                if (value.isNotEmpty) {
+
+                    validName = true;
+                }
+              }
+            },
+
+            textInputAction: TextInputAction.next,
+
             obscureText: obscureText,
             controller: _firstName,
             decoration: const InputDecoration(
                 hintText: 'Họ và Tên',
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey),
                 ),
@@ -318,29 +396,57 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         const SizedBox(height: 5),
         Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: TextFormField(
-                controller: _email,
-                obscureText: obscureText,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                    hintText: 'Email',
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                    ),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey))),
-                validator: (email) {
-                  if (email != null && !EmailValidator.validate(email)) {
-                    return "Nhập đúng email";
-                  } else if (email!.isEmpty) {
-                    return "Vui lòng nhập email!";
-                  } else {
-                    return null;
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: TextFormField(
+            controller: _email,
+            obscureText: obscureText,
+            keyboardType: TextInputType.emailAddress,
+            decoration: const InputDecoration(
+                hintText: 'Email',
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey))),
+            textInputAction: TextInputAction.next,
+            validator: (email) {
+              if (email != null && !EmailValidator.validate(email)) {
+                validEmail = false;
+                return "Nhập đúng email";
+              } else if (email!.isEmpty) {
+                validEmail = false;
+                return "Vui lòng nhập email!";
+              }
+              else if (list != null) {
+                ErrorModel? error;
+                list!.forEach((element) {
+                  if (element.error.contains("Email")) {
+                    error = element;
                   }
-                })),
+                });
+
+                if (error != null) {
+
+                    validEmail = false;
+                  return error!.error;
+
+                }
+
+              } else {
+
+                if (email.isNotEmpty) {
+
+
+                    validEmail = true;
+
+                }
+
+              }
+            },
+          ),
+        ),
         const SizedBox(height: 10)
       ],
     );
@@ -380,13 +486,34 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey))),
+
             validator: (value) {
               if (value!.isEmpty) {
+                validPhone = false;
                 return "Hãy nhập số điện thoại";
               } else if (value.length < 10 || value.length > 10) {
-                return "Hãy nhập đúng số điện thoại";
-              } else {
-                return null;
+                validPhone = false;
+                return "Độ dài số điện thoại là 10 số";
+              } else if (list != null) {
+                ErrorModel? error;
+                list!.forEach((element) {
+                  if (element.error.contains("Số điện thoại")) {
+                    error = element;
+                  }
+                });
+                if (error != null) {
+
+                    validPhone = false;
+
+                  return error!.error;
+                }
+              } else  {
+                if (value.isNotEmpty) {
+                    print("a");
+                    validPhone = true;
+
+                }
+
               }
             },
           ),
@@ -396,7 +523,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget address({label, obscureText = false}) {
+  Widget address({label, }) {
     return Column(
       children: <Widget>[
         Row(
@@ -408,16 +535,16 @@ class _SignUpPageState extends State<SignUpPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
+            // const Text(
+            //   " *",
+            //   style: TextStyle(color: Colors.red),
+            // ),
           ],
         ),
         const SizedBox(height: 5),
         TextFormField(
           controller: _address,
-          obscureText: obscureText,
+
           keyboardType: TextInputType.streetAddress,
           decoration: const InputDecoration(
               hintText: 'Địa chỉ',
@@ -452,26 +579,45 @@ class _SignUpPageState extends State<SignUpPage> {
           ],
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          controller: _password,
-          obscureText: isObscure,
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isObscure = !isObscure;
-                    });
-                  },
-                  icon: Icon(
-                      isObscure ? Icons.visibility_off : Icons.visibility)),
-              hintText: 'Mật khẩu',
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
+        Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                validPassword = false;
+                return "Hãy nhập mật khẩu";
+              }
+              if (value.length < 6) {
+                validPassword = false;
+                return "Mật khẩu phải ít nhất 6 ký tự";
+              } else {
+                if (value.isNotEmpty) {
+
+                    validPassword = true;
+
+                }
+              }
+            },
+            controller: _password,
+            obscureText: isObscure,
+            decoration: InputDecoration(
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isObscure = !isObscure;
+                      });
+                    },
+                    icon: Icon(
+                        isObscure ? Icons.visibility_off : Icons.visibility)),
+                hintText: 'Mật khẩu',
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                border: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey))),
+          ),
         ),
         const SizedBox(height: 15)
       ],
@@ -497,26 +643,46 @@ class _SignUpPageState extends State<SignUpPage> {
           ],
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          controller: _confirmPassword,
-          obscureText: isObscure1,
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isObscure1 = !isObscure1;
-                    });
-                  },
-                  icon: Icon(
-                      isObscure1 ? Icons.visibility_off : Icons.visibility)),
-              hintText: 'Mật khẩu xác thực',
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
+        Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty){
+                validConfirmPass = false;
+                return "Hãy nhập mật khẩu xác thực";
+              }
+              else if (value != _password.text) {
+                validConfirmPass = false;
+                return "Mật Khẩu xác thực không trùng với mật khẩu";
+              } else {
+                if (value.isNotEmpty) {
+
+                    validConfirmPass = true;
+
+                }
+
+              }
+            },
+            controller: _confirmPassword,
+            obscureText: isObscure1,
+            decoration: InputDecoration(
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isObscure1 = !isObscure1;
+                      });
+                    },
+                    icon: Icon(
+                        isObscure1 ? Icons.visibility_off : Icons.visibility)),
+                hintText: 'Mật khẩu xác thực',
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                border: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey))),
+          ),
         ),
         const SizedBox(height: 0)
       ],
