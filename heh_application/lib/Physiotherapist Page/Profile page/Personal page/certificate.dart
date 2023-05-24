@@ -31,6 +31,8 @@ class _PhysioCertificatePageState extends State<PhysioCertificatePage> {
   final TextEditingController _skill = TextEditingController();
   final List<CategoryModel> _listCategory = [];
   List<Problem> _problems = [];
+  bool validSpecialize = true ;
+  bool visible = false ;
   List<Problem?> _selectedProblems = [];
   String specializeTxt = sharedPhysiotherapist!.specialize!;
   void addProblem(List<CategoryModel> list) {
@@ -64,100 +66,122 @@ class _PhysioCertificatePageState extends State<PhysioCertificatePage> {
                     .getPhysiotherapistByUserID(sharedCurrentUser!.userID!),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 20),
-                        specialize(
-                          label: "Chuyên môn của chuyên viên.",
-                        ),
-                        skill(
-                            label: "Kỹ năng của chuyên viên.",
-                            skill: snapshot.data!.skill),
-                        Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 0),
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.only(top: 10, bottom: 10),
-                              child: MaterialButton(
-                                height: 50,
-                                onPressed: () async {
-                                  //get Skill concatenate String
-                                  String skill = '';
-                                  if (_selectedProblems.length > 0) {
-                                    if (_selectedProblems.length > 1) {
-                                      _selectedProblems.forEach((element) {
-                                        if (element != _selectedProblems.last) {
-                                          skill += '${element!.name}, ';
+                    return Form(autovalidateMode: AutovalidateMode.onUserInteraction,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 20),
+                          specialize(
+                            label: "Chuyên môn của chuyên viên.",
+                          ),
+                          skill(
+                              label: "Kỹ năng của chuyên viên.",
+                              skill: snapshot.data!.skill),
+                          Visibility(
+                            visible: visible,
+                            child: const Text(
+                              "Hãy nhập đúng những field cần thiết",
+                              style: TextStyle(fontSize: 15, color: Colors.red),
+                            ),
+                          ),
+                          Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 0),
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.only(top: 10, bottom: 10),
+                                child: MaterialButton(
+                                  height: 50,
+                                  onPressed: () async {
+                                    if (validSpecialize == true) {
+                                      //get Skill concatenate String
+                                      if (visible) {
+                                        setState(() {
+                                          visible = false;
+                                        });
+                                      }
+                                      String skill = '';
+                                      if (_selectedProblems.length > 0) {
+                                        if (_selectedProblems.length > 1) {
+                                          _selectedProblems.forEach((element) {
+                                            if (element != _selectedProblems.last) {
+                                              skill += '${element!.name}, ';
+                                            } else {
+                                              skill += '${element!.name} ';
+                                            }
+                                          });
                                         } else {
-                                          skill += '${element!.name} ';
+                                          _selectedProblems.forEach((element) {
+                                            skill = '${element!.name}';
+                                          });
                                         }
-                                      });
-                                    } else {
-                                      _selectedProblems.forEach((element) {
-                                        skill = '${element!.name}';
+                                      } else {
+                                        skill = sharedPhysiotherapist!.skill!;
+                                      }
+                                      //update physio
+                                      PhysiotherapistModel physio =
+                                      PhysiotherapistModel(
+                                        physiotherapistID: sharedPhysiotherapist!
+                                            .physiotherapistID,
+                                        scheduleStatus:
+                                        sharedPhysiotherapist!.scheduleStatus,
+                                        userID: sharedCurrentUser!.userID,
+                                        skill: skill,
+                                        specialize: _specialize.text,
+                                      );
+                                      bool result =
+                                      await CallAPI().updatePhysio(physio);
+                                      if (result) {
+                                        PhysiotherapistModel physio = await CallAPI().getPhysiotherapistByUserID(
+                                            sharedCurrentUser!.userID!);
+                                        setState(() {
+                                          sharedPhysiotherapist = physio;
+                                        });
+                                        print("a");
+                                        print(sharedPhysiotherapist!.skill);
+                                        final snackBar = SnackBar(
+                                          content: Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: const [
+                                              Text(
+                                                "Thành công",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
+                                          backgroundColor: Colors.green,
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      }
+                                    }
+                                    else {
+                                      setState(() {
+                                        visible = true;
                                       });
                                     }
-                                  } else {
-                                    skill = sharedPhysiotherapist!.skill!;
-                                  }
-                                  //update physio
-                                  PhysiotherapistModel physio =
-                                      PhysiotherapistModel(
-                                    physiotherapistID: sharedPhysiotherapist!
-                                        .physiotherapistID,
-                                    scheduleStatus:
-                                        sharedPhysiotherapist!.scheduleStatus,
-                                    userID: sharedCurrentUser!.userID,
-                                    skill: skill,
-                                    specialize: _specialize.text,
-                                  );
-                                  bool result =
-                                      await CallAPI().updatePhysio(physio);
-                                  if (result) {
-                                   PhysiotherapistModel physio = await CallAPI().getPhysiotherapistByUserID(
-                                        sharedCurrentUser!.userID!);
-                                   setState(() {
-                                     sharedPhysiotherapist = physio;
-                                   });
-                                   print("a");
-                                   print(sharedPhysiotherapist!.skill);
-                                    final snackBar = SnackBar(
-                                      content: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: const [
-                                          Text(
-                                            "Thành công",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ],
-                                      ),
-                                      backgroundColor: Colors.green,
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  }
-                                },
-                                color: const Color.fromARGB(255, 46, 161, 226),
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: const Text(
-                                  "Cập nhật",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 18,
-                                    color: Colors.white,
+
+                                  },
+                                  color: const Color.fromARGB(255, 46, 161, 226),
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Text(
+                                    "Cập nhật",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )),
-                      ],
+                              )),
+                        ],
+                      ),
                     );
                   } else {
                     return Text("ABC");
@@ -192,6 +216,15 @@ class _PhysioCertificatePageState extends State<PhysioCertificatePage> {
           controller: _specialize..text = specializeTxt,
           onChanged: (value) {
             specializeTxt = value;
+          },
+          validator: (value) {
+            if (value!.isEmpty){
+              validSpecialize = false;
+              return "Hãy nhập chuyên môn của bạn";
+            }
+            else {
+              validSpecialize = true;
+            }
           },
           decoration: const InputDecoration(
               hintText: 'Chuyên môn',

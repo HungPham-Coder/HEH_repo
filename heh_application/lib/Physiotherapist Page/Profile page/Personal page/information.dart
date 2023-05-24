@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Profile%20page/setting.dart';
 import 'package:heh_application/constant/firestore_constant.dart';
+import 'package:heh_application/models/error_model.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
@@ -32,7 +33,7 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
   File? imageFile;
   late int age;
   DateTime today = DateTime.now();
-  String? firstName = sharedCurrentUser!.firstName;
+  String? firstNameTxt = sharedCurrentUser!.firstName;
   String? phoneTxt = sharedCurrentUser!.phone;
   String dobChange = DateTimeFormat.formatDateSaveDB(sharedCurrentUser!.dob!);
   String dob = DateTimeFormat.formatDate(sharedCurrentUser!.dob!);
@@ -40,6 +41,11 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
   final TextEditingController _firstName = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _phone = TextEditingController();
+  bool validName = true;
+  bool validPhone = true;
+  bool validDOB = true;
+  List<ErrorModel>? list;
+  bool visible = false;
   @override
   void initState() {
     super.initState();
@@ -144,6 +150,13 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
               ],
             ),
             dobWidget(),
+            Visibility(
+              visible: visible,
+              child: const Text(
+                "Hãy nhập đúng những field cần thiết",
+                style: TextStyle(fontSize: 15, color: Colors.red),
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -154,47 +167,114 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
                       child: MaterialButton(
                         height: 50,
                         onPressed: () async {
-                          bool gender = false;
-                          if (_genderValue.index == 0) {
-                            gender = true;
-                          } else if (_genderValue.index == 1) {
-                            gender = false;
+                          if (list != null) {
+                            if (validPhone == false) {
+                              setState(() {
+                                validPhone = true;
+                              });
+                            }
                           }
+                          if (validPhone == true &&
+                              validDOB == true &&
+                              validName == true) {
+                            if (list != null) {
+                              setState(() {
+                                list = null;
+                              });
+                            }
+                            if (visible) {
+                              setState(() {
+                                visible = false;
+                              });
+                            }
+                            bool gender = false;
+                            if (_genderValue.index == 0) {
+                              gender = true;
+                            } else if (_genderValue.index == 1) {
+                              gender = false;
+                            }
 
-                          SignUpUser signUpUser = SignUpUser(
-                              userID: sharedCurrentUser!.userID,
-                              firstName: _firstName.text,
-                              image: sharedCurrentUser!.image,
-                              email: sharedCurrentUser!.email,
-                              phone: _phone.text,
-                              address: sharedCurrentUser!.address,
-                              gender: gender,
-                              dob: dobChange,
-                              password: sharedCurrentUser!.password);
-                          print(dobChange);
-                          await CallAPI().updateUserbyUID(signUpUser);
-                          SignUpUser? user = await CallAPI()
-                              .getUserById(sharedResultLogin!.userID!);
+                            SignUpUser signUpUser = SignUpUser(
+                                userID: sharedCurrentUser!.userID,
+                                firstName: _firstName.text,
+                                image: sharedCurrentUser!.image,
+                                email: sharedCurrentUser!.email,
+                                phone: _phone.text,
+                                address: sharedCurrentUser!.address,
+                                gender: gender,
+                                dob: dobChange,
+                                password: sharedCurrentUser!.password);
+                            print(dobChange);
+                            //check trùng sdt
+                            dynamic result = "Validate Pass";
+                            if (sharedCurrentUser!.phone != _phone.text) {
+                              result = await CallAPI()
+                                  .CheckRegisterMember(signUpUser);
+                            }
+                            //sdt ko trùng
+                            if (result == "Validate Pass") {
+                              await CallAPI().updateUserbyUID(signUpUser);
+                              SignUpUser? user = await CallAPI()
+                                  .getUserById(sharedResultLogin!.userID!);
 
-                          setState(() {
-                            sharedCurrentUser = user;
-                          });
-                          final snackBar = SnackBar(
-                            content: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: const [
-                                Text(
-                                  "Thành công",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500),
+                              setState(() {
+                                sharedCurrentUser = user;
+                              });
+                              final snackBar = SnackBar(
+                                content: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: const [
+                                    Text(
+                                      "Thành công",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            backgroundColor: Colors.green,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                backgroundColor: Colors.green,
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                            //sdt bị trùng
+                            else {
+                              setState(() {
+                                list = result;
+                              });
+                              if (list!.length == 1) {
+                                await CallAPI().updateUserbyUID(signUpUser);
+                                SignUpUser? user = await CallAPI()
+                                    .getUserById(sharedResultLogin!.userID!);
+
+                                setState(() {
+                                  sharedCurrentUser = user;
+                                });
+                                final snackBar = SnackBar(
+                                  content: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: const [
+                                      Text(
+                                        "Thành công",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
+                                  ),
+                                  backgroundColor: Colors.green,
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
+                            }
+                          } else {
+                            setState(() {
+                              visible = true;
+                            });
+                          }
                         },
                         color: const Color.fromARGB(255, 46, 161, 226),
                         elevation: 0,
@@ -268,7 +348,8 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
     );
   }
 
-  Widget fullName({label, obscureText = false}) {
+  Widget fullName({label, input, obscureText = false}) {
+    RegExp regExp = RegExp(r'[a-zA-Z0-9]{1,100}$');
     return Column(
       children: <Widget>[
         Row(
@@ -289,20 +370,36 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
         const SizedBox(height: 5),
         TextFormField(
           // initialValue: sharedCurrentUser!.firstName,
+          textCapitalization: TextCapitalization.words,
           obscureText: obscureText,
-
-          controller: _firstName..text = firstName!,
+          keyboardType: TextInputType.name,
+          controller: _firstName..text = firstNameTxt!,
           onChanged: (value) {
-            firstName = value;
+            firstNameTxt = value;
           },
           decoration: const InputDecoration(
-              // hintText: 'Họ và Tên',
+            // hintStyle: const TextStyle(color: Colors.black),
+            // hintText: sharedCurrentUser!.firstName,
               contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
               ),
               border: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey))),
+          validator: (value) {
+            if (value!.isEmpty) {
+              validName = false;
+              return "Hãy nhập Họ và Tên của bạn.";
+            } else if (!regExp.hasMatch(value)) {
+              print(value);
+              validName = false;
+              return "Tên không được chứ ký tự đặc biệt như ?@#";
+            } else {
+              if (value.isNotEmpty) {
+                validName = true;
+              }
+            }
+          },
         ),
         const SizedBox(height: 10)
       ],
@@ -369,15 +466,35 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
         TextFormField(
           controller: _phone..text = phoneTxt!,
           onChanged: (value) {
+            if (list != null) {
+              list = null;
+            }
             phoneTxt = value;
           },
           validator: (value) {
             if (value!.isEmpty) {
+              validPhone = false;
               return "Hãy nhập số điện thoại";
             } else if (value.length < 10 || value.length > 10) {
-              return "Hãy nhập đúng số điện thoại";
+              validPhone = false;
+              return "Độ dài số điện thoại là 10 số";
+            } else if (list != null) {
+              ErrorModel? error;
+              list!.forEach((element) {
+                if (element.error.contains("Số điện thoại")) {
+                  error = element;
+                }
+              });
+              if (error != null) {
+                validPhone = false;
+
+                return error!.error;
+              }
             } else {
-              return null;
+              if (value.isNotEmpty) {
+                print("a");
+                validPhone = true;
+              }
             }
           },
           keyboardType: TextInputType.phone,
@@ -397,7 +514,7 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
   }
 
   Widget dobWidget() {
-    DateTime dateTemp =  DateFormat("yyyy-MM-dd").parse(dobChange);
+    DateTime dateTemp = DateFormat("yyyy-MM-dd").parse(dobChange);
     age = today.year - dateTemp.year;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -407,11 +524,13 @@ class _PhysioInformationPageState extends State<PhysioInformationPage> {
           controller: _date..text = dob,
           validator: (value) {
             if (value!.isEmpty) {
+              validDOB = false;
               return "Không được để trống ngày sinh!";
             } else if (age < 18) {
+              validDOB = false;
               return "Tuổi phải trên 18.";
             } else {
-              return null;
+              validDOB = true;
             }
           },
           decoration: const InputDecoration(
