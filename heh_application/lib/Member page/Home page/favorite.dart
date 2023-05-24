@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:heh_application/Exercise%20Page/resource.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/common_widget/menu_listview.dart';
 import 'package:heh_application/models/favorite_exercise.dart';
 import 'package:heh_application/services/call_api.dart';
@@ -30,7 +31,7 @@ class _FavoritePageState extends State<FavoritePage> {
         child: Column(
           children: [
             FutureBuilder<List<FavoriteExercise>>(
-                future: CallAPI().getAllFavoriteExercise(),
+                future: CallAPI().getAllFavoriteExerciseByUserID(sharedCurrentUser!.userID!),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length > 0) {
