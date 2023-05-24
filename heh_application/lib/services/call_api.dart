@@ -1402,8 +1402,8 @@ class CallAPI {
     }
   }
 
-  Future<List<FavoriteExercise>> getAllFavoriteExercise() async {
-    var url = Uri.parse('${link}/api/FavoriteExercise');
+  Future<List<FavoriteExercise>> getAllFavoriteExerciseByUserID(String userID) async {
+    var url = Uri.parse('${link}/api/FavoriteExercise/GetAllByUserID?userID=$userID');
     // var url = Uri.https('localhost:7166', 'api/UserExercise');
     final headers = {
       "Accept": "application/json",
