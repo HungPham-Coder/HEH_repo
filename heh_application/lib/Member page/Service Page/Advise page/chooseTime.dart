@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class ChooseTimePage extends StatefulWidget {
-   ChooseTimePage({Key? key, required this.typeName}) : super(key: key);
+  ChooseTimePage({Key? key, required this.typeName}) : super(key: key);
   String typeName;
   @override
   State<ChooseTimePage> createState() => _ChooseTimePageState();
@@ -27,6 +27,12 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
 
   List<Problem> _problems = [];
   List<Problem?> _selectedProblems = [];
+  bool validRelationShip = false;
+  bool validDate = false;
+  bool validCategory = false;
+  bool validTime = false;
+  bool visible = false;
+  bool visibleValid = false;
 
   final List<String> _time = [
     "- Chọn khung giờ -",
@@ -99,6 +105,14 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                       print("Co data");
                     }
                     return DropdownButtonFormField<String>(
+                      validator: (value) {
+                        if (selectedSubName == "- Chọn -") {
+                          validRelationShip = false;
+                          return "Hãy chọn người điều trị";
+                        } else {
+                          validRelationShip = true;
+                        }
+                      },
                       decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
                               borderSide:
@@ -142,6 +156,14 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
           Text("*", style: TextStyle(color: Colors.red))
         ]),
         TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              validDate = false;
+              return "Hãy chọn ngày điều trị";
+            } else {
+              validDate = true;
+            }
+          },
           readOnly: true,
           controller: _date,
           decoration: const InputDecoration(
@@ -158,7 +180,9 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
               _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
               setState(() {
                 dateSearch = DateFormat('yyyy-MM-dd').format(pickeddate);
+                selectedTime = "- Chọn khung giờ -";
                 timeVisible = true;
+                visible = false;
               });
             }
           },
@@ -198,6 +222,14 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                       "Tình trạng",
                       style: TextStyle(color: Colors.grey, fontSize: 15),
                     ),
+                    validator: (value) {
+                      if (_selectedProblems.isEmpty) {
+                        validCategory = false;
+                        return "Hãy chọn loại triệu chứng";
+                      } else {
+                        validCategory = true;
+                      }
+                    },
                     items: _problems
                         .map((e) => MultiSelectItem<Problem?>(e, e.name))
                         .toList(),
@@ -244,7 +276,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width,
-              height: 50,
+              height: 70,
               child: FutureBuilder<List<Slot>>(
                   future: CallAPI()
                       .GetAllSlotByDateAndTypeOfSlot(date, widget.typeName),
@@ -252,33 +284,46 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                     if (snapshot.hasData) {
                       addSlot(snapshot.data!);
                       if (snapshot.data!.isNotEmpty) {
+                        visible = true;
                         return DropdownButtonFormField<String>(
                           value: selectedTime,
                           items: _time
                               .map((relationship) => DropdownMenuItem<String>(
-                              value: relationship,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10),
-                                child: Text(
-                                  relationship,
-                                  style: const TextStyle(fontSize: 13),
-                                ),
-                              )))
+                                  value: relationship,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Text(
+                                      relationship,
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                  )))
                               .toList(),
+                          validator: (value) {
+                            if (selectedTime == "- Chọn khung giờ -") {
+                              validTime = false;
+
+                              return "Hãy chọn khung giờ điều trị";
+                            }
+                            else {
+
+                              validTime = true;
+                            }
+                          },
                           onChanged: (relationship) => setState(() {
                             selectedTime = relationship;
                             print(selectedTime);
                           }),
                         );
-                      }
-                      else {
-                        return Center(
-                          child: Text("Đã hết slot có thể đặt", ),
+                      } else {
+                        visible = false;
+
+                        return const Center(
+                          child: Text(
+                            "Đã hết slot có thể đặt",
+                          ),
                         );
                       }
-             
-                      
                     } else {
                       return const Center(
                         child: CircularProgressIndicator(),
@@ -322,91 +367,113 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
           backgroundColor: const Color.fromARGB(255, 46, 161, 226),
         ),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: Container(
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Colors.black)),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 20),
-                        relationship(),
-                        const SizedBox(height: 5),
-                        Category(),
-                        const SizedBox(height: 20),
-                        Date(),
-                        const SizedBox(height: 20),
-                        Time(dateSearch),
-                        const SizedBox(height: 10),
-                      ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  relationship(),
+                  const SizedBox(height: 5),
+                  Category(),
+                  const SizedBox(height: 20),
+                  Date(),
+                  const SizedBox(height: 20),
+                  Time(dateSearch),
+                  const SizedBox(height: 10),
+                  Visibility(
+                    visible: visibleValid,
+                    child: const Text(
+                      "Hãy nhập đúng những field cần thiết",
+                      style: TextStyle(fontSize: 15, color: Colors.red),
                     ),
                   ),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      padding:
-                          MaterialStateProperty.all(const EdgeInsets.all(15)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            side: const BorderSide(color: Colors.white)),
-                      )),
-                  onPressed: () async {
-                    SubProfile subProfile = await CallAPI()
-                        .getSubProfileBySubNameAndUserID(
-                            selectedSubName.trim(), sharedCurrentUser!.userID!);
-                    String problem = '';
-                    _selectedProblems.forEach((element) {
-                      if (element != _selectedProblems.last) {
-                        problem += '${element!.name}, ';
-                      } else {
-                        problem += '${element!.name} ';
-                      }
-                    });
+                  const SizedBox(height: 10),
+                  Visibility(
+                    visible: visible,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                                const EdgeInsets.all(15)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  side: const BorderSide(color: Colors.white)),
+                            )),
+                        onPressed: () async {
+                          if (validTime == true &&
+                              validCategory == true &&
+                              validDate == true &&
+                              validRelationShip == true) {
 
-                    DateTime tempDate =
-                        new DateFormat("dd-MM-yyyy").parse(_date.text);
+                              setState(() {
+                                visibleValid = false;
+                              });
 
-                    String date = DateFormat("yyyy-MM-dd").format(tempDate);
-                    print(date);
+                            SubProfile subProfile = await CallAPI()
+                                .getSubProfileBySubNameAndUserID(
+                                    selectedSubName.trim(),
+                                    sharedCurrentUser!.userID!);
+                            String problem = '';
+                            _selectedProblems.forEach((element) {
+                              if (element != _selectedProblems.last) {
+                                problem += '${element!.name}, ';
+                              } else {
+                                problem += '${element!.name} ';
+                              }
+                            });
 
-                    var timeSplit = selectedTime!.trim().split('-');
-                    String start = timeSplit[0].trim();
-                    String end = timeSplit[1].trim();
-                    DateTime dateStart = new DateFormat("HH:mm").parse(start);
-                    String startStr = DateFormat("HH:mm:ss").format(dateStart);
-                    String timeStart = '${date}T${startStr}';
-                    DateTime dateEnd = new DateFormat("HH:mm").parse(end);
-                    String endStr = DateFormat("HH:mm:ss").format(dateEnd);
-                    String timeEnd = '${date}T${endStr}';
+                            DateTime tempDate =
+                                new DateFormat("dd-MM-yyyy").parse(_date.text);
 
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TimeResultPage(
-                                  subProfile: subProfile,
-                                  timeStart: timeStart,
-                                  timeEnd: timeEnd,
-                                  problem: problem,
-                                )));
-                  },
-                  child: const Text(
-                    "Tìm kiếm",
-                    style: TextStyle(fontSize: 18),
+                            String date =
+                                DateFormat("yyyy-MM-dd").format(tempDate);
+                            print(date);
+
+                            var timeSplit = selectedTime!.trim().split('-');
+                            String start = timeSplit[0].trim();
+                            String end = timeSplit[1].trim();
+                            DateTime dateStart =
+                                new DateFormat("HH:mm").parse(start);
+                            String startStr =
+                                DateFormat("HH:mm:ss").format(dateStart);
+                            String timeStart = '${date}T${startStr}';
+                            DateTime dateEnd =
+                                new DateFormat("HH:mm").parse(end);
+                            String endStr =
+                                DateFormat("HH:mm:ss").format(dateEnd);
+                            String timeEnd = '${date}T${endStr}';
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TimeResultPage(
+                                          subProfile: subProfile,
+                                          timeStart: timeStart,
+                                          timeEnd: timeEnd,
+                                          problem: problem,
+                                        )));
+                          } else {
+                            setState(() {
+                              visibleValid = true;
+                            });
+                          }
+                        },
+                        child: const Text(
+                          "Tìm kiếm",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ));
   }
