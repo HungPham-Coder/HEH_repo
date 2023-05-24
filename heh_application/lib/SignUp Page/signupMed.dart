@@ -96,6 +96,7 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
             children: [
               const SizedBox(height: 20),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Row(
@@ -147,14 +148,19 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                                   searchable: true,
                                   onConfirm: (values) {
                                     setState(() {
-                                      _selectedProblems = values;
-                                      int counter = 0;
+                                      if (values != null) {
+                                        _selectedProblems = values;
+                                        int counter = 0;
 
-                                      _selectedProblems.forEach((element) {
-                                        if (element!.name.contains("Khác")) {
-                                          counter++;
-                                        }
-                                      });
+                                        _selectedProblems.forEach((element) {
+                                          if (element!.name.contains("Khác")) {
+                                            counter++;
+                                          }
+                                        });
+                                      } else {
+                                        Navigator.pop(context);
+                                      }
+
                                       // if (counter > 0) {
                                       //   _visibility = true;
                                       // } else {
@@ -197,6 +203,7 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                   //   visible: _visibility,
                   //   child: problem(label: "Khác"),
                   // ),
+                  Text("data"),
                   const SizedBox(height: 10),
                   difficult(label: "Hoạt động khó khăn trong cuộc sống?"),
                   injury(label: "Anh/Chị đã gặp chấn thương gì?"),
@@ -284,9 +291,9 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                             MedicalRecord? medical = await CallAPI()
                                 .createMedicalRecord(medicalRecord);
                             //Create problem
-                            List<Problem1>? listAddProblem = [] ;
-                            _selectedProblems.forEach((elementSelected)  {
-                              _listCategory.forEach((element)   {
+                            List<Problem1>? listAddProblem = [];
+                            _selectedProblems.forEach((elementSelected) {
+                              _listCategory.forEach((element) {
                                 if (elementSelected!.name ==
                                     element.categoryName) {
                                   Problem1 problem1 = Problem1(
@@ -294,19 +301,16 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
                                       medicalRecordID:
                                           medical!.medicalRecordID!);
 
-
                                   listAddProblem.add(problem1);
                                 }
                               });
                             });
-                            if (listAddProblem.length > 0){
-                              for (var element in listAddProblem){
-
+                            if (listAddProblem.length > 0) {
+                              for (var element in listAddProblem) {
                                 await CallAPI().addProblem(element);
                               }
-                            }
-                            else {
-                              print ("Add problem loi");
+                            } else {
+                              print("Add problem loi");
                             }
 
                             //gửi mã OTP

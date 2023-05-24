@@ -142,8 +142,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         firstDate: DateTime(1900),
                         lastDate: DateTime(2030));
                     if (pickeddate != null) {
-                      _date.text =
-                          DateFormat('dd-MM-yyyy').format(pickeddate);
+                      _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
                       // print(_date.text);
                       dob = DateFormat('yyyy-MM-dd').format(pickeddate);
                       age = today.year - pickeddate.year;

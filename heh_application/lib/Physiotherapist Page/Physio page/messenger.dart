@@ -22,7 +22,7 @@ class _PhysioMessengerPageState extends State<PhysioMessengerPage> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text(
-            "Tin nhắn ",
+            "Hỗ trợ tư vấn",
             style: TextStyle(fontSize: 23),
           ),
           backgroundColor: const Color.fromARGB(255, 46, 161, 226),

@@ -12,10 +12,8 @@ import '../common_widget/search_delegate.dart';
 class ExerciseResources extends StatefulWidget {
   ExerciseResources({
     Key? key,
-
     this.exerciseDetail,
   }) : super(key: key);
-
 
   ExerciseDetail1? exerciseDetail;
   // List<ExerciseResource>? exerciseResource;
@@ -46,6 +44,23 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
                 if (widget.exerciseDetail!.favoriteStatus == 0) {
                   setState(() {
                     widget.exerciseDetail!.favoriteStatus = 1;
+                    final snackBar = SnackBar(
+                      duration: const Duration(seconds: 1),
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: const [
+                          Text(
+                            "Thích bài tập.",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                      backgroundColor: Colors.green,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   });
                   FavoriteExercise favoriteExercise = FavoriteExercise(
                     exerciseDetailID: widget.exerciseDetail!.exerciseDetailID,
@@ -55,8 +70,28 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
                 } else {
                   setState(() {
                     widget.exerciseDetail!.favoriteStatus = 0;
+                    final snackBar = SnackBar(
+                      duration: const Duration(seconds: 1),
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: const [
+                          Text(
+                            "Bỏ thích bài tập",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                      backgroundColor: Colors.pink,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   });
-                  await CallAPI().DeleteFavoriteExerciseByExerciseDetailIDAndUserID(widget.exerciseDetail!.exerciseDetailID, sharedCurrentUser!.userID!);
+                  await CallAPI()
+                      .DeleteFavoriteExerciseByExerciseDetailIDAndUserID(
+                          widget.exerciseDetail!.exerciseDetailID,
+                          sharedCurrentUser!.userID!);
                 }
                 await CallAPI().updateExerciseDetail(widget.exerciseDetail!);
               },
@@ -101,11 +136,9 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
 
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-
-                                      return ExerciseResourcesDetail(
-                                        exerciseResource: snapshot.data![index],
-                                      );
-
+                                    return ExerciseResourcesDetail(
+                                      exerciseResource: snapshot.data![index],
+                                    );
                                   }));
                                 },
                               );

@@ -319,7 +319,7 @@ class _MessengerPageState extends State<MessengerPage> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text(
-            "Chăm sóc khách hàng",
+            "Hỗ trợ tư vấn",
             style: TextStyle(fontSize: 18),
           ),
           elevation: 10,
