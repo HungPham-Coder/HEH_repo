@@ -807,7 +807,7 @@ class CallAPI {
     final body = jsonEncode({
       "bookingDetailID": bookingDetail.bookingDetailID,
       "bookingScheduleID": bookingDetail.bookingScheduleID,
-      "videoCallRoom": bookingDetail.videoCallRoom,
+      "imageUrl": bookingDetail.imageUrl,
       "imageUrl": null,
       "longtermStatus": bookingDetail.longtermStatus,
       "shorttermStatus": bookingDetail.shorttermStatus,
@@ -1455,7 +1455,7 @@ class CallAPI {
 
     final body = jsonEncode({
       "bookingScheduleID": bookingDetail.bookingScheduleID,
-      "videoCallRoom": bookingDetail.videoCallRoom,
+      "imageUrl": bookingDetail.imageUrl,
       "longtermStatus": bookingDetail.longtermStatus,
       "shorttermStatus": bookingDetail.shorttermStatus,
     });

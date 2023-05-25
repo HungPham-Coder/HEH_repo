@@ -446,7 +446,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                           .bookingScheduleID!,
                                       shorttermStatus: 3,
                                       longtermStatus: 1,
-                                      videoCallRoom: "Mới add");
+                                      imageUrl: "Dài hạn");
 
                                   BookingDetail bookingDetailAdd =
                                       await CallAPI()

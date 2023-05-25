@@ -27,15 +27,107 @@ class PaymentTimePage extends StatefulWidget {
 
 class _PaymentTimePageState extends State<PaymentTimePage> {
   // paymentGroup _paymentValue = paymentGroup.male;
+
+  File? imageFile;
+  bool isLoading = false;
+  bool visible = false;
+  String imageUrl =
+      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fwhite.jpg?alt=media&token=992ffa5a-dd2b-4ff4-bf8f-285be1da997d";
+  final value = NumberFormat("###,###,###");
   @override
   void initState() {
     super.initState();
   }
 
-  File? imageFile;
-  bool isLoading = false;
-  String imageUrl = "";
-  final value = NumberFormat("###,###,###");
+  Future getImage() async {
+    ImagePicker imagePicker = ImagePicker();
+    XFile? pickedFile;
+    pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      imageFile = File(pickedFile.path);
+      if (imageFile != null) {
+        setState(() {
+          isLoading = true;
+        });
+        await uploadImageFile();
+      }
+    }
+  }
+
+  Future<void> uploadImageFile() async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    UploadTask uploadTask =
+    ChatProvider().upLoadImageFile(imageFile!, fileName);
+    try {
+      TaskSnapshot snapshot = await uploadTask;
+      String imageUrlDownLoadUrl = await snapshot.ref.getDownloadURL();
+
+      setState(() {
+        imageUrl = imageUrlDownLoadUrl;
+        // sharedCurrentUser!.setImage = imageUrl;
+        // print(sharedCurrentUser!.image);
+        isLoading = false;
+      });
+    } on FirebaseException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      Fluttertoast.showToast(msg: e.message ?? e.toString());
+    }
+  }
+
+  Widget choose ({required String priceImage}){
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.black),
+          borderRadius: BorderRadius.circular(15)),
+      child: Column(
+        children: [
+          const SizedBox(height: 10),
+          const Text("Hình thức thanh toán",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Center(
+              child: Image.network(
+                priceImage,
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text(
+                "Hình ảnh hóa đơn",
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              ElevatedButton(
+                  onPressed: () async {
+                    await getImage();
+                  },
+                  child: const Text(
+                    "Chọn",
+                    style: TextStyle(fontSize: 16),
+                  )),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Center(
+              child: Image.network(
+                imageUrl,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,20 +225,28 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(children: [
                 choose(
-                  icon:
+                  priceImage:
                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FQR3.jpg?alt=media&token=cd4a5333-227b-491a-8365-a5334d2a491d",
-                )
-                //   icon:
-                //       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FQR.jpg?alt=media&token=cf838750-d192-44cf-831d-4cf7fc0d1802",
-                // )
+                ),
+                Visibility(
+                  visible: visible,
+                  child: const Text(
+                    "Hãy chọn hình ảnh hóa đơn",
+                    style: TextStyle(fontSize: 15, color: Colors.red),
+                  ),
+                ),
+
               ])),
+
+
+
           const SizedBox(
             height: 130,
-          )
+          ),
         ],
       ))),
       bottomSheet: SizedBox(
-        height: 120,
+        height: 115,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Column(
@@ -179,24 +279,31 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                           side: const BorderSide(color: Colors.white)),
                     )),
                 onPressed: () async {
-                  BookingDetail addBookingDetail =
-                      await CallAPI().addBookingDetail(widget.bookingDetail!);
-                  if (addBookingDetail != null) {
-                    widget.bookingDetail!.bookingSchedule!.schedule!
-                        .physioBookingStatus = true;
-                    await CallAPI().updateSchedule(
-                        widget.bookingDetail!.bookingSchedule!.schedule!);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SuccessPage()));
+                  if (imageUrl == "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fwhite.jpg?alt=media&token=992ffa5a-dd2b-4ff4-bf8f-285be1da997d"){
+                    setState(() {
+                      visible = true;
+                    });
                   }
-                  // else {
-                  //   Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) =>  FailPage()));
-                  // }
+                  else {
+                    setState(() {
+                      visible = false;
+                    });
+                    widget.bookingDetail!.imageUrl = imageUrl;
+                    BookingDetail addBookingDetail =
+                    await CallAPI().addBookingDetail(widget.bookingDetail!);
+                    if (addBookingDetail != null) {
+                      widget.bookingDetail!.bookingSchedule!.schedule!
+                          .physioBookingStatus = true;
+                      await CallAPI().updateSchedule(
+                          widget.bookingDetail!.bookingSchedule!.schedule!);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SuccessPage()));
+                  }
+
+                  }
+
                 },
                 child: const Text(
                   "Thanh toán",
@@ -206,111 +313,6 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class choose extends StatefulWidget {
-  choose({Key? key, required this.icon}) : super(key: key);
-
-  String icon;
-  @override
-  State<choose> createState() => _chooseState();
-}
-
-class _chooseState extends State<choose> {
-  File? imageFile;
-  bool isLoading = false;
-  String imageUrl =
-      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fwhite.jpg?alt=media&token=992ffa5a-dd2b-4ff4-bf8f-285be1da997d";
-
-  Future getImage() async {
-    ImagePicker imagePicker = ImagePicker();
-    XFile? pickedFile;
-    pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      imageFile = File(pickedFile.path);
-      if (imageFile != null) {
-        setState(() {
-          isLoading = true;
-        });
-        await uploadImageFile();
-      }
-    }
-  }
-
-  Future<void> uploadImageFile() async {
-    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-    UploadTask uploadTask =
-        ChatProvider().upLoadImageFile(imageFile!, fileName);
-    try {
-      TaskSnapshot snapshot = await uploadTask;
-      imageUrl = await snapshot.ref.getDownloadURL();
-
-      setState(() {
-        // imageUrl = imageUrl;
-        // sharedCurrentUser!.setImage = imageUrl;
-        // print(sharedCurrentUser!.image);
-        isLoading = false;
-      });
-    } on FirebaseException catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      Fluttertoast.showToast(msg: e.message ?? e.toString());
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-          borderRadius: BorderRadius.circular(15)),
-      child: Column(
-        children: [
-          const SizedBox(height: 10),
-          const Text("Hình thức thanh toán",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Center(
-              child: Image.network(
-                widget.icon,
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                "Hình ảnh hóa đơn",
-                style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-              ElevatedButton(
-                  onPressed: () async {
-                    await getImage();
-                  },
-                  child: const Text(
-                    "Chọn",
-                    style: TextStyle(fontSize: 16),
-                  )),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Center(
-              child: Image.network(
-                imageUrl,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
