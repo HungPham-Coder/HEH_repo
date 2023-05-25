@@ -216,7 +216,7 @@ class _SessionPageState extends State<SessionPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            FutureBuilder<List<BookingDetail>>(
+            FutureBuilder<List<BookingDetail>?>(
                 future: CallAPI()
                     .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
                         sharedPhysiotherapist!.physiotherapistID,
@@ -225,7 +225,13 @@ class _SessionPageState extends State<SessionPage> {
                         1),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    if (snapshot.data!.length > 0) {
+                    List<BookingDetail> listSort  = [];
+                    for (var item in snapshot.data!){
+                      if (item.longtermStatus! < 3) {
+                        listSort.add(item);
+                      }
+                    }
+                    if (listSort.length > 0) {
                       return ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: snapshot.data!.length,

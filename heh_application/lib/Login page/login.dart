@@ -449,7 +449,7 @@ class _LoginPageState extends State<LoginPage> {
             child: TextFormField(
               validator: (email) {
                 if (email != null && !EmailValidator.validate(email)) {
-                  return "Nhập đúng email";
+                  return "Email phải bao gồm @.";
                 } else if (email!.isEmpty) {
                   return "Vui lòng nhập email!";
                 } else {

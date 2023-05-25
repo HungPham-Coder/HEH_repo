@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:agora_uikit/agora_uikit.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:heh_application/models/booking_detail.dart';
+import 'package:heh_application/services/call_api.dart';
 
 class VideoCallScreen extends StatefulWidget {
-  const VideoCallScreen({Key? key}) : super(key: key);
+   VideoCallScreen({Key? key, required this.bookingDetail}) : super(key: key);
   static String? channelName;
-
+  BookingDetail bookingDetail;
   @override
   State<VideoCallScreen> createState() => _VideoCallScreenState();
 }
@@ -41,7 +43,24 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   void dispose() {
     // engine.leaveChannel();
     // releaseAgora();
+    changeStatus();
     super.dispose();
+  }
+  Future<void> changeStatus () async {
+    if (sharedCurrentUser!.role!.name == "Physiotherapist"){
+      if (widget.bookingDetail.bookingSchedule!.schedule!.typeOfSlot!.typeName == "Tư vấn trị liệu"){
+        widget.bookingDetail.shorttermStatus = 3;
+        await CallAPI().updateBookingDetailStatus(widget.bookingDetail);
+        // Navigator.popUntil(context, ModalRoute.withName('/shortTerm'));
+      }
+      else if (widget.bookingDetail.bookingSchedule!.schedule!.typeOfSlot!.typeName == "Trị liệu dài hạn"){
+        widget.bookingDetail.longtermStatus = 3;
+        await CallAPI().updateBookingDetailStatus(widget.bookingDetail);
+        // Navigator.popUntil(context, ModalRoute.withName('/longTerm'));
+      }
+
+    }
+
   }
 
   Future<void> initAgora() async {

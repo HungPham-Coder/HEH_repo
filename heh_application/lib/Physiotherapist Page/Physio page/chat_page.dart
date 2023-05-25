@@ -521,25 +521,25 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          actions: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () async {
-                    // await setupVoiceSDKEngine();
-                    // await fetchToken(1, widget.bookingDetail!.bookingDetailID!, 2);
-                    VideoCallScreen.channelName =
-                        widget.bookingDetail!.bookingDetailID;
-                    print(VideoCallScreen.channelName);
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => VideoCallScreen(),
-                    ));
-                  },
-                  icon: const Icon(Icons.video_call),
-                )
-              ],
-            )
-          ],
+          // actions: [
+          //   Row(
+          //     children: [
+          //       IconButton(
+          //         onPressed: () async {
+          //           // await setupVoiceSDKEngine();
+          //           // await fetchToken(1, widget.bookingDetail!.bookingDetailID!, 2);
+          //           VideoCallScreen.channelName =
+          //               widget.bookingDetail!.bookingDetailID;
+          //           print(VideoCallScreen.channelName);
+          //           Navigator.of(context).push(MaterialPageRoute(
+          //             builder: (context) => VideoCallScreen(),
+          //           ));
+          //         },
+          //         icon: const Icon(Icons.video_call),
+          //       )
+          //     ],
+          //   )
+          // ],
           title: const Text(
             "Chăm sóc khách hàng",
             style: TextStyle(fontSize: 18),

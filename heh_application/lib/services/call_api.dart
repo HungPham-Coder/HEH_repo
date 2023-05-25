@@ -366,7 +366,7 @@ class CallAPI {
     }
   }
 
-  Future<List<BookingDetail>>
+  Future<List<BookingDetail>?>
       getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
           String physioID,
           String typeOfSlot,
@@ -389,7 +389,7 @@ class CallAPI {
       List<BookingDetail> list = List<BookingDetail>.from(
           jsonResult.map((model) => BookingDetail.fromMap(model)));
       if (list.isEmpty) {
-        throw Exception('BookingDetail List null');
+
       } else {
         return list;
       }
@@ -808,7 +808,6 @@ class CallAPI {
       "bookingDetailID": bookingDetail.bookingDetailID,
       "bookingScheduleID": bookingDetail.bookingScheduleID,
       "imageUrl": bookingDetail.imageUrl,
-      "imageUrl": null,
       "longtermStatus": bookingDetail.longtermStatus,
       "shorttermStatus": bookingDetail.shorttermStatus,
     });

@@ -298,7 +298,11 @@ class _AdvicePaidPageState extends State<AdvicePaidPage> {
                     child: CircularProgressIndicator(),
                   );
                 }
-              }));
+              })).then((value) {
+                setState(() {
+
+                });
+              });
             },
             child: const Text(
               "Tham gia",

@@ -215,14 +215,21 @@ class _AppointmentPageState extends State<AppointmentPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            FutureBuilder<List<BookingDetail>>(
+            FutureBuilder<List<BookingDetail>?>(
                 future: CallAPI().getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
                     sharedPhysiotherapist!.physiotherapistID, 'Tư vấn trị liệu',1,-1),
                 builder: (context, snapshot) {
 
                   if (snapshot.hasData) {
                     print(snapshot.data!.length);
-                    if (snapshot.data!.length > 0) {
+                    List<BookingDetail> listSort  = [];
+                    for (var item in snapshot.data!){
+                      if (item.shorttermStatus! < 3) {
+                        listSort.add(item);
+                      }
+                    }
+                    if (listSort.isNotEmpty) {
+
                       return ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: snapshot.data!.length,

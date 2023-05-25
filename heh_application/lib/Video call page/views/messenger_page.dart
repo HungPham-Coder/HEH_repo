@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heh_application/Login%20page/login.dart';
 import 'package:heh_application/constant/firestore_constant.dart';
 import 'package:heh_application/models/booking_detail.dart';
+import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/chat_provider.dart';
 import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:image_picker/image_picker.dart';
@@ -526,11 +527,20 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
                   onPressed: () async {
                     // await setupVoiceSDKEngine();
                     // await fetchToken(1, widget.bookingDetail!.bookingDetailID!, 2);
+                    if (widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.typeName == "Tư vấn trị liệu"){
+                      widget.bookingDetail!.shorttermStatus = 2;
+                      await CallAPI().updateBookingDetailStatus(widget.bookingDetail!);
+                    }
+                    else if (widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.typeName == "Trị liệu dài hạn"){
+                      widget.bookingDetail!.longtermStatus = 2;
+                      await CallAPI().updateBookingDetailStatus(widget.bookingDetail!);
+                    }
+
                     VideoCallScreen.channelName =
                         widget.bookingDetail!.bookingDetailID;
                     print(VideoCallScreen.channelName);
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => VideoCallScreen(),
+                      builder: (context) => VideoCallScreen(bookingDetail: widget.bookingDetail!),
                     ));
                   },
                   icon: const Icon(Icons.video_call),
