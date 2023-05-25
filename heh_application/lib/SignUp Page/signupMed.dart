@@ -327,7 +327,7 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
           child: TextFormField(
             controller: _difficult,
             // validator: (value) {
-            //   if (value!.isEmpty){
+            //   if (value!.isEmpty){=
             //     validDifficult = false;
             //     return "Hãy nhập hoạt động khó khăn trong cuộc sống";
             //   }
