@@ -19,7 +19,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
   final TextEditingController _date = TextEditingController();
   final TextEditingController _des = TextEditingController();
   String? dayStr;
-  List<Slot>? slotList ;
+  List<Slot>? slotList;
   String? registerResult = "";
   @override
   void initState() {
@@ -47,7 +47,6 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -65,8 +64,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
             button(),
             const SizedBox(height: 10),
             check == false && _date.text == "" && slotList == null
-                ?
-            Center(
+                ? Center(
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 150),
                       child: Text(
@@ -166,14 +164,15 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
                           ],
                         ))
                     : Center(
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 150),
-                child: Text(
-                  "Ngày ${_date.text} đã hết slot để đăng ký ",
-                  style: TextStyle(color: Colors.grey[500], fontSize: 16),
-                ),
-              ),
-            )
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 150),
+                          child: Text(
+                            "Ngày ${_date.text} đã hết slot để đăng ký ",
+                            style: TextStyle(
+                                color: Colors.grey[500], fontSize: 16),
+                          ),
+                        ),
+                      )
           ],
         ),
       ),

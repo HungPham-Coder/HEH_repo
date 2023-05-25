@@ -322,11 +322,11 @@ class _ChatPageState extends State<ChatPage> {
                         chatContent: chatMessages.content,
                         color: Colors.blue,
                         textColor: Colors.white,
-                        margin: const EdgeInsets.only(right: 10, top: 2),
+                        margin: const EdgeInsets.only(right: 5, top: 2),
                       )
                     : chatMessages.type == MessageType.image
                         ? Container(
-                            margin: const EdgeInsets.only(right: 10, top: 10),
+                            margin: const EdgeInsets.only(right: 5, top: 10),
                             child: chatImage(
                               imageSrc: chatMessages.content,
                             ),
@@ -334,48 +334,48 @@ class _ChatPageState extends State<ChatPage> {
                         : const SizedBox.shrink(),
                 isMessageSent(index)
                     ? Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Image.network(
-                          widget.userAvatar!,
-                          width: 40,
-                          height: 40,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (BuildContext ctx, Widget child,
-                              ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.red,
-                                value: loadingProgress.expectedTotalBytes !=
-                                            null &&
-                                        loadingProgress.expectedTotalBytes !=
-                                            null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, object, stackTrace) {
-                            return const Icon(
-                              Icons.account_circle,
-                              size: 35,
-                              color: Colors.lightGreenAccent,
-                            );
-                          },
-                        ),
-                      )
+                        // clipBehavior: Clip.hardEdge,
+                        // decoration: BoxDecoration(
+                        //   borderRadius: BorderRadius.circular(20),
+                        // ),
+                        // child: Image.network(
+                        //   widget.userAvatar!,
+                        //   width: 40,
+                        //   height: 40,
+                        //   fit: BoxFit.cover,
+                        //   loadingBuilder: (BuildContext ctx, Widget child,
+                        //       ImageChunkEvent? loadingProgress) {
+                        //     if (loadingProgress == null) return child;
+                        //     return Center(
+                        //       child: CircularProgressIndicator(
+                        //         color: Colors.red,
+                        //         value: loadingProgress.expectedTotalBytes !=
+                        //                     null &&
+                        //                 loadingProgress.expectedTotalBytes !=
+                        //                     null
+                        //             ? loadingProgress.cumulativeBytesLoaded /
+                        //                 loadingProgress.expectedTotalBytes!
+                        //             : null,
+                        //       ),
+                        //     );
+                        //   },
+                        //   errorBuilder: (context, object, stackTrace) {
+                        //     return const Icon(
+                        //       Icons.account_circle,
+                        //       size: 35,
+                        //       color: Colors.lightGreenAccent,
+                        //     );
+                        //   },
+                        // ),
+                        )
                     : Container(
-                        width: 35,
+                        width: 0,
                       ),
               ],
             ),
             isMessageSent(index)
                 ? Container(
-                    margin: const EdgeInsets.only(right: 50, top: 6, bottom: 8),
+                    margin: const EdgeInsets.only(right: 5, top: 6, bottom: 8),
                     child: Text(
                       DateFormat('dd MMM yyyy, hh:mm a').format(
                         DateTime.fromMillisecondsSinceEpoch(
@@ -415,7 +415,7 @@ class _ChatPageState extends State<ChatPage> {
                             if (loadingProgress == null) return child;
                             return Center(
                               child: CircularProgressIndicator(
-                                color: Colors.blue,
+                                color: Colors.grey,
                                 value: loadingProgress.expectedTotalBytes !=
                                             null &&
                                         loadingProgress.expectedTotalBytes !=
@@ -436,14 +436,14 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                       )
                     : Container(
-                        width: 35,
+                        width: 40,
                       ),
                 chatMessages.type == MessageType.text
                     ? messageBubble(
-                        color: Colors.blue,
+                        color: Colors.grey,
                         textColor: Colors.white,
                         chatContent: chatMessages.content,
-                        margin: const EdgeInsets.only(left: 10),
+                        margin: const EdgeInsets.only(left: 5, top: 2),
                       )
                     : chatMessages.type == MessageType.image
                         ? Container(
@@ -455,7 +455,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
             isMessageReceived(index)
                 ? Container(
-                    margin: const EdgeInsets.only(left: 50, top: 6, bottom: 8),
+                    margin: const EdgeInsets.only(left: 45, top: 6, bottom: 8),
                     child: Text(
                       DateFormat('dd MMM yyyy, hh:mm a').format(
                         DateTime.fromMillisecondsSinceEpoch(
@@ -489,7 +489,7 @@ class _ChatPageState extends State<ChatPage> {
                   listMessages = snapshot.data!.docs;
                   if (listMessages.isNotEmpty) {
                     return ListView.builder(
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
                         itemCount: snapshot.data?.docs.length,
                         reverse: true,
                         controller: scrollController,
@@ -521,27 +521,8 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          actions: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () async {
-                    // await setupVoiceSDKEngine();
-                    // await fetchToken(1, widget.bookingDetail!.bookingDetailID!, 2);
-                    VideoCallScreen.channelName =
-                        widget.bookingDetail!.bookingDetailID;
-                    print(VideoCallScreen.channelName);
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => VideoCallScreen(),
-                    ));
-                  },
-                  icon: const Icon(Icons.video_call),
-                )
-              ],
-            )
-          ],
           title: const Text(
-            "Chăm sóc khách hàng",
+            "Hỗ trợ tư vấn",
             style: TextStyle(fontSize: 18),
           ),
           elevation: 10,

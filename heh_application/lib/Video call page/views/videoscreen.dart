@@ -22,14 +22,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   static String appID = "1405b81aefdb475a94c00cc139ed7450";
 
   final AgoraClient client = AgoraClient(
-
       agoraConnectionData: AgoraConnectionData(
-
-        username: sharedCurrentUser!.firstName,
-        tokenUrl: serverUrl,
-        appId: appID,
-        channelName: VideoCallScreen.channelName!,
-      ));
+    username: sharedCurrentUser!.firstName,
+    tokenUrl: serverUrl,
+    appId: appID,
+    channelName: VideoCallScreen.channelName!,
+  ));
 
   @override
   void initState() {
@@ -47,6 +45,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   Future<void> initAgora() async {
     await client.initialize();
   }
+
   Future<void> releaseAgora() async {
     await client.release();
   }
