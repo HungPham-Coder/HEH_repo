@@ -521,6 +521,7 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+
           title: const Text(
             "Hỗ trợ tư vấn",
             style: TextStyle(fontSize: 18),

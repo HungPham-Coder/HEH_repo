@@ -299,7 +299,11 @@ class _SessionPaidPageState extends State<SessionPaidPage> {
                     child: CircularProgressIndicator(),
                   );
                 }
-              }));
+              })).then((value) {
+                setState(() {
+                  
+                });
+              });
             },
             child: const Text(
               "Tham gia",

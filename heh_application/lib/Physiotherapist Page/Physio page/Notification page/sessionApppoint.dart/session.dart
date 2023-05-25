@@ -29,7 +29,7 @@ class _SessionAppointmentPageState extends State<SessionAppointmentPage> {
           child: Column(
             children: [
               const SizedBox(height: 10),
-              FutureBuilder<List<BookingDetail>>(
+              FutureBuilder<List<BookingDetail>?>(
                   future: CallAPI()
                       .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
                           sharedPhysiotherapist!.physiotherapistID,

@@ -40,7 +40,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            FutureBuilder<List<BookingDetail>>(
+            FutureBuilder<List<BookingDetail>?>(
                 future: CallAPI()
                     .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
                         sharedPhysiotherapist!.physiotherapistID,

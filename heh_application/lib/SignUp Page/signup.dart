@@ -307,7 +307,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget fullName({label, obscureText = false}) {
-    RegExp regExp = RegExp(r'^[a-zA-Z0-9]{1,100}$');
+    RegExp regExp = RegExp(r'[a-zA-Z0-9]{1,100}$');
     return Column(
       children: <Widget>[
         Row(
@@ -337,7 +337,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 return "Hãy nhập Họ và Tên của bạn.";
               } else if (!regExp.hasMatch(value)) {
                 validName = false;
-                return "Họ và Tên không được chứ ký tự đặc biệt như ?@#";
+
+                return "Tên không được chứ ký tự đặc biệt như ?@#";
               } else {
                 if (value.isNotEmpty) {
                   validName = true;

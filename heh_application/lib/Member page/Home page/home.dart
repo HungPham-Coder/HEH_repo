@@ -126,26 +126,34 @@ class _HomePageState extends State<HomePage> {
                                       if (snapshot.data![index].typeName ==
                                           "Tư vấn trị liệu") {
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AdvicePaidPage(
-                                                        firebaseFirestoreBase:
-                                                            firestoreDatabase,
-                                                        typeName: snapshot
-                                                            .data![index]
-                                                            .typeName)));
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                AdvicePaidPage(
+                                                    firebaseFirestoreBase:
+                                                        firestoreDatabase,
+                                                    typeName: snapshot
+                                                        .data![index].typeName),
+                                            settings: const RouteSettings(
+                                              name: "/shortTerm",
+                                            ),
+                                          ),
+                                        );
                                       } else {
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SessionPaidPage(
-                                                        firebaseFirestoreBase:
-                                                            firestoreDatabase,
-                                                        typeName: snapshot
-                                                            .data![index]
-                                                            .typeName)));
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                SessionPaidPage(
+                                                    firebaseFirestoreBase:
+                                                        firestoreDatabase,
+                                                    typeName: snapshot
+                                                        .data![index].typeName),
+                                            settings: const RouteSettings(
+                                              name: "/longTerm",
+                                            ),
+                                          ),
+                                        );
                                       }
                                     },
                                   );

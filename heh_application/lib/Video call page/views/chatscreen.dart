@@ -41,13 +41,13 @@ class _ChatScreenState extends State<ChatScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        actions: [
-          IconButton(
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>  VideoCallScreen(),
-                  )),
-              icon: const Icon(Icons.video_call)),
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+        //             builder: (context) =>  VideoCallScreen(),
+        //           )),
+        //       icon: const Icon(Icons.video_call)),
+        // ],
         title: const Text(
           "Tin nhắn",
           style: TextStyle(fontSize: 23, color: Colors.white),
