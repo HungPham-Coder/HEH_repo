@@ -134,11 +134,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       return "Không được để trống ngày sinh!";
                     } else if (age < 18) {
                       return "Tuổi phải trên 18.";
-                    }
-                    else if (value.isNotEmpty){
-
-                        validDOB = true;
-
+                    } else if (value.isNotEmpty) {
+                      validDOB = true;
                     }
                   },
                   decoration: const InputDecoration(
@@ -211,12 +208,12 @@ class _SignUpPageState extends State<SignUpPage> {
                           height: 50,
                           onPressed: () async {
                             if (list != null) {
-                              if (validEmail == false ){
+                              if (validEmail == false) {
                                 setState(() {
                                   validEmail = true;
                                 });
                               }
-                              if (validPhone == false ){
+                              if (validPhone == false) {
                                 setState(() {
                                   validPhone = true;
                                 });
@@ -245,16 +242,15 @@ class _SignUpPageState extends State<SignUpPage> {
                             );
 
                             if (validName == true &&
-                                validDOB == true&&
-                                validConfirmPass == true&&
-                                validPassword == true&&
+                                validDOB == true &&
+                                validConfirmPass == true &&
+                                validPassword == true &&
                                 validPhone == true &&
-                                    validEmail == true) {
+                                validEmail == true) {
                               if (list != null) {
                                 setState(() {
-                                  list =null;
+                                  list = null;
                                 });
-
                               }
                               if (visible) {
                                 setState(() {
@@ -263,8 +259,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               }
                               dynamic result = await CallAPI()
                                   .CheckRegisterMember(signUpUser);
-                              if (result ==
-                                  "Validate Pass") {
+                              if (result == "Validate Pass") {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -273,20 +268,16 @@ class _SignUpPageState extends State<SignUpPage> {
                                     ),
                                   ),
                                 );
-                              }
-                              else {
+                              } else {
                                 setState(() {
                                   list = result;
                                 });
                               }
-                            }
-                            else {
+                            } else {
                               setState(() {
                                 visible = true;
                               });
                             }
-
-
                           },
                           color: const Color.fromARGB(255, 46, 161, 226),
                           elevation: 0,
@@ -347,12 +338,9 @@ class _SignUpPageState extends State<SignUpPage> {
               } else if (!regExp.hasMatch(value)) {
                 validName = false;
                 return "Họ và Tên không được chứ ký tự đặc biệt như ?@#";
-              }
-
-              else {
+              } else {
                 if (value.isNotEmpty) {
-
-                    validName = true;
+                  validName = true;
                 }
               }
             },
@@ -363,7 +351,8 @@ class _SignUpPageState extends State<SignUpPage> {
             controller: _firstName,
             decoration: const InputDecoration(
                 hintText: 'Họ và Tên',
-                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey),
                 ),
@@ -418,8 +407,7 @@ class _SignUpPageState extends State<SignUpPage> {
               } else if (email!.isEmpty) {
                 validEmail = false;
                 return "Vui lòng nhập email!";
-              }
-              else if (list != null) {
+              } else if (list != null) {
                 ErrorModel? error;
                 list!.forEach((element) {
                   if (element.error.contains("Email")) {
@@ -428,21 +416,13 @@ class _SignUpPageState extends State<SignUpPage> {
                 });
 
                 if (error != null) {
-
-                    validEmail = false;
+                  validEmail = false;
                   return error!.error;
-
                 }
-
               } else {
-
                 if (email.isNotEmpty) {
-
-
-                    validEmail = true;
-
+                  validEmail = true;
                 }
-
               }
             },
           ),
@@ -486,7 +466,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey))),
-
             validator: (value) {
               if (value!.isEmpty) {
                 validPhone = false;
@@ -502,18 +481,15 @@ class _SignUpPageState extends State<SignUpPage> {
                   }
                 });
                 if (error != null) {
-
-                    validPhone = false;
+                  validPhone = false;
 
                   return error!.error;
                 }
-              } else  {
+              } else {
                 if (value.isNotEmpty) {
-                    print("a");
-                    validPhone = true;
-
+                  print("a");
+                  validPhone = true;
                 }
-
               }
             },
           ),
@@ -523,7 +499,9 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget address({label, }) {
+  Widget address({
+    label,
+  }) {
     return Column(
       children: <Widget>[
         Row(
@@ -544,7 +522,6 @@ class _SignUpPageState extends State<SignUpPage> {
         const SizedBox(height: 5),
         TextFormField(
           controller: _address,
-
           keyboardType: TextInputType.streetAddress,
           decoration: const InputDecoration(
               hintText: 'Địa chỉ',
@@ -592,9 +569,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 return "Mật khẩu phải ít nhất 6 ký tự";
               } else {
                 if (value.isNotEmpty) {
-
-                    validPassword = true;
-
+                  validPassword = true;
                 }
               }
             },
@@ -647,20 +622,16 @@ class _SignUpPageState extends State<SignUpPage> {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: TextFormField(
             validator: (value) {
-              if (value!.isEmpty){
+              if (value!.isEmpty) {
                 validConfirmPass = false;
                 return "Hãy nhập mật khẩu xác thực";
-              }
-              else if (value != _password.text) {
+              } else if (value != _password.text) {
                 validConfirmPass = false;
                 return "Mật Khẩu xác thực không trùng với mật khẩu";
               } else {
                 if (value.isNotEmpty) {
-
-                    validConfirmPass = true;
-
+                  validConfirmPass = true;
                 }
-
               }
             },
             controller: _confirmPassword,

@@ -11,12 +11,13 @@ class renewForgotPass extends StatefulWidget {
 }
 
 class _renewForgotPassState extends State<renewForgotPass> {
-  final TextEditingController _oldPassword = TextEditingController();
   final TextEditingController _newPassword = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();
-
+  bool validPassword = false;
+  bool validConfirmPass = false;
   bool isObscure = false;
   bool isObscure1 = false;
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +41,6 @@ class _renewForgotPassState extends State<renewForgotPass> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              oldPassword(label: "Nhập mật khẩu cũ"),
               newPassword(label: "Nhập mật khẩu mới "),
               confirmPassword(label: "Nhập lại mật khẩu mới"),
               confirm(),
@@ -56,58 +56,11 @@ class _renewForgotPassState extends State<renewForgotPass> {
             style: const ButtonStyle(
                 shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20))))),
-            onPressed: () async {
-
-            },
+            onPressed: () async {},
             child: Container(
               child: const Text("Thay đổi mật khẩu",
                   style: TextStyle(fontSize: 18)),
             )));
-  }
-
-  Widget oldPassword({label}) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(
-              label,
-              style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black87),
-            ),
-            const Text(
-              " *",
-              style: TextStyle(color: Colors.red),
-            ),
-          ],
-        ),
-        const SizedBox(height: 5),
-        TextFormField(
-          controller: _oldPassword,
-          obscureText: isObscure,
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isObscure = !isObscure;
-                    });
-                  },
-                  icon: Icon(
-                      isObscure ? Icons.visibility_off : Icons.visibility)),
-              hintText: 'Mật khẩu',
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
-        ),
-        const SizedBox(height: 15)
-      ],
-    );
   }
 
   Widget newPassword({label}) {
@@ -129,26 +82,81 @@ class _renewForgotPassState extends State<renewForgotPass> {
           ],
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          controller: _newPassword,
-          obscureText: isObscure,
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isObscure = !isObscure;
-                    });
-                  },
-                  icon: Icon(
-                      isObscure ? Icons.visibility_off : Icons.visibility)),
-              hintText: 'Mật khẩu',
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
+        Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                validPassword = false;
+                return "Hãy nhập mật khẩu";
+              }
+              if (value.length < 6) {
+                validPassword = false;
+                return "Mật khẩu phải ít nhất 6 ký tự";
+              } else {
+                if (value.isNotEmpty) {
+                  validPassword = true;
+                }
+              }
+            },
+            controller: _newPassword,
+            obscureText: isObscure,
+            decoration: InputDecoration(
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isObscure = !isObscure;
+                      });
+                    },
+                    icon: Icon(
+                        isObscure ? Icons.visibility_off : Icons.visibility)),
+                hintText: 'Mật khẩu',
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                border: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey))),
+          ),
+        ),
+        Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                validPassword = false;
+                return "Hãy nhập mật khẩu";
+              }
+              if (value.length < 6) {
+                validPassword = false;
+                return "Mật khẩu phải ít nhất 6 ký tự";
+              } else {
+                if (value.isNotEmpty) {
+                  validPassword = true;
+                }
+              }
+            },
+            controller: _newPassword,
+            obscureText: isObscure,
+            decoration: InputDecoration(
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isObscure = !isObscure;
+                      });
+                    },
+                    icon: Icon(
+                        isObscure ? Icons.visibility_off : Icons.visibility)),
+                hintText: 'Mật khẩu',
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                border: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey))),
+          ),
         ),
         const SizedBox(height: 15)
       ],
@@ -174,26 +182,42 @@ class _renewForgotPassState extends State<renewForgotPass> {
           ],
         ),
         const SizedBox(height: 5),
-        TextFormField(
-          controller: _confirmPassword,
-          obscureText: isObscure1,
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isObscure1 = !isObscure1;
-                    });
-                  },
-                  icon: Icon(
-                      isObscure1 ? Icons.visibility_off : Icons.visibility)),
-              hintText: 'Mật khẩu xác thực',
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-              ),
-              border: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey))),
+        Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                validConfirmPass = false;
+                return "Hãy nhập mật khẩu xác thực";
+              } else if (value != _newPassword.text) {
+                validConfirmPass = false;
+                return "Mật Khẩu xác thực không trùng với mật khẩu";
+              } else {
+                if (value.isNotEmpty) {
+                  validConfirmPass = true;
+                }
+              }
+            },
+            controller: _confirmPassword,
+            obscureText: isObscure1,
+            decoration: InputDecoration(
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isObscure1 = !isObscure1;
+                      });
+                    },
+                    icon: Icon(
+                        isObscure1 ? Icons.visibility_off : Icons.visibility)),
+                hintText: 'Mật khẩu xác thực',
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                border: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey))),
+          ),
         ),
         const SizedBox(height: 0)
       ],
