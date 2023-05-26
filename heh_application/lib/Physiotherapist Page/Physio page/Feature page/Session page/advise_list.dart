@@ -50,87 +50,108 @@ class _AdviseListPageState extends State<AdviseListPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.isNotEmpty) {
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            bool visible = true;
-                            String subName;
+                      List<BookingDetail> listSort = [];
+                      for (var item in snapshot.data!) {
+                        if (item.longtermStatus == -1 ){
+                          listSort.add(item);
+                        }
+                      }
+                      if (listSort.isNotEmpty) {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              bool visible = true;
+                              String subName;
 
-                            if (snapshot.data![index].bookingSchedule!
-                                    .subProfile!.relationship!.relationName ==
-                                "Tôi") {
-                              visible = false;
+                              if (snapshot.data![index].bookingSchedule!
+                                  .subProfile!.relationship!.relationName ==
+                                  "Tôi") {
+                                visible = false;
 
-                              subName = "";
-                            } else {
-                              subName = snapshot.data![index].bookingSchedule!
-                                  .subProfile!.subName;
-                            }
-                            String date = DateTimeFormat.formatDate(snapshot
-                                .data![index]
-                                .bookingSchedule!
-                                .schedule!
-                                .slot!
-                                .timeStart);
-                            String start = DateTimeFormat.formateTime(snapshot
-                                .data![index]
-                                .bookingSchedule!
-                                .schedule!
-                                .slot!
-                                .timeStart);
-                            String end = DateTimeFormat.formateTime(snapshot
-                                .data![index]
-                                .bookingSchedule!
-                                .schedule!
-                                .slot!
-                                .timeEnd);
-                            if (snapshot.data![index].longtermStatus == -1) {
-                              return ServicePaid(
-                                  icon:
-                                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
-                                  date: "$date",
-                                  name:
-                                      "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
-                                  subName: subName,
-                                  time: "$start - $end",
-                                  status: 'xong',
-                                  press: () {
-                                    String bookingScheduleID =
-                                        snapshot.data![index].bookingScheduleID;
-                                    BookingDetail bookingDetail = BookingDetail(
-                                        bookingDetailID: snapshot
-                                            .data![index].bookingDetailID,
-                                        bookingScheduleID: bookingScheduleID,
-                                        longtermStatus: 0,
-                                        shorttermStatus: 3);
-                                    CallAPI().updateBookingDetailStatus(
-                                        bookingDetail);
+                                subName = "";
+                              } else {
+                                subName = snapshot.data![index].bookingSchedule!
+                                    .subProfile!.subName;
+                              }
+                              String date = DateTimeFormat.formatDate(snapshot
+                                  .data![index]
+                                  .bookingSchedule!
+                                  .schedule!
+                                  .slot!
+                                  .timeStart);
+                              String start = DateTimeFormat.formateTime(snapshot
+                                  .data![index]
+                                  .bookingSchedule!
+                                  .schedule!
+                                  .slot!
+                                  .timeStart);
+                              String end = DateTimeFormat.formateTime(snapshot
+                                  .data![index]
+                                  .bookingSchedule!
+                                  .schedule!
+                                  .slot!
+                                  .timeEnd);
+                              if (snapshot.data![index].longtermStatus == -1) {
+                                return ServicePaid(
+                                    icon:
+                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
+                                    date: "$date",
+                                    name:
+                                    "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
+                                    subName: subName,
+                                    time: "$start - $end",
+                                    status: 'xong',
+                                    press: () {
+                                      String bookingScheduleID =
+                                          snapshot.data![index].bookingScheduleID;
+                                      BookingDetail bookingDetail = BookingDetail(
+                                          bookingDetailID: snapshot
+                                              .data![index].bookingDetailID,
+                                          bookingScheduleID: bookingScheduleID,
+                                          longtermStatus: 0,
+                                          shorttermStatus: 3);
+                                      CallAPI().updateBookingDetailStatus(
+                                          bookingDetail);
 
-                                    setState(() {});
-                                    Navigator.pop(context);
-                                  },
-                                  visible: visible);
-                            } else {
-                              return Center(
-                                child: Container(
+                                      setState(() {});
+                                      Navigator.pop(context);
+                                    },
+                                    visible: visible);
+                              } else {
+                                return Center(
+                                  child: Container(
                                     // padding: const EdgeInsets.symmetric(vertical: 150),
                                     // child: Text(
                                     //   "Hiện tại đã hết slot có thể đăng ký",
                                     //   style: TextStyle(
                                     //       color: Colors.grey[500], fontSize: 16),
                                     // ),
-                                    ),
-                              );
-                            }
-                          });
+                                  ),
+                                );
+                              }
+                            });
+                      }
+                      else {
+                        return Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 150),
+                            child: Text(
+                              "Hiện tại chưa có slot tư vấn trị liệu nào hoàn thành",
+                              style: TextStyle(
+                                  color: Colors.grey[500], fontSize: 16),
+                            ),
+                          ),
+                        );
+                      }
+
                     } else {
                       return Center(
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 150),
                           child: Text(
-                            "Hiện tại đã hết slot có thể đăng ký",
+                            "Hiện tại chưa có slot tư vấn trị liệu nào hoàn thành",
                             style: TextStyle(
                                 color: Colors.grey[500], fontSize: 16),
                           ),
@@ -140,12 +161,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
                   } else {
                     return Center(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 150),
-                        child: Text(
-                          "Hiện tại đã hết slot có thể đăng ký",
-                          style:
-                              TextStyle(color: Colors.grey[500], fontSize: 16),
-                        ),
+            
                       ),
                     );
                   }

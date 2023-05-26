@@ -24,7 +24,7 @@ class _ExercisePageState extends State<ExercisePage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          "Vấn đề của bạn",
+          "Danh sách bài tập ",
           style: TextStyle(fontSize: 23),
         ),
         elevation: 10,
@@ -46,7 +46,7 @@ class _ExercisePageState extends State<ExercisePage> {
                       itemBuilder: (context, index) {
                         return MenuListView(
                           icon:
-                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbackache.png?alt=media&token=d725e1f5-c106-41f7-9ee5-ade77c464a54",
+                          "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/category%2Fbackache.png?alt=media&token=56f8cdbd-7ca2-46d8-a60b-93cfc4951c91",
                           text: "${snapshot.data![index].exerciseName}",
                           press: () async {
                             // List<ExerciseDetail1> exerciseDetailList = await CallAPI()

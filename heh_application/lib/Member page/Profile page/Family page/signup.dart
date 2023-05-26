@@ -257,7 +257,7 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
   }
 
   Widget fullName({label, input, obscureText = false}) {
-    RegExp regExp = RegExp(r'^[a-zA-Z0-9]{1,100}$');
+    RegExp regExp = RegExp(r'^[a-zA-ZÀ-ỹẠ-ỵĂăÂâĐđÊêÔôƠơƯư\s]+$');
     return Column(
       children: <Widget>[
         Row(
