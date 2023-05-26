@@ -304,9 +304,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                               validTime = false;
 
                               return "Hãy chọn khung giờ điều trị";
-                            }
-                            else {
-
+                            } else {
                               validTime = true;
                             }
                           },
@@ -318,9 +316,14 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                       } else {
                         visible = false;
 
-                        return const Center(
-                          child: Text(
-                            "Đã hết slot có thể đặt",
+                        return Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 50),
+                            child: Text(
+                              "Hiện tại không còn slot trống",
+                              style: TextStyle(
+                                  color: Colors.grey[500], fontSize: 16),
+                            ),
                           ),
                         );
                       }
@@ -410,10 +413,9 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                               validCategory == true &&
                               validDate == true &&
                               validRelationShip == true) {
-
-                              setState(() {
-                                visibleValid = false;
-                              });
+                            setState(() {
+                              visibleValid = false;
+                            });
 
                             SubProfile subProfile = await CallAPI()
                                 .getSubProfileBySubNameAndUserID(

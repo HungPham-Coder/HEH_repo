@@ -11,7 +11,9 @@ import 'package:intl/intl.dart';
 import '../../../models/sub_profile.dart';
 
 class ChooseDetailPage extends StatefulWidget {
-  ChooseDetailPage({Key? key, required this.physiotherapist, required this.typeName}) : super(key: key);
+  ChooseDetailPage(
+      {Key? key, required this.physiotherapist, required this.typeName})
+      : super(key: key);
   PhysiotherapistModel physiotherapist;
   String typeName;
   @override
@@ -133,8 +135,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
             const SizedBox(height: 5),
             FutureBuilder<List<Schedule>?>(
                 future: CallAPI().getallSlotByPhysiotherapistIDAndTypeOfSlot(
-                    widget.physiotherapist.physiotherapistID,
-                    widget.typeName),
+                    widget.physiotherapist.physiotherapistID, widget.typeName),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     int count = 0;
@@ -145,24 +146,32 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                     });
                     if (count == snapshot.data!.length) {
                       return Container(
-                        child: const Center(
-                            child: Text(
-                          "Physio dang ban het tat ca cac slot",
-                          style: TextStyle(fontSize: 16),
-                        )),
-                      );
+                          child: Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 100),
+                          child: Text(
+                            "Chuyên viên đang bận hết slot",
+                            style: TextStyle(
+                                color: Colors.grey[500], fontSize: 16),
+                          ),
+                        ),
+                      ));
                     } else {
                       return ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
-                          dynamic weekDay = new DateFormat("yyyy-MM-ddThh:mm:ss")
-                              .parse(snapshot.data![index].slot!.timeStart).weekday + 1;
+                          dynamic weekDay = new DateFormat(
+                                      "yyyy-MM-ddThh:mm:ss")
+                                  .parse(snapshot.data![index].slot!.timeStart)
+                                  .weekday +
+                              1;
                           if (weekDay == 8) {
                             weekDay = "Chủ Nhật";
                           }
-                          String date = DateTimeFormat.formatDate(snapshot.data![index].slot!.timeStart);
+                          String date = DateTimeFormat.formatDate(
+                              snapshot.data![index].slot!.timeStart);
                           DateTime tempStart =
                               new DateFormat("yyyy-MM-ddThh:mm:ss")
                                   .parse(snapshot.data![index].slot!.timeStart);
@@ -203,8 +212,6 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                           onPressed: () async {
                                             if (selectedSubName ==
                                                 "- Chọn -") {
-
-
                                               Navigator.pop(context, 'Ok');
                                             } else {
                                               BookingSchedule bookingSchedule =
