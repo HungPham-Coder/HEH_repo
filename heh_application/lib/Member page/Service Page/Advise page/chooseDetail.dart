@@ -24,6 +24,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
   final List<String> _relationships = [
     "- Chọn -",
   ];
+  bool validRelation = false;
 
   String selectedSubName = "- Chọn -";
   SubProfile? subProfile;
@@ -66,28 +67,39 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                         ],
                       );
                     } else {
-                      return DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 1, color: Colors.grey))),
-                        value: selectedSubName,
-                        items: _relationships
-                            .map((relationship) => DropdownMenuItem<String>(
-                                value: relationship,
-                                child: Text(
-                                  relationship,
-                                  style: const TextStyle(fontSize: 15),
-                                )))
-                            .toList(),
-                        onChanged: (subName) => setState(() {
-                          snapshot.data!.forEach((element) {
-                            if (subName == element.subName) {
-                              subProfile = element;
+                      return Form(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: DropdownButtonFormField<String>(
+                          decoration: const InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1, color: Colors.grey))),
+                          value: selectedSubName,
+                          items: _relationships
+                              .map((relationship) => DropdownMenuItem<String>(
+                                  value: relationship,
+                                  child: Text(
+                                    relationship,
+                                    style: const TextStyle(fontSize: 15),
+                                  )))
+                              .toList(),
+                          validator: (value) {
+                            if (value == "- Chọn -") {
+                              validRelation = false;
+                              return "Hãy chọn người bạn muốn đặt";
+                            } else {
+                              validRelation = true;
                             }
-                          });
-                          selectedSubName = subName!;
-                        }),
+                          },
+                          onChanged: (subName) => setState(() {
+                            snapshot.data!.forEach((element) {
+                              if (subName == element.subName) {
+                                subProfile = element;
+                              }
+                            });
+                            selectedSubName = subName!;
+                          }),
+                        ),
                       );
                     }
                   } else {
@@ -212,7 +224,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                           onPressed: () async {
                                             if (selectedSubName ==
                                                 "- Chọn -") {
-                                              Navigator.pop(context, 'Ok');
+                                              Navigator.pop(context, "Ok");
                                             } else {
                                               BookingSchedule bookingSchedule =
                                                   BookingSchedule(

@@ -307,7 +307,8 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget fullName({label, obscureText = false}) {
-    RegExp regExp = RegExp(r'[a-zA-Z0-9]{1,100}$');
+    // RegExp regExp = RegExp(r'[a-zA-Z0-9]{1,100}$');
+    RegExp regExp = RegExp(r'^[a-zA-ZÀ-ỹẠ-ỵĂăÂâĐđÊêÔôƠơƯư\s]+$');
     return Column(
       children: <Widget>[
         Row(
@@ -391,6 +392,11 @@ class _SignUpPageState extends State<SignUpPage> {
             controller: _email,
             obscureText: obscureText,
             keyboardType: TextInputType.emailAddress,
+            onChanged: (value) {
+              if (list != null) {
+                list = null;
+              }
+            },
             decoration: const InputDecoration(
                 hintText: 'Email',
                 contentPadding:
@@ -458,6 +464,11 @@ class _SignUpPageState extends State<SignUpPage> {
             keyboardType: TextInputType.phone,
             controller: _phone,
             obscureText: obscureText,
+            onChanged: (value) {
+              if (list != null) {
+                list = null;
+              }
+            },
             decoration: const InputDecoration(
                 hintText: 'Số điện thoại',
                 contentPadding:

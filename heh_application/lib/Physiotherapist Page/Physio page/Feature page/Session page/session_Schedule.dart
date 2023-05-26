@@ -51,22 +51,22 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
   // DateTime today = DateTime.now();
   // final DateTime _firstDay = today.subtract(const Duration(days: 30));
 
-  void addSlot(List<Schedule> list) {
-    if (_time.length == 1) {
-      list.forEach((element) {
-        String start = DateTimeFormat.formateTime(element.slot!.timeStart);
-        String end = DateTimeFormat.formateTime(element.slot!.timeEnd);
-        _time.add("${start} - ${end}");
-      });
-    } else {
-      _time.removeWhere((element) => element != "- Chọn khung giờ -");
-      list.forEach((element) {
-        String start = DateTimeFormat.formateTime(element.slot!.timeStart);
-        String end = DateTimeFormat.formateTime(element.slot!.timeEnd);
-        _time.add("${start} - ${end}");
-      });
-    }
-  }
+  // void addSlot(List<Schedule> list) {
+  //   if (_time.length == 1) {
+  //     list.forEach((element) {
+  //       String start = DateTimeFormat.formateTime(element.slot!.timeStart);
+  //       String end = DateTimeFormat.formateTime(element.slot!.timeEnd);
+  //       _time.add("${start} - ${end}");
+  //     });
+  //   } else {
+  //     _time.removeWhere((element) => element != "- Chọn khung giờ -");
+  //     list.forEach((element) {
+  //       String start = DateTimeFormat.formateTime(element.slot!.timeStart);
+  //       String end = DateTimeFormat.formateTime(element.slot!.timeEnd);
+  //       _time.add("${start} - ${end}");
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {

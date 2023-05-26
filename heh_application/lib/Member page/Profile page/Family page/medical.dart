@@ -80,10 +80,6 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                           fontWeight: FontWeight.w400,
                           color: Colors.black87),
                     ),
-                    Text(
-                      " *",
-                      style: TextStyle(color: Colors.red),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 5),
@@ -175,12 +171,11 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                                     problem += '${element!.name} ';
                                   }
                                 });
-                                print("ABBC");
+
                               } else {
                                 _selectedProblems.forEach((element) {
                                   problem = '${element!.name}';
                                 });
-                                print("ABBC");
                               }
                               }
                               else {
