@@ -137,6 +137,14 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                       future: CallAPI().getAllRelationship(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
+                          snapshot.data!.removeWhere((element) {
+                            if (element.relationName == "Tôi"){
+                              return true;
+                            }
+                            else {
+                              return false;
+                            }
+                          });
                           if (_relationships.length == 1) {
                             snapshot.data!.forEach((element) {
                               String field = "${element.relationName}";

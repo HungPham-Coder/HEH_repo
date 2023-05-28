@@ -73,7 +73,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
     if (widget.bookingDetail != null) {
       widget.listDetail!.forEach(
         (element) {
-          if (element.longtermStatus! >= 0) {
+          if (element.longtermStatus! >= 0 && element.longtermStatus! < 3) {
             DateTime dateTemp = new DateFormat("yyyy-MM-dd")
                 .parse(element.bookingSchedule!.schedule!.slot!.timeStart);
             if (selectedEvents[dateTemp] == null) {
@@ -445,7 +445,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                       bookingScheduleID: bookingScheduleAdd!
                                           .bookingScheduleID!,
                                       shorttermStatus: 3,
-                                      longtermStatus: 1,
+                                      longtermStatus: 0,
                                       imageUrl: "Dài hạn");
 
                                   BookingDetail bookingDetailAdd =
