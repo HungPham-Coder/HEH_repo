@@ -9,6 +9,7 @@ class SignUpUser {
   final String? lastName;
   final String? address;
   String? _image;
+  String? DateCreated;
 
   String? get image => _image;
 
@@ -35,7 +36,9 @@ class SignUpUser {
       required this.gender,
       this.dob,
       this.roleID,
-      this.role})
+      this.role,
+        this.DateCreated
+      })
       : _image = image;
 
   factory SignUpUser.fromMap(Map<String, dynamic> json, String? documentId) {
@@ -51,6 +54,7 @@ class SignUpUser {
         gender: json["gender"],
         phone: json["phoneNumber"],
         roleID: json['roleID'],
+        DateCreated: json['dateCreated'],
         role: Role.fromMap(json['role']));
   }
 }

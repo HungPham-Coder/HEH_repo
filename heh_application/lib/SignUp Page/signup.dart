@@ -229,17 +229,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               gender = false;
                             }
 
-                            SignUpUser signUpUser = SignUpUser(
-                              image:
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FavatarIcon.png?alt=media&token=790e190a-1559-4272-b4c8-213fbc0d7f89",
-                              firstName: _firstName.text,
-                              email: _email.text,
-                              phone: _phone.text,
-                              address: _address.text,
-                              gender: gender,
-                              dob: dob,
-                              password: _password.text,
-                            );
+
 
                             if (validName == true &&
                                 validDOB == true &&
@@ -247,6 +237,18 @@ class _SignUpPageState extends State<SignUpPage> {
                                 validPassword == true &&
                                 validPhone == true &&
                                 validEmail == true) {
+                              SignUpUser signUpUser = SignUpUser(
+                                image:
+                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FavatarIcon.png?alt=media&token=790e190a-1559-4272-b4c8-213fbc0d7f89",
+                                firstName: _firstName.text,
+                                email: _email.text,
+                                phone: _phone.text,
+                                address: _address.text,
+                                gender: gender,
+                                dob: dob,
+                                password: _password.text,
+                                DateCreated: today.toString()
+                              );
                               if (list != null) {
                                 setState(() {
                                   list = null;

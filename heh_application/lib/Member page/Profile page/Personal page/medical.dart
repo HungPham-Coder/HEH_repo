@@ -189,8 +189,6 @@ class _MedicalPageState extends State<MedicalPage> {
                                 medicine: _medicine.text,
                               );
                               //update medical record
-                              CallAPI().updateMedicalRecordbysubIDandMedicalID(
-                                  medicalRecord);
                               MedicalRecord? medical = await CallAPI()
                                   .updateMedicalRecord(medicalRecord);
                               // update problem

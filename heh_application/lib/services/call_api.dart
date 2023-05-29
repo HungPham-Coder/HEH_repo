@@ -73,6 +73,7 @@ class CallAPI {
       "gender": signUpUser.gender,
       "bookingStatus": false,
       "banStatus": false,
+      "dateCreated" : signUpUser.DateCreated
     });
     final headers = {
       "Accept": "application/json",
