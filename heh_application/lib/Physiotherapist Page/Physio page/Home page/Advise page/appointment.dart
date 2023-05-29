@@ -10,7 +10,8 @@ import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:heh_application/util/date_time_format.dart';
 
 class AppointmentPage extends StatefulWidget {
-   AppointmentPage({Key? key, required this.firebaseFirestoreBase}) : super(key: key);
+  AppointmentPage({Key? key, required this.firebaseFirestoreBase})
+      : super(key: key);
   FirebaseFirestoreBase firebaseFirestoreBase;
   @override
   State<AppointmentPage> createState() => _AppointmentPageState();
@@ -64,11 +65,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   userAvatar: currentUser!.photoUrl,
                   oponentID: bookingDetail.bookingSchedule!.signUpUser!.userID!,
                   oponentNickName:
-                  bookingDetail.bookingSchedule!.signUpUser!.firstName!,
+                      bookingDetail.bookingSchedule!.signUpUser!.firstName!,
                   oponentAvartar:
-                  bookingDetail.bookingSchedule!.signUpUser!.image!,
+                      bookingDetail.bookingSchedule!.signUpUser!.image!,
                   firebaseFirestoreBase: firebaseFirestoreBase,
-                  bookingDetail: bookingDetail, groupChatID: bookingDetail.bookingSchedule!.signUpUser!.userID!,
+                  bookingDetail: bookingDetail,
+                  groupChatID:
+                      bookingDetail.bookingSchedule!.signUpUser!.userID!,
                 );
               }));
             },
@@ -82,16 +85,15 @@ class _AppointmentPageState extends State<AppointmentPage> {
     );
   }
 
-
   Widget ServicePaid(
       {required String icon,
-        required FirebaseFirestoreBase firebaseFirestoreBase,
-        required BookingDetail bookingDetail,
-        name,
-        time,
-        bookedFor,
-        date,
-        required VoidCallback press}) {
+      required FirebaseFirestoreBase firebaseFirestoreBase,
+      required BookingDetail bookingDetail,
+      name,
+      time,
+      bookedFor,
+      date,
+      required VoidCallback press}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
@@ -216,82 +218,91 @@ class _AppointmentPageState extends State<AppointmentPage> {
         child: Column(
           children: [
             FutureBuilder<List<BookingDetail>?>(
-                future: CallAPI().getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                    sharedPhysiotherapist!.physiotherapistID, 'Tư vấn trị liệu',1,-1),
+                future: CallAPI()
+                    .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                        sharedPhysiotherapist!.physiotherapistID,
+                        'Tư vấn trị liệu',
+                        1,
+                        -1,
+                        ""),
                 builder: (context, snapshot) {
-
                   if (snapshot.hasData) {
                     print(snapshot.data!.length);
-                    List<BookingDetail> listSort  = [];
-                    for (var item in snapshot.data!){
+                    List<BookingDetail> listSort = [];
+                    for (var item in snapshot.data!) {
                       if (item.shorttermStatus! < 3) {
                         listSort.add(item);
                       }
                     }
                     if (listSort.isNotEmpty) {
+                      return RefreshIndicator(
+                        child: ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              if (snapshot.data![index].shorttermStatus! < 3) {
+                                print(index);
+                                String day = DateTimeFormat.formatDate(snapshot
+                                    .data![index]
+                                    .bookingSchedule!
+                                    .schedule!
+                                    .slot!
+                                    .timeStart);
+                                String start = DateTimeFormat.formateTime(
+                                    snapshot.data![index].bookingSchedule!
+                                        .schedule!.slot!.timeStart);
+                                String end = DateTimeFormat.formateTime(snapshot
+                                    .data![index]
+                                    .bookingSchedule!
+                                    .schedule!
+                                    .slot!
+                                    .timeEnd);
 
-                      return ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: snapshot.data!.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            if (snapshot.data![index].shorttermStatus! < 3) {
-                              print(index);
-                              String day = DateTimeFormat.formatDate(snapshot
-                                  .data![index]
-                                  .bookingSchedule!
-                                  .schedule!
-                                  .slot!
-                                  .timeStart);
-                              String start = DateTimeFormat.formateTime(snapshot
-                                  .data![index]
-                                  .bookingSchedule!
-                                  .schedule!
-                                  .slot!
-                                  .timeStart);
-                              String end = DateTimeFormat.formateTime(snapshot
-                                  .data![index]
-                                  .bookingSchedule!
-                                  .schedule!
-                                  .slot!
-                                  .timeEnd);
-
-                              return ServicePaid(
-                                bookingDetail: snapshot.data![index],
-                                firebaseFirestoreBase:
-                                widget.firebaseFirestoreBase,
-                                icon:
-                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
-                                name:
-                                "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
-                                date: "$day",
-                                time: "$start - $end",
-                                bookedFor:
-                                "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
-                                press: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => AdviseDetailPage(
-                                              bookingSchedule: snapshot
-                                                  .data![index]
-                                                  .bookingSchedule)));
-                                },
-                              );
-                            }
-                            else {
-                              return Container(
-                                // padding: const EdgeInsets.symmetric(vertical: 280),
-                                // child: const Center(
-                                //   child: Text(
-                                //     "Hiện tại không có lịch đặt hẹn",
-                                //     style: TextStyle(fontSize: 18, color: Colors.grey),
-                                //   ),
-                                // ),
-                              );
-                            }
-
-                          });
+                                return ServicePaid(
+                                  bookingDetail: snapshot.data![index],
+                                  firebaseFirestoreBase:
+                                      widget.firebaseFirestoreBase,
+                                  icon:
+                                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                                  name:
+                                      "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                                  date: "$day",
+                                  time: "$start - $end",
+                                  bookedFor:
+                                      "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
+                                  press: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                AdviseDetailPage(
+                                                    bookingSchedule: snapshot
+                                                        .data![index]
+                                                        .bookingSchedule)));
+                                  },
+                                );
+                              } else {
+                                return Container(
+                                    // padding: const EdgeInsets.symmetric(vertical: 280),
+                                    // child: const Center(
+                                    //   child: Text(
+                                    //     "Hiện tại không có lịch đặt hẹn",
+                                    //     style: TextStyle(fontSize: 18, color: Colors.grey),
+                                    //   ),
+                                    // ),
+                                    );
+                              }
+                            }),
+                        onRefresh: () async {
+                          CallAPI()
+                              .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                                  sharedPhysiotherapist!.physiotherapistID,
+                                  'Tư vấn trị liệu',
+                                  1,
+                                  -1,
+                                  "");
+                        },
+                      );
                     } else {
                       return Container(
                         padding: const EdgeInsets.symmetric(vertical: 280),
@@ -320,10 +331,11 @@ class _AppointmentPageState extends State<AppointmentPage> {
       ),
     );
   }
+
   Future<void> loadPhysioTherapistAccount(
       FirebaseFirestoreBase firebaseFirestoreBase) async {
     UserChat? userChatResult =
-    await firebaseFirestoreBase.getPhysioUser(physioID: 'physiotherapist');
+        await firebaseFirestoreBase.getPhysioUser(physioID: 'physiotherapist');
     currentUser = userChatResult;
   }
 }

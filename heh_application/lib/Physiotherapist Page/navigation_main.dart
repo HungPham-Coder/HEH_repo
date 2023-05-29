@@ -23,8 +23,8 @@ class _PhyNavigation_barState extends State<PhyNavigation_bar> {
   List<Widget> pageList = <Widget>[
     const PhysioHomePage(),
     const FeaturePage(),
-    const NotificationPage(),
     const PhysioSettingPage(),
+    // const NotificationPage(),
   ];
 
   @override
@@ -56,16 +56,16 @@ class _PhyNavigation_barState extends State<PhyNavigation_bar> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.featured_play_list), label: "Tính năng"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.notifications),
-                // Stack(children: const [
-                //   Badge(
-                //     child:
-                //     smallSize: 7,
-                //   )
-                // ]),
-                label: "Thông báo"),
-            BottomNavigationBarItem(
                 icon: Icon(Icons.settings), label: "Cài đặt"),
+            // BottomNavigationBarItem(
+            //     icon: Icon(Icons.notifications),
+            //     // Stack(children: const [
+            //     //   Badge(
+            //     //     child:
+            //     //     smallSize: 7,
+            //     //   )
+            //     // ]),
+            //     label: "Thông báo"),
           ]),
     );
   }

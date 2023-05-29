@@ -3,6 +3,7 @@ import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Session%20page/session_Schedule.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Feature%20page/Session%20page/session_list.dart';
 import 'package:heh_application/common_widget/menu_listview.dart';
+import 'package:heh_application/common_widget/search_delegate.dart';
 import 'package:heh_application/models/booking_detail.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/util/date_time_format.dart';
@@ -27,12 +28,25 @@ class _AdviseListPageState extends State<AdviseListPage> {
         actions: [
           IconButton(
               onPressed: () {
+                showSearch(
+                    context: context,
+                    delegate: SearchDoneAdvice(
+                      sharedPhysiotherapist!.physiotherapistID,
+                      'Tư vấn trị liệu',
+                      3,
+                      -1,
+                      context,
+                    ));
+              },
+              icon: const Icon(Icons.search)),
+          IconButton(
+              onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const SessionListPage()));
               },
-              icon: Icon(Icons.list_alt, size: 30))
+              icon: const Icon(Icons.list_alt, size: 30))
         ],
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
@@ -46,97 +60,113 @@ class _AdviseListPageState extends State<AdviseListPage> {
                         sharedPhysiotherapist!.physiotherapistID,
                         'Tư vấn trị liệu',
                         3,
-                        -1),
+                        -1,
+                        ""),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.isNotEmpty) {
                       List<BookingDetail> listSort = [];
                       for (var item in snapshot.data!) {
-                        if (item.longtermStatus == -1 ){
+                        if (item.longtermStatus == -1) {
                           listSort.add(item);
                         }
                       }
                       if (listSort.isNotEmpty) {
-                        return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              bool visible = true;
-                              String subName;
+                        return RefreshIndicator(
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                bool visible = true;
+                                String subName;
 
-                              if (snapshot.data![index].bookingSchedule!
-                                  .subProfile!.relationship!.relationName ==
-                                  "Tôi") {
-                                visible = false;
+                                if (snapshot
+                                        .data![index]
+                                        .bookingSchedule!
+                                        .subProfile!
+                                        .relationship!
+                                        .relationName ==
+                                    "Tôi") {
+                                  visible = false;
 
-                                subName = "";
-                              } else {
-                                subName = snapshot.data![index].bookingSchedule!
-                                    .subProfile!.subName;
-                              }
-                              String date = DateTimeFormat.formatDate(snapshot
-                                  .data![index]
-                                  .bookingSchedule!
-                                  .schedule!
-                                  .slot!
-                                  .timeStart);
-                              String start = DateTimeFormat.formateTime(snapshot
-                                  .data![index]
-                                  .bookingSchedule!
-                                  .schedule!
-                                  .slot!
-                                  .timeStart);
-                              String end = DateTimeFormat.formateTime(snapshot
-                                  .data![index]
-                                  .bookingSchedule!
-                                  .schedule!
-                                  .slot!
-                                  .timeEnd);
-                              if (snapshot.data![index].longtermStatus == -1) {
-                                return ServicePaid(
-                                    icon:
-                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
-                                    date: "$date",
-                                    name:
-                                    "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
-                                    subName: subName,
-                                    time: "$start - $end",
-                                    status: 'xong',
-                                    press: () {
-                                      String bookingScheduleID =
-                                          snapshot.data![index].bookingScheduleID;
-                                      BookingDetail bookingDetail = BookingDetail(
-                                          bookingDetailID: snapshot
-                                              .data![index].bookingDetailID,
-                                          bookingScheduleID: bookingScheduleID,
-                                          longtermStatus: 0,
-                                          shorttermStatus: 3);
-                                      CallAPI().updateBookingDetailStatus(
-                                          bookingDetail);
+                                  subName = "";
+                                } else {
+                                  subName = snapshot.data![index]
+                                      .bookingSchedule!.subProfile!.subName;
+                                }
+                                String date = DateTimeFormat.formatDate(snapshot
+                                    .data![index]
+                                    .bookingSchedule!
+                                    .schedule!
+                                    .slot!
+                                    .timeStart);
+                                String start = DateTimeFormat.formateTime(
+                                    snapshot.data![index].bookingSchedule!
+                                        .schedule!.slot!.timeStart);
+                                String end = DateTimeFormat.formateTime(snapshot
+                                    .data![index]
+                                    .bookingSchedule!
+                                    .schedule!
+                                    .slot!
+                                    .timeEnd);
+                                if (snapshot.data![index].longtermStatus ==
+                                    -1) {
+                                  return ServicePaid(
+                                      icon:
+                                          "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
+                                      date: "$date",
+                                      name:
+                                          "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
+                                      subName: subName,
+                                      time: "$start - $end",
+                                      status: 'xong',
+                                      press: () {
+                                        String bookingScheduleID = snapshot
+                                            .data![index].bookingScheduleID;
+                                        BookingDetail bookingDetail =
+                                            BookingDetail(
+                                                bookingDetailID:
+                                                    snapshot.data![index]
+                                                        .bookingDetailID,
+                                                bookingScheduleID:
+                                                    bookingScheduleID,
+                                                longtermStatus: 0,
+                                                shorttermStatus: 3);
+                                        CallAPI().updateBookingDetailStatus(
+                                            bookingDetail);
 
-                                      setState(() {});
-                                      Navigator.pop(context);
-                                    },
-                                    visible: visible);
-                              } else {
-                                return Center(
-                                  child: Container(
-                                    // padding: const EdgeInsets.symmetric(vertical: 150),
-                                    // child: Text(
-                                    //   "Hiện tại đã hết slot có thể đăng ký",
-                                    //   style: TextStyle(
-                                    //       color: Colors.grey[500], fontSize: 16),
-                                    // ),
-                                  ),
-                                );
-                              }
-                            });
-                      }
-                      else {
+                                        setState(() {});
+                                        Navigator.pop(context);
+                                      },
+                                      visible: visible);
+                                } else {
+                                  return Center(
+                                    child: Container(
+                                        // padding: const EdgeInsets.symmetric(vertical: 150),
+                                        // child: Text(
+                                        //   "Hiện tại đã hết slot có thể đăng ký",
+                                        //   style: TextStyle(
+                                        //       color: Colors.grey[500], fontSize: 16),
+                                        // ),
+                                        ),
+                                  );
+                                }
+                              }),
+                          onRefresh: () async {
+                            CallAPI()
+                                .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                                    sharedPhysiotherapist!.physiotherapistID,
+                                    'Tư vấn trị liệu',
+                                    3,
+                                    -1,
+                                    "");
+                            setState(() {});
+                          },
+                        );
+                      } else {
                         return Center(
                           child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 150),
+                            padding: const EdgeInsets.symmetric(vertical: 250),
                             child: Text(
                               "Hiện tại chưa có slot tư vấn trị liệu nào hoàn thành",
                               style: TextStyle(
@@ -145,11 +175,10 @@ class _AdviseListPageState extends State<AdviseListPage> {
                           ),
                         );
                       }
-
                     } else {
                       return Center(
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 150),
+                          padding: const EdgeInsets.symmetric(vertical: 250),
                           child: Text(
                             "Hiện tại chưa có slot tư vấn trị liệu nào hoàn thành",
                             style: TextStyle(
@@ -160,9 +189,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
                     }
                   } else {
                     return Center(
-                      child: Container(
-            
-                      ),
+                      child: Container(),
                     );
                   }
                 }),
@@ -296,7 +323,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
 
   Widget dialog({required VoidCallback press}) {
     return IconButton(
-      icon: Icon(Icons.add),
+      icon: const Icon(Icons.add),
       onPressed: () => showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(

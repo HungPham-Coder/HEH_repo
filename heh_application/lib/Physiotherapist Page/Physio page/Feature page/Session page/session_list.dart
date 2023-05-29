@@ -35,7 +35,7 @@ class _SessionListPageState extends State<SessionListPage> {
                   if (snapshot.data!.isNotEmpty) {
                     List<BookingDetail> listSort = [];
                     snapshot.data!.forEach((element) {
-                    int count = 0;
+                      int count = 0;
                       listSort.forEach((elementCmp) {
                         if (element.bookingSchedule!.schedule!.typeOfSlot!
                                     .typeName ==
@@ -46,45 +46,53 @@ class _SessionListPageState extends State<SessionListPage> {
                             element.bookingSchedule!.subProfile!.subName ==
                                 elementCmp
                                     .bookingSchedule!.subProfile!.subName) {
-                          count ++ ;
+                          count++;
                         }
-
                       });
-                      if (count == 0)
-                        {
-                          listSort.add(element);
-                        }
+                      if (count == 0) {
+                        listSort.add(element);
+                      }
                     });
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: listSort.length,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        if (listSort[index].bookingSchedule!.schedule!
-                                    .typeOfSlot!.typeName ==
-                                "Tư vấn trị liệu" &&
-                            listSort[index].longtermStatus != 0) {
-                          return Container();
-                        } else {
-                          return ServicePaid(
-                              bookingDetail: listSort[index],
-                              subName: listSort[index].bookingSchedule!.subProfile!.subName,
-                              icon:
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
-                              name:
-                                  "${listSort[index].bookingSchedule!.signUpUser!.firstName}",
-                              status: listSort[index].longtermStatus == 0
-                                  ? "Chờ"
-                                  : listSort[index].longtermStatus == 1
-                                      ? "Đã được lên lịch"
-                                      : "Đang điều trị");
-                        }
-                      },
-                    );
+                    return RefreshIndicator(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: listSort.length,
+                          itemBuilder: (context, index) {
+                            if (listSort[index]
+                                        .bookingSchedule!
+                                        .schedule!
+                                        .typeOfSlot!
+                                        .typeName ==
+                                    "Tư vấn trị liệu" &&
+                                listSort[index].longtermStatus != 0) {
+                              return Container();
+                            } else {
+                              return ServicePaid(
+                                  bookingDetail: listSort[index],
+                                  subName: listSort[index]
+                                      .bookingSchedule!
+                                      .subProfile!
+                                      .subName,
+                                  icon:
+                                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
+                                  name:
+                                      "${listSort[index].bookingSchedule!.signUpUser!.firstName}",
+                                  status: listSort[index].longtermStatus == 0
+                                      ? "Chờ"
+                                      : listSort[index].longtermStatus == 1
+                                          ? "Đã được lên lịch"
+                                          : "Đang điều trị");
+                            }
+                          },
+                        ),
+                        onRefresh: () async {
+                          CallAPI().getLongTermListByStatus(3);
+                          setState(() {});
+                        });
                   } else {
                     return Center(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 150),
+                        padding: const EdgeInsets.symmetric(vertical: 250),
                         child: Text(
                           "Hiện tại đã hết slot có thể đăng ký",
                           style:
@@ -96,7 +104,7 @@ class _SessionListPageState extends State<SessionListPage> {
                 } else {
                   return Center(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 150),
+                      padding: const EdgeInsets.symmetric(vertical: 250),
                       child: Text(
                         "Hiện tại đã hết slot có thể đăng ký",
                         style: TextStyle(color: Colors.grey[500], fontSize: 16),
@@ -117,8 +125,7 @@ class _SessionListPageState extends State<SessionListPage> {
       name,
       status,
       required BookingDetail bookingDetail,
-      required String subName
-      }) {
+      required String subName}) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(

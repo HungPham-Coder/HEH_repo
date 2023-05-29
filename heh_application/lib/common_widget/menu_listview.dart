@@ -250,6 +250,7 @@ class ScheduleMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isSelected = true;
     // ignore: duplicate_ignore
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -300,7 +301,14 @@ class ScheduleMenu extends StatelessWidget {
                         time,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
-                      Text('$typeOfSlot'),
+                      Text(
+                        '$typeOfSlot',
+                        style: TextStyle(
+                          color: typeOfSlot != 'Chưa gán'
+                              ? Colors.blue
+                              : Colors.pink,
+                        ),
+                      ),
                       const SizedBox(height: 5),
                     ],
                   )),
@@ -508,15 +516,15 @@ class SessionMenu extends StatelessWidget {
 }
 
 class SessionScheduleMenu extends StatelessWidget {
-  SessionScheduleMenu({
-    Key? key,
-    required this.icon,
-    required this.name,
-    required this.time,
-    required this.buttonPress,
-    required this.color,
-    required this.visible
-  }) : super(key: key);
+  SessionScheduleMenu(
+      {Key? key,
+      required this.icon,
+      required this.name,
+      required this.time,
+      required this.buttonPress,
+      required this.color,
+      required this.visible})
+      : super(key: key);
   Color color;
   final String icon, name, time;
   final VoidCallback buttonPress;
@@ -528,7 +536,7 @@ class SessionScheduleMenu extends StatelessWidget {
       child: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color:  color,
+            color: color,
             borderRadius: const BorderRadius.all(Radius.circular(15)),
             border: Border.all(color: Colors.black),
           ),

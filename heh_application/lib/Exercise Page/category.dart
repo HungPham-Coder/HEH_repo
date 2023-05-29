@@ -15,6 +15,8 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,6 +26,13 @@ class _CategoryPageState extends State<CategoryPage> {
           "Bài tập trị liệu",
           style: TextStyle(fontSize: 23),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showSearch(context: context, delegate: SearchCategory());
+              },
+              icon: const Icon(Icons.search))
+        ],
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),
@@ -31,35 +40,38 @@ class _CategoryPageState extends State<CategoryPage> {
         physics: const ScrollPhysics(),
         child: Column(
           children: [
-            const SizedBox(height: 20),
-            const Center(child: Text("Bạn đang gặp vấn đề gì?")),
             FutureBuilder<List<CategoryModel>>(
-                future: CallAPI().getAllCategory(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return MenuListView(
-                          icon: snapshot.data![index].iconUrl!,
-                          text: "${snapshot.data![index].categoryName}",
-                          press: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ExercisePage(
-                                        categoryID:
-                                            snapshot.data![index].categoryID)));
-                          },
-                        );
-                      },
-                    );
-                  } else {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                }),
+              future: CallAPI().getAllCategory(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return RefreshIndicator(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return MenuListView(
+                            icon: snapshot.data![index].iconUrl!,
+                            text: "${snapshot.data![index].categoryName}",
+                            press: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ExercisePage(
+                                          categoryID: snapshot
+                                              .data![index].categoryID)));
+                            },
+                          );
+                        },
+                      ),
+                      onRefresh: () async {
+                        await CallAPI().getAllCategory();
+                        setState(() {});
+                      });
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
           ],
         ),
       ),

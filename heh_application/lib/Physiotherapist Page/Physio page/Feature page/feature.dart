@@ -36,17 +36,6 @@ class _FeaturePageState extends State<FeaturePage> {
           children: [
             FeatureMenu(
               icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fexercise.png?alt=media&token=f9b0b759-2f11-431e-b821-f695bd62e78c",
-              text: "Bài tập trị liệu",
-              press: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CategoryPage()));
-              },
-            ),
-            FeatureMenu(
-              icon:
                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar1.png?alt=media&token=0c80092a-d7d8-4f16-97cc-afa766361770",
               text: "Đăng ký lịch làm việc",
               press: () {
@@ -74,6 +63,17 @@ class _FeaturePageState extends State<FeaturePage> {
               press: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => SchedulePage()));
+              },
+            ),
+            FeatureMenu(
+              icon:
+                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fexercise.png?alt=media&token=f9b0b759-2f11-431e-b821-f695bd62e78c",
+              text: "Bài tập trị liệu",
+              press: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CategoryPage()));
               },
             ),
           ],

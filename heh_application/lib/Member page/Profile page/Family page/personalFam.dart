@@ -5,7 +5,8 @@ import 'package:heh_application/models/medical_record.dart';
 import 'package:heh_application/models/sub_profile.dart';
 
 class FamilyPersonalPage extends StatefulWidget {
-  FamilyPersonalPage({Key? key, required this.subProfile, required this.medicalRecord})
+  FamilyPersonalPage(
+      {Key? key, required this.subProfile, required this.medicalRecord})
       : super(key: key);
 
   SubProfile? subProfile;
@@ -23,7 +24,6 @@ class _FamilyPersonalPageState extends State<FamilyPersonalPage> {
         child: Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              automaticallyImplyLeading: true,
               title: const Text(
                 "Tài khoản của bạn",
                 style: TextStyle(fontSize: 23),
@@ -36,6 +36,9 @@ class _FamilyPersonalPageState extends State<FamilyPersonalPage> {
               ),
               elevation: 10,
               backgroundColor: const Color.fromARGB(255, 46, 161, 226),
+              leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.of(context).pop()),
             ),
             body: TabBarView(children: [
               FamilyInformationPage(subProfile: widget.subProfile),

@@ -169,101 +169,111 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                         ),
                       ));
                     } else {
-                      return ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          dynamic weekDay = new DateFormat(
-                                      "yyyy-MM-ddThh:mm:ss")
-                                  .parse(snapshot.data![index].slot!.timeStart)
-                                  .weekday +
-                              1;
-                          if (weekDay == 8) {
-                            weekDay = "Chủ Nhật";
-                          }
-                          String date = DateTimeFormat.formatDate(
-                              snapshot.data![index].slot!.timeStart);
-                          DateTime tempStart =
-                              new DateFormat("yyyy-MM-ddThh:mm:ss")
-                                  .parse(snapshot.data![index].slot!.timeStart);
-                          String start = DateFormat("HH:mm").format(tempStart);
-                          DateTime tempEnd =
-                              new DateFormat("yyyy-MM-ddThh:mm:ss")
-                                  .parse(snapshot.data![index].slot!.timeEnd);
-                          String end = DateFormat("HH:mm").format(tempEnd);
-                          String? notify;
-                          snapshot.data![index].physioBookingStatus == true
-                              ? notify = 'Slot này đã có người đặt rồi'
-                              : notify = '';
-                          return PhysioChooseMenu(
-                              notify: notify,
-                              weekDay: "Thứ ${weekDay} Ngày $date",
-                              icon:
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
-                              name: snapshot.data![index].slot!.slotName!,
-                              time: "Khung giờ: ",
-                              timeStart: '$start',
-                              timeEnd: '$end',
-                              price: snapshot.data![index].typeOfSlot!.price,
-                              press: () => showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        AlertDialog(
-                                      title:
-                                          const Text("Chọn người được tư vấn"),
-                                      content: relationship(
-                                          snapshot.data![index].slotID),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, 'Hủy bỏ'),
-                                          child: const Text('Hủy bỏ'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () async {
-                                            if (selectedSubName ==
-                                                "- Chọn -") {
-                                              Navigator.pop(context, "Ok");
-                                            } else {
-                                              BookingSchedule bookingSchedule =
-                                                  BookingSchedule(
-                                                      userID:
-                                                          sharedCurrentUser!
-                                                              .userID!,
-                                                      subProfileID:
-                                                          '${subProfile!.profileID}',
-                                                      scheduleID: snapshot
-                                                          .data![index]
-                                                          .scheduleID!,
-                                                      dateBooking: DateFormat(
-                                                              "yyyy-MM-dd")
-                                                          .format(
-                                                              DateTime.now()),
-                                                      timeBooking: DateFormat(
-                                                              "yyyy-MM-ddTHH:mm:ss")
-                                                          .format(
-                                                              DateTime.now()));
+                      return RefreshIndicator(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            dynamic weekDay = new DateFormat(
+                                        "yyyy-MM-ddThh:mm:ss")
+                                    .parse(
+                                        snapshot.data![index].slot!.timeStart)
+                                    .weekday +
+                                1;
+                            if (weekDay == 8) {
+                              weekDay = "Chủ Nhật";
+                            }
+                            String date = DateTimeFormat.formatDate(
+                                snapshot.data![index].slot!.timeStart);
+                            DateTime tempStart =
+                                new DateFormat("yyyy-MM-ddThh:mm:ss").parse(
+                                    snapshot.data![index].slot!.timeStart);
+                            String start =
+                                DateFormat("HH:mm").format(tempStart);
+                            DateTime tempEnd =
+                                new DateFormat("yyyy-MM-ddThh:mm:ss")
+                                    .parse(snapshot.data![index].slot!.timeEnd);
+                            String end = DateFormat("HH:mm").format(tempEnd);
+                            String? notify;
+                            snapshot.data![index].physioBookingStatus == true
+                                ? notify = 'Slot này đã có người đặt rồi'
+                                : notify = '';
+                            return PhysioChooseMenu(
+                                notify: notify,
+                                weekDay: "Thứ ${weekDay} Ngày $date",
+                                icon:
+                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
+                                name: snapshot.data![index].slot!.slotName!,
+                                time: "Khung giờ: ",
+                                timeStart: '$start',
+                                timeEnd: '$end',
+                                price: snapshot.data![index].typeOfSlot!.price,
+                                press: () => showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        title: const Text(
+                                            "Chọn người được tư vấn"),
+                                        content: relationship(
+                                            snapshot.data![index].slotID),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(
+                                                context, 'Hủy bỏ'),
+                                            child: const Text('Hủy bỏ'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              if (selectedSubName ==
+                                                  "- Chọn -") {
+                                                Navigator.pop(context, "Ok");
+                                              } else {
+                                                BookingSchedule
+                                                    bookingSchedule =
+                                                    BookingSchedule(
+                                                        userID:
+                                                            sharedCurrentUser!
+                                                                .userID!,
+                                                        subProfileID:
+                                                            '${subProfile!.profileID}',
+                                                        scheduleID: snapshot
+                                                            .data![index]
+                                                            .scheduleID!,
+                                                        dateBooking: DateFormat(
+                                                                "yyyy-MM-dd")
+                                                            .format(
+                                                                DateTime.now()),
+                                                        timeBooking: DateFormat(
+                                                                "yyyy-MM-ddTHH:mm:ss")
+                                                            .format(DateTime
+                                                                .now()));
 
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          BillChoosePage(
-                                                            physiotherapist: widget
-                                                                .physiotherapist,
-                                                            schedule: snapshot
-                                                                .data![index],
-                                                            bookingSchedule:
-                                                                bookingSchedule,
-                                                          )));
-                                            }
-                                          },
-                                          child: const Text('Ok'),
-                                        )
-                                      ],
-                                    ),
-                                  ));
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            BillChoosePage(
+                                                              physiotherapist:
+                                                                  widget
+                                                                      .physiotherapist,
+                                                              schedule: snapshot
+                                                                  .data![index],
+                                                              bookingSchedule:
+                                                                  bookingSchedule,
+                                                            )));
+                                              }
+                                            },
+                                            child: const Text('Ok'),
+                                          )
+                                        ],
+                                      ),
+                                    ));
+                          },
+                        ),
+                        onRefresh: () async {
+                          CallAPI().getallSlotByPhysiotherapistIDAndTypeOfSlot(
+                              widget.physiotherapist.physiotherapistID,
+                              widget.typeName);
                         },
                       );
                     }
@@ -390,6 +400,7 @@ class PhysioChooseMenu extends StatelessWidget {
   String timeStart, timeEnd;
   bool visible = false;
   double price;
+  final value = NumberFormat("###,###,###");
   String weekDay;
   @override
   Widget build(BuildContext context) {
@@ -450,23 +461,30 @@ class PhysioChooseMenu extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              name,
-                              style: Theme.of(context).textTheme.bodyText1,
+                            Text(name,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                )),
+                            const SizedBox(
+                              height: 5,
                             ),
-                            // SizedBox(
-                            //   height: 10,
-                            // ),
+                            Text(weekDay,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                )),
+                            Text('$time$timeStart - $timeEnd',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                )),
                             Text(
-                              weekDay,
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                            Text(
-                              '$time$timeStart - $timeEnd',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                            Text(
-                              '$price VND',
+                              "Giá tiền: ${value.format(price.toInt())} VNĐ",
+                              style: const TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             Visibility(
                                 visible: visible, child: Text('$notify')),

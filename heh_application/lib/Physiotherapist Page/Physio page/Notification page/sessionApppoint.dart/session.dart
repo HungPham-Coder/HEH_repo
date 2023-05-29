@@ -35,7 +35,8 @@ class _SessionAppointmentPageState extends State<SessionAppointmentPage> {
                           sharedPhysiotherapist!.physiotherapistID,
                           'Trị liệu dài hạn',
                           3,
-                          1),
+                          1,
+                          ""),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.isNotEmpty) {

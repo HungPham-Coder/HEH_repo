@@ -57,7 +57,7 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
   Future<void> uploadImageFile() async {
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
     UploadTask uploadTask =
-    ChatProvider().upLoadImageFile(imageFile!, fileName);
+        ChatProvider().upLoadImageFile(imageFile!, fileName);
     try {
       TaskSnapshot snapshot = await uploadTask;
       String imageUrlDownLoadUrl = await snapshot.ref.getDownloadURL();
@@ -76,7 +76,7 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
     }
   }
 
-  Widget choose ({required String priceImage}){
+  Widget choose({required String priceImage}) {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(color: Colors.black),
@@ -235,11 +235,7 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                     style: TextStyle(fontSize: 15, color: Colors.red),
                   ),
                 ),
-
               ])),
-
-
-
           const SizedBox(
             height: 130,
           ),
@@ -248,7 +244,7 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
       bottomSheet: SizedBox(
         height: 115,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -279,18 +275,18 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                           side: const BorderSide(color: Colors.white)),
                     )),
                 onPressed: () async {
-                  if (imageUrl == "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fwhite.jpg?alt=media&token=992ffa5a-dd2b-4ff4-bf8f-285be1da997d"){
+                  if (imageUrl ==
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fwhite.jpg?alt=media&token=992ffa5a-dd2b-4ff4-bf8f-285be1da997d") {
                     setState(() {
                       visible = true;
                     });
-                  }
-                  else {
+                  } else {
                     setState(() {
                       visible = false;
                     });
                     widget.bookingDetail!.imageUrl = imageUrl;
                     BookingDetail addBookingDetail =
-                    await CallAPI().addBookingDetail(widget.bookingDetail!);
+                        await CallAPI().addBookingDetail(widget.bookingDetail!);
                     if (addBookingDetail != null) {
                       widget.bookingDetail!.bookingSchedule!.schedule!
                           .physioBookingStatus = true;
@@ -300,10 +296,8 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const SuccessPage()));
+                    }
                   }
-
-                  }
-
                 },
                 child: const Text(
                   "Thanh toán",

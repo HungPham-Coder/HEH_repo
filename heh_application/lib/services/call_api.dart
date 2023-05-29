@@ -213,7 +213,7 @@ class CallAPI {
   }
 
   Future<List<ExerciseDetail1>> getExerciseDetailByExerciseID(
-      String exerciseID) async {
+      {String? query, String? exerciseID}) async {
     var url =
         Uri.parse('${link}/api/ExerciseDetail/GetByExerciseID/$exerciseID');
     // var url = Uri.https('localhost:7166', 'api/ExerciseDetail/GetByExerciseID/$exerciseID');
@@ -225,7 +225,14 @@ class CallAPI {
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
       List<ExerciseDetail1> list = List<ExerciseDetail1>.from(
-          jsonResult.map((model) => ExerciseDetail1.fromMap(model)));
+          jsonResult.map((model) => ExerciseDetail1.fromMap(model)).toList());
+      if (query != null) {
+        print(query);
+        list = list
+            .where((element) =>
+                element.detailName!.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
       if (list == null) {
         throw Exception('Exercise Detail List null');
       } else {
@@ -298,7 +305,7 @@ class CallAPI {
     }
   }
 
-  Future<List<CategoryModel>> getAllCategory() async {
+  Future<List<CategoryModel>> getAllCategory({String? query}) async {
     var url = Uri.parse('${link}/api/Category');
     // var url = Uri.https('localhost:7166', 'api/Category');
     final headers = {
@@ -309,7 +316,16 @@ class CallAPI {
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
       List<CategoryModel> list = List<CategoryModel>.from(
-          jsonResult.map((model) => CategoryModel.fromMap(model)));
+          jsonResult.map((model) => CategoryModel.fromMap(model)).toList());
+
+      if (query != null) {
+        print(query);
+        list = list
+            .where((element) => element.categoryName
+                .toLowerCase()
+                .contains(query.toLowerCase()))
+            .toList();
+      }
       if (list == null) {
         throw Exception('Category List null');
       } else {
@@ -368,10 +384,12 @@ class CallAPI {
 
   Future<List<BookingDetail>?>
       getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-          String physioID,
-          String typeOfSlot,
-          int shortTermStatus,
-          int longTermStatus) async {
+    String physioID,
+    String typeOfSlot,
+    int shortTermStatus,
+    int longTermStatus,
+    String? query,
+  ) async {
     var url = Uri.parse('${link}/api/BookingDetail/'
         'GetAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus'
         '?physioID=$physioID'
@@ -387,9 +405,17 @@ class CallAPI {
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
       List<BookingDetail> list = List<BookingDetail>.from(
-          jsonResult.map((model) => BookingDetail.fromMap(model)));
-      if (list.isEmpty) {
+          jsonResult.map((model) => BookingDetail.fromMap(model)).toList());
+      if (query != null) {
+        print(query);
+        list = list
+            .where((element) => element.bookingSchedule!.signUpUser!.firstName!
+                .toLowerCase()
+                .contains(query.toLowerCase()))
+            .toList();
+      }
 
+      if (list.isEmpty) {
       } else {
         return list;
       }
@@ -421,7 +447,7 @@ class CallAPI {
   }
 
   Future<List<ExerciseResource>> getExerciseResourceByExerciseDetailID(
-      String detailID) async {
+      String detailID, String? query) async {
     var url = Uri.parse(
         '${link}/api/ExerciseResource/GetByExerciseDetailId/$detailID');
     // var url = Uri.https('localhost:7166', 'api/ExerciseDetail/GetByExerciseID/$exerciseID');
@@ -433,7 +459,15 @@ class CallAPI {
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
       List<ExerciseResource> list = List<ExerciseResource>.from(
-          jsonResult.map((model) => ExerciseResource.fromMap(model)));
+          jsonResult.map((model) => ExerciseResource.fromMap(model)).toList());
+      if (query != null) {
+        print(query);
+        list = list
+            .where((element) => element.resourceName!
+                .toLowerCase()
+                .contains(query.toLowerCase()))
+            .toList();
+      }
       if (list == null) {
         throw Exception('ExerciseResource List null');
       } else {
@@ -877,7 +911,7 @@ class CallAPI {
   }
 
   Future<List<Schedule>?> getallSlotByPhysiotherapistID(
-      String physiotherapistID) async {
+      String physiotherapistID, String? query) async {
     var url = Uri.parse(
         '${link}/api/Schedule/getAllSlotByPhysiotherapistID/$physiotherapistID');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
@@ -889,7 +923,15 @@ class CallAPI {
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
       List<Schedule> list = List<Schedule>.from(
-          jsonResult.map((model) => Schedule.fromMap(model)));
+          jsonResult.map((model) => Schedule.fromMap(model)).toList());
+      if (query != null) {
+        print(query);
+        list = list
+            .where((element) => element.slot!.slotName!
+                .toLowerCase()
+                .contains(query.toLowerCase()))
+            .toList();
+      }
 
       if (list == null) {
         print("List Schedule Null");
@@ -1096,8 +1138,8 @@ class CallAPI {
       "userID": subProfile.userID,
       "relationId": subProfile.relationID,
       "subName": subProfile.subName,
-      "dateOfBirth":subProfile.dob,
-      "isDeleted" :false
+      "dateOfBirth": subProfile.dob,
+      "isDeleted": false
     });
     final headers = {
       "Accept": "application/json",
@@ -1112,7 +1154,9 @@ class CallAPI {
       throw Exception("failed to add subprofile");
     }
   }
-  Future<dynamic> ChangePassword(SignUpUser signUpUser, String oldPass, String newPass) async {
+
+  Future<dynamic> ChangePassword(
+      SignUpUser signUpUser, String oldPass, String newPass) async {
     var url = Uri.parse('${link}/api/User/ChangePassword');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
 
@@ -1133,7 +1177,6 @@ class CallAPI {
       return json.decode(response.body);
     }
   }
-
 
   Future<void> updateSubprofile(SubProfile subProfile) async {
     var url = Uri.parse('${link}/api/SubProfile');
@@ -1157,9 +1200,9 @@ class CallAPI {
       throw Exception('Failed to update subProfile');
     }
   }
+
   Future<dynamic> CheckRegisterMember(SignUpUser signUpUser) async {
-    var url =
-    Uri.parse('${link}/api/User/CheckRegisterMember');
+    var url = Uri.parse('${link}/api/User/CheckRegisterMember');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
 
     final headers = {
@@ -1180,7 +1223,7 @@ class CallAPI {
       "bookingStatus": false,
       "banStatus": false,
     });
-    var response = await http.post(url, body: body,headers: headers);
+    var response = await http.post(url, body: body, headers: headers);
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -1216,7 +1259,8 @@ class CallAPI {
     }
   }
 
-  Future<List<SubProfile>?> getallSubProfileByUserId(String userId) async {
+  Future<List<SubProfile>?> getallSubProfileByUserId(
+      String userId, String? query) async {
     var url = Uri.parse('${link}/api/SubProfile/GetByUserId/$userId');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
@@ -1227,8 +1271,14 @@ class CallAPI {
     if (response.statusCode == 200) {
       Iterable jsonResult = json.decode(response.body);
       List<SubProfile> list = List<SubProfile>.from(
-          jsonResult.map((model) => SubProfile.fromMap(model)));
-
+          jsonResult.map((model) => SubProfile.fromMap(model)).toList());
+      if (query != null) {
+        print(query);
+        list = list
+            .where((element) =>
+                element.subName.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
       if (list == null) {
       } else {
         return list;
@@ -1401,8 +1451,10 @@ class CallAPI {
     }
   }
 
-  Future<List<FavoriteExercise>> getAllFavoriteExerciseByUserID(String userID) async {
-    var url = Uri.parse('${link}/api/FavoriteExercise/GetAllByUserID?userID=$userID');
+  Future<List<FavoriteExercise>> getAllFavoriteExerciseByUserID(
+      String userID) async {
+    var url =
+        Uri.parse('${link}/api/FavoriteExercise/GetAllByUserID?userID=$userID');
     // var url = Uri.https('localhost:7166', 'api/UserExercise');
     final headers = {
       "Accept": "application/json",

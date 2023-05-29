@@ -23,14 +23,20 @@ class ExerciseResources extends StatefulWidget {
 }
 
 class _ExerciseResourcesState extends State<ExerciseResources> {
-  bool isSelected = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.grey,
         appBar: AppBar(
           actions: [
+            IconButton(
+                onPressed: () {
+                  showSearch(
+                      context: context,
+                      delegate: SearchExerciseResource(
+                          widget.exerciseDetail!.exerciseDetailID));
+                },
+                icon: const Icon(Icons.search)),
             IconButton(
               icon: Icon(
                   widget.exerciseDetail!.favoriteStatus == 0
@@ -101,7 +107,7 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
             // widget.exerciseDetail!.detailName!,
             "Các loại tài nguyên",
             style: TextStyle(
-              fontSize: 23,
+              fontSize: 20,
               color: Colors.white,
               // fontFamily: "Times New Roman",
             ),
@@ -117,36 +123,68 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
                   const SizedBox(height: 5),
                   FutureBuilder<List<ExerciseResource>?>(
                       future: CallAPI().getExerciseResourceByExerciseDetailID(
-                          widget.exerciseDetail!.exerciseDetailID),
+                          widget.exerciseDetail!.exerciseDetailID, ""),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return ListView.builder(
-                            // physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              return ResourceListView(
-                                icon: snapshot.data![index].imageURL!,
-                                text: snapshot.data![index].resourceName!,
-                                press: () async {
-                                  // List<ExerciseDetail1> exerciseDetailList =
-                                  //     await CallAPI()
-                                  //         .getExerciseDetailByExerciseID(widget
-                                  //             .exerciseDetail!.exerciseID);
+                          if (snapshot.data!.length > 0) {
+                            return RefreshIndicator(
+                              child: ListView.builder(
+                                // physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                  return ResourceListView(
+                                    icon: snapshot.data![index].imageURL!,
+                                    text: snapshot.data![index].resourceName!,
+                                    press: () async {
+                                      // List<ExerciseDetail1> exerciseDetailList =
+                                      //     await CallAPI()
+                                      //         .getExerciseDetailByExerciseID(widget
+                                      //             .exerciseDetail!.exerciseID);
 
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return ExerciseResourcesDetail(
-                                      exerciseResource: snapshot.data![index],
-                                    );
-                                  }));
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return ExerciseResourcesDetail(
+                                          exerciseResource:
+                                              snapshot.data![index],
+                                        );
+                                      }));
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                          );
+                              ),
+                              onRefresh: () async {
+                                CallAPI().getExerciseResourceByExerciseDetailID(
+                                    widget.exerciseDetail!.exerciseDetailID,
+                                    "");
+                                setState(() {});
+                              },
+                            );
+                          } else {
+                            return Center(
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 300),
+                                child: Text(
+                                  "Tài nguyyên trống",
+                                  style: TextStyle(
+                                      color: Colors.grey[500], fontSize: 16),
+                                ),
+                              ),
+                            );
+                          }
                         } else {
-                          return const Center(
-                              child: CircularProgressIndicator());
+                          return Center(
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 300),
+                              child: Text(
+                                "Tài nguyên trống",
+                                style: TextStyle(
+                                    color: Colors.grey[500], fontSize: 16),
+                              ),
+                            ),
+                          );
                         }
                       }),
                 ],

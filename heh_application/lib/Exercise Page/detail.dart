@@ -29,6 +29,15 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
           "Bài tập cụ thể",
           style: TextStyle(fontSize: 23),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showSearch(
+                    context: context,
+                    delegate: SearchExerciseDetail(widget.exerciseID));
+              },
+              icon: const Icon(Icons.search))
+        ],
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),
@@ -37,38 +46,61 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
         child: Column(
           children: [
             FutureBuilder<List<ExerciseDetail1>>(
-                future:
-                    CallAPI().getExerciseDetailByExerciseID(widget.exerciseID!),
+                future: CallAPI().getExerciseDetailByExerciseID(
+                    exerciseID: widget.exerciseID!),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return MenuListView(
-                          icon:
-                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbackache.png?alt=media&token=d725e1f5-c106-41f7-9ee5-ade77c464a54",
-                          text: "${snapshot.data![index].detailName}",
-                          press: () async {
-
-
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-
-                                return ExerciseResources(
-
-                                  exerciseDetail: snapshot.data![index],
-                                  // exerciseResource: exerciseResource,
-                                );
-
-                            }));
+                    if (snapshot.data!.length > 0) {
+                      return RefreshIndicator(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return MenuListView(
+                              icon:
+                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbackache.png?alt=media&token=d725e1f5-c106-41f7-9ee5-ade77c464a54",
+                              text: "${snapshot.data![index].detailName}",
+                              press: () async {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return ExerciseResources(
+                                    exerciseDetail: snapshot.data![index],
+                                    // exerciseResource: exerciseResource,
+                                  );
+                                }));
+                              },
+                            );
                           },
-                        );
-                      },
-                    );
+                        ),
+                        onRefresh: () async {
+                          CallAPI().getExerciseDetailByExerciseID(
+                              exerciseID: widget.exerciseID!);
+                          setState(() {});
+                        },
+                      );
+                    } else {
+                      return Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 300),
+                          child: Text(
+                            "Bài tâp trống",
+                            style: TextStyle(
+                                color: Colors.grey[500], fontSize: 16),
+                          ),
+                        ),
+                      );
+                    }
                   } else {
-                    return const Center(child: CircularProgressIndicator());
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 300),
+                        child: Text(
+                          "Bài tâp trống",
+                          style:
+                              TextStyle(color: Colors.grey[500], fontSize: 16),
+                        ),
+                      ),
+                    );
                   }
                 }),
           ],

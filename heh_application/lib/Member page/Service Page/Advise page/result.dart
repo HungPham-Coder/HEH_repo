@@ -56,51 +56,62 @@ class _TimeResultPageState extends State<TimeResultPage> {
                             'Tư vấn trị liệu'),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        return ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: snapshot.data!.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              String startStr = DateTimeFormat.formateTime(
-                                  snapshot.data![index].slot!.timeStart);
-                              String endStr = DateTimeFormat.formateTime(
-                                  snapshot.data![index].slot!.timeEnd);
+                        return RefreshIndicator(
+                            child: ListView.builder(
+                                itemCount: snapshot.data!.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  String startStr = DateTimeFormat.formateTime(
+                                      snapshot.data![index].slot!.timeStart);
+                                  String endStr = DateTimeFormat.formateTime(
+                                      snapshot.data![index].slot!.timeEnd);
 
-                              return PhysioChooseMenu(
-                                slotName:
-                                    '${snapshot.data![index].slot!.slotName}',
-                                icon:
-                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
-                                name:
-                                    "${snapshot.data![index].physiotherapist!.signUpUser!.firstName}",
-                                time: "Khung giờ: $startStr - $endStr",
-                                press: () async {
-                                  String date = DateFormat("yyyy-MM-dd")
-                                      .format(DateTime.now());
-                                  String time = DateFormat("HH:mm:ss")
-                                      .format(DateTime.now());
-                                  BookingSchedule bookingSchedule =
-                                      BookingSchedule(
-                                          userID: sharedCurrentUser!.userID!,
-                                          subProfileID:
-                                              widget.subProfile.profileID!,
-                                          scheduleID:
-                                              snapshot.data![index].scheduleID!,
-                                          dateBooking: date,
-                                          timeBooking: time);
+                                  return PhysioChooseMenu(
+                                    slotName:
+                                        '${snapshot.data![index].slot!.slotName}',
+                                    icon:
+                                        "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622",
+                                    name:
+                                        "${snapshot.data![index].physiotherapist!.signUpUser!.firstName}",
+                                    time: "Khung giờ: $startStr - $endStr",
+                                    press: () async {
+                                      String date = DateFormat("yyyy-MM-dd")
+                                          .format(DateTime.now());
+                                      String time = DateFormat("HH:mm:ss")
+                                          .format(DateTime.now());
+                                      BookingSchedule bookingSchedule =
+                                          BookingSchedule(
+                                              userID:
+                                                  sharedCurrentUser!.userID!,
+                                              subProfileID:
+                                                  widget.subProfile.profileID!,
+                                              scheduleID: snapshot
+                                                  .data![index].scheduleID!,
+                                              dateBooking: date,
+                                              timeBooking: time);
 
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => BillChoosePage(
-                                              physiotherapist: snapshot
-                                                  .data![index]
-                                                  .physiotherapist!,
-                                              schedule: snapshot.data![index],
-                                              bookingSchedule:
-                                                  bookingSchedule)));
-                                },
-                              );
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BillChoosePage(
+                                                      physiotherapist: snapshot
+                                                          .data![index]
+                                                          .physiotherapist!,
+                                                      schedule:
+                                                          snapshot.data![index],
+                                                      bookingSchedule:
+                                                          bookingSchedule)));
+                                    },
+                                  );
+                                }),
+                            onRefresh: () async {
+                              CallAPI()
+                                  .getallPhysiotherapistBySlotTimeAndSkillAndTypeOfSlot(
+                                      widget.timeStart,
+                                      widget.timeEnd,
+                                      'Đau Lưng',
+                                      'Tư vấn trị liệu');
                             });
                       } else {
                         return Center(

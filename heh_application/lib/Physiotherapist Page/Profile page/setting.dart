@@ -2,6 +2,7 @@ import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:heh_application/Change%20password/otpchange.dart';
+import 'package:heh_application/Exercise%20Page/category.dart';
 import 'package:heh_application/Member%20page/Profile%20page/history.dart';
 import 'package:heh_application/Physiotherapist%20Page/Profile%20page/Personal%20page/personal.dart';
 import 'package:heh_application/Physiotherapist%20Page/Profile%20page/history.dart';
@@ -61,19 +62,18 @@ class _PhysioSettingPageState extends State<PhysioSettingPage> {
             text: "Thông tin của bạn",
             press: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const PhysioPersonalPage())).then((value) {
-                        setState(() {
-
-                        });
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PhysioPersonalPage()))
+                  .then((value) {
+                setState(() {});
               });
             },
           ),
           ProfileMenu(
             icon:
                 "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fhistory.svg?alt=media&token=13ed285f-0a27-4ee5-b984-bd73d5f15ac8",
-            text: "Lịch sử giao dịch",
+            text: "Lịch sử trị liệu",
             press: () {
               Navigator.push(
                   context,

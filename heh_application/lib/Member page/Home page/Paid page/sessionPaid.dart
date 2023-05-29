@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/billChoose.dart';
@@ -20,7 +19,8 @@ import 'package:provider/provider.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 
 class SessionPaidPage extends StatefulWidget {
-  SessionPaidPage({Key? key, required this.firebaseFirestoreBase, required this.typeName})
+  SessionPaidPage(
+      {Key? key, required this.firebaseFirestoreBase, required this.typeName})
       : super(key: key);
   FirebaseFirestoreBase firebaseFirestoreBase;
   String typeName;
@@ -48,51 +48,59 @@ class _SessionPaidPageState extends State<SessionPaidPage> {
         child: Column(
           children: [
             FutureBuilder<List<BookingDetail>>(
-                future: CallAPI()
-                    .getAllBookingDetailByUserIDAndTypeOfSlot(sharedCurrentUser!.userID!,widget.typeName),
+                future: CallAPI().getAllBookingDetailByUserIDAndTypeOfSlot(
+                    sharedCurrentUser!.userID!, widget.typeName),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length > 0) {
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: snapshot.data!.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          DateTime tempDate = new DateFormat("yyyy-MM-dd")
-                              .parse(snapshot.data![index].bookingSchedule!
-                                  .schedule!.slot!.timeStart);
-                          String day =
-                              DateFormat("dd-MM-yyyy").format(tempDate);
-                          DateTime tempStart =
-                              new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
-                                  snapshot.data![index].bookingSchedule!
+                      return RefreshIndicator(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              DateTime tempDate = new DateFormat("yyyy-MM-dd")
+                                  .parse(snapshot.data![index].bookingSchedule!
                                       .schedule!.slot!.timeStart);
-                          String start = DateFormat("HH:mm").format(tempStart);
-                          DateTime tempEnd =
-                              new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
-                                  snapshot.data![index].bookingSchedule!
-                                      .schedule!.slot!.timeEnd);
-                          String end = DateFormat("HH:mm").format(tempEnd);
-                          return ServicePaid(
-                              icon:
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
-                              name:
-                                  "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
-                              date: "$day",
-                              time: "$start - $end",
-                              bookedFor:
-                                  "${snapshot.data![index].bookingSchedule!.subProfile!.relationship!.relationName}",
-                              bookingSchedule:
-                                  snapshot.data![index].bookingSchedule!,
-                              physiotherapist: snapshot.data![index]
-                                  .bookingSchedule!.schedule!.physiotherapist!,
-                              schedule: snapshot
-                                  .data![index].bookingSchedule!.schedule!,
-                              firebaseFirestoreBase:
-                                  widget.firebaseFirestoreBase,
-                              bookingDetail: snapshot.data![index]);
-                        },
-                      );
+                              String day =
+                                  DateFormat("dd-MM-yyyy").format(tempDate);
+                              DateTime tempStart =
+                                  new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
+                                      snapshot.data![index].bookingSchedule!
+                                          .schedule!.slot!.timeStart);
+                              String start =
+                                  DateFormat("HH:mm").format(tempStart);
+                              DateTime tempEnd =
+                                  new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
+                                      snapshot.data![index].bookingSchedule!
+                                          .schedule!.slot!.timeEnd);
+                              String end = DateFormat("HH:mm").format(tempEnd);
+                              return ServicePaid(
+                                  icon:
+                                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                                  name:
+                                      "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                                  date: "$day",
+                                  time: "$start - $end",
+                                  bookedFor:
+                                      "${snapshot.data![index].bookingSchedule!.subProfile!.relationship!.relationName}",
+                                  bookingSchedule:
+                                      snapshot.data![index].bookingSchedule!,
+                                  physiotherapist: snapshot
+                                      .data![index]
+                                      .bookingSchedule!
+                                      .schedule!
+                                      .physiotherapist!,
+                                  schedule: snapshot
+                                      .data![index].bookingSchedule!.schedule!,
+                                  firebaseFirestoreBase:
+                                      widget.firebaseFirestoreBase,
+                                  bookingDetail: snapshot.data![index]);
+                            },
+                          ),
+                          onRefresh: () async {
+                            CallAPI().getAllBookingDetailByUserIDAndTypeOfSlot(
+                                sharedCurrentUser!.userID!, widget.typeName);
+                          });
                     } else {
                       return Center(
                         child: Container(
@@ -106,7 +114,7 @@ class _SessionPaidPageState extends State<SessionPaidPage> {
                       );
                     }
                   } else {
-                    return  Container();
+                    return Container();
                   }
                 }),
           ],
@@ -300,9 +308,7 @@ class _SessionPaidPageState extends State<SessionPaidPage> {
                   );
                 }
               })).then((value) {
-                setState(() {
-                  
-                });
+                setState(() {});
               });
             },
             child: const Text(

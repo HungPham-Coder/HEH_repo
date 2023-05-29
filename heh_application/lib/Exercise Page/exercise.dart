@@ -27,6 +27,16 @@ class _ExercisePageState extends State<ExercisePage> {
           "Danh sách bài tập ",
           style: TextStyle(fontSize: 23),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showSearch(
+                    context: context,
+                    delegate: SearchExercise(
+                        widget.categoryID, sharedResultLogin!.accessToken!));
+              },
+              icon: const Icon(Icons.search))
+        ],
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),
@@ -36,37 +46,69 @@ class _ExercisePageState extends State<ExercisePage> {
           children: [
             FutureBuilder<List<Exercise>?>(
                 future: auth.getListExerciseByCategoryID(
-                    widget.categoryID, sharedResultLogin!.accessToken!),
+                    widget.categoryID, sharedResultLogin!.accessToken!, ""),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return MenuListView(
-                          icon:
-                          "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/category%2Fbackache.png?alt=media&token=56f8cdbd-7ca2-46d8-a60b-93cfc4951c91",
-                          text: "${snapshot.data![index].exerciseName}",
-                          press: () async {
-                            // List<ExerciseDetail1> exerciseDetailList = await CallAPI()
-                            //     .getExerciseDetailByExerciseID(
-                            //         snapshot.data![index].exerciseID);
-                            // ExerciseResource exerciseResource = await CallAPI()
-                            //     .getExerciseResourceByExerciseDetailID(
-                            //         exerciseDetail.exerciseDetailID);
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return ExerciseDetail(
-                                exerciseID: snapshot.data![index].exerciseID,
-                              );
-                            }));
+                    if (snapshot.data!.length > 0) {
+                      return RefreshIndicator(
+                        child: ListView.builder(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return MenuListView(
+                              icon:
+                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/category%2Fbackache.png?alt=media&token=56f8cdbd-7ca2-46d8-a60b-93cfc4951c91",
+                              text: "${snapshot.data![index].exerciseName}",
+                              press: () async {
+                                // List<ExerciseDetail1> exerciseDetailList = await CallAPI()
+                                //     .getExerciseDetailByExerciseID(
+                                //         snapshot.data![index].exerciseID);
+                                // ExerciseResource exerciseResource = await CallAPI()
+                                //     .getExerciseResourceByExerciseDetailID(
+                                //         exerciseDetail.exerciseDetailID);
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return ExerciseDetail(
+                                    exerciseID:
+                                        snapshot.data![index].exerciseID,
+                                  );
+                                }));
+                              },
+                            );
                           },
-                        );
-                      },
-                    );
+                        ),
+                        onRefresh: () async {
+                          await auth.getListExerciseByCategoryID(
+                              widget.categoryID,
+                              sharedResultLogin!.accessToken!,
+                              "");
+                          setState(() {});
+                        },
+                      );
+                    } else {
+                      return Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 300),
+                          child: Text(
+                            "Bài tâp trống",
+                            style: TextStyle(
+                                color: Colors.grey[500], fontSize: 16),
+                          ),
+                        ),
+                      );
+                    }
                   } else {
-                    return const Center(child: CircularProgressIndicator());
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 300),
+                        child: Text(
+                          "Bài tâp trống",
+                          style:
+                              TextStyle(color: Colors.grey[500], fontSize: 16),
+                        ),
+                      ),
+                    );
                   }
                 }),
           ],

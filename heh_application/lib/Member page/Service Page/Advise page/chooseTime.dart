@@ -93,7 +93,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
             height: 70,
             child: FutureBuilder<List<SubProfile>?>(
                 future: CallAPI()
-                    .getallSubProfileByUserId(sharedCurrentUser!.userID!),
+                    .getallSubProfileByUserId(sharedCurrentUser!.userID!, ""),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (_relationships.length == 1) {
@@ -108,21 +108,21 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                       validator: (value) {
                         if (selectedSubName == "- Chọn -") {
                           validRelationShip = false;
-                          return "Hãy chọn người điều trị";
+                          return "Hãy chọn người cần được điều trị";
                         } else {
                           validRelationShip = true;
                         }
                       },
-                      decoration: const InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 1, color: Colors.grey))),
+                      // decoration: const InputDecoration(
+                      //     enabledBorder: OutlineInputBorder(
+                      //         borderSide:
+                      //             BorderSide(width: 1, color: Colors.grey))),
                       value: selectedSubName,
                       items: _relationships
                           .map((relationship) => DropdownMenuItem<String>(
                               value: relationship,
                               child: Text(
-                                relationship,
+                                "   $relationship",
                                 style: const TextStyle(fontSize: 15),
                               )))
                           .toList(),
@@ -225,7 +225,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                     validator: (value) {
                       if (_selectedProblems.isEmpty) {
                         validCategory = false;
-                        return "Hãy chọn loại triệu chứng";
+                        return "Hãy chọn tình trạng";
                       } else {
                         validCategory = true;
                       }
@@ -265,15 +265,6 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
         visible: timeVisible,
         child: Column(
           children: [
-            Row(
-              children: const [
-                Text("Bạn muốn đặt khung giờ nào?"),
-                Text(" *", style: TextStyle(color: Colors.red)),
-              ],
-            ),
-            const SizedBox(
-              height: 5,
-            ),
             SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 70,
@@ -285,33 +276,41 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                       addSlot(snapshot.data!);
                       if (snapshot.data!.isNotEmpty) {
                         visible = true;
-                        return DropdownButtonFormField<String>(
-                          value: selectedTime,
-                          items: _time
-                              .map((relationship) => DropdownMenuItem<String>(
-                                  value: relationship,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    child: Text(
-                                      relationship,
-                                      style: const TextStyle(fontSize: 13),
-                                    ),
-                                  )))
-                              .toList(),
-                          validator: (value) {
-                            if (selectedTime == "- Chọn khung giờ -") {
-                              validTime = false;
+                        return Column(
+                          children: [
+                            Row(
+                              children: const [
+                                Text("Bạn muốn đặt khung giờ nào?"),
+                                Text(" *", style: TextStyle(color: Colors.red)),
+                              ],
+                            ),
+                            DropdownButtonFormField<String>(
+                              value: selectedTime,
+                              items: _time
+                                  .map((relationship) =>
+                                      DropdownMenuItem<String>(
+                                        value: relationship,
+                                        child: Text(
+                                          "   $relationship",
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                      ))
+                                  .toList(),
+                              validator: (value) {
+                                if (selectedTime == "- Chọn khung giờ -") {
+                                  validTime = false;
 
-                              return "Hãy chọn khung giờ điều trị";
-                            } else {
-                              validTime = true;
-                            }
-                          },
-                          onChanged: (relationship) => setState(() {
-                            selectedTime = relationship;
-                            print(selectedTime);
-                          }),
+                                  return "Hãy chọn khung giờ điều trị";
+                                } else {
+                                  validTime = true;
+                                }
+                              },
+                              onChanged: (relationship) => setState(() {
+                                selectedTime = relationship;
+                                print(selectedTime);
+                              }),
+                            ),
+                          ],
                         );
                       } else {
                         visible = false;
@@ -388,7 +387,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                   Visibility(
                     visible: visibleValid,
                     child: const Text(
-                      "Hãy nhập đúng những field cần thiết",
+                      "Hãy nhập điền đầy đủ thông tin cần thiết",
                       style: TextStyle(fontSize: 15, color: Colors.red),
                     ),
                   ),
@@ -397,7 +396,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                     visible: visible,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
+                          horizontal: 10, vertical: 0),
                       child: ElevatedButton(
                         style: ButtonStyle(
                             padding: MaterialStateProperty.all(

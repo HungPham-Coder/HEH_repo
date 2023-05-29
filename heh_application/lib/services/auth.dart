@@ -20,7 +20,10 @@ abstract class AuthBase {
   Future<User?> signInWithGoogle();
   Future<User> signInWithFacebook();
   Future<List<Exercise>?> getListExerciseByCategoryID(
-      String categoryID, String accessToken);
+    String categoryID,
+    String accessToken,
+    String? query,
+  );
   // Future<User?> signInWithPhoneAndPassword(String phoneNumber, String password);
 
   Future<User?> signInWithEmailAndPassword(String username, String password);
@@ -30,7 +33,7 @@ abstract class AuthBase {
   // Future<void> addSignUpUserStream(SignUpUser? signUpUser);
   Future<bool> checkUserExistInPostgre(String email);
   Future<void> checkUserExistInFirebase(SignUpUser signUpUser);
-  Future<bool> checkUserExistInFirebaseLogIn (String email);
+  Future<bool> checkUserExistInFirebaseLogIn(String email);
   Future<SignUpUser> getCurrentUser(ResultLogin resultLogin);
   Future<void> signInAnonymously();
   Future<void> upLoadFirestoreData(
@@ -39,7 +42,7 @@ abstract class AuthBase {
   // Stream<ResultLogin> get userLoginStream;
   // Stream<SignUpUser> get userSignUpStream;
   void dispose();
-  Future<Map<String,dynamic>?> getDocumentByID (String userID);
+  Future<Map<String, dynamic>?> getDocumentByID(String userID);
   Future<void> signOut(BuildContext context);
 }
 
@@ -92,25 +95,23 @@ class Auth implements AuthBase {
         //throw exception when idtoken is null
       }
     } else {
-
-
       throw FirebaseAuthException(
           code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
       //can not sign in
     }
   }
+
   @override
-  Future<Map<String,dynamic>?> getDocumentByID (String userID) async {
+  Future<Map<String, dynamic>?> getDocumentByID(String userID) async {
     final docRef = _firestore.collection("user").doc(userID);
-   docRef.get().then((value) {
-     Map<String,dynamic>? data = value.data();
-     return data;
-   },
-   onError: (e) {
-     return null;
-   }
-   );
+    docRef.get().then((value) {
+      Map<String, dynamic>? data = value.data();
+      return data;
+    }, onError: (e) {
+      return null;
+    });
   }
+
   @override
   Future<User> signInWithFacebook() async {
     final fb = FacebookLogin();
@@ -285,10 +286,17 @@ class Auth implements AuthBase {
 
   @override
   Future<List<Exercise>?> getListExerciseByCategoryID(
-      String categoryID, String accessToken) async {
+      String categoryID, String accessToken, String? query) async {
     // TODO: implement getExerciseByCategoryID
     List<Exercise> list =
         await _callAPI.getListExerciseByCategoryID(categoryID);
+    if (query != null) {
+      print(query);
+      list = list
+          .where((element) =>
+              element.exerciseName.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
 
     return list;
   }
@@ -302,17 +310,15 @@ class Auth implements AuthBase {
   @override
   Future<bool> checkUserExistInFirebaseLogIn(String email) async {
     // TODO: implement checkUserExistInFirebaseLogIn
-    try{
-      final list = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
-      if (list.isNotEmpty){
+    try {
+      final list =
+          await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+      if (list.isNotEmpty) {
         return true;
-      }
-      else {
+      } else {
         return false;
       }
-    }
-
-   on FirebaseException catch (e){
+    } on FirebaseException catch (e) {
       print(e.message);
       return true;
     }
