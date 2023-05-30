@@ -4,8 +4,8 @@ import 'package:heh_application/Login%20page/login.dart';
 import 'package:heh_application/services/call_api.dart';
 
 class renewForgotPass extends StatefulWidget {
-  const renewForgotPass({Key? key}) : super(key: key);
-
+   renewForgotPass({Key? key, required this.email}) : super(key: key);
+  String email;
   @override
   State<renewForgotPass> createState() => _renewForgotPassState();
 }
@@ -56,7 +56,48 @@ class _renewForgotPassState extends State<renewForgotPass> {
             style: const ButtonStyle(
                 shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20))))),
-            onPressed: () async {},
+            onPressed: () async {
+              if (validPassword == true  && validConfirmPass == true){
+               String result = await CallAPI().ResetPassword(widget.email, _newPassword.text);
+                if (result == "Đặt lại password thành công"){
+                  final snackBar = SnackBar(
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children:  [
+                        Text(
+                          "${result}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                    backgroundColor: Colors.green,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  Navigator.popUntil(context, ModalRoute.withName('/landing'));
+                }
+                else {
+                  final snackBar = SnackBar(
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children:  [
+                        Text(
+                          "${result}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                    backgroundColor: Colors.red,
+                  );
+                }
+              }
+
+            },
             child: Container(
               child: const Text("Thay đổi mật khẩu",
                   style: TextStyle(fontSize: 18)),
@@ -120,44 +161,7 @@ class _renewForgotPassState extends State<renewForgotPass> {
                     borderSide: BorderSide(color: Colors.grey))),
           ),
         ),
-        Form(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: TextFormField(
-            validator: (value) {
-              if (value!.isEmpty) {
-                validPassword = false;
-                return "Hãy nhập mật khẩu";
-              }
-              if (value.length < 6) {
-                validPassword = false;
-                return "Mật khẩu phải ít nhất 6 ký tự";
-              } else {
-                if (value.isNotEmpty) {
-                  validPassword = true;
-                }
-              }
-            },
-            controller: _newPassword,
-            obscureText: isObscure,
-            decoration: InputDecoration(
-                suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isObscure = !isObscure;
-                      });
-                    },
-                    icon: Icon(
-                        isObscure ? Icons.visibility_off : Icons.visibility)),
-                hintText: 'Mật khẩu',
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                border: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey))),
-          ),
-        ),
+
         const SizedBox(height: 15)
       ],
     );

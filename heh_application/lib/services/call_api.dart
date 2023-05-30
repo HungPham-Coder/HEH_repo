@@ -45,7 +45,7 @@ class CallAPI {
     if (response.statusCode == 200) {
       // return auth.signInWithEmailAndPassword(loginUser.phone, loginUser.password);
       Map<String, dynamic> responseBody = json.decode(response.body);
-      Map<String, dynamic> result = responseBody["result"];
+      Map<String, dynamic> result = responseBody;
 
       final headers = {
         "Content-Type": "application/json",
@@ -1196,6 +1196,41 @@ class CallAPI {
       } else {
         return list;
       }
+    }
+  }
+  Future<String> CheckExistEmail(String email) async {
+    var url =
+    Uri.parse('${link}/api/User/CheckExistEmail?email=$email');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url,headers: headers);
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      return json.decode(response.body);
+    }
+  }
+
+  Future<String> ResetPassword(String email, String newPassword) async {
+    var url =
+    Uri.parse('${link}/api/User/ResetPasswordMobile?email=$email&newPassword=$newPassword');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.get(url,headers: headers);
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      return json.decode(response.body);
     }
   }
 
