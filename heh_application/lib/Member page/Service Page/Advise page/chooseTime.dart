@@ -102,7 +102,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
 
                         _relationships.add(field);
                       });
-                      print("Co data");
+
                     }
                     return DropdownButtonFormField<String>(
                       validator: (value) {
@@ -267,14 +267,16 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
           children: [
             SizedBox(
               width: MediaQuery.of(context).size.width,
-              height: 70,
+              height: 90,
               child: FutureBuilder<List<Slot>>(
                   future: CallAPI()
                       .GetAllSlotByDateAndTypeOfSlot(date, widget.typeName),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      addSlot(snapshot.data!);
+
                       if (snapshot.data!.isNotEmpty) {
+                        visibleValid = false;
+                        addSlot(snapshot.data!);
                         visible = true;
                         return Column(
                           children: [
@@ -312,23 +314,33 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                             ),
                           ],
                         );
-                      } else {
+                      }
+                      else {
                         visible = false;
-
+                        visibleValid = false;
+                        DateTime dateTemp =  DateFormat("yyyy-MM-dd").parse(date);
+                        String datefmt = DateFormat("dd-MM-yyyy").format(dateTemp);
                         return Center(
                           child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 50),
+                            padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
-                              "Hiện tại không còn slot trống",
+                              "Ngày $datefmt không còn slot trống",
                               style: TextStyle(
-                                  color: Colors.grey[500], fontSize: 16),
+                                  color: Colors.red, fontSize: 16),
                             ),
                           ),
                         );
                       }
                     } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
+                      return Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 50),
+                          child: Text(
+                            "Hiện tại không còn slot trống",
+                            style: TextStyle(
+                                color: Colors.grey[500], fontSize: 16),
+                          ),
+                        ),
                       );
                     }
                   }),
@@ -357,7 +369,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
     //   String b = '${date}T${startStr}';
     //   print(b);
     // }
-    print(dateSearch);
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -434,7 +446,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
 
                             String date =
                                 DateFormat("yyyy-MM-dd").format(tempDate);
-                            print(date);
+
 
                             var timeSplit = selectedTime!.trim().split('-');
                             String start = timeSplit[0].trim();
