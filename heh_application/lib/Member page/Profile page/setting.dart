@@ -7,6 +7,7 @@ import 'package:heh_application/Change%20password/otpchange.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Home%20page/favorite.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Personal%20page/personal.dart';
+import 'package:heh_application/Member%20page/Profile%20page/history.dart';
 import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/stream_test.dart';
@@ -23,13 +24,9 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   EmailOTP myauth = EmailOTP();
-  FutureOr onGoBack (){
-    setState(() {
-      
-    });
+  FutureOr onGoBack() {
+    setState(() {});
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +55,9 @@ class _SettingPageState extends State<SettingPage> {
               // ignore: prefer_const_literals_to_create_immutables
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage(sharedCurrentUser!.image == null ?  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2F360_F_84671939_jxymoYZO8Oeacc3JRBDE8bSXBWj0ZfA9.jpg?alt=media&token=86b0417c-4b47-4207-8c1f-eea21242c91a":sharedCurrentUser!.image! ),
+                  backgroundImage: NetworkImage(sharedCurrentUser!.image == null
+                      ? "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2F360_F_84671939_jxymoYZO8Oeacc3JRBDE8bSXBWj0ZfA9.jpg?alt=media&token=86b0417c-4b47-4207-8c1f-eea21242c91a"
+                      : sharedCurrentUser!.image!),
                 ),
               ],
             ),
@@ -73,9 +72,10 @@ class _SettingPageState extends State<SettingPage> {
             text: "Thông tin của bạn",
             press: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const PersonalPage())).then((value) => onGoBack());
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PersonalPage()))
+                  .then((value) => onGoBack());
             },
           ),
           ProfileMenu(
@@ -83,16 +83,14 @@ class _SettingPageState extends State<SettingPage> {
                 "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Ffamily.svg?alt=media&token=f6f01b99-6901-48be-9a69-798ea594bd77",
             text: "Thành viên gia đình",
             press: () async {
-
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => FamilyPage(
-
-                          ),
+                    builder: (context) => FamilyPage(),
                     settings: const RouteSettings(
                       name: "/familySignUp",
-                    ),)).then((value) => onGoBack());
+                    ),
+                  )).then((value) => onGoBack());
             },
           ),
           ProfileMenu(
@@ -100,10 +98,17 @@ class _SettingPageState extends State<SettingPage> {
                 "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fhistory.svg?alt=media&token=13ed285f-0a27-4ee5-b984-bd73d5f15ac8",
             text: "Dịch vụ chưa thanh toán",
             press: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const FavoritePage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const HistoryPage()));
+            },
+          ),
+          ProfileMenu(
+            icon:
+                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fhistory.svg?alt=media&token=13ed285f-0a27-4ee5-b984-bd73d5f15ac8",
+            text: "Dịch vụ chưa thanh toán",
+            press: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const HistoryPage()));
             },
           ),
           ProfileMenu(
