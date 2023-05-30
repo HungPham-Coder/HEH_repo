@@ -8,6 +8,7 @@ import 'package:heh_application/models/chat_model/user_chat.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:heh_application/util/date_time_format.dart';
+import 'package:intl/intl.dart';
 
 class SessionPage extends StatefulWidget {
   SessionPage({Key? key, required this.firebaseFirestoreBase})
@@ -94,6 +95,7 @@ class _SessionPageState extends State<SessionPage> {
       time,
       bookedFor,
       date,
+        weekDay,
       required VoidCallback press}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -151,7 +153,7 @@ class _SessionPageState extends State<SessionPage> {
                                 style: Theme.of(context).textTheme.bodyText2,
                               ),
                               Text(
-                                date,
+                                '$weekDay $date',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     color: Colors.black),
@@ -237,40 +239,43 @@ class _SessionPageState extends State<SessionPage> {
                     if (listSort.length > 0) {
                       return RefreshIndicator(
                           child: ListView.builder(
-                              itemCount: snapshot.data!.length,
+                              itemCount: listSort.length,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
-                                if (snapshot.data![index].longtermStatus! < 3) {
+                                if (listSort[index].longtermStatus! < 3) {
                                   String day = DateTimeFormat.formatDate(
-                                      snapshot.data![index].bookingSchedule!
+                                      listSort[index].bookingSchedule!
                                           .schedule!.slot!.timeStart);
                                   String start = DateTimeFormat.formateTime(
-                                      snapshot.data![index].bookingSchedule!
+                                      listSort[index].bookingSchedule!
                                           .schedule!.slot!.timeStart);
                                   String end = DateTimeFormat.formateTime(
-                                      snapshot.data![index].bookingSchedule!
+                                      listSort[index].bookingSchedule!
                                           .schedule!.slot!.timeEnd);
-
+                                  String weekDay = "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(listSort[index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
+                                  if (weekDay =="Thứ 8"){
+                                    weekDay = "Chủ Nhật";
+                                  }
                                   return ServicePaid(
-                                    bookingDetail: snapshot.data![index],
+                                    bookingDetail: listSort[index],
                                     firebaseFirestoreBase:
                                         widget.firebaseFirestoreBase,
                                     icon:
                                         "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
                                     name:
-                                        "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                                        "${listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
                                     date: "$day",
+                                    weekDay:weekDay,
                                     time: "$start - $end",
                                     bookedFor:
-                                        "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
+                                        "${listSort[index].bookingSchedule!.subProfile!.subName}",
                                     press: () {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   AdviseDetailPage(
-                                                      bookingSchedule: snapshot
-                                                          .data![index]
+                                                      bookingSchedule: listSort[index]
                                                           .bookingSchedule)));
                                     },
                                   );
@@ -289,13 +294,9 @@ class _SessionPageState extends State<SessionPage> {
                                 }
                               }),
                           onRefresh: () async {
-                            CallAPI()
-                                .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                                    sharedPhysiotherapist!.physiotherapistID,
-                                    'Trị liệu dài hạn',
-                                    3,
-                                    1,
-                                    "");
+                          setState(() {
+
+                          });
                           });
                     } else {
                       return Container(

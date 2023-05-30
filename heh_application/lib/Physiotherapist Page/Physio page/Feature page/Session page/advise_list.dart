@@ -7,6 +7,7 @@ import 'package:heh_application/common_widget/search_delegate.dart';
 import 'package:heh_application/models/booking_detail.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/util/date_time_format.dart';
+import 'package:intl/intl.dart';
 
 class AdviseListPage extends StatefulWidget {
   const AdviseListPage({Key? key}) : super(key: key);
@@ -109,18 +110,22 @@ class _AdviseListPageState extends State<AdviseListPage> {
                                     .schedule!
                                     .slot!
                                     .timeEnd);
-                                if (snapshot.data![index].longtermStatus ==
-                                    -1) {
+                                String weekDay = "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(snapshot.data![index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
+                                if (weekDay =="Thứ 8"){
+                                  weekDay = "Chủ Nhật";
+                                }
+                                if (snapshot.data![index].longtermStatus == -1 ) {
                                   return ServicePaid(
                                       icon:
                                           "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
                                       date: "$date",
+                                      weekDay:weekDay,
                                       name:
                                           "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
                                       subName: subName,
                                       time: "$start - $end",
                                       status: 'xong',
-                                      press: () {
+                                      press: () async {
                                         String bookingScheduleID = snapshot
                                             .data![index].bookingScheduleID;
                                         BookingDetail bookingDetail =
@@ -132,7 +137,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
                                                     bookingScheduleID,
                                                 longtermStatus: 0,
                                                 shorttermStatus: 3);
-                                        CallAPI().updateBookingDetailStatus(
+                                       await CallAPI().updateBookingDetailStatus(
                                             bookingDetail);
 
                                         setState(() {});
@@ -144,7 +149,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
                                     child: Container(
                                         // padding: const EdgeInsets.symmetric(vertical: 150),
                                         // child: Text(
-                                        //   "Hiện tại đã hết slot có thể đăng ký",
+                                        //   "Hiện tại chưa có slot tư vấn trị liệu nào",
                                         //   style: TextStyle(
                                         //       color: Colors.grey[500], fontSize: 16),
                                         // ),
@@ -153,22 +158,17 @@ class _AdviseListPageState extends State<AdviseListPage> {
                                 }
                               }),
                           onRefresh: () async {
-                            CallAPI()
-                                .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                                    sharedPhysiotherapist!.physiotherapistID,
-                                    'Tư vấn trị liệu',
-                                    3,
-                                    -1,
-                                    "");
+
                             setState(() {});
                           },
                         );
                       } else {
+
                         return Center(
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 250),
                             child: Text(
-                              "Hiện tại chưa có slot tư vấn trị liệu nào hoàn thành",
+                              "Hiện tại chưa có slot tư vấn trị liệu nào",
                               style: TextStyle(
                                   color: Colors.grey[500], fontSize: 16),
                             ),
@@ -180,7 +180,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 250),
                           child: Text(
-                            "Hiện tại chưa có slot tư vấn trị liệu nào hoàn thành",
+                            "Hiện tại chưa có slot tư vấn trị liệu nào ",
                             style: TextStyle(
                                 color: Colors.grey[500], fontSize: 16),
                           ),
@@ -189,7 +189,14 @@ class _AdviseListPageState extends State<AdviseListPage> {
                     }
                   } else {
                     return Center(
-                      child: Container(),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 150),
+                        child: Text(
+                          "Hiện tại chưa có slot tư vấn trị liệu nào ",
+                          style: TextStyle(
+                              color: Colors.grey[500], fontSize: 16),
+                        ),
+                      ),
                     );
                   }
                 }),
@@ -205,6 +212,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
       time,
       date,
       status,
+        weekDay,
       String? subName,
       required bool visible,
       required VoidCallback press}) {
@@ -274,7 +282,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
                                 style: Theme.of(context).textTheme.bodyText2,
                               ),
                               Text(
-                                date,
+                                '$weekDay $date',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     color: Colors.black),

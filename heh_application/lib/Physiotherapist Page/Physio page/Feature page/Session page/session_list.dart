@@ -49,7 +49,7 @@ class _SessionListPageState extends State<SessionListPage> {
                           count++;
                         }
                       });
-                      if (count == 0) {
+                      if (count <= 1  ) {
                         listSort.add(element);
                       }
                     });
@@ -77,16 +77,15 @@ class _SessionListPageState extends State<SessionListPage> {
                                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
                                   name:
                                       "${listSort[index].bookingSchedule!.signUpUser!.firstName}",
-                                  status: listSort[index].longtermStatus == 0
-                                      ? "Chờ"
-                                      : listSort[index].longtermStatus == 1
+                                  status: listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName == "Tư vấn trị liệu" && listSort[index].longtermStatus == 0
+                                      ? "Chờ xếp lịch":
+                                   listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName == "Trị liệu dài hạn" && listSort[index].longtermStatus == 0
                                           ? "Đã được lên lịch"
-                                          : "Đang điều trị");
+                                          : "Đã được lên lịch");
                             }
                           },
                         ),
                         onRefresh: () async {
-                          CallAPI().getLongTermListByStatus(3);
                           setState(() {});
                         });
                   } else {

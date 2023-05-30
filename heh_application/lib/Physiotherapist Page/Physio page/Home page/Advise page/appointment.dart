@@ -8,6 +8,7 @@ import 'package:heh_application/models/chat_model/user_chat.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:heh_application/util/date_time_format.dart';
+import 'package:intl/intl.dart';
 
 class AppointmentPage extends StatefulWidget {
   AppointmentPage({Key? key, required this.firebaseFirestoreBase})
@@ -89,6 +90,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
       {required String icon,
       required FirebaseFirestoreBase firebaseFirestoreBase,
       required BookingDetail bookingDetail,
+        weekDay,
       name,
       time,
       bookedFor,
@@ -150,7 +152,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                 style: Theme.of(context).textTheme.bodyText2,
                               ),
                               Text(
-                                date,
+                                '$weekDay $date',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     color: Colors.black),
@@ -237,70 +239,57 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     if (listSort.isNotEmpty) {
                       return RefreshIndicator(
                         child: ListView.builder(
-                            itemCount: snapshot.data!.length,
+                            itemCount: listSort.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              if (snapshot.data![index].shorttermStatus! < 3) {
+
                                 print(index);
-                                String day = DateTimeFormat.formatDate(snapshot
-                                    .data![index]
+                                String day = DateTimeFormat.formatDate(listSort[index]
                                     .bookingSchedule!
                                     .schedule!
                                     .slot!
                                     .timeStart);
                                 String start = DateTimeFormat.formateTime(
-                                    snapshot.data![index].bookingSchedule!
+                                    listSort[index].bookingSchedule!
                                         .schedule!.slot!.timeStart);
-                                String end = DateTimeFormat.formateTime(snapshot
-                                    .data![index]
+                                String end = DateTimeFormat.formateTime(listSort[index]
                                     .bookingSchedule!
                                     .schedule!
                                     .slot!
                                     .timeEnd);
-
+                                String weekDay = "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(listSort[index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
+                                if (weekDay =="Thứ 8"){
+                                  weekDay = "Chủ Nhật";
+                                }
                                 return ServicePaid(
-                                  bookingDetail: snapshot.data![index],
+                                  bookingDetail: listSort[index],
                                   firebaseFirestoreBase:
                                       widget.firebaseFirestoreBase,
                                   icon:
                                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
                                   name:
-                                      "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                                      "${listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
                                   date: "$day",
+                                  weekDay:weekDay,
                                   time: "$start - $end",
                                   bookedFor:
-                                      "${snapshot.data![index].bookingSchedule!.subProfile!.subName}",
+                                      "${listSort[index].bookingSchedule!.subProfile!.subName}",
                                   press: () {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 AdviseDetailPage(
-                                                    bookingSchedule: snapshot
-                                                        .data![index]
+                                                    bookingSchedule: listSort[index]
                                                         .bookingSchedule)));
                                   },
                                 );
-                              } else {
-                                return Container(
-                                    // padding: const EdgeInsets.symmetric(vertical: 280),
-                                    // child: const Center(
-                                    //   child: Text(
-                                    //     "Hiện tại không có lịch đặt hẹn",
-                                    //     style: TextStyle(fontSize: 18, color: Colors.grey),
-                                    //   ),
-                                    // ),
-                                    );
-                              }
+
                             }),
                         onRefresh: () async {
-                          CallAPI()
-                              .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                                  sharedPhysiotherapist!.physiotherapistID,
-                                  'Tư vấn trị liệu',
-                                  1,
-                                  -1,
-                                  "");
+                          setState(() {
+
+                          });
                         },
                       );
                     } else {
