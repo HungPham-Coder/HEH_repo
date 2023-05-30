@@ -94,31 +94,6 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
       child: Column(
         children: [
           const SizedBox(height: 10),
-          TextButton(
-            onPressed: () {
-              // InAppWebView(
-              //   initialUrlRequest: URLRequest(
-              //     url: Uri.parse("https://www.google.com"),
-              //   ),
-              //   onWebViewCreated: (controller) {
-              //     _webViewController = controller;
-              //   },
-              //   onProgressChanged: (controller, progress) {
-              //     setState(() {
-              //       _progress = progress / 100;
-              //     });
-              //   },
-              //   onLoadStop: (controller, url) {
-              //     if (url ==
-              //         "https://taskuatapi.hisoft.vn/api/Payment/callbackVNPayGW") {
-              //       // Navigator.pop(context);
-              //       controller.goBack();
-              //     }
-              //   },
-              // );
-            },
-            child: const Text("ABC"),
-          ),
           const Text("Hình thức thanh toán",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
           Row(

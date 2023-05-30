@@ -204,12 +204,18 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                 visible = false;
                 color =  Colors.green;
               }
+              String weekDay = "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(bookingDetail.bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
+              if (weekDay =="Thứ 8"){
+                weekDay = "Chủ Nhật";
+              }
+              String day = DateTimeFormat.formatDate(bookingDetail.bookingSchedule!.schedule!.slot!.timeStart);
               return SessionScheduleMenu(
                 visible: visible,
                 color: color,
                 name:
                     "Người điều trị: ${bookingDetail.bookingSchedule!.subProfile!.signUpUser!.firstName}",
                 time: "Khung giờ: ${start}-${end}",
+                day: "$weekDay ngày $day",
                 icon:
                     "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbooking.png?alt=media&token=aa78656d-2651-42a4-810e-07c273cdfe5a",
                 buttonPress: () {
