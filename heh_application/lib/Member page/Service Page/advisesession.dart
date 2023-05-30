@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:heh_application/Member%20page/Service%20Page/Advise%20page/chooseTime.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Advise%20page/physioChoose.dart';
 
 class AdviseSession extends StatefulWidget {
-   AdviseSession({Key? key, required this.typeName}) : super(key: key);
+  AdviseSession({Key? key, required this.typeName}) : super(key: key);
   String typeName;
   @override
   State<AdviseSession> createState() => _AdviseSessionState();
@@ -34,7 +35,9 @@ class _AdviseSessionState extends State<AdviseSession> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>  PhysioChoosePage(typeName: widget.typeName,)));
+                        builder: (context) => PhysioChoosePage(
+                              typeName: widget.typeName,
+                            )));
               },
             ),
             AdviseMenu(
@@ -45,7 +48,9 @@ class _AdviseSessionState extends State<AdviseSession> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>  ChooseTimePage(typeName: widget.typeName,)));
+                        builder: (context) => ChooseTimePage(
+                              typeName: widget.typeName,
+                            )));
               },
             ),
           ],

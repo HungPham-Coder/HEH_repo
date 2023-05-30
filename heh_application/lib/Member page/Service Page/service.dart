@@ -3,6 +3,7 @@ import 'package:heh_application/Login%20page/landing_page.dart';
 
 import 'package:heh_application/Member%20page/Service%20Page/advisesession.dart';
 import 'package:heh_application/Member%20page/Messenger%20page/messenger_page.dart';
+import 'package:heh_application/Member%20page/navigation_main.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 import 'package:heh_application/models/chat_model/user_chat.dart';
 import 'package:heh_application/models/type_of_slot.dart';
@@ -12,18 +13,18 @@ import 'package:heh_application/services/chat_provider.dart';
 import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:provider/provider.dart';
 
-class Physiotherapist extends StatefulWidget {
-  const Physiotherapist({
+class ServicePage extends StatefulWidget {
+  const ServicePage({
     Key? key,
     this.currentUser,
   }) : super(key: key);
   final SignUpUser? currentUser;
 
   @override
-  State<Physiotherapist> createState() => _PhysiotherapistState();
+  State<ServicePage> createState() => _ServicePageState();
 }
 
-class _PhysiotherapistState extends State<Physiotherapist> {
+class _ServicePageState extends State<ServicePage> {
   UserChat? opponentUser;
 
   Future<void> loadPhysioTherapistAccount() async {
@@ -50,6 +51,7 @@ class _PhysiotherapistState extends State<Physiotherapist> {
 
     // print("${sharedSignupUser!.firstName} physio");
     String physioIcon = 'assets/icons/physio.png';
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

@@ -36,43 +36,37 @@ class _CategoryPageState extends State<CategoryPage> {
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),
-      body: SingleChildScrollView(
-        physics: const ScrollPhysics(),
-        child: Column(
-          children: [
-            FutureBuilder<List<CategoryModel>>(
-              future: CallAPI().getAllCategory(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return RefreshIndicator(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          return MenuListView(
-                            icon: snapshot.data![index].iconUrl!,
-                            text: "${snapshot.data![index].categoryName}",
-                            press: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ExercisePage(
-                                          categoryID: snapshot
-                                              .data![index].categoryID)));
-                            },
-                          );
-                        },
-                      ),
-                      onRefresh: () async {
-                        await CallAPI().getAllCategory();
-                        setState(() {});
-                      });
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-          ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          CallAPI().getAllCategory();
+          setState(() {});
+        },
+        child: FutureBuilder<List<CategoryModel>>(
+          future: CallAPI().getAllCategory(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return MenuListView(
+                    icon: snapshot.data![index].iconUrl!,
+                    text: "${snapshot.data![index].categoryName}",
+                    press: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ExercisePage(
+                                  categoryID:
+                                      snapshot.data![index].categoryID)));
+                    },
+                  );
+                },
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
         ),
       ),
     );

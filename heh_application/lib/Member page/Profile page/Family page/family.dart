@@ -39,66 +39,61 @@ class _FamilyPageState extends State<FamilyPage> {
           elevation: 10,
           backgroundColor: const Color.fromARGB(255, 46, 161, 226),
         ),
-        body: SingleChildScrollView(
-          physics: ScrollPhysics(),
-          child: Column(
-            children: [
-              // const SizedBox(height: 20),
-              FutureBuilder<List<SubProfile>?>(
-                  future: CallAPI()
-                      .getallSubProfileByUserId(sharedCurrentUser!.userID!, ""),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data!.length > 0) {
-                        return ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              DateTime tempDate = new DateFormat("yyyy-MM-dd")
-                                  .parse(snapshot.data![index].dob!);
+        body: RefreshIndicator(
+          onRefresh: () async {
+            CallAPI().getallSubProfileByUserId(sharedCurrentUser!.userID!, "");
+            setState(() {});
+          },
+          child: FutureBuilder<List<SubProfile>?>(
+              future: CallAPI()
+                  .getallSubProfileByUserId(sharedCurrentUser!.userID!, ""),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.length > 0) {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          DateTime tempDate = new DateFormat("yyyy-MM-dd")
+                              .parse(snapshot.data![index].dob!);
 
-                              int age = DateTime.now().year - tempDate.year;
+                          int age = DateTime.now().year - tempDate.year;
 
-                              return ProfileMenu(
-                                icon:
-                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fperson.svg?alt=media&token=7bef043d-fdb5-4c5b-bb2e-644ee7682345",
-                                name: "${snapshot.data![index].subName}",
-                                relationship:
-                                    "${snapshot.data![index].relationship!.relationName} - ",
-                                text: "$age tuổi",
-                                press: () async {
-                                  MedicalRecord? medicalRecord = await CallAPI()
-                                      .getMedicalRecordBySubProfileID(
-                                          snapshot.data![index].profileID!);
-                                  setState(() {
-                                    sharedSubprofile = snapshot.data![index];
-                                  });
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              FamilyPersonalPage(
-                                                subProfile:
-                                                    snapshot.data![index],
-                                                medicalRecord: medicalRecord,
-                                              ))).then((value) {});
-                                },
-                              );
-                            });
-                      } else {
-                        return Center(
-                          child: Container(),
-                        );
-                      }
-                    } else {
-                      return Center(
-                        child: Container(),
-                      );
-                    }
-                  }),
-            ],
-          ),
+                          return ProfileMenu(
+                            icon:
+                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fperson.svg?alt=media&token=7bef043d-fdb5-4c5b-bb2e-644ee7682345",
+                            name: "${snapshot.data![index].subName}",
+                            relationship:
+                                "${snapshot.data![index].relationship!.relationName} - ",
+                            text: "$age tuổi",
+                            press: () async {
+                              MedicalRecord? medicalRecord = await CallAPI()
+                                  .getMedicalRecordBySubProfileID(
+                                      snapshot.data![index].profileID!);
+                              setState(() {
+                                sharedSubprofile = snapshot.data![index];
+                              });
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FamilyPersonalPage(
+                                            subProfile: snapshot.data![index],
+                                            medicalRecord: medicalRecord,
+                                          ))).then((value) {});
+                            },
+                          );
+                        });
+                  } else {
+                    return Center(
+                      child: Container(),
+                    );
+                  }
+                } else {
+                  return Center(
+                    child: Container(),
+                  );
+                }
+              }),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {

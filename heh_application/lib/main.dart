@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Login page/landing_page.dart';
 import 'SignUp Page/signup.dart';
 import 'models/sign_up_user.dart';
+
 SharedPreferences? preferences;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,14 +41,17 @@ Future<void> main() async {
       await PlatformAssetBundle().load('assets/ca/lets-encrypt-r3.pem');
   SecurityContext.defaultContext
       .setTrustedCertificatesBytes(data.buffer.asUint8List());
-  await Firebase.initializeApp(
-  );
+  await Firebase.initializeApp();
 
   runApp(Provider<AuthBase>(
     create: (context) => Auth(),
-    child:  MaterialApp(
+    child: MaterialApp(
+      initialRoute: "/",
       debugShowCheckedModeBanner: false,
-      home: WelcomePage1() ,
+      // home: WelcomePage1(),
+      routes: {
+        '/': (context) => const WelcomePage1(),
+      },
     ),
   ));
 }

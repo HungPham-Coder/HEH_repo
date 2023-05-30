@@ -46,32 +46,34 @@ class SearchCategory extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return FutureBuilder<List<CategoryModel>>(
-        future: CallAPI().getAllCategory(query: query),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return MenuListView(
-                  icon: snapshot.data![index].iconUrl!,
-                  text: snapshot.data![index].categoryName,
-                  press: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ExercisePage(
-                                categoryID: snapshot.data![index].categoryID)));
+    return SingleChildScrollView(
+        child: FutureBuilder<List<CategoryModel>>(
+            future: CallAPI().getAllCategory(query: query),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return MenuListView(
+                      icon: snapshot.data![index].iconUrl!,
+                      text: snapshot.data![index].categoryName,
+                      press: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ExercisePage(
+                                    categoryID:
+                                        snapshot.data![index].categoryID)));
+                      },
+                    );
                   },
                 );
-              },
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            }));
   }
 
   List<String> searchResults = [];
@@ -84,7 +86,8 @@ class SearchCategory extends SearchDelegate {
       return result.contains(input);
     }).toList();
 
-    return FutureBuilder<List<CategoryModel>>(
+    return SingleChildScrollView(
+        child: FutureBuilder<List<CategoryModel>>(
       future: CallAPI().getAllCategory(query: query),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -115,7 +118,7 @@ class SearchCategory extends SearchDelegate {
           return const Center(child: CircularProgressIndicator());
         }
       },
-    );
+    ));
   }
 }
 
@@ -147,41 +150,42 @@ class SearchExercise extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
-    return FutureBuilder<List<Exercise>?>(
-        future: auth.getListExerciseByCategoryID(
-            categoryID!, sharedResultLogin!.accessToken!, query),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return MenuListView(
-                  icon:
-                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/category%2Fbackache.png?alt=media&token=56f8cdbd-7ca2-46d8-a60b-93cfc4951c91",
-                  text: "${snapshot.data![index].exerciseName}",
-                  press: () async {
-                    // List<ExerciseDetail1> exerciseDetailList = await CallAPI()
-                    //     .getExerciseDetailByExerciseID(
-                    //         snapshot.data![index].exerciseID);
-                    // ExerciseResource exerciseResource = await CallAPI()
-                    //     .getExerciseResourceByExerciseDetailID(
-                    //         exerciseDetail.exerciseDetailID);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ExerciseDetail(
-                        exerciseID: snapshot.data![index].exerciseID,
-                      );
-                    }));
+    return SingleChildScrollView(
+        child: FutureBuilder<List<Exercise>?>(
+            future: auth.getListExerciseByCategoryID(
+                categoryID!, sharedResultLogin!.accessToken!, query),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return MenuListView(
+                      icon:
+                          "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/category%2Fbackache.png?alt=media&token=56f8cdbd-7ca2-46d8-a60b-93cfc4951c91",
+                      text: "${snapshot.data![index].exerciseName}",
+                      press: () async {
+                        // List<ExerciseDetail1> exerciseDetailList = await CallAPI()
+                        //     .getExerciseDetailByExerciseID(
+                        //         snapshot.data![index].exerciseID);
+                        // ExerciseResource exerciseResource = await CallAPI()
+                        //     .getExerciseResourceByExerciseDetailID(
+                        //         exerciseDetail.exerciseDetailID);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ExerciseDetail(
+                            exerciseID: snapshot.data![index].exerciseID,
+                          );
+                        }));
+                      },
+                    );
                   },
                 );
-              },
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            }));
   }
 
   List<String> searchResults = [];
@@ -194,7 +198,8 @@ class SearchExercise extends SearchDelegate {
       return result.contains(input);
     }).toList();
     final auth = Provider.of<AuthBase>(context, listen: false);
-    return FutureBuilder<List<Exercise>?>(
+    return SingleChildScrollView(
+        child: FutureBuilder<List<Exercise>?>(
       future: auth.getListExerciseByCategoryID(
           categoryID!, sharedResultLogin!.accessToken!, query),
       builder: (context, snapshot) {
@@ -226,7 +231,7 @@ class SearchExercise extends SearchDelegate {
           return const Center(child: CircularProgressIndicator());
         }
       },
-    );
+    ));
   }
 }
 
@@ -257,36 +262,37 @@ class SearchExerciseDetail extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return FutureBuilder<List<ExerciseDetail1>>(
-        future: CallAPI().getExerciseDetailByExerciseID(
-            query: query, exerciseID: exerciseID),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return MenuListView(
-                  icon:
-                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbackache.png?alt=media&token=d725e1f5-c106-41f7-9ee5-ade77c464a54",
-                  text: "${snapshot.data![index].detailName}",
-                  press: () async {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ExerciseResources(
-                        exerciseDetail: snapshot.data![index],
-                        // exerciseResource: exerciseResource,
-                      );
-                    }));
+    return SingleChildScrollView(
+        child: FutureBuilder<List<ExerciseDetail1>>(
+            future: CallAPI().getExerciseDetailByExerciseID(
+                query: query, exerciseID: exerciseID),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return MenuListView(
+                      icon:
+                          "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbackache.png?alt=media&token=d725e1f5-c106-41f7-9ee5-ade77c464a54",
+                      text: "${snapshot.data![index].detailName}",
+                      press: () async {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ExerciseResources(
+                            exerciseDetail: snapshot.data![index],
+                            // exerciseResource: exerciseResource,
+                          );
+                        }));
+                      },
+                    );
                   },
                 );
-              },
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            }));
   }
 
   List<String> searchResults = [];
@@ -299,7 +305,8 @@ class SearchExerciseDetail extends SearchDelegate {
       return result.contains(input);
     }).toList();
 
-    return FutureBuilder<List<ExerciseDetail1>>(
+    return SingleChildScrollView(
+        child: FutureBuilder<List<ExerciseDetail1>>(
       future: CallAPI()
           .getExerciseDetailByExerciseID(query: query, exerciseID: exerciseID),
       builder: (context, snapshot) {
@@ -331,7 +338,7 @@ class SearchExerciseDetail extends SearchDelegate {
           return const Center(child: CircularProgressIndicator());
         }
       },
-    );
+    ));
   }
 }
 
@@ -366,39 +373,40 @@ class SearchExerciseResource extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return FutureBuilder<List<ExerciseResource>?>(
-        future: CallAPI()
-            .getExerciseResourceByExerciseDetailID(exerciseDetailID!, query),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              // physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return ResourceListView(
-                  icon: snapshot.data![index].imageURL!,
-                  text: snapshot.data![index].resourceName!,
-                  press: () async {
-                    // List<ExerciseDetail1> exerciseDetailList =
-                    //     await CallAPI()
-                    //         .getExerciseDetailByExerciseID(widget
-                    //             .exerciseDetail!.exerciseID);
+    return SingleChildScrollView(
+        child: FutureBuilder<List<ExerciseResource>?>(
+            future: CallAPI().getExerciseResourceByExerciseDetailID(
+                exerciseDetailID!, query),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  // physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return ResourceListView(
+                      icon: snapshot.data![index].imageURL!,
+                      text: snapshot.data![index].resourceName!,
+                      press: () async {
+                        // List<ExerciseDetail1> exerciseDetailList =
+                        //     await CallAPI()
+                        //         .getExerciseDetailByExerciseID(widget
+                        //             .exerciseDetail!.exerciseID);
 
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ExerciseResourcesDetail(
-                        exerciseResource: snapshot.data![index],
-                      );
-                    }));
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ExerciseResourcesDetail(
+                            exerciseResource: snapshot.data![index],
+                          );
+                        }));
+                      },
+                    );
                   },
                 );
-              },
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            }));
   }
 
   List<String> searchResults = [];
@@ -411,7 +419,8 @@ class SearchExerciseResource extends SearchDelegate {
       return result.contains(input);
     }).toList();
 
-    return FutureBuilder<List<ExerciseResource>?>(
+    return SingleChildScrollView(
+        child: FutureBuilder<List<ExerciseResource>?>(
       future: CallAPI()
           .getExerciseResourceByExerciseDetailID(exerciseDetailID!, query),
       builder: (context, snapshot) {
@@ -443,7 +452,7 @@ class SearchExerciseResource extends SearchDelegate {
           return const Center(child: CircularProgressIndicator());
         }
       },
-    );
+    ));
   }
 }
 
@@ -478,57 +487,58 @@ class SearchFamilyName extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return FutureBuilder<List<SubProfile>?>(
-        future: CallAPI()
-            .getallSubProfileByUserId(sharedCurrentUser!.userID!, query),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data!.length > 0) {
-              return ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    DateTime tempDate = new DateFormat("yyyy-MM-dd")
-                        .parse(snapshot.data![index].dob!);
+    return SingleChildScrollView(
+        child: FutureBuilder<List<SubProfile>?>(
+            future: CallAPI()
+                .getallSubProfileByUserId(sharedCurrentUser!.userID!, query),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data!.length > 0) {
+                  return ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        DateTime tempDate = new DateFormat("yyyy-MM-dd")
+                            .parse(snapshot.data![index].dob!);
 
-                    int age = DateTime.now().year - tempDate.year;
+                        int age = DateTime.now().year - tempDate.year;
 
-                    return ProfileMenu(
-                      icon:
-                          "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fperson.svg?alt=media&token=7bef043d-fdb5-4c5b-bb2e-644ee7682345",
-                      name: "${snapshot.data![index].subName}",
-                      relationship:
-                          "${snapshot.data![index].relationship!.relationName} - ",
-                      text: "$age tuổi",
-                      press: () async {
-                        MedicalRecord? medicalRecord = await CallAPI()
-                            .getMedicalRecordBySubProfileID(
-                                snapshot.data![index].profileID!);
-                        // setState(() {
-                        sharedSubprofile = snapshot.data![index];
-                        // });
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FamilyPersonalPage(
-                                      subProfile: snapshot.data![index],
-                                      medicalRecord: medicalRecord,
-                                    ))).then((value) {});
-                      },
-                    );
-                  });
-            } else {
-              return Center(
-                child: Container(),
-              );
-            }
-          } else {
-            return Center(
-              child: Container(),
-            );
-          }
-        });
+                        return ProfileMenu(
+                          icon:
+                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fperson.svg?alt=media&token=7bef043d-fdb5-4c5b-bb2e-644ee7682345",
+                          name: "${snapshot.data![index].subName}",
+                          relationship:
+                              "${snapshot.data![index].relationship!.relationName} - ",
+                          text: "$age tuổi",
+                          press: () async {
+                            MedicalRecord? medicalRecord = await CallAPI()
+                                .getMedicalRecordBySubProfileID(
+                                    snapshot.data![index].profileID!);
+                            // setState(() {
+                            sharedSubprofile = snapshot.data![index];
+                            // });
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => FamilyPersonalPage(
+                                          subProfile: snapshot.data![index],
+                                          medicalRecord: medicalRecord,
+                                        ))).then((value) {});
+                          },
+                        );
+                      });
+                } else {
+                  return Center(
+                    child: Container(),
+                  );
+                }
+              } else {
+                return Center(
+                  child: Container(),
+                );
+              }
+            }));
   }
 
   List<String> searchResults = [];
@@ -541,7 +551,8 @@ class SearchFamilyName extends SearchDelegate {
       return result.contains(input);
     }).toList();
 
-    return FutureBuilder<List<SubProfile>?>(
+    return SingleChildScrollView(
+        child: FutureBuilder<List<SubProfile>?>(
       future:
           CallAPI().getallSubProfileByUserId(sharedCurrentUser!.userID!, query),
       builder: (context, snapshot) {
@@ -573,7 +584,7 @@ class SearchFamilyName extends SearchDelegate {
           return const Center(child: CircularProgressIndicator());
         }
       },
-    );
+    ));
   }
 }
 
@@ -608,7 +619,8 @@ class SearchSchedule extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return FutureBuilder<List<Schedule>?>(
+    return SingleChildScrollView(
+        child: FutureBuilder<List<Schedule>?>(
       future: CallAPI().getallSlotByPhysiotherapistID(
           sharedPhysiotherapist!.physiotherapistID, query),
       builder: (context, snapshot) {
@@ -666,7 +678,7 @@ class SearchSchedule extends SearchDelegate {
           );
         }
       },
-    );
+    ));
   }
 
   List<String> searchResults = [];
@@ -679,7 +691,8 @@ class SearchSchedule extends SearchDelegate {
       return result.contains(input);
     }).toList();
 
-    return FutureBuilder<List<Schedule>?>(
+    return SingleChildScrollView(
+        child: FutureBuilder<List<Schedule>?>(
       future: CallAPI().getallSlotByPhysiotherapistID(
           sharedPhysiotherapist!.physiotherapistID, query),
       builder: (context, snapshot) {
@@ -711,7 +724,7 @@ class SearchSchedule extends SearchDelegate {
           return const Center(child: CircularProgressIndicator());
         }
       },
-    );
+    ));
   }
 }
 
@@ -755,136 +768,138 @@ class SearchDoneAdvice extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return FutureBuilder<List<BookingDetail>?>(
-        future: CallAPI()
-            .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                sharedPhysiotherapist!.physiotherapistID,
-                'Tư vấn trị liệu',
-                3,
-                -1,
-                ""),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data!.isNotEmpty) {
-              List<BookingDetail> listSort = [];
-              for (var item in snapshot.data!) {
-                if (item.longtermStatus == -1) {
-                  listSort.add(item);
+    return SingleChildScrollView(
+        child: FutureBuilder<List<BookingDetail>?>(
+            future: CallAPI()
+                .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                    sharedPhysiotherapist!.physiotherapistID,
+                    'Tư vấn trị liệu',
+                    3,
+                    -1,
+                    ""),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data!.isNotEmpty) {
+                  List<BookingDetail> listSort = [];
+                  for (var item in snapshot.data!) {
+                    if (item.longtermStatus == -1) {
+                      listSort.add(item);
+                    }
+                  }
+                  if (listSort.isNotEmpty) {
+                    return RefreshIndicator(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            bool visible = true;
+                            String subName;
+
+                            if (snapshot.data![index].bookingSchedule!
+                                    .subProfile!.relationship!.relationName ==
+                                "Tôi") {
+                              visible = false;
+
+                              subName = "";
+                            } else {
+                              subName = snapshot.data![index].bookingSchedule!
+                                  .subProfile!.subName;
+                            }
+                            String date = DateTimeFormat.formatDate(snapshot
+                                .data![index]
+                                .bookingSchedule!
+                                .schedule!
+                                .slot!
+                                .timeStart);
+                            String start = DateTimeFormat.formateTime(snapshot
+                                .data![index]
+                                .bookingSchedule!
+                                .schedule!
+                                .slot!
+                                .timeStart);
+                            String end = DateTimeFormat.formateTime(snapshot
+                                .data![index]
+                                .bookingSchedule!
+                                .schedule!
+                                .slot!
+                                .timeEnd);
+                            if (snapshot.data![index].longtermStatus == -1) {
+                              return ServicePaid(
+                                  icon:
+                                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
+                                  date: "$date",
+                                  name:
+                                      "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
+                                  subName: subName,
+                                  time: "$start - $end",
+                                  status: 'xong',
+                                  press: () {
+                                    String bookingScheduleID =
+                                        snapshot.data![index].bookingScheduleID;
+                                    BookingDetail bookingDetail = BookingDetail(
+                                        bookingDetailID: snapshot
+                                            .data![index].bookingDetailID,
+                                        bookingScheduleID: bookingScheduleID,
+                                        longtermStatus: 0,
+                                        shorttermStatus: 3);
+                                    CallAPI().updateBookingDetailStatus(
+                                        bookingDetail);
+
+                                    Navigator.pop(context);
+                                  },
+                                  visible: visible);
+                            } else {
+                              return Center(
+                                child: Container(
+                                    // padding: const EdgeInsets.symmetric(vertical: 150),
+                                    // child: Text(
+                                    //   "Hiện tại đã hết slot có thể đăng ký",
+                                    //   style: TextStyle(
+                                    //       color: Colors.grey[500], fontSize: 16),
+                                    // ),
+                                    ),
+                              );
+                            }
+                          }),
+                      onRefresh: () async {
+                        CallAPI()
+                            .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                                sharedPhysiotherapist!.physiotherapistID,
+                                'Tư vấn trị liệu',
+                                3,
+                                -1,
+                                "");
+                      },
+                    );
+                  } else {
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 150),
+                        child: Text(
+                          "Hiện tại chưa có slot tư vấn trị liệu nào hoàn thành",
+                          style:
+                              TextStyle(color: Colors.grey[500], fontSize: 16),
+                        ),
+                      ),
+                    );
+                  }
+                } else {
+                  return Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 150),
+                      child: Text(
+                        "Hiện tại chưa có slot tư vấn trị liệu nào hoàn thành",
+                        style: TextStyle(color: Colors.grey[500], fontSize: 16),
+                      ),
+                    ),
+                  );
                 }
-              }
-              if (listSort.isNotEmpty) {
-                return RefreshIndicator(
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        bool visible = true;
-                        String subName;
-
-                        if (snapshot.data![index].bookingSchedule!.subProfile!
-                                .relationship!.relationName ==
-                            "Tôi") {
-                          visible = false;
-
-                          subName = "";
-                        } else {
-                          subName = snapshot.data![index].bookingSchedule!
-                              .subProfile!.subName;
-                        }
-                        String date = DateTimeFormat.formatDate(snapshot
-                            .data![index]
-                            .bookingSchedule!
-                            .schedule!
-                            .slot!
-                            .timeStart);
-                        String start = DateTimeFormat.formateTime(snapshot
-                            .data![index]
-                            .bookingSchedule!
-                            .schedule!
-                            .slot!
-                            .timeStart);
-                        String end = DateTimeFormat.formateTime(snapshot
-                            .data![index]
-                            .bookingSchedule!
-                            .schedule!
-                            .slot!
-                            .timeEnd);
-                        if (snapshot.data![index].longtermStatus == -1) {
-                          return ServicePaid(
-                              icon:
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
-                              date: "$date",
-                              name:
-                                  "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
-                              subName: subName,
-                              time: "$start - $end",
-                              status: 'xong',
-                              press: () {
-                                String bookingScheduleID =
-                                    snapshot.data![index].bookingScheduleID;
-                                BookingDetail bookingDetail = BookingDetail(
-                                    bookingDetailID:
-                                        snapshot.data![index].bookingDetailID,
-                                    bookingScheduleID: bookingScheduleID,
-                                    longtermStatus: 0,
-                                    shorttermStatus: 3);
-                                CallAPI()
-                                    .updateBookingDetailStatus(bookingDetail);
-
-                                Navigator.pop(context);
-                              },
-                              visible: visible);
-                        } else {
-                          return Center(
-                            child: Container(
-                                // padding: const EdgeInsets.symmetric(vertical: 150),
-                                // child: Text(
-                                //   "Hiện tại đã hết slot có thể đăng ký",
-                                //   style: TextStyle(
-                                //       color: Colors.grey[500], fontSize: 16),
-                                // ),
-                                ),
-                          );
-                        }
-                      }),
-                  onRefresh: () async {
-                    CallAPI()
-                        .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                            sharedPhysiotherapist!.physiotherapistID,
-                            'Tư vấn trị liệu',
-                            3,
-                            -1,
-                            "");
-                  },
-                );
               } else {
                 return Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 150),
-                    child: Text(
-                      "Hiện tại chưa có slot tư vấn trị liệu nào hoàn thành",
-                      style: TextStyle(color: Colors.grey[500], fontSize: 16),
-                    ),
-                  ),
+                  child: Container(),
                 );
               }
-            } else {
-              return Center(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 150),
-                  child: Text(
-                    "Hiện tại chưa có slot tư vấn trị liệu nào hoàn thành",
-                    style: TextStyle(color: Colors.grey[500], fontSize: 16),
-                  ),
-                ),
-              );
-            }
-          } else {
-            return Center(
-              child: Container(),
-            );
-          }
-        });
+            }));
   }
 
   List<String> searchResults = [];
@@ -897,7 +912,8 @@ class SearchDoneAdvice extends SearchDelegate {
       return result.contains(input);
     }).toList();
 
-    return FutureBuilder<List<BookingDetail>?>(
+    return SingleChildScrollView(
+        child: FutureBuilder<List<BookingDetail>?>(
       future: CallAPI()
           .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
               sharedPhysiotherapist!.physiotherapistID,
@@ -934,7 +950,7 @@ class SearchDoneAdvice extends SearchDelegate {
           return const Center(child: CircularProgressIndicator());
         }
       },
-    );
+    ));
   }
 
   Widget ServicePaid(

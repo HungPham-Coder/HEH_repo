@@ -45,11 +45,11 @@ class CallAPI {
     if (response.statusCode == 200) {
       // return auth.signInWithEmailAndPassword(loginUser.phone, loginUser.password);
       Map<String, dynamic> responseBody = json.decode(response.body);
-      Map<String, dynamic> result = responseBody["result"];
+      Map<String, dynamic> result = responseBody;
 
       final headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer ${result["access_token"]}",
+        "Authorization": "Bearer ${["access_token"]}",
       };
 
       return ResultLogin.fromMap(result);
@@ -73,7 +73,7 @@ class CallAPI {
       "gender": signUpUser.gender,
       "bookingStatus": false,
       "banStatus": false,
-      "dateCreated" : signUpUser.DateCreated
+      "dateCreated": signUpUser.DateCreated
     });
     final headers = {
       "Accept": "application/json",
@@ -1518,6 +1518,25 @@ class CallAPI {
     var response = await http.post(url, body: body, headers: headers);
     if (response.statusCode == 200) {
       return BookingDetail.fromMap(json.decode(response.body));
+    } else {
+      throw Exception('Failed to add BookingDetail');
+    }
+  }
+
+  Future<String> deleteBookingDetailbyID(String bookingDetailID) async {
+    var url = Uri.parse('${link}api/BookingDetail/$bookingDetailID');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+    final body = jsonEncode({
+      "bookingDetailID": bookingDetailID,
+    });
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.delete(url, body: body, headers: headers);
+    if (response.statusCode == 200) {
+      return "Success";
     } else {
       throw Exception('Failed to add BookingDetail');
     }

@@ -40,8 +40,12 @@ class _ExercisePageState extends State<ExercisePage> {
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),
-      body: SingleChildScrollView(
-        physics: const ScrollPhysics(),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await auth.getListExerciseByCategoryID(
+              widget.categoryID, sharedResultLogin!.accessToken!, "");
+          setState(() {});
+        },
         child: Column(
           children: [
             FutureBuilder<List<Exercise>?>(
@@ -50,40 +54,30 @@ class _ExercisePageState extends State<ExercisePage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length > 0) {
-                      return RefreshIndicator(
-                        child: ListView.builder(
-                          physics: AlwaysScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            return MenuListView(
-                              icon:
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/category%2Fbackache.png?alt=media&token=56f8cdbd-7ca2-46d8-a60b-93cfc4951c91",
-                              text: "${snapshot.data![index].exerciseName}",
-                              press: () async {
-                                // List<ExerciseDetail1> exerciseDetailList = await CallAPI()
-                                //     .getExerciseDetailByExerciseID(
-                                //         snapshot.data![index].exerciseID);
-                                // ExerciseResource exerciseResource = await CallAPI()
-                                //     .getExerciseResourceByExerciseDetailID(
-                                //         exerciseDetail.exerciseDetailID);
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return ExerciseDetail(
-                                    exerciseID:
-                                        snapshot.data![index].exerciseID,
-                                  );
-                                }));
-                              },
-                            );
-                          },
-                        ),
-                        onRefresh: () async {
-                          await auth.getListExerciseByCategoryID(
-                              widget.categoryID,
-                              sharedResultLogin!.accessToken!,
-                              "");
-                          setState(() {});
+                      return ListView.builder(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return MenuListView(
+                            icon:
+                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/category%2Fbackache.png?alt=media&token=56f8cdbd-7ca2-46d8-a60b-93cfc4951c91",
+                            text: "${snapshot.data![index].exerciseName}",
+                            press: () async {
+                              // List<ExerciseDetail1> exerciseDetailList = await CallAPI()
+                              //     .getExerciseDetailByExerciseID(
+                              //         snapshot.data![index].exerciseID);
+                              // ExerciseResource exerciseResource = await CallAPI()
+                              //     .getExerciseResourceByExerciseDetailID(
+                              //         exerciseDetail.exerciseDetailID);
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return ExerciseDetail(
+                                  exerciseID: snapshot.data![index].exerciseID,
+                                );
+                              }));
+                            },
+                          );
                         },
                       );
                     } else {

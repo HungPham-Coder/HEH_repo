@@ -114,83 +114,66 @@ class _ExerciseResourcesState extends State<ExerciseResources> {
           ),
           backgroundColor: const Color.fromARGB(255, 46, 161, 226),
         ),
-        body: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  const SizedBox(height: 5),
-                  FutureBuilder<List<ExerciseResource>?>(
-                      future: CallAPI().getExerciseResourceByExerciseDetailID(
-                          widget.exerciseDetail!.exerciseDetailID, ""),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          if (snapshot.data!.length > 0) {
-                            return RefreshIndicator(
-                              child: ListView.builder(
-                                // physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (context, index) {
-                                  return ResourceListView(
-                                    icon: snapshot.data![index].imageURL!,
-                                    text: snapshot.data![index].resourceName!,
-                                    press: () async {
-                                      // List<ExerciseDetail1> exerciseDetailList =
-                                      //     await CallAPI()
-                                      //         .getExerciseDetailByExerciseID(widget
-                                      //             .exerciseDetail!.exerciseID);
+        body: RefreshIndicator(
+          child: FutureBuilder<List<ExerciseResource>?>(
+              future: CallAPI().getExerciseResourceByExerciseDetailID(
+                  widget.exerciseDetail!.exerciseDetailID, ""),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.length > 0) {
+                    return ListView.builder(
+                      // physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        return ResourceListView(
+                          icon: snapshot.data![index].imageURL!,
+                          text: snapshot.data![index].resourceName!,
+                          press: () async {
+                            // List<ExerciseDetail1> exerciseDetailList =
+                            //     await CallAPI()
+                            //         .getExerciseDetailByExerciseID(widget
+                            //             .exerciseDetail!.exerciseID);
 
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) {
-                                        return ExerciseResourcesDetail(
-                                          exerciseResource:
-                                              snapshot.data![index],
-                                        );
-                                      }));
-                                    },
-                                  );
-                                },
-                              ),
-                              onRefresh: () async {
-                                CallAPI().getExerciseResourceByExerciseDetailID(
-                                    widget.exerciseDetail!.exerciseDetailID,
-                                    "");
-                                setState(() {});
-                              },
-                            );
-                          } else {
-                            return Center(
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 300),
-                                child: Text(
-                                  "Tài nguyyên trống",
-                                  style: TextStyle(
-                                      color: Colors.grey[500], fontSize: 16),
-                                ),
-                              ),
-                            );
-                          }
-                        } else {
-                          return Center(
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 300),
-                              child: Text(
-                                "Tài nguyên trống",
-                                style: TextStyle(
-                                    color: Colors.grey[500], fontSize: 16),
-                              ),
-                            ),
-                          );
-                        }
-                      }),
-                ],
-              ),
-            )
-          ],
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ExerciseResourcesDetail(
+                                exerciseResource: snapshot.data![index],
+                              );
+                            }));
+                          },
+                        );
+                      },
+                    );
+                  } else {
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 300),
+                        child: Text(
+                          "Tài nguyyên trống",
+                          style:
+                              TextStyle(color: Colors.grey[500], fontSize: 16),
+                        ),
+                      ),
+                    );
+                  }
+                } else {
+                  return Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 300),
+                      child: Text(
+                        "Tài nguyên trống",
+                        style: TextStyle(color: Colors.grey[500], fontSize: 16),
+                      ),
+                    ),
+                  );
+                }
+              }),
+          onRefresh: () async {
+            CallAPI().getExerciseResourceByExerciseDetailID(
+                widget.exerciseDetail!.exerciseDetailID, "");
+            setState(() {});
+          },
         ));
   }
 }

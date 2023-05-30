@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:heh_application/Login%20page/landing_page.dart';
+import 'package:heh_application/Member%20page/Service%20Page/Advise%20page/physioChoose.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Advise%20page/result.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/paymentChoose.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/paymentTime.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/success.dart';
+import 'package:heh_application/Member%20page/navigation_main.dart';
 import 'package:heh_application/models/booking_detail.dart';
 import 'package:heh_application/models/booking_schedule.dart';
 import 'package:heh_application/models/physiotherapist.dart';
@@ -30,6 +33,7 @@ class _BillChoosePageState extends State<BillChoosePage> {
   String? day;
   String? timeStart;
   String? timeEnd;
+  bool check = false;
   void formatDateAndTime() {
     DateTime tempDate =
         new DateFormat("yyyy-MM-dd").parse(widget.schedule.slot!.timeStart);
@@ -57,10 +61,12 @@ class _BillChoosePageState extends State<BillChoosePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           "Xác nhận",
           style: TextStyle(fontSize: 23),
         ),
+        centerTitle: true,
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),
@@ -149,8 +155,43 @@ class _BillChoosePageState extends State<BillChoosePage> {
                               borderRadius: BorderRadius.circular(15),
                               side: const BorderSide(color: Colors.white)),
                         )),
-                    onPressed: () {
-                      Navigator.of(context).pop();
+                    onPressed: () async {
+                      // CallAPI().getBookingDetailByID(bookingDetail!);
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: const Text("Bạn muốn hủy hóa đơn?"),
+                            actions: [
+                              TextButton(
+                                  onPressed: () async {
+                                    BookingSchedule bookingSchedule =
+                                        await CallAPI().getBookingScheduleByID(
+                                            widget.bookingSchedule!
+                                                .bookingScheduleID!);
+                                    print(widget.bookingSchedule!);
+                                    print(bookingSchedule.bookingScheduleID!);
+                                    print(widget
+                                        .bookingSchedule!.bookingScheduleID);
+                                  },
+                                  child: const Text(
+                                    "Huỷ",
+                                    style: TextStyle(color: Colors.red),
+                                  )),
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Navigation_Bar()));
+                                  },
+                                  child: const Text("Chập nhận")),
+                            ],
+                          );
+                        },
+                      );
+                      // Navigator.of(context).pop();
                     },
                     child: const Text(
                       "Trở lại",
@@ -171,25 +212,34 @@ class _BillChoosePageState extends State<BillChoosePage> {
                               side: const BorderSide(color: Colors.white)),
                         )),
                     onPressed: () async {
-                      BookingSchedule? bookingScheduleAdd = await CallAPI()
-                          .addBookingSchedule(widget.bookingSchedule!);
+                      // BookingSchedule? bookingScheduleAdd = await CallAPI()
+                      //     .addBookingSchedule(widget.bookingSchedule!);
                       BookingSchedule bookingSchedule = await CallAPI()
                           .getBookingScheduleByID(
-                              bookingScheduleAdd!.bookingScheduleID!);
+                              widget.bookingSchedule!.bookingScheduleID!);
+
                       BookingDetail bookingDetail = BookingDetail(
-                        bookingScheduleID:
-                            bookingScheduleAdd.bookingScheduleID!,
+                        bookingScheduleID: bookingSchedule.bookingScheduleID!,
                         bookingSchedule: bookingSchedule,
                         shorttermStatus: 0,
                         longtermStatus: -1,
                       );
-
+                      BookingDetail addBookingDetail =
+                          await CallAPI().addBookingDetail(bookingDetail);
+                      BookingDetail getBookingDetail = await CallAPI()
+                          .getBookingDetailByID(
+                              addBookingDetail.bookingDetailID!);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => PaymentTimePage(
-                                    bookingDetail: bookingDetail,
+                                    bookingDetail: getBookingDetail,
                                   )));
+                      // Navigator.pushNamed(
+                      //   context,
+                      //   '/payment',
+                      //   arguments: {'bookingDetail': getBookingDetail},
+                      // );
                     },
                     child: const Text(
                       "Thanh toán",

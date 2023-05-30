@@ -42,65 +42,54 @@ class _AdvicePaidPageState extends State<AdvicePaidPage> {
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          children: [
-            FutureBuilder<List<BookingDetail>>(
+      body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: RefreshIndicator(
+            child: FutureBuilder<List<BookingDetail>>(
                 future: CallAPI().getAllBookingDetailByUserIDAndTypeOfSlot(
                     sharedCurrentUser!.userID!, widget.typeName),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length > 0) {
-                      return RefreshIndicator(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              DateTime tempDate = new DateFormat("yyyy-MM-dd")
-                                  .parse(snapshot.data![index].bookingSchedule!
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          DateTime tempDate = new DateFormat("yyyy-MM-dd")
+                              .parse(snapshot.data![index].bookingSchedule!
+                                  .schedule!.slot!.timeStart);
+                          String day =
+                              DateFormat("dd-MM-yyyy").format(tempDate);
+                          DateTime tempStart =
+                              new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
+                                  snapshot.data![index].bookingSchedule!
                                       .schedule!.slot!.timeStart);
-                              String day =
-                                  DateFormat("dd-MM-yyyy").format(tempDate);
-                              DateTime tempStart =
-                                  new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
-                                      snapshot.data![index].bookingSchedule!
-                                          .schedule!.slot!.timeStart);
-                              String start =
-                                  DateFormat("HH:mm").format(tempStart);
-                              DateTime tempEnd =
-                                  new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
-                                      snapshot.data![index].bookingSchedule!
-                                          .schedule!.slot!.timeEnd);
-                              String end = DateFormat("HH:mm").format(tempEnd);
-                              return ServicePaid(
-                                  icon:
-                                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
-                                  name:
-                                      "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
-                                  date: "$day",
-                                  time: "$start - $end",
-                                  bookedFor:
-                                      "${snapshot.data![index].bookingSchedule!.subProfile!.relationship!.relationName}",
-                                  bookingSchedule:
-                                      snapshot.data![index].bookingSchedule!,
-                                  physiotherapist: snapshot
-                                      .data![index]
-                                      .bookingSchedule!
-                                      .schedule!
-                                      .physiotherapist!,
-                                  schedule: snapshot
-                                      .data![index].bookingSchedule!.schedule!,
-                                  firebaseFirestoreBase:
-                                      widget.firebaseFirestoreBase,
-                                  bookingDetail: snapshot.data![index]);
-                            },
-                          ),
-                          onRefresh: () async {
-                            CallAPI().getAllBookingDetailByUserIDAndTypeOfSlot(
-                                sharedCurrentUser!.userID!, widget.typeName);
-                          });
+                          String start = DateFormat("HH:mm").format(tempStart);
+                          DateTime tempEnd =
+                              new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
+                                  snapshot.data![index].bookingSchedule!
+                                      .schedule!.slot!.timeEnd);
+                          String end = DateFormat("HH:mm").format(tempEnd);
+                          return ServicePaid(
+                              icon:
+                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                              name:
+                                  "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                              date: "$day",
+                              time: "$start - $end",
+                              bookedFor:
+                                  "${snapshot.data![index].bookingSchedule!.subProfile!.relationship!.relationName}",
+                              bookingSchedule:
+                                  snapshot.data![index].bookingSchedule!,
+                              physiotherapist: snapshot.data![index]
+                                  .bookingSchedule!.schedule!.physiotherapist!,
+                              schedule: snapshot
+                                  .data![index].bookingSchedule!.schedule!,
+                              firebaseFirestoreBase:
+                                  widget.firebaseFirestoreBase,
+                              bookingDetail: snapshot.data![index]);
+                        },
+                      );
                     } else {
                       return Center(
                         child: Container(
@@ -117,9 +106,12 @@ class _AdvicePaidPageState extends State<AdvicePaidPage> {
                     return Container();
                   }
                 }),
-          ],
-        ),
-      )),
+            onRefresh: () async {
+              CallAPI().getAllBookingDetailByUserIDAndTypeOfSlot(
+                  sharedCurrentUser!.userID!, widget.typeName);
+              setState(() {});
+            },
+          )),
     );
   }
 

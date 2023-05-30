@@ -79,6 +79,7 @@ class _TimeResultPageState extends State<TimeResultPage> {
                                           .format(DateTime.now());
                                       String time = DateFormat("HH:mm:ss")
                                           .format(DateTime.now());
+                                      print("Khung giờ: $startStr - $endStr");
                                       BookingSchedule bookingSchedule =
                                           BookingSchedule(
                                               userID:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Advise%20page/chooseDetail.dart';
 import 'package:heh_application/models/physiotherapist.dart';
@@ -25,6 +26,11 @@ class _PhysioChoosePageState extends State<PhysioChoosePage> {
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),
       body: SingleChildScrollView(
+        physics: PageScrollPhysics(),
+        // onRefresh: () async {
+        //   CallAPI().getAllPhysiotherapist();
+        //   setState(() {});
+        // },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -48,53 +54,42 @@ class _PhysioChoosePageState extends State<PhysioChoosePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Category(category: sharedMedicalRecord!.problem!),
-                          RefreshIndicator(
-                              child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: listPhysio.length,
-                                  itemBuilder: (context, index) {
-                                    return PhysioChooseMenu(
-                                      icon: listPhysio[index]
-                                                  .signUpUser!
-                                                  .gender ==
-                                              true
-                                          ? "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622"
-                                          : "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2FPhysio.png?alt=media&token=30d7e2dc-5a5b-4637-bda5-7cc798b6104e",
-                                      name: listPhysio[index]
-                                          .signUpUser!
-                                          .firstName!,
-                                      skill:
-                                          'Kỹ năng: ${listPhysio[index].skill!}',
-                                      press: () {
-                                        if (listPhysio[index].scheduleStatus ==
-                                            0) {
-                                          return null;
-                                        } else {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ChooseDetailPage(
-                                                        typeName:
-                                                            widget.typeName,
-                                                        physiotherapist:
-                                                            listPhysio[index],
-                                                      )));
-                                        }
-                                      },
-                                      visible:
-                                          listPhysio[index].scheduleStatus == 0
-                                              ? true
-                                              : false,
-                                      notify:
-                                          listPhysio[index].scheduleStatus == 0
-                                              ? "Chuyên viên đang bận hết slot"
-                                              : "",
-                                    );
-                                  }),
-                              onRefresh: () async {
-                                CallAPI().getAllPhysiotherapist();
-                              }),
+                          ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: listPhysio.length,
+                              itemBuilder: (context, index) {
+                                return PhysioChooseMenu(
+                                  icon: listPhysio[index].signUpUser!.gender ==
+                                          true
+                                      ? "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fphy.png?alt=media&token=bac867bc-190c-4523-83ba-86fccc649622"
+                                      : "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2FPhysio.png?alt=media&token=30d7e2dc-5a5b-4637-bda5-7cc798b6104e",
+                                  name:
+                                      listPhysio[index].signUpUser!.firstName!,
+                                  skill: 'Kỹ năng: ${listPhysio[index].skill!}',
+                                  press: () {
+                                    if (listPhysio[index].scheduleStatus == 0) {
+                                      return null;
+                                    } else {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ChooseDetailPage(
+                                                    typeName: widget.typeName,
+                                                    physiotherapist:
+                                                        listPhysio[index],
+                                                  )));
+                                    }
+                                  },
+                                  visible: listPhysio[index].scheduleStatus == 0
+                                      ? true
+                                      : false,
+                                  notify: listPhysio[index].scheduleStatus == 0
+                                      ? "Chuyên viên đang bận hết slot"
+                                      : "",
+                                );
+                              })
                         ],
                       );
                     } else {
