@@ -14,6 +14,7 @@ import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/chat_provider.dart';
 import 'package:heh_application/services/firebase_firestore.dart';
+import 'package:heh_application/util/date_time_format.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:heh_application/models/sign_up_user.dart';
@@ -52,54 +53,65 @@ class _AdvicePaidPageState extends State<AdvicePaidPage> {
                     sharedCurrentUser!.userID!, widget.typeName),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    if (snapshot.data!.length > 0) {
+                    List<BookingDetail> listSort = [];
+                    for (var item in snapshot.data!) {
+                      if (item.shorttermStatus! < 3) {
+                        listSort.add(item);
+                      }
+                    }
+                    if (listSort.isNotEmpty) {
                       return RefreshIndicator(
                           child: ListView.builder(
                             shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
+                            itemCount: listSort.length,
                             itemBuilder: (context, index) {
                               DateTime tempDate = new DateFormat("yyyy-MM-dd")
-                                  .parse(snapshot.data![index].bookingSchedule!
+                                  .parse(listSort[index].bookingSchedule!
                                       .schedule!.slot!.timeStart);
                               String day =
                                   DateFormat("dd-MM-yyyy").format(tempDate);
                               DateTime tempStart =
                                   new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
-                                      snapshot.data![index].bookingSchedule!
+                                      listSort[index].bookingSchedule!
                                           .schedule!.slot!.timeStart);
                               String start =
                                   DateFormat("HH:mm").format(tempStart);
                               DateTime tempEnd =
                                   new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
-                                      snapshot.data![index].bookingSchedule!
+                                      listSort[index].bookingSchedule!
                                           .schedule!.slot!.timeEnd);
                               String end = DateFormat("HH:mm").format(tempEnd);
+                              String weekDay = "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(listSort[index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
+                              if (weekDay =="Thứ 8"){
+                                weekDay = "Chủ Nhật";
+                              }
+
                               return ServicePaid(
                                   icon:
                                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
                                   name:
-                                      "${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                                      "${listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                                  weekDay:weekDay,
                                   date: "$day",
                                   time: "$start - $end",
                                   bookedFor:
-                                      "${snapshot.data![index].bookingSchedule!.subProfile!.relationship!.relationName}",
+                                      "${listSort[index].bookingSchedule!.subProfile!.relationship!.relationName}",
                                   bookingSchedule:
-                                      snapshot.data![index].bookingSchedule!,
-                                  physiotherapist: snapshot
-                                      .data![index]
+                                  listSort[index].bookingSchedule!,
+                                  physiotherapist: listSort[index]
                                       .bookingSchedule!
                                       .schedule!
                                       .physiotherapist!,
-                                  schedule: snapshot
-                                      .data![index].bookingSchedule!.schedule!,
+                                  schedule: listSort[index].bookingSchedule!.schedule!,
                                   firebaseFirestoreBase:
                                       widget.firebaseFirestoreBase,
-                                  bookingDetail: snapshot.data![index]);
+                                  bookingDetail: listSort[index]);
                             },
                           ),
                           onRefresh: () async {
-                            CallAPI().getAllBookingDetailByUserIDAndTypeOfSlot(
-                                sharedCurrentUser!.userID!, widget.typeName);
+                           setState(() {
+
+                           });
                           });
                     } else {
                       return Center(
@@ -129,6 +141,7 @@ class _AdvicePaidPageState extends State<AdvicePaidPage> {
       time,
       bookedFor,
       date,
+        weekDay,
       required PhysiotherapistModel physiotherapist,
       required Schedule schedule,
       required BookingSchedule bookingSchedule,
@@ -179,7 +192,7 @@ class _AdvicePaidPageState extends State<AdvicePaidPage> {
                                 style: Theme.of(context).textTheme.bodyText2,
                               ),
                               Text(
-                                date,
+                                '$weekDay $date',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     color: Colors.black),
@@ -215,6 +228,18 @@ class _AdvicePaidPageState extends State<AdvicePaidPage> {
                                     color: Colors.black),
                               ),
                             ],
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            "Chuyên viên điều trị: ",
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            physiotherapist.signUpUser!.firstName!,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
                           ),
                           const SizedBox(height: 10),
                           button(

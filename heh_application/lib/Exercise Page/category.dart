@@ -46,7 +46,10 @@ class _CategoryPageState extends State<CategoryPage> {
                 if (snapshot.hasData) {
                   return RefreshIndicator(
                       child: ListView.builder(
-                        shrinkWrap: true,
+
+                        // physics: AlwaysScrollableScrollPhysics(),
+                         shrinkWrap: true,
+
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
                           return MenuListView(

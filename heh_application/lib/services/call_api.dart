@@ -47,10 +47,6 @@ class CallAPI {
       Map<String, dynamic> responseBody = json.decode(response.body);
       Map<String, dynamic> result = responseBody;
 
-      final headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer ${result["access_token"]}",
-      };
 
       return ResultLogin.fromMap(result);
     }
@@ -195,7 +191,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -220,7 +217,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/ExerciseDetail/GetByExerciseID/$exerciseID');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -255,7 +253,8 @@ class CallAPI {
     });
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.post(url, body: body, headers: headers);
 
@@ -276,7 +275,8 @@ class CallAPI {
 
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.delete(url, headers: headers);
 
@@ -294,7 +294,8 @@ class CallAPI {
 
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.delete(url, headers: headers);
 
@@ -311,7 +312,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Category');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -342,7 +344,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/BookingDetail');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -366,7 +369,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/BookingDetail');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -400,7 +404,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/BookingDetail');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -430,7 +435,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/ExerciseResource');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -454,7 +460,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/ExerciseDetail/GetByExerciseID/$exerciseID');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -484,7 +491,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Feedback');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -506,7 +514,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/MedicalRecord');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -529,7 +538,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Schedule');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     final body = jsonEncode({
       "medicalRecordID": medicalRecord.medicalRecordID,
@@ -553,7 +563,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Schedule');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     final body = jsonEncode({
       "exerciseDetailID": exerciseDetail1.exerciseDetailID,
@@ -578,7 +589,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/MedicalRecord');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -604,7 +616,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/MedicalRecord');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -630,7 +643,8 @@ class CallAPI {
     });
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+
     };
     var response = await http.post(url, body: body, headers: headers);
 
@@ -656,7 +670,8 @@ class CallAPI {
     });
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.put(url, body: body, headers: headers);
 
@@ -670,7 +685,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Physiotherapist');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -693,7 +709,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Physiotherapist');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -709,7 +726,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Physiotherapist');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -731,7 +749,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Schedule');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -796,7 +815,8 @@ class CallAPI {
     });
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.post(url, body: body, headers: headers);
 
@@ -814,7 +834,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Schedule');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     final body = jsonEncode({
       "scheduleID": schedule.scheduleID,
@@ -837,7 +858,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Schedule');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     final body = jsonEncode({
       "bookingDetailID": bookingDetail.bookingDetailID,
@@ -858,7 +880,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Schedule');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     final body = jsonEncode({
       "slotID": slot.slotID,
@@ -894,7 +917,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -918,7 +942,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -951,7 +976,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -976,7 +1002,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1002,7 +1029,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1028,7 +1056,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1052,7 +1081,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1069,7 +1099,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1092,7 +1123,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Slot');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1114,7 +1146,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/SubProfile');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1144,7 +1177,8 @@ class CallAPI {
     });
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+
     };
     var response = await http.post(url, body: body, headers: headers);
 
@@ -1168,7 +1202,7 @@ class CallAPI {
     });
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
     };
     var response = await http.post(url, body: body, headers: headers);
 
@@ -1184,7 +1218,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Schedule');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     final body = jsonEncode({
       "userID": subProfile.userID,
@@ -1284,7 +1319,8 @@ class CallAPI {
 
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+
     };
     var response = await http.get(url, headers: headers);
 
@@ -1301,7 +1337,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1331,7 +1368,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1356,7 +1394,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1373,7 +1412,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
 
@@ -1398,7 +1438,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1413,7 +1454,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1429,7 +1471,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1467,7 +1510,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/TypeOfSlot');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1494,7 +1538,8 @@ class CallAPI {
     // var url = Uri.https('localhost:7166', 'api/UserExercise');
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1526,7 +1571,8 @@ class CallAPI {
     });
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.post(url, body: body, headers: headers);
     if (response.statusCode == 200) {
@@ -1548,7 +1594,8 @@ class CallAPI {
     });
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.post(url, body: body, headers: headers);
     if (response.statusCode == 200) {
@@ -1569,7 +1616,8 @@ class CallAPI {
     });
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+
     };
     var response = await http.post(url, body: body, headers: headers);
 
@@ -1589,7 +1637,8 @@ class CallAPI {
     });
     final headers = {
       "Accept": "application/json",
-      "content-type": "application/json"
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.post(url, body: body, headers: headers);
 

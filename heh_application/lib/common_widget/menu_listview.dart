@@ -240,9 +240,11 @@ class ScheduleMenu extends StatelessWidget {
     required this.time,
     required this.icon,
     required this.press,
+    this.weekDay,
+    this.date,
     this.typeOfSlot,
   }) : super(key: key);
-
+  String? weekDay,date;
   final String icon, name, time;
   final String? typeOfSlot;
 
@@ -297,6 +299,11 @@ class ScheduleMenu extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                               color: Colors.black)),
                       const SizedBox(height: 5),
+                      weekDay == null && date == null ? Container():
+                      Text(
+                        "$weekDay $date",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                       Text(
                         time,
                         style: Theme.of(context).textTheme.bodyMedium,
@@ -518,6 +525,7 @@ class SessionMenu extends StatelessWidget {
 class SessionScheduleMenu extends StatelessWidget {
   SessionScheduleMenu(
       {Key? key,
+        this.day,
       required this.icon,
       required this.name,
       required this.time,
@@ -528,6 +536,7 @@ class SessionScheduleMenu extends StatelessWidget {
   Color color;
   final String icon, name, time;
   final VoidCallback buttonPress;
+  String? day;
   bool visible;
   @override
   Widget build(BuildContext context) {
@@ -573,6 +582,12 @@ class SessionScheduleMenu extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                               color: Colors.white)),
                       const SizedBox(height: 5),
+                      Text(
+                        day!,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      const SizedBox(height: 5),
+
                       Text(
                         time,
                         style: const TextStyle(color: Colors.white),
