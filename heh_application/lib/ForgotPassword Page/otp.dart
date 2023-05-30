@@ -1,7 +1,7 @@
 import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:heh_application/ForgotPassword%20Page/renewPass,.dart';
+import 'package:heh_application/ForgotPassword%20Page/renewPass.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 
 class OTPForgotPage extends StatefulWidget {
@@ -84,7 +84,7 @@ class _OTPForgotPageState extends State<OTPForgotPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => renewForgotPass()));
+                                builder: (context) => renewForgotPass(email:widget.email!)));
                       } else {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
