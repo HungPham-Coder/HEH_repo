@@ -125,26 +125,30 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                   await launchUrl(Uri.parse(payments),
                       mode: LaunchMode.externalNonBrowserApplication);
 
-                  // InAppWebView(
-                  //   initialUrlRequest: URLRequest(
-                  //     url: Uri.parse(payments),
-                  //   ),
-                  //   onWebViewCreated: (controller) {
-                  //     _webViewController = controller;
-                  //   },
-                  //   onProgressChanged: (controller, progress) {
-                  //     setState(() {
-                  //       _progress = progress / 100;
-                  //     });
-                  //   },
-                  //   onLoadStop: (controller, url) {
-                  //     if (url ==
-                  //         "https://taskuatapi.hisoft.vn/api/Payment/callbackVNPayGW") {
-                  //       // Navigator.pop(context);
-                  //       controller.goBack();
-                  //     }
-                  //   },
-                  // );
+                  InAppWebView(
+                    initialUrlRequest: URLRequest(
+                      url: Uri.parse(payments),
+                    ),
+                    onWebViewCreated: (controller) {
+                      _webViewController = controller;
+                    },
+                    onProgressChanged: (controller, progress) {
+                      setState(() {
+                        _progress = progress / 100;
+                      });
+                    },
+                    onLoadStop: (controller, url) {
+                      String domainName = Uri.parse(payments).host;
+
+                      // Check if the domain name contains a random subdirectory.
+                      bool containsRandomSubdirectory = domainName.contains(
+                          r'https://taskuatapi.hisoft.vn/api/Payment/callbackVNPayGW');
+                      if (containsRandomSubdirectory) {
+                        // Navigator.pop(context);
+                        controller.goBack();
+                      }
+                    },
+                  );
 
                   showDialog(
                     context: context,
