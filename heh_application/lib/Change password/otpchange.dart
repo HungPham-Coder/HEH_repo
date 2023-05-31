@@ -98,7 +98,7 @@ class _OTPChangePageState extends State<OTPChangePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => renewChangePass()));
+                                builder: (context) => const renewChangePass()));
                       } else {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
