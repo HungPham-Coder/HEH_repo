@@ -286,6 +286,7 @@ class _AdvicePaidPageState extends State<AdvicePaidPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => BillChoosePage(
+                        view: "true",
                           physiotherapist: physiotherapist,
                           schedule: schedule,
                           bookingSchedule: bookingSchedule)));

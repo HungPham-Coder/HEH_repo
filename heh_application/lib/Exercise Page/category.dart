@@ -68,7 +68,7 @@ class _CategoryPageState extends State<CategoryPage> {
                         },
                       ),
                       onRefresh: () async {
-                        await CallAPI().getAllCategory();
+
                         setState(() {});
                       });
                 } else {

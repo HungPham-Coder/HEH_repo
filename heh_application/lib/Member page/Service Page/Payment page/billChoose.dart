@@ -20,11 +20,14 @@ class BillChoosePage extends StatefulWidget {
       {Key? key,
       required this.physiotherapist,
       required this.schedule,
-      required this.bookingSchedule})
+      required this.bookingSchedule,
+      this.view,
+      })
       : super(key: key);
   PhysiotherapistModel physiotherapist;
   Schedule schedule;
   BookingSchedule? bookingSchedule;
+  String? view;
   @override
   State<BillChoosePage> createState() => _BillChoosePageState();
 }
@@ -34,6 +37,9 @@ class _BillChoosePageState extends State<BillChoosePage> {
   String? timeStart;
   String? timeEnd;
   bool check = false;
+
+  String title = "Xác nhận";
+  String subTitle = "Xác nhận hóa đơn";
   void formatDateAndTime() {
     DateTime tempDate =
         new DateFormat("yyyy-MM-dd").parse(widget.schedule.slot!.timeStart);
@@ -58,12 +64,20 @@ class _BillChoosePageState extends State<BillChoosePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.view == "true") {
+      setState(() {
+        title = "Chi Tiết Hóa Đơn";
+        subTitle = "Hóa Đơn";
+
+      });
+
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text(
-          "Xác nhận",
+        title:  Text(
+        title ,
           style: TextStyle(fontSize: 23),
         ),
         centerTitle: true,
@@ -95,8 +109,8 @@ class _BillChoosePageState extends State<BillChoosePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Center(
-                            child: Text("Xác nhận hóa đơn",
+                         Center(
+                            child: Text( subTitle,
                                 style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500))),
@@ -137,6 +151,34 @@ class _BillChoosePageState extends State<BillChoosePage> {
                 ]),
               ),
             ),
+            widget.view == "true"
+            ? Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: const MaterialStatePropertyAll<Color>(
+                        Colors.black12),
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.only(
+                            left: 25, right: 25, top: 15, bottom: 15)),
+                    shape:
+                    MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          side: const BorderSide(color: Colors.white)),
+                    )),
+                onPressed: () async {
+                  // CallAPI().getBookingDetailByID(bookingDetail!);
+
+                      Navigator.of(context).pop();
+
+                },
+                child: const Text(
+                  "Trở lại",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ):
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

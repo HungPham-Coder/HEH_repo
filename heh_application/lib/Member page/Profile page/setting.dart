@@ -105,7 +105,7 @@ class _SettingPageState extends State<SettingPage> {
           ProfileMenu(
             icon:
                 "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fhistory.svg?alt=media&token=13ed285f-0a27-4ee5-b984-bd73d5f15ac8",
-            text: "Dịch vụ chưa thanh toán",
+            text: "Lịch sử thanh toán",
             press: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const HistoryPage()));

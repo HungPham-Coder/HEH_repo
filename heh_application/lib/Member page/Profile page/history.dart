@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
+import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/billChoose.dart';
+import 'package:heh_application/models/booking_detail.dart';
+import 'package:heh_application/services/call_api.dart';
+import 'package:heh_application/util/date_time_format.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -23,24 +28,90 @@ class _HistoryPageState extends State<HistoryPage> {
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          children: [
-            ServicePaid(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
-              name: "Tư vấn một buổi",
-              date: "04-11-2023",
-              time: "11:00 - 12:00",
-              bookedFor: "Tôi",
-              press: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const HistoryPage()));
-              },
-            ),
-          ],
-        ),
+        child: FutureBuilder<List<BookingDetail>>(
+            future:
+                CallAPI().GetAllBookingDetailBill(sharedCurrentUser!.userID!),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data!.isNotEmpty) {
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      setState(() {});
+                    },
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        String day = DateTimeFormat.formatDate(snapshot
+                            .data![index]
+                            .bookingSchedule!
+                            .schedule!
+                            .slot!
+                            .timeStart);
+                        String start = DateTimeFormat.formateTime(snapshot
+                            .data![index]
+                            .bookingSchedule!
+                            .schedule!
+                            .slot!
+                            .timeStart);
+                        String end = DateTimeFormat.formateTime(snapshot
+                            .data![index]
+                            .bookingSchedule!
+                            .schedule!
+                            .slot!
+                            .timeEnd);
+                        return ServicePaid(
+                          icon:
+                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                          name: snapshot.data![index].bookingSchedule!.schedule!
+                              .typeOfSlot!.typeName,
+                          date: day,
+                          time: "$start - $end",
+                          bookedFor: snapshot.data![index].bookingSchedule!
+                              .subProfile!.subName,
+                          press: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BillChoosePage(
+                                      view : "true",
+                                        physiotherapist: snapshot
+                                            .data![index]
+                                            .bookingSchedule!
+                                            .schedule!
+                                            .physiotherapist!,
+                                        schedule: snapshot.data![index]
+                                            .bookingSchedule!.schedule!,
+                                        bookingSchedule: snapshot
+                                            .data![index].bookingSchedule!)));
+                          },
+                        );
+                      },
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 300),
+                      child: Text(
+                        "Bạn chưa thanh toán dịch vụ nào",
+                        style: TextStyle(color: Colors.grey[500], fontSize: 16),
+                      ),
+                    ),
+                  );
+                }
+              } else {
+                return Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 300),
+                    child: Text(
+                      "Bạn chưa thanh toán dịch vụ nào",
+                      style: TextStyle(color: Colors.grey[500], fontSize: 16),
+                    ),
+                  ),
+                );
+              }
+            }),
       )),
     );
   }
@@ -146,7 +217,7 @@ class ServicePaid extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 10),
-                          const button(),
+                           button(press: press),
                         ],
                       )),
                 ],
@@ -158,8 +229,8 @@ class ServicePaid extends StatelessWidget {
 }
 
 class button extends StatefulWidget {
-  const button({Key? key}) : super(key: key);
-
+  const button({Key? key, this.press}) : super(key: key);
+  final VoidCallback? press;
   @override
   State<button> createState() => _buttonState();
 }
@@ -182,13 +253,7 @@ class _buttonState extends State<button> {
                       borderRadius: BorderRadius.circular(15),
                       side: const BorderSide(color: Colors.white)),
                 )),
-            onPressed: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) =>
-              //             const TimeResultPage()));
-            },
+            onPressed: widget.press,
             child: const Text("Xem hóa đơn",
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
           ),
