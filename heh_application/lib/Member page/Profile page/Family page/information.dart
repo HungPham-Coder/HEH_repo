@@ -16,8 +16,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-final TextEditingController _date = TextEditingController();
-final TextEditingController _firstName = TextEditingController();
+
 
 
 enum genderGroup { male, female }
@@ -43,6 +42,8 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
   final List<String> _relationships = [
     "- Chọn -",
   ];
+  final TextEditingController _date = TextEditingController();
+  final TextEditingController _firstName = TextEditingController();
   bool validName = true;
   bool validDOB = true ;
   bool validRelationShip = true ;
@@ -107,8 +108,9 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
 
     final auth = Provider.of<AuthBase>(context, listen: false);
     DateTime tempDob =
-        new DateFormat("yyyy-MM-dd").parse(sharedCurrentUser!.dob!);
+        new DateFormat("yyyy-MM-dd").parse(widget.subProfile!.dob!);
     String dob = DateFormat("dd-MM-yyyy").format(tempDob);
+    print(_date.text);
     String dobChange = DateFormat("yyyy-MM-dd").format(tempDob);
     return Scaffold(
         body: SingleChildScrollView(
