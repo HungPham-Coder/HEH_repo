@@ -192,7 +192,7 @@ class _InformationPageState extends State<InformationPage> {
                                       sharedCurrentUser!.firstName!,
                                       sharedCurrentUser!.userID!);
                               subProfile.subName = _firstName.text;
-
+                              subProfile.dob = dobChange;
                               await CallAPI().updateSubprofile(subProfile);
                               //update user
                               await CallAPI().updateUserbyUID(signUpUser);
