@@ -956,9 +956,9 @@ class CallAPI {
     }
   }
 
-  Future<List<BookingDetail>?> GetLongTermLists() async {
+  Future<List<BookingDetail>?> GetLongTermLists(String physioID) async {
     var url = Uri.parse(
-        '${link}/api/BookingDetail/GetLongTermLists');
+        '${link}/api/BookingDetail/GetLongTermLists?physioID=$physioID');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",

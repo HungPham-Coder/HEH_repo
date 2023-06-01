@@ -29,7 +29,7 @@ class _SessionListPageState extends State<SessionListPage> {
         child: Column(
           children: [
             FutureBuilder<List<BookingDetail>?>(
-              future: CallAPI().GetLongTermLists(),
+              future: CallAPI().GetLongTermLists(sharedPhysiotherapist!.physiotherapistID),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data!.isNotEmpty) {
@@ -246,7 +246,7 @@ class _SessionListPageState extends State<SessionListPage> {
     return IconButton(
         onPressed: () async {
           List<BookingDetail>? listLongTerm =
-              await CallAPI().GetLongTermLists();
+              await CallAPI().GetLongTermLists(sharedPhysiotherapist!.physiotherapistID);
           List<BookingDetail> listLongTermSort = [];
           listLongTerm!.forEach((element) {
             if (element.longtermStatus == 1) {
