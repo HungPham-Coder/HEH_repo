@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Login%20page/login.dart';
 import 'package:heh_application/constant/firestore_constant.dart';
 import 'package:heh_application/models/booking_detail.dart';
@@ -527,8 +528,11 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
                   onPressed: () async {
                     // await setupVoiceSDKEngine();
                     // await fetchToken(1, widget.bookingDetail!.bookingDetailID!, 2);
+                    if (sharedCurrentUser!.role!.name == "Member"){
                       widget.bookingDetail!.shorttermStatus = 2;
                       await CallAPI().updateBookingDetailStatus(widget.bookingDetail!);
+                    }
+
 
                     VideoCallScreen.channelName =
                         widget.bookingDetail!.bookingDetailID;
