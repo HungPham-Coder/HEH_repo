@@ -19,6 +19,7 @@ class AdviseListPage extends StatefulWidget {
 class _AdviseListPageState extends State<AdviseListPage> {
   @override
   Widget build(BuildContext context) {
+    print(sharedPhysiotherapist!.physiotherapistID);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
