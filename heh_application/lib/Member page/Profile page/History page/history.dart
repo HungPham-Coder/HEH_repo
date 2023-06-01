@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
-import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/billChoose.dart';
+import 'package:heh_application/Member%20page/Profile%20page/History%20page/billHistory.dart';
+import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/billShortTerm.dart';
 import 'package:heh_application/models/booking_detail.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/util/date_time_format.dart';
@@ -16,29 +17,27 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          "Lịch sử giao dịch",
-          style: TextStyle(fontSize: 23),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: const Text(
+            "Lịch sử thanh toán",
+            style: TextStyle(fontSize: 23),
+          ),
+          elevation: 10,
+          backgroundColor: const Color.fromARGB(255, 46, 161, 226),
         ),
-        elevation: 10,
-        backgroundColor: const Color.fromARGB(255, 46, 161, 226),
-      ),
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: FutureBuilder<List<BookingDetail>>(
-            future:
-                CallAPI().GetAllBookingDetailBill(sharedCurrentUser!.userID!),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data!.isNotEmpty) {
-                  return RefreshIndicator(
-                    onRefresh: () async {
-                      setState(() {});
-                    },
-                    child: ListView.builder(
+        body: RefreshIndicator(
+          onRefresh: () async {
+            CallAPI().GetAllBookingDetailBill(sharedCurrentUser!.userID!);
+            setState(() {});
+          },
+          child: FutureBuilder<List<BookingDetail>>(
+              future:
+                  CallAPI().GetAllBookingDetailBill(sharedCurrentUser!.userID!),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.isNotEmpty) {
+                    return ListView.builder(
                       shrinkWrap: true,
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
@@ -60,35 +59,49 @@ class _HistoryPageState extends State<HistoryPage> {
                             .schedule!
                             .slot!
                             .timeEnd);
-                        return ServicePaid(
-                          icon:
-                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
-                          name: snapshot.data![index].bookingSchedule!.schedule!
-                              .typeOfSlot!.typeName,
-                          date: day,
-                          time: "$start - $end",
-                          bookedFor: snapshot.data![index].bookingSchedule!
-                              .subProfile!.subName,
-                          press: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => BillChoosePage(
-                                      view : "true",
-                                        physiotherapist: snapshot
-                                            .data![index]
-                                            .bookingSchedule!
-                                            .schedule!
-                                            .physiotherapist!,
-                                        schedule: snapshot.data![index]
-                                            .bookingSchedule!.schedule!,
-                                        bookingSchedule: snapshot
-                                            .data![index].bookingSchedule!)));
-                          },
+                        return Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: ServicePaid(
+                            icon:
+                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                            name: snapshot.data![index].bookingSchedule!
+                                .schedule!.typeOfSlot!.typeName,
+                            date: day,
+                            time: "$start - $end",
+                            bookedFor: snapshot.data![index].bookingSchedule!
+                                .subProfile!.subName,
+                            press: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BillHistoryPage(
+                                          view: "true",
+                                          physiotherapist: snapshot
+                                              .data![index]
+                                              .bookingSchedule!
+                                              .schedule!
+                                              .physiotherapist!,
+                                          schedule: snapshot.data![index]
+                                              .bookingSchedule!.schedule!,
+                                          bookingSchedule: snapshot
+                                              .data![index].bookingSchedule!)));
+                            },
+                          ),
                         );
                       },
-                    ),
-                  );
+                    );
+                  } else {
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 300),
+                        child: Text(
+                          "Bạn chưa thanh toán dịch vụ nào",
+                          style:
+                              TextStyle(color: Colors.grey[500], fontSize: 16),
+                        ),
+                      ),
+                    );
+                  }
                 } else {
                   return Center(
                     child: Container(
@@ -100,20 +113,8 @@ class _HistoryPageState extends State<HistoryPage> {
                     ),
                   );
                 }
-              } else {
-                return Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 300),
-                    child: Text(
-                      "Bạn chưa thanh toán dịch vụ nào",
-                      style: TextStyle(color: Colors.grey[500], fontSize: 16),
-                    ),
-                  ),
-                );
-              }
-            }),
-      )),
-    );
+              }),
+        ));
   }
 }
 
@@ -217,7 +218,7 @@ class ServicePaid extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 10),
-                           button(press: press),
+                          button(press: press),
                         ],
                       )),
                 ],

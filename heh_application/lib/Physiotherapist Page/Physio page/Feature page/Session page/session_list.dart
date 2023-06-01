@@ -29,7 +29,9 @@ class _SessionListPageState extends State<SessionListPage> {
         child: Column(
           children: [
             FutureBuilder<List<BookingDetail>?>(
-              future: CallAPI().getLongTermListByStatus(3),
+              future: CallAPI().getLongTermListByStatus(
+                sharedPhysiotherapist!.physiotherapistID,
+              ),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data!.isNotEmpty) {
@@ -49,45 +51,53 @@ class _SessionListPageState extends State<SessionListPage> {
                           count++;
                         }
                       });
-                      if (count <= 1  ) {
+                      if (count <= 1) {
                         listSort.add(element);
                       }
                     });
-                    return RefreshIndicator(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: listSort.length,
-                          itemBuilder: (context, index) {
-                            if (listSort[index]
-                                        .bookingSchedule!
-                                        .schedule!
-                                        .typeOfSlot!
-                                        .typeName ==
-                                    "Tư vấn trị liệu" &&
-                                listSort[index].longtermStatus != 0) {
-                              return Container();
-                            } else {
-                              return ServicePaid(
-                                  bookingDetail: listSort[index],
-                                  subName: listSort[index]
-                                      .bookingSchedule!
-                                      .subProfile!
-                                      .subName,
-                                  icon:
-                                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
-                                  name:
-                                      "${listSort[index].bookingSchedule!.signUpUser!.firstName}",
-                                  status: listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName == "Tư vấn trị liệu" && listSort[index].longtermStatus == 0
-                                      ? "Chờ xếp lịch":
-                                   listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName == "Trị liệu dài hạn" && listSort[index].longtermStatus == 0
-                                          ? "Đã được lên lịch"
-                                          : "Đã được lên lịch");
-                            }
-                          },
-                        ),
-                        onRefresh: () async {
-                          setState(() {});
-                        });
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: listSort.length,
+                      itemBuilder: (context, index) {
+                        if (listSort[index]
+                                    .bookingSchedule!
+                                    .schedule!
+                                    .typeOfSlot!
+                                    .typeName ==
+                                "Tư vấn trị liệu" &&
+                            listSort[index].longtermStatus != 0) {
+                          return Container();
+                        } else {
+                          return ServicePaid(
+                              bookingDetail: listSort[index],
+                              subName: listSort[index]
+                                  .bookingSchedule!
+                                  .subProfile!
+                                  .subName,
+                              icon:
+                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
+                              name:
+                                  "${listSort[index].bookingSchedule!.signUpUser!.firstName}",
+                              status: listSort[index]
+                                              .bookingSchedule!
+                                              .schedule!
+                                              .typeOfSlot!
+                                              .typeName ==
+                                          "Tư vấn trị liệu" &&
+                                      listSort[index].longtermStatus == 0
+                                  ? "Chờ xếp lịch"
+                                  : listSort[index]
+                                                  .bookingSchedule!
+                                                  .schedule!
+                                                  .typeOfSlot!
+                                                  .typeName ==
+                                              "Trị liệu dài hạn" &&
+                                          listSort[index].longtermStatus == 0
+                                      ? "Đã được lên lịch"
+                                      : "Đã được lên lịch");
+                        }
+                      },
+                    );
                   } else {
                     return Center(
                       child: Container(
@@ -223,7 +233,9 @@ class _SessionListPageState extends State<SessionListPage> {
     return IconButton(
         onPressed: () async {
           List<BookingDetail>? listLongTerm =
-              await CallAPI().getLongTermListByStatus(3);
+              await CallAPI().getLongTermListByStatus(
+            sharedPhysiotherapist!.physiotherapistID,
+          );
           List<BookingDetail> listLongTermSort = [];
           listLongTerm!.forEach((element) {
             if (element.bookingSchedule!.schedule!.typeOfSlot!.typeName ==

@@ -46,38 +46,36 @@ class _SchedulePageState extends State<SchedulePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data!.length > 0) {
-                    return RefreshIndicator(
-                      child: ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            String startStr = DateTimeFormat.formateTime(snapshot.data![index].slot!.timeStart);
-                            String endStr = DateTimeFormat.formateTime(snapshot.data![index].slot!.timeEnd);
-                            String date = DateTimeFormat.formatDate(snapshot.data![index].slot!.timeStart);
-                            String weekDay = "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(snapshot.data![index].slot!.timeStart).weekday + 1}";
-                            if (weekDay =="Thứ 8"){
-                              weekDay = "Chủ Nhật";
-                            }
+                    return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          String startStr = DateTimeFormat.formateTime(
+                              snapshot.data![index].slot!.timeStart);
+                          String endStr = DateTimeFormat.formateTime(
+                              snapshot.data![index].slot!.timeEnd);
+                          String date = DateTimeFormat.formatDate(
+                              snapshot.data![index].slot!.timeStart);
+                          String weekDay =
+                              "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(snapshot.data![index].slot!.timeStart).weekday + 1}";
+                          if (weekDay == "Thứ 8") {
+                            weekDay = "Chủ Nhật";
+                          }
 
-                            // print(snapshot.data![index].typeOfSlot!.typeName);
-                            return ScheduleMenu(
-                              icon:
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
-                              press: () {},
-                              name: snapshot.data![index].slot!.slotName!,
-                              date: date,
-                              weekDay: weekDay,
-                              time: "Khung giờ: $startStr - $endStr",
-                              typeOfSlot: snapshot.data![index].typeOfSlot ==
-                                      null
-                                  ? "Chưa gán"
-                                  : snapshot.data![index].typeOfSlot!.typeName,
-                            );
-                          }),
-                      onRefresh: () async {
-                        setState(() {});
-                      },
-                    );
+                          // print(snapshot.data![index].typeOfSlot!.typeName);
+                          return ScheduleMenu(
+                            icon:
+                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fregisterd.png?alt=media&token=0b0eba33-ef11-44b4-a943-5b5b9b936cfe",
+                            press: () {},
+                            name: snapshot.data![index].slot!.slotName!,
+                            date: date,
+                            weekDay: weekDay,
+                            time: "Khung giờ: $startStr - $endStr",
+                            typeOfSlot: snapshot.data![index].typeOfSlot == null
+                                ? "Chưa gán"
+                                : snapshot.data![index].typeOfSlot!.typeName,
+                          );
+                        });
                   } else {
                     return Center(
                       child: Container(

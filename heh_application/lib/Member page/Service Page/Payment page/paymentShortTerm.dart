@@ -8,29 +8,28 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/success.dart';
+import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/website.dart';
 import 'package:heh_application/models/booking_detail.dart';
 import 'package:heh_application/models/payment.dart';
 import 'package:heh_application/services/call_api.dart';
-import 'package:flutter/services.dart';
 import 'package:heh_application/services/chat_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 // import 'package:lottie/lottie.dart';
 
 // enum paymentGroup { male, female, others }
 
-class PaymentTimePage extends StatefulWidget {
-  PaymentTimePage({Key? key, this.bookingDetail}) : super(key: key);
+class PaymentShortTermPage extends StatefulWidget {
+  PaymentShortTermPage({Key? key, this.bookingDetail}) : super(key: key);
 
   BookingDetail? bookingDetail;
   @override
-  State<PaymentTimePage> createState() => _PaymentTimePageState();
+  State<PaymentShortTermPage> createState() => _PaymentShortTermPageState();
 }
 
-class _PaymentTimePageState extends State<PaymentTimePage> {
+class _PaymentShortTermPageState extends State<PaymentShortTermPage> {
   // paymentGroup _paymentValue = paymentGroup.male;
 
   File? imageFile;
@@ -39,6 +38,7 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
   String imageUrl =
       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fwhite.jpg?alt=media&token=992ffa5a-dd2b-4ff4-bf8f-285be1da997d";
   final value = NumberFormat("###,###,###");
+  bool check = false;
   InAppWebViewController? _webViewController;
 
   @override
@@ -125,30 +125,37 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                   await launchUrl(Uri.parse(payments),
                       mode: LaunchMode.externalNonBrowserApplication);
 
-                  InAppWebView(
-                    initialUrlRequest: URLRequest(
-                      url: Uri.parse(payments),
-                    ),
-                    onWebViewCreated: (controller) {
-                      _webViewController = controller;
-                    },
-                    onProgressChanged: (controller, progress) {
-                      setState(() {
-                        _progress = progress / 100;
-                      });
-                    },
-                    onLoadStop: (controller, url) {
-                      String domainName = Uri.parse(payments).host;
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => VNPayPage(
+                  //               payments: payments,
+                  //             )));
 
-                      // Check if the domain name contains a random subdirectory.
-                      bool containsRandomSubdirectory = domainName.contains(
-                          r'https://taskuatapi.hisoft.vn/api/Payment/callbackVNPayGW');
-                      if (containsRandomSubdirectory) {
-                        // Navigator.pop(context);
-                        controller.goBack();
-                      }
-                    },
-                  );
+                  // InAppWebView(
+                  //   initialUrlRequest: URLRequest(
+                  //     url: Uri.parse(payments),
+                  //   ),
+                  //   onWebViewCreated: (controller) {
+                  //     _webViewController = controller;
+                  //   },
+                  //   onProgressChanged: (controller, progress) {
+                  //     setState(() {
+                  //       _progress = progress / 100;
+                  //     });
+                  //   },
+                  //   onLoadStop: (controller, url) {
+                  //     String domainName = Uri.parse(payments).host;
+
+                  //     // Check if the domain name contains a random subdirectory.
+                  //     bool containsRandomSubdirectory = domainName.contains(
+                  //         r'https://taskuatapi.hisoft.vn/api/Payment/callbackVNPayGW');
+                  //     if (containsRandomSubdirectory) {
+                  //       // Navigator.pop(context);
+                  //       controller.goBack();
+                  //     }
+                  //   },
+                  // );
 
                   showDialog(
                     context: context,
@@ -194,7 +201,9 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                                       widget.bookingDetail!.bookingDetailID!);
 
                               if (getBookingDetail.shorttermStatus! == 1 &&
-                                  getBookingDetail.longtermStatus == -1) {
+                                  getBookingDetail.longtermStatus == 0) {
+                                widget.bookingDetail!.bookingSchedule!.schedule!
+                                    .physioBookingStatus = true;
                                 return showDialog(
                                   context: context,
                                   builder: (context) {
@@ -236,7 +245,7 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                                 );
                               } else if (getBookingDetail.shorttermStatus! ==
                                       0 &&
-                                  getBookingDetail.longtermStatus == -1) {
+                                  getBookingDetail.longtermStatus == 0) {
                                 return showDialog(
                                   context: context,
                                   builder: (context) {
@@ -335,19 +344,6 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
                       );
                     },
                   );
-
-                  // BookingDetail addBookingDetail =
-                  //     await CallAPI().addBookingDetail(widget.bookingDetail!);
-                  // if (addBookingDetail != null) {
-                  //   widget.bookingDetail!.bookingSchedule!.schedule!
-                  //       .physioBookingStatus = true;
-                  //   await CallAPI().updateSchedule(
-                  //       widget.bookingDetail!.bookingSchedule!.schedule!);
-                  //   Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => const SuccessPage()));
-                  // }
                 },
                 child: const Text("Thanh toán bằng VNPay"),
               ),
@@ -362,36 +358,6 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
               ),
             ],
           ),
-
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-          //   children: [
-          //     const Text(
-          //       "Hình ảnh hóa đơn",
-          //       style: TextStyle(
-          //           fontSize: 20,
-          //           color: Colors.black,
-          //           fontWeight: FontWeight.bold),
-          //     ),
-          //     ElevatedButton(
-          //         onPressed: () async {
-          //           await getImage();
-          //         },
-          //         child: const Text(
-          //           "Chọn",
-          //           style: TextStyle(fontSize: 16),
-          //         )),
-          //   ],
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          //   child: Center(
-          //     child: Image.network(
-          //       imageUrl,
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -399,192 +365,196 @@ class _PaymentTimePageState extends State<PaymentTimePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          "Thanh toán",
-          style: TextStyle(fontSize: 23),
-        ),
-        elevation: 10,
-        backgroundColor: const Color.fromARGB(255, 46, 161, 226),
-      ),
-      body: SingleChildScrollView(
-          child: SizedBox(
-              // height: MediaQuery.of(context).size.height * 2,
-              child: Column(
-        children: [
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(15)),
-                child: Column(children: [
-                  const SizedBox(height: 10),
-                  Container(
-                    height: MediaQuery.of(context).size.height / 11,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2Fwelcome2.png?alt=media&token=e26f1d4f-e548-406c-aa71-65c099663f85"))),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text("Chi tiết giao dịch",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text("Người thanh toán: "),
-                            Text(
-                                "${widget.bookingDetail!.bookingSchedule!.signUpUser!.firstName}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600)),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          child: Container(
-                            height: 1,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text("Số tiền: "),
-                            Row(
-                              children: [
-                                Text(
-                                    value.format(widget
-                                        .bookingDetail!
-                                        .bookingSchedule!
-                                        .schedule!
-                                        .typeOfSlot!
-                                        .price
-                                        .toInt()),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w600)),
-                                const Text(" VNĐ",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600)),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          child: Container(
-                            height: 1,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ]),
-              )),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(children: [
-                choose(
-                  priceImage:
-                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fvnpay-logo-inkythuatso-01.png?alt=media&token=9660dcb8-4021-434d-b69f-b9695be592cc",
-                ),
-                // Visibility(
-                //   visible: visible,
-                //   child: const Text(
-                //     "Hãy chọn hình ảnh hóa đơn",
-                //     style: TextStyle(fontSize: 15, color: Colors.red),
-                //   ),
-                // ),
-              ])),
-          const SizedBox(
-            height: 130,
+    return WillPopScope(
+      onWillPop: () async {
+        return CallAPI()
+            .deleteBookingDetailbyID(widget.bookingDetail!.bookingDetailID!);
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: const Text(
+            "Thanh toán",
+            style: TextStyle(fontSize: 23),
           ),
-        ],
-      ))),
-      bottomSheet: SizedBox(
-        height: 115,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const Text("Số tiền:"),
-                  Text(
-                      value.format(widget.bookingDetail!.bookingSchedule!
-                          .schedule!.typeOfSlot!.price
-                          .toInt()),
-                      style: const TextStyle(fontWeight: FontWeight.w600)),
-                  const Text(" VND"),
-                ],
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor: const MaterialStatePropertyAll<Color>(
-                      Color.fromARGB(255, 46, 161, 226),
+          elevation: 10,
+          backgroundColor: const Color.fromARGB(255, 46, 161, 226),
+        ),
+        body: SingleChildScrollView(
+            child: SizedBox(
+                // height: MediaQuery.of(context).size.height * 2,
+                child: Column(
+          children: [
+            Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Column(children: [
+                    const SizedBox(height: 10),
+                    Container(
+                      height: MediaQuery.of(context).size.height / 11,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2Fwelcome2.png?alt=media&token=e26f1d4f-e548-406c-aa71-65c099663f85"))),
                     ),
-                    padding: MaterialStateProperty.all(
-                        const EdgeInsets.symmetric(
-                            horizontal: 100, vertical: 14)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          side: const BorderSide(color: Colors.white)),
-                    )),
-                onPressed: () async {
-                  // if (imageUrl ==
-                  //     "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fwhite.jpg?alt=media&token=992ffa5a-dd2b-4ff4-bf8f-285be1da997d") {
-                  //   setState(() {
-                  //     visible = true;
-                  //   });
-                  // } else {
-                  //   setState(() {
-                  //     visible = false;
-                  //   });
-                  //   widget.bookingDetail!.imageUrl = imageUrl;
-                  //   BookingDetail addBookingDetail =
-                  //       await CallAPI().addBookingDetail(widget.bookingDetail!);
-                  //   if (addBookingDetail != null) {
-                  //     widget.bookingDetail!.bookingSchedule!.schedule!
-                  //         .physioBookingStatus = true;
-                  //     await CallAPI().updateSchedule(
-                  //         widget.bookingDetail!.bookingSchedule!.schedule!);
-                  //   }
-                  // }
-                  BookingDetail getBookingDetail = await CallAPI()
-                      .getBookingDetailByID(
-                          widget.bookingDetail!.bookingDetailID!);
-                  if (getBookingDetail.shorttermStatus! == 1 &&
-                      getBookingDetail.longtermStatus == -1) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SuccessPage()));
-                  } else {
-                    const Text(
-                      "Bạn chưa hoàn thành thanh toán. Vui lòng thanh toán.",
-                      style: TextStyle(color: Colors.red),
-                    );
-                  }
-                },
-                child: const Text(
-                  "Hoàn thành",
-                  style: TextStyle(fontSize: 16),
+                    const SizedBox(height: 10),
+                    const Text("Chi tiết giao dịch",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text("Người thanh toán: "),
+                              Text(
+                                  "${widget.bookingDetail!.bookingSchedule!.signUpUser!.firstName}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            child: Container(
+                              height: 1,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text("Số tiền: "),
+                              Row(
+                                children: [
+                                  Text(
+                                      value.format(widget
+                                          .bookingDetail!
+                                          .bookingSchedule!
+                                          .schedule!
+                                          .typeOfSlot!
+                                          .price
+                                          .toInt()),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w600)),
+                                  const Text(" VNĐ",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600)),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            child: Container(
+                              height: 1,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]),
+                )),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(children: [
+                  choose(
+                    priceImage:
+                        "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fvnpay-logo-inkythuatso-01.png?alt=media&token=9660dcb8-4021-434d-b69f-b9695be592cc",
+                  ),
+                ])),
+            const SizedBox(
+              height: 130,
+            ),
+          ],
+        ))),
+        bottomSheet: SizedBox(
+          height: 115,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Text("Số tiền:"),
+                    Text(
+                        value.format(widget.bookingDetail!.bookingSchedule!
+                            .schedule!.typeOfSlot!.price
+                            .toInt()),
+                        style: const TextStyle(fontWeight: FontWeight.w600)),
+                    const Text(" VND"),
+                  ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: const MaterialStatePropertyAll<Color>(
+                        Color.fromARGB(255, 46, 161, 226),
+                      ),
+                      padding: MaterialStateProperty.all(
+                          const EdgeInsets.symmetric(
+                              horizontal: 100, vertical: 14)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: const BorderSide(color: Colors.white)),
+                      )),
+                  onPressed: () async {
+                    BookingDetail getBookingDetail = await CallAPI()
+                        .getBookingDetailByID(
+                            widget.bookingDetail!.bookingDetailID!);
+                    if (getBookingDetail.shorttermStatus! == 1 &&
+                        getBookingDetail.longtermStatus == 0) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SuccessPage()));
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: const Text(
+                              "Chưa hoàn thành thanh toán.",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            actions: [
+                              Center(
+                                child: TextButton(
+                                  onPressed: () async {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text(
+                                    "OK",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                  child: const Text(
+                    "Hoàn thành",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

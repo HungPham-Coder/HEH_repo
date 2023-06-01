@@ -37,7 +37,7 @@ class _FeaturePageState extends State<FeaturePage> {
             FeatureMenu(
               icon:
                   "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar1.png?alt=media&token=0c80092a-d7d8-4f16-97cc-afa766361770",
-              text: "Đăng ký lịch làm việc",
+              text: "Đăng ký lịch trị liệu",
               press: () {
                 Navigator.push(
                     context,

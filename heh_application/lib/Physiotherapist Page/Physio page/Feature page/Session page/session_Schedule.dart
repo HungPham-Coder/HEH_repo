@@ -193,22 +193,24 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
               bool visible = true;
               print(bookingDetail.bookingSchedule!.subProfile!.subName);
               print(widget.bookingDetail!.bookingSchedule!.subProfile!.subName);
-              if (widget.bookingDetail!.bookingSchedule!.signUpUser!.firstName ==
+              if (widget.bookingDetail!.bookingSchedule!.signUpUser!
+                          .firstName ==
                       bookingDetail.bookingSchedule!.signUpUser!.firstName &&
                   widget.bookingDetail!.bookingSchedule!.subProfile!.subName ==
                       bookingDetail.bookingSchedule!.subProfile!.subName) {
-               color =  Color.fromARGB(255, 46, 161, 226);
-               //  color = Colors.blue ;
-              }
-              else {
+                color = Color.fromARGB(255, 46, 161, 226);
+                //  color = Colors.blue ;
+              } else {
                 visible = false;
-                color =  Colors.green;
+                color = Colors.green;
               }
-              String weekDay = "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(bookingDetail.bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
-              if (weekDay =="Thứ 8"){
+              String weekDay =
+                  "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(bookingDetail.bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
+              if (weekDay == "Thứ 8") {
                 weekDay = "Chủ Nhật";
               }
-              String day = DateTimeFormat.formatDate(bookingDetail.bookingSchedule!.schedule!.slot!.timeStart);
+              String day = DateTimeFormat.formatDate(
+                  bookingDetail.bookingSchedule!.schedule!.slot!.timeStart);
               return SessionScheduleMenu(
                 visible: visible,
                 color: color,
@@ -450,7 +452,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                   BookingDetail bookingDetail = BookingDetail(
                                       bookingScheduleID: bookingScheduleAdd!
                                           .bookingScheduleID!,
-                                      shorttermStatus: 3,
+                                      shorttermStatus: 4,
                                       longtermStatus: 0,
                                       imageUrl: "Dài hạn");
 
@@ -458,6 +460,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                       await CallAPI()
                                           .addBookingDetail(bookingDetail);
                                   widget.bookingDetail!.longtermStatus = 1;
+                                  widget.bookingDetail!.shorttermStatus = 0;
                                   await CallAPI().updateBookingDetailStatus(
                                       widget.bookingDetail!);
                                   //check add booking detail

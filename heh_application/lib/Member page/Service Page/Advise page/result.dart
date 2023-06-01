@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
-import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/billChoose.dart';
-import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/billTime.dart';
+import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/billShortTerm.dart';
 import 'package:heh_application/models/booking_schedule.dart';
 import 'package:heh_application/models/schedule.dart';
 import 'package:heh_application/models/sub_profile.dart';
@@ -95,7 +94,7 @@ class _TimeResultPageState extends State<TimeResultPage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  BillChoosePage(
+                                                  BillShortTermPage(
                                                       physiotherapist: snapshot
                                                           .data![index]
                                                           .physiotherapist!,

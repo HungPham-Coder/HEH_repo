@@ -47,7 +47,6 @@ class CallAPI {
       Map<String, dynamic> responseBody = json.decode(response.body);
       Map<String, dynamic> result = responseBody;
 
-
       return ResultLogin.fromMap(result);
     }
   }
@@ -363,7 +362,33 @@ class CallAPI {
   }
 
   Future<List<BookingDetail>> GetAllBookingDetailBill(String userID) async {
-    var url = Uri.parse('${link}/api/BookingDetail/GetAllBookingDetailBill?userID=$userID');
+    var url = Uri.parse(
+        '${link}/api/BookingDetail/GetAllBookingDetailBill?userID=$userID');
+    // var url = Uri.https('localhost:7166', 'api/BookingDetail');
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json",
+      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
+    };
+    var response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      Iterable jsonResult = json.decode(response.body);
+      List<BookingDetail> list = List<BookingDetail>.from(
+          jsonResult.map((model) => BookingDetail.fromMap(model)));
+      if (list == null) {
+        throw Exception('BookingDetail List null');
+      } else {
+        return list;
+      }
+    } else {
+      throw Exception('Failed to load BookingDetail');
+    }
+  }
+
+  Future<List<BookingDetail>> GetAllBookingDetailLongTermNotPayment(
+      String userID) async {
+    var url = Uri.parse(
+        '${link}/api/BookingDetail/GetAllBookingDetailBill?userID=$userID');
     // var url = Uri.https('localhost:7166', 'api/BookingDetail');
     final headers = {
       "Accept": "application/json",
@@ -667,7 +692,6 @@ class CallAPI {
     final headers = {
       "Accept": "application/json",
       "content-type": "application/json",
-
     };
     var response = await http.post(url, body: body, headers: headers);
 
@@ -934,9 +958,8 @@ class CallAPI {
   }
 
   Future<List<BookingDetail>?> getLongTermListByStatus(
-      int shortTermStatus) async {
-    var url = Uri.parse(
-        '${link}/api/BookingDetail/GetLongTermListByStatus?shortTermStatus=$shortTermStatus');
+      String physiotherapistID) async {
+    var url = Uri.parse('${link}/api/BookingDetail/GetLongTermLists');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",
@@ -1201,7 +1224,6 @@ class CallAPI {
     final headers = {
       "Accept": "application/json",
       "content-type": "application/json",
-
     };
     var response = await http.post(url, body: body, headers: headers);
 
@@ -1299,16 +1321,16 @@ class CallAPI {
       }
     }
   }
+
   Future<String> CheckExistEmail(String email) async {
-    var url =
-    Uri.parse('${link}/api/User/CheckExistEmail?email=$email');
+    var url = Uri.parse('${link}/api/User/CheckExistEmail?email=$email');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
 
     final headers = {
       "Accept": "application/json",
       "content-type": "application/json"
     };
-    var response = await http.get(url,headers: headers);
+    var response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -1318,15 +1340,15 @@ class CallAPI {
   }
 
   Future<String> ResetPassword(String email, String newPassword) async {
-    var url =
-    Uri.parse('${link}/api/User/ResetPasswordMobile?email=$email&newPassword=$newPassword');
+    var url = Uri.parse(
+        '${link}/api/User/ResetPasswordMobile?email=$email&newPassword=$newPassword');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
 
     final headers = {
       "Accept": "application/json",
       "content-type": "application/json"
     };
-    var response = await http.get(url,headers: headers);
+    var response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -1343,7 +1365,6 @@ class CallAPI {
     final headers = {
       "Accept": "application/json",
       "content-type": "application/json",
-
     };
     var response = await http.get(url, headers: headers);
 
@@ -1462,7 +1483,6 @@ class CallAPI {
     final headers = {
       "Accept": "application/json",
       "content-type": "application/json",
-
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
@@ -1628,12 +1648,12 @@ class CallAPI {
     }
   }
 
-  Future<String> deleteBookingDetailbyID(String bookingDetailID) async {
-    var url = Uri.parse('${link}api/BookingDetail/$bookingDetailID');
+  Future<bool> deleteBookingDetailbyID(String bookingDetailID) async {
+    var url = Uri.parse('${link}/api/BookingDetail/$bookingDetailID');
     // var url = Uri.https('localhost:7166', 'api/User/Register');
 
     final body = jsonEncode({
-      "bookingDetailID": bookingDetailID,
+      "id": bookingDetailID,
     });
     final headers = {
       "Accept": "application/json",
@@ -1641,7 +1661,26 @@ class CallAPI {
     };
     var response = await http.delete(url, body: body, headers: headers);
     if (response.statusCode == 200) {
-      return "Success";
+      return true;
+    } else {
+      throw Exception('Failed to delete BookingDetail');
+    }
+  }
+
+  Future<bool> deleteBookingSchedulebyID(String bookingScheduleID) async {
+    var url = Uri.parse('${link}/api/BookingSchedule/$bookingScheduleID');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+    final body = jsonEncode({
+      "id": bookingScheduleID,
+    });
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.delete(url, body: body, headers: headers);
+    if (response.statusCode == 200) {
+      return true;
     } else {
       throw Exception('Failed to delete BookingDetail');
     }
@@ -1659,7 +1698,6 @@ class CallAPI {
     final headers = {
       "Accept": "application/json",
       "content-type": "application/json",
-
     };
     var response = await http.post(url, body: body, headers: headers);
 

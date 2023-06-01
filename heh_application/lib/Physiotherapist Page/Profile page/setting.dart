@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:heh_application/Change%20password/otpchange.dart';
 import 'package:heh_application/Exercise%20Page/category.dart';
-import 'package:heh_application/Member%20page/Profile%20page/history.dart';
+import 'package:heh_application/Member%20page/Profile%20page/History%20page/history.dart';
 import 'package:heh_application/Physiotherapist%20Page/Profile%20page/Personal%20page/personal.dart';
 import 'package:heh_application/Physiotherapist%20Page/Profile%20page/history.dart';
 import 'package:heh_application/services/stream_test.dart';

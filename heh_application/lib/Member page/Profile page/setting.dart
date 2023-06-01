@@ -6,8 +6,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:heh_application/Change%20password/otpchange.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Home%20page/favorite.dart';
+import 'package:heh_application/Member%20page/Profile%20page/History%20page/history.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Personal%20page/personal.dart';
-import 'package:heh_application/Member%20page/Profile%20page/history.dart';
+import 'package:heh_application/Member%20page/Profile%20page/Unpaid%20page/unpaid.dart';
+import 'package:heh_application/models/booking_detail.dart';
 import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/stream_test.dart';
@@ -97,18 +99,25 @@ class _SettingPageState extends State<SettingPage> {
             icon:
                 "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fhistory.svg?alt=media&token=13ed285f-0a27-4ee5-b984-bd73d5f15ac8",
             text: "Dịch vụ chưa thanh toán",
-            press: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const HistoryPage()));
+            press: () async {
+              List<BookingDetail> bookingDetail = await CallAPI()
+                  .GetAllBookingDetailBill(sharedCurrentUser!.userID!);
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UnPaidServicePage(
+                            bookingdetail: bookingDetail,
+                          )));
             },
           ),
           ProfileMenu(
             icon:
                 "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fhistory.svg?alt=media&token=13ed285f-0a27-4ee5-b984-bd73d5f15ac8",
             text: "Lịch sử thanh toán",
-            press: () {
+            press: () async {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const HistoryPage()));
+                  MaterialPageRoute(builder: (context) => HistoryPage()));
             },
           ),
           ProfileMenu(

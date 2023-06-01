@@ -90,7 +90,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
       {required String icon,
       required FirebaseFirestoreBase firebaseFirestoreBase,
       required BookingDetail bookingDetail,
-        weekDay,
+      weekDay,
       name,
       time,
       bookedFor,
@@ -225,7 +225,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         sharedPhysiotherapist!.physiotherapistID,
                         'Tư vấn trị liệu',
                         1,
-                        -1,
+                        0,
                         ""),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -242,54 +242,57 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             itemCount: listSort.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-
-                                print(index);
-                                String day = DateTimeFormat.formatDate(listSort[index]
-                                    .bookingSchedule!
-                                    .schedule!
-                                    .slot!
-                                    .timeStart);
-                                String start = DateTimeFormat.formateTime(
-                                    listSort[index].bookingSchedule!
-                                        .schedule!.slot!.timeStart);
-                                String end = DateTimeFormat.formateTime(listSort[index]
-                                    .bookingSchedule!
-                                    .schedule!
-                                    .slot!
-                                    .timeEnd);
-                                String weekDay = "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(listSort[index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
-                                if (weekDay =="Thứ 8"){
-                                  weekDay = "Chủ Nhật";
-                                }
-                                return ServicePaid(
-                                  bookingDetail: listSort[index],
-                                  firebaseFirestoreBase:
-                                      widget.firebaseFirestoreBase,
-                                  icon:
-                                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
-                                  name:
-                                      "${listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
-                                  date: "$day",
-                                  weekDay:weekDay,
-                                  time: "$start - $end",
-                                  bookedFor:
-                                      "${listSort[index].bookingSchedule!.subProfile!.subName}",
-                                  press: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                AdviseDetailPage(
-                                                    bookingSchedule: listSort[index]
-                                                        .bookingSchedule)));
-                                  },
-                                );
-
+                              print(index);
+                              String day = DateTimeFormat.formatDate(
+                                  listSort[index]
+                                      .bookingSchedule!
+                                      .schedule!
+                                      .slot!
+                                      .timeStart);
+                              String start = DateTimeFormat.formateTime(
+                                  listSort[index]
+                                      .bookingSchedule!
+                                      .schedule!
+                                      .slot!
+                                      .timeStart);
+                              String end = DateTimeFormat.formateTime(
+                                  listSort[index]
+                                      .bookingSchedule!
+                                      .schedule!
+                                      .slot!
+                                      .timeEnd);
+                              String weekDay =
+                                  "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(listSort[index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
+                              if (weekDay == "Thứ 8") {
+                                weekDay = "Chủ Nhật";
+                              }
+                              return ServicePaid(
+                                bookingDetail: listSort[index],
+                                firebaseFirestoreBase:
+                                    widget.firebaseFirestoreBase,
+                                icon:
+                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                                name:
+                                    "${listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                                date: "$day",
+                                weekDay: weekDay,
+                                time: "$start - $end",
+                                bookedFor:
+                                    "${listSort[index].bookingSchedule!.subProfile!.subName}",
+                                press: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AdviseDetailPage(
+                                                  bookingSchedule:
+                                                      listSort[index]
+                                                          .bookingSchedule)));
+                                },
+                              );
                             }),
                         onRefresh: () async {
-                          setState(() {
-
-                          });
+                          setState(() {});
                         },
                       );
                     } else {
