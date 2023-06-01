@@ -59,7 +59,9 @@ class _SessionListPageState extends State<SessionListPage> {
                       int count = 0;
                       listSort.forEach((element) {
                         if (elementRemove.shorttermStatus == 4 &&
-                            elementRemove.longtermStatus == 0 &&
+                            elementRemove.longtermStatus == 0
+                            &&
+                            element.longtermStatus == 1 &&
                             element.bookingSchedule!.signUpUser!.firstName ==
                                 elementRemove
                                     .bookingSchedule!.signUpUser!.firstName &&
