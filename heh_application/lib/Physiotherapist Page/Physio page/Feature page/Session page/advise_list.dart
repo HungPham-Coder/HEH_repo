@@ -123,7 +123,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
                                   "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
                               subName: subName,
                               time: "$start - $end",
-                              status: 'xong',
+                              status: 'Hoàn thành tư vấn',
                               press: () async {
                                 snapshot.data![index].shorttermStatus = 4;
                                 await CallAPI().updateBookingDetailStatus(
@@ -143,7 +143,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 250),
                       child: Text(
-                        "Hiện tại chưa có slot tư vấn trị liệu nào ",
+                        "Hiện tại chưa có slot tư vấn trị liệu nào",
                         style: TextStyle(color: Colors.grey[500], fontSize: 16),
                       ),
                     ),

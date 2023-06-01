@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Member%20page/Profile%20page/History%20page/history.dart';
+import 'package:heh_application/Member%20page/Profile%20page/Unpaid%20page/billLongTerm.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/billShortTerm.dart';
 import 'package:heh_application/models/booking_detail.dart';
 import 'package:heh_application/util/date_time_format.dart';
@@ -78,7 +79,7 @@ class _UnPaidServicePageState extends State<UnPaidServicePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => BillShortTermPage(
+                                    builder: (context) => BillLongTermPage(
                                         view: "true",
                                         physiotherapist: snapshot
                                             .data![index]
@@ -99,7 +100,7 @@ class _UnPaidServicePageState extends State<UnPaidServicePage> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 300),
                       child: Text(
-                        "Bạn chưa thanh toán dịch vụ nào",
+                        "Bạn chưa có hóa đơn để thanh toán",
                         style: TextStyle(color: Colors.grey[500], fontSize: 16),
                       ),
                     ),
@@ -110,7 +111,7 @@ class _UnPaidServicePageState extends State<UnPaidServicePage> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 300),
                     child: Text(
-                      "Bạn chưa thanh toán dịch vụ nào",
+                      "Bạn chưa có hóa đơn để thanh toán",
                       style: TextStyle(color: Colors.grey[500], fontSize: 16),
                     ),
                   ),

@@ -68,133 +68,190 @@ class _BillLongTermPageState extends State<BillLongTermPage> {
         subTitle = "Hóa Đơn";
       });
     }
-    return WillPopScope(
-        onWillPop: () async {
-          final shouldPop = await showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Hủy thanh toán!'),
-                content: const Text('Tất cả thanh toán của ban sẽ bi hủy bỏ?'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, false),
-                    child: const Text('Hủy'),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(
+          title,
+          style: TextStyle(fontSize: 23),
+        ),
+        centerTitle: true,
+        elevation: 10,
+        backgroundColor: const Color.fromARGB(255, 46, 161, 226),
+      ),
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(15)),
+                child: Column(children: [
+                  const SizedBox(height: 10),
+                  Container(
+                    height: MediaQuery.of(context).size.height / 11,
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2Fwelcome3.png?alt=media&token=0fbdd14a-2e64-4ed5-87ab-2733d6180051"))),
                   ),
-                  TextButton(
-                    onPressed: () async {
-                      bool delete = await CallAPI().deleteBookingSchedulebyID(
-                          widget.bookingSchedule!.bookingScheduleID!);
-                      print(delete);
-                      Navigator.pop(context, true);
-                    },
-                    child: const Text('Đồng ý'),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                            child: Text(subTitle,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500))),
+                        const SizedBox(height: 20),
+                        information(
+                            name: "ID: ", info: widget.schedule.scheduleID),
+                        padding(),
+                        information(
+                            name: "Tên chuyên viên: ",
+                            info:
+                                widget.physiotherapist.signUpUser!.firstName!),
+                        padding(),
+                        information(
+                            name: "Tên người đặt: ",
+                            info: sharedCurrentUser!.firstName!),
+                        padding(),
+                        const SizedBox(height: 15),
+                        information(
+                            name: "Buổi điều trị: ",
+                            info: widget.schedule.slot!.slotName),
+                        padding(),
+                        information(name: "Ngày điều trị: ", info: day),
+                        padding(),
+                        information(
+                            name: "Thời gian bắt đầu: ", info: timeStart),
+                        padding(),
+                        information(
+                            name: "Thời gian kết thúc: ", info: timeEnd),
+                        padding(),
+                        information(
+                            name: "Số tiền: ",
+                            info:
+                                '${value.format(widget.schedule.typeOfSlot!.price.toInt())} VNĐ'),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
                   ),
-                ],
-              );
-            },
-          );
-
-          // if the user confirms, pop the route
-          if (shouldPop) {
-            return true;
-          } else {
-            return false;
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: Text(
-              title,
-              style: TextStyle(fontSize: 23),
+                ]),
+              ),
             ),
-            centerTitle: true,
-            elevation: 10,
-            backgroundColor: const Color.fromARGB(255, 46, 161, 226),
-          ),
-          body: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Column(children: [
-                      const SizedBox(height: 10),
-                      Container(
-                        height: MediaQuery.of(context).size.height / 11,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/image%2Fwelcome3.png?alt=media&token=0fbdd14a-2e64-4ed5-87ab-2733d6180051"))),
+            widget.view == "true"
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              const MaterialStatePropertyAll<Color>(
+                                  Colors.black12),
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.only(
+                                  left: 25, right: 25, top: 15, bottom: 15)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                side: const BorderSide(color: Colors.white)),
+                          )),
+                      onPressed: () async {
+                        // CallAPI().getBookingDetailByID(bookingDetail!);
+
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        "Trở lại",
+                        style: TextStyle(fontSize: 16),
                       ),
+                    ),
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Padding(
+                      //   padding: const EdgeInsets.only(left: 20),
+                      //   child: ElevatedButton(
+                      //     style: ButtonStyle(
+                      //         backgroundColor:
+                      //             const MaterialStatePropertyAll<Color>(
+                      //                 Colors.black12),
+                      //         padding: MaterialStateProperty.all(
+                      //             const EdgeInsets.only(
+                      //                 left: 25,
+                      //                 right: 25,
+                      //                 top: 15,
+                      //                 bottom: 15)),
+                      //         shape: MaterialStateProperty.all<
+                      //             RoundedRectangleBorder>(
+                      //           RoundedRectangleBorder(
+                      //               borderRadius: BorderRadius.circular(15),
+                      //               side: const BorderSide(
+                      //                   color: Colors.white)),
+                      //         )),
+                      //     onPressed: () async {
+                      //       // CallAPI().getBookingDetailByID(bookingDetail!);
+                      //       showDialog(
+                      //         context: context,
+                      //         builder: (context) {
+                      //           return AlertDialog(
+                      //             content:
+                      //                 const Text("Bạn muốn hủy hóa đơn?"),
+                      //             actions: [
+                      //               TextButton(
+                      //                   onPressed: () async {
+                      //                     BookingSchedule bookingSchedule =
+                      //                         await CallAPI()
+                      //                             .getBookingScheduleByID(
+                      //                                 widget
+                      //                                     .bookingSchedule!
+                      //                                     .bookingScheduleID!);
+                      //                     print(widget.bookingSchedule!);
+                      //                     print(bookingSchedule
+                      //                         .bookingScheduleID!);
+                      //                     print(widget.bookingSchedule!
+                      //                         .bookingScheduleID);
+                      //                   },
+                      //                   child: const Text(
+                      //                     "Huỷ",
+                      //                     style:
+                      //                         TextStyle(color: Colors.red),
+                      //                   )),
+                      //               TextButton(
+                      //                   onPressed: () {
+                      //                     Navigator.pop(
+                      //                         context,
+                      //                         MaterialPageRoute(
+                      //                             builder: (context) =>
+                      //                                 Navigation_Bar()));
+                      //                   },
+                      //                   child: const Text("Chập nhận")),
+                      //             ],
+                      //           );
+                      //         },
+                      //       );
+                      //       // Navigator.of(context).pop();
+                      //     },
+                      //     child: const Text(
+                      //       "Trở lại",
+                      //       style: TextStyle(fontSize: 16),
+                      //     ),
+                      //   ),
+                      // ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Center(
-                                child: Text(subTitle,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500))),
-                            const SizedBox(height: 20),
-                            information(
-                                name: "ID: ", info: widget.schedule.scheduleID),
-                            padding(),
-                            information(
-                                name: "Tên chuyên viên: ",
-                                info: widget
-                                    .physiotherapist.signUpUser!.firstName!),
-                            padding(),
-                            information(
-                                name: "Tên người đặt: ",
-                                info: sharedCurrentUser!.firstName!),
-                            padding(),
-                            const SizedBox(height: 15),
-                            information(
-                                name: "Buổi điều trị: ",
-                                info: widget.schedule.slot!.slotName),
-                            padding(),
-                            information(name: "Ngày điều trị: ", info: day),
-                            padding(),
-                            information(
-                                name: "Thời gian bắt đầu: ", info: timeStart),
-                            padding(),
-                            information(
-                                name: "Thời gian kết thúc: ", info: timeEnd),
-                            padding(),
-                            information(
-                                name: "Số tiền: ",
-                                info:
-                                    '${value.format(widget.schedule.typeOfSlot!.price.toInt())} VNĐ'),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
-                      ),
-                    ]),
-                  ),
-                ),
-                widget.view == "true"
-                    ? Padding(
-                        padding: const EdgeInsets.only(left: 20),
+                        padding: const EdgeInsets.only(top: 10),
                         child: ElevatedButton(
                           style: ButtonStyle(
-                              backgroundColor:
-                                  const MaterialStatePropertyAll<Color>(
-                                      Colors.black12),
                               padding: MaterialStateProperty.all(
-                                  const EdgeInsets.only(
-                                      left: 25,
-                                      right: 25,
-                                      top: 15,
-                                      bottom: 15)),
+                                  const EdgeInsets.all(15)),
                               shape: MaterialStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
@@ -203,146 +260,48 @@ class _BillLongTermPageState extends State<BillLongTermPage> {
                                         const BorderSide(color: Colors.white)),
                               )),
                           onPressed: () async {
-                            // CallAPI().getBookingDetailByID(bookingDetail!);
+                            // BookingSchedule? bookingScheduleAdd = await CallAPI()
+                            //     .addBookingSchedule(widget.bookingSchedule!);
+                            BookingSchedule bookingSchedule = await CallAPI()
+                                .getBookingScheduleByID(
+                                    widget.bookingSchedule!.bookingScheduleID!);
 
-                            Navigator.of(context).pop();
+                            BookingDetail bookingDetail = BookingDetail(
+                              bookingScheduleID:
+                                  bookingSchedule.bookingScheduleID!,
+                              bookingSchedule: bookingSchedule,
+                              shorttermStatus: 0,
+                              longtermStatus: -1,
+                            );
+                            BookingDetail addBookingDetail =
+                                await CallAPI().addBookingDetail(bookingDetail);
+                            BookingDetail getBookingDetail = await CallAPI()
+                                .getBookingDetailByID(
+                                    addBookingDetail.bookingDetailID!);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PaymentShortTermPage(
+                                          bookingDetail: getBookingDetail,
+                                        )));
+                            // Navigator.pushNamed(
+                            //   context,
+                            //   '/payment',
+                            //   arguments: {'bookingDetail': getBookingDetail},
+                            // );
                           },
                           child: const Text(
-                            "Trở lại",
+                            "Thanh toán",
                             style: TextStyle(fontSize: 16),
                           ),
                         ),
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Padding(
-                          //   padding: const EdgeInsets.only(left: 20),
-                          //   child: ElevatedButton(
-                          //     style: ButtonStyle(
-                          //         backgroundColor:
-                          //             const MaterialStatePropertyAll<Color>(
-                          //                 Colors.black12),
-                          //         padding: MaterialStateProperty.all(
-                          //             const EdgeInsets.only(
-                          //                 left: 25,
-                          //                 right: 25,
-                          //                 top: 15,
-                          //                 bottom: 15)),
-                          //         shape: MaterialStateProperty.all<
-                          //             RoundedRectangleBorder>(
-                          //           RoundedRectangleBorder(
-                          //               borderRadius: BorderRadius.circular(15),
-                          //               side: const BorderSide(
-                          //                   color: Colors.white)),
-                          //         )),
-                          //     onPressed: () async {
-                          //       // CallAPI().getBookingDetailByID(bookingDetail!);
-                          //       showDialog(
-                          //         context: context,
-                          //         builder: (context) {
-                          //           return AlertDialog(
-                          //             content:
-                          //                 const Text("Bạn muốn hủy hóa đơn?"),
-                          //             actions: [
-                          //               TextButton(
-                          //                   onPressed: () async {
-                          //                     BookingSchedule bookingSchedule =
-                          //                         await CallAPI()
-                          //                             .getBookingScheduleByID(
-                          //                                 widget
-                          //                                     .bookingSchedule!
-                          //                                     .bookingScheduleID!);
-                          //                     print(widget.bookingSchedule!);
-                          //                     print(bookingSchedule
-                          //                         .bookingScheduleID!);
-                          //                     print(widget.bookingSchedule!
-                          //                         .bookingScheduleID);
-                          //                   },
-                          //                   child: const Text(
-                          //                     "Huỷ",
-                          //                     style:
-                          //                         TextStyle(color: Colors.red),
-                          //                   )),
-                          //               TextButton(
-                          //                   onPressed: () {
-                          //                     Navigator.pop(
-                          //                         context,
-                          //                         MaterialPageRoute(
-                          //                             builder: (context) =>
-                          //                                 Navigation_Bar()));
-                          //                   },
-                          //                   child: const Text("Chập nhận")),
-                          //             ],
-                          //           );
-                          //         },
-                          //       );
-                          //       // Navigator.of(context).pop();
-                          //     },
-                          //     child: const Text(
-                          //       "Trở lại",
-                          //       style: TextStyle(fontSize: 16),
-                          //     ),
-                          //   ),
-                          // ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  padding: MaterialStateProperty.all(
-                                      const EdgeInsets.all(15)),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                        side: const BorderSide(
-                                            color: Colors.white)),
-                                  )),
-                              onPressed: () async {
-                                // BookingSchedule? bookingScheduleAdd = await CallAPI()
-                                //     .addBookingSchedule(widget.bookingSchedule!);
-                                BookingSchedule bookingSchedule =
-                                    await CallAPI().getBookingScheduleByID(
-                                        widget.bookingSchedule!
-                                            .bookingScheduleID!);
-
-                                BookingDetail bookingDetail = BookingDetail(
-                                  bookingScheduleID:
-                                      bookingSchedule.bookingScheduleID!,
-                                  bookingSchedule: bookingSchedule,
-                                  shorttermStatus: 0,
-                                  longtermStatus: -1,
-                                );
-                                BookingDetail addBookingDetail = await CallAPI()
-                                    .addBookingDetail(bookingDetail);
-                                BookingDetail getBookingDetail = await CallAPI()
-                                    .getBookingDetailByID(
-                                        addBookingDetail.bookingDetailID!);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PaymentShortTermPage(
-                                              bookingDetail: getBookingDetail,
-                                            )));
-                                // Navigator.pushNamed(
-                                //   context,
-                                //   '/payment',
-                                //   arguments: {'bookingDetail': getBookingDetail},
-                                // );
-                              },
-                              child: const Text(
-                                "Thanh toán",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
-              ],
-            ),
-          ),
-        ));
+                    ],
+                  ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

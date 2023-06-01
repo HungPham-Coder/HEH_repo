@@ -388,7 +388,7 @@ class CallAPI {
   Future<List<BookingDetail>> GetAllBookingDetailLongTermNotPayment(
       String userID) async {
     var url = Uri.parse(
-        '${link}/api/BookingDetail/GetAllBookingDetailBill?userID=$userID');
+        '${link}/api/BookingDetail/GetAllBookingDetailLongTermNotPayment?userID=$userID');
     // var url = Uri.https('localhost:7166', 'api/BookingDetail');
     final headers = {
       "Accept": "application/json",
