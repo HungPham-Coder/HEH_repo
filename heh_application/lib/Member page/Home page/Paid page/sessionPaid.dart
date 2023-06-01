@@ -33,118 +33,126 @@ class _SessionPaidPageState extends State<SessionPaidPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          "Danh sách buổi trị liệu",
-          style: TextStyle(fontSize: 20),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: const Text(
+            "Danh sách buổi trị liệu",
+            style: TextStyle(fontSize: 20),
+          ),
+          elevation: 10,
+          backgroundColor: const Color.fromARGB(255, 46, 161, 226),
         ),
-        elevation: 10,
-        backgroundColor: const Color.fromARGB(255, 46, 161, 226),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Column(children: [
-          FutureBuilder<List<BookingDetail>>(
-              future: CallAPI().getAllBookingDetailByUserIDAndTypeOfSlot(
-                  sharedCurrentUser!.userID!, widget.typeName),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<BookingDetail> listSort = [];
-                  for (var item in snapshot.data!) {
-                    if (item.longtermStatus! < 3) {
-                      listSort.add(item);
-                    }
-                  }
-                  if (listSort.isNotEmpty) {
-                    return RefreshIndicator(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: listSort.length,
-                          itemBuilder: (context, index) {
-                            DateTime tempDate = new DateFormat("yyyy-MM-dd")
-                                .parse(listSort[index]
-                                    .bookingSchedule!
-                                    .schedule!
-                                    .slot!
-                                    .timeStart);
-                            String day =
-                                DateFormat("dd-MM-yyyy").format(tempDate);
-                            DateTime tempStart =
-                                new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
-                                    listSort[index]
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await CallAPI().getAllBookingDetailByUserIDAndTypeOfSlot(
+                sharedCurrentUser!.userID!, widget.typeName);
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Column(children: [
+              FutureBuilder<List<BookingDetail>>(
+                  future: CallAPI().getAllBookingDetailByUserIDAndTypeOfSlot(
+                      sharedCurrentUser!.userID!, widget.typeName),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      List<BookingDetail> listSort = [];
+                      for (var item in snapshot.data!) {
+                        if (item.longtermStatus! < 3) {
+                          listSort.add(item);
+                        }
+                      }
+                      if (listSort.isNotEmpty) {
+                        return RefreshIndicator(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: listSort.length,
+                              itemBuilder: (context, index) {
+                                DateTime tempDate = new DateFormat("yyyy-MM-dd")
+                                    .parse(listSort[index]
                                         .bookingSchedule!
                                         .schedule!
                                         .slot!
                                         .timeStart);
-                            String start =
-                                DateFormat("HH:mm").format(tempStart);
-                            DateTime tempEnd =
-                                new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
-                                    listSort[index]
+                                String day =
+                                    DateFormat("dd-MM-yyyy").format(tempDate);
+                                DateTime tempStart =
+                                    new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
+                                        listSort[index]
+                                            .bookingSchedule!
+                                            .schedule!
+                                            .slot!
+                                            .timeStart);
+                                String start =
+                                    DateFormat("HH:mm").format(tempStart);
+                                DateTime tempEnd =
+                                    new DateFormat("yyyy-MM-ddTHH:mm:ss").parse(
+                                        listSort[index]
+                                            .bookingSchedule!
+                                            .schedule!
+                                            .slot!
+                                            .timeEnd);
+                                String end =
+                                    DateFormat("HH:mm").format(tempEnd);
+                                String weekDay =
+                                    "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(listSort[index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
+                                if (weekDay == "Thứ 8") {
+                                  weekDay = "Chủ Nhật";
+                                }
+                                return ServicePaid(
+                                    icon:
+                                        "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                                    name:
+                                        "${listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                                    date: "$day",
+                                    weekDay: weekDay,
+                                    time: "$start - $end",
+                                    bookedFor:
+                                        "${listSort[index].bookingSchedule!.subProfile!.relationship!.relationName}",
+                                    bookingSchedule:
+                                        listSort[index].bookingSchedule!,
+                                    physiotherapist: listSort[index]
                                         .bookingSchedule!
                                         .schedule!
-                                        .slot!
-                                        .timeEnd);
-                            String end = DateFormat("HH:mm").format(tempEnd);
-                            String weekDay =
-                                "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(listSort[index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
-                            if (weekDay == "Thứ 8") {
-                              weekDay = "Chủ Nhật";
-                            }
-                            return ServicePaid(
-                                icon:
-                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
-                                name:
-                                    "${listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
-                                date: "$day",
-                                weekDay: weekDay,
-                                time: "$start - $end",
-                                bookedFor:
-                                    "${listSort[index].bookingSchedule!.subProfile!.relationship!.relationName}",
-                                bookingSchedule:
-                                    listSort[index].bookingSchedule!,
-                                physiotherapist: listSort[index]
-                                    .bookingSchedule!
-                                    .schedule!
-                                    .physiotherapist!,
-                                schedule:
-                                    listSort[index].bookingSchedule!.schedule!,
-                                firebaseFirestoreBase:
-                                    widget.firebaseFirestoreBase,
-                                bookingDetail: listSort[index]);
-                          },
+                                        .physiotherapist!,
+                                    schedule: listSort[index]
+                                        .bookingSchedule!
+                                        .schedule!,
+                                    firebaseFirestoreBase:
+                                        widget.firebaseFirestoreBase,
+                                    bookingDetail: listSort[index]);
+                              },
+                            ),
+                            onRefresh: () async {
+                              setState(() {});
+                            });
+                      } else {
+                        return Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 300),
+                            child: Text(
+                              "Bạn chưa đăng ký dịch vụ ${widget.typeName.toLowerCase()} nào",
+                              style: TextStyle(
+                                  color: Colors.grey[500], fontSize: 16),
+                            ),
+                          ),
+                        );
+                      }
+                    } else {
+                      return Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 300),
+                          child: Text(
+                            "Bạn chưa đăng ký dịch vụ ${widget.typeName.toLowerCase()} nào",
+                            style: TextStyle(
+                                color: Colors.grey[500], fontSize: 16),
+                          ),
                         ),
-                        onRefresh: () async {
-                          setState(() {});
-                        });
-                  } else {
-                    return Center(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 300),
-                        child: Text(
-                          "Bạn chưa đăng ký dịch vụ ${widget.typeName.toLowerCase()} nào",
-                          style:
-                              TextStyle(color: Colors.grey[500], fontSize: 16),
-                        ),
-                      ),
-                    );
-                  }
-                } else {
-                  return Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 300),
-                      child: Text(
-                        "Bạn chưa đăng ký dịch vụ ${widget.typeName.toLowerCase()} nào",
-                        style: TextStyle(color: Colors.grey[500], fontSize: 16),
-                      ),
-                    ),
-                  );
-                }
-              }),
-        ]),
-      ),
-    );
+                      );
+                    }
+                  }),
+            ]),
+          ),
+        ));
   }
 
   Widget ServicePaid(

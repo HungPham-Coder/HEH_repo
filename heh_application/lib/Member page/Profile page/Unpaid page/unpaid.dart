@@ -66,7 +66,7 @@ class _UnPaidServicePageState extends State<UnPaidServicePage> {
                           .timeEnd);
                       return Container(
                         padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: ServicePaid(
+                        child: ServiceUnPaid(
                           icon:
                               "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
                           name: snapshot.data![index].bookingSchedule!.schedule!
@@ -80,16 +80,19 @@ class _UnPaidServicePageState extends State<UnPaidServicePage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => BillLongTermPage(
-                                        view: "true",
-                                        physiotherapist: snapshot
-                                            .data![index]
-                                            .bookingSchedule!
-                                            .schedule!
-                                            .physiotherapist!,
-                                        schedule: snapshot.data![index]
-                                            .bookingSchedule!.schedule!,
-                                        bookingSchedule: snapshot
-                                            .data![index].bookingSchedule!)));
+                                          view: "false",
+                                          physiotherapist: snapshot
+                                              .data![index]
+                                              .bookingSchedule!
+                                              .schedule!
+                                              .physiotherapist!,
+                                          schedule: snapshot.data![index]
+                                              .bookingSchedule!.schedule!,
+                                          bookingSchedule: snapshot
+                                              .data![index].bookingSchedule!,
+                                          bookingDetailID: snapshot
+                                              .data![index].bookingDetailID,
+                                        )));
                           },
                         ),
                       );

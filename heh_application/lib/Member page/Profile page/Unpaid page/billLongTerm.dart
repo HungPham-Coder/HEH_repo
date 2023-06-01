@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:heh_application/Login%20page/landing_page.dart';
+import 'package:heh_application/Member%20page/Profile%20page/Unpaid%20page/paymentLongTerm.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Advise%20page/physioChoose.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Advise%20page/result.dart';
 import 'package:heh_application/Member%20page/Service%20Page/Payment%20page/paymentShortTerm.dart';
@@ -20,12 +21,14 @@ class BillLongTermPage extends StatefulWidget {
     required this.physiotherapist,
     required this.schedule,
     required this.bookingSchedule,
+    required this.bookingDetailID,
     this.view,
   }) : super(key: key);
   PhysiotherapistModel physiotherapist;
   Schedule schedule;
   BookingSchedule? bookingSchedule;
   String? view;
+  String? bookingDetailID;
   @override
   State<BillLongTermPage> createState() => _BillLongTermPageState();
 }
@@ -73,7 +76,7 @@ class _BillLongTermPageState extends State<BillLongTermPage> {
       appBar: AppBar(
         title: Text(
           title,
-          style: TextStyle(fontSize: 23),
+          style: const TextStyle(fontSize: 23),
         ),
         centerTitle: true,
         elevation: 10,
@@ -106,7 +109,7 @@ class _BillLongTermPageState extends State<BillLongTermPage> {
                       children: [
                         Center(
                             child: Text(subTitle,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500))),
                         const SizedBox(height: 20),
@@ -177,75 +180,6 @@ class _BillLongTermPageState extends State<BillLongTermPage> {
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Padding(
-                      //   padding: const EdgeInsets.only(left: 20),
-                      //   child: ElevatedButton(
-                      //     style: ButtonStyle(
-                      //         backgroundColor:
-                      //             const MaterialStatePropertyAll<Color>(
-                      //                 Colors.black12),
-                      //         padding: MaterialStateProperty.all(
-                      //             const EdgeInsets.only(
-                      //                 left: 25,
-                      //                 right: 25,
-                      //                 top: 15,
-                      //                 bottom: 15)),
-                      //         shape: MaterialStateProperty.all<
-                      //             RoundedRectangleBorder>(
-                      //           RoundedRectangleBorder(
-                      //               borderRadius: BorderRadius.circular(15),
-                      //               side: const BorderSide(
-                      //                   color: Colors.white)),
-                      //         )),
-                      //     onPressed: () async {
-                      //       // CallAPI().getBookingDetailByID(bookingDetail!);
-                      //       showDialog(
-                      //         context: context,
-                      //         builder: (context) {
-                      //           return AlertDialog(
-                      //             content:
-                      //                 const Text("Bạn muốn hủy hóa đơn?"),
-                      //             actions: [
-                      //               TextButton(
-                      //                   onPressed: () async {
-                      //                     BookingSchedule bookingSchedule =
-                      //                         await CallAPI()
-                      //                             .getBookingScheduleByID(
-                      //                                 widget
-                      //                                     .bookingSchedule!
-                      //                                     .bookingScheduleID!);
-                      //                     print(widget.bookingSchedule!);
-                      //                     print(bookingSchedule
-                      //                         .bookingScheduleID!);
-                      //                     print(widget.bookingSchedule!
-                      //                         .bookingScheduleID);
-                      //                   },
-                      //                   child: const Text(
-                      //                     "Huỷ",
-                      //                     style:
-                      //                         TextStyle(color: Colors.red),
-                      //                   )),
-                      //               TextButton(
-                      //                   onPressed: () {
-                      //                     Navigator.pop(
-                      //                         context,
-                      //                         MaterialPageRoute(
-                      //                             builder: (context) =>
-                      //                                 Navigation_Bar()));
-                      //                   },
-                      //                   child: const Text("Chập nhận")),
-                      //             ],
-                      //           );
-                      //         },
-                      //       );
-                      //       // Navigator.of(context).pop();
-                      //     },
-                      //     child: const Text(
-                      //       "Trở lại",
-                      //       style: TextStyle(fontSize: 16),
-                      //     ),
-                      //   ),
-                      // ),
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: ElevatedButton(
@@ -262,26 +196,26 @@ class _BillLongTermPageState extends State<BillLongTermPage> {
                           onPressed: () async {
                             // BookingSchedule? bookingScheduleAdd = await CallAPI()
                             //     .addBookingSchedule(widget.bookingSchedule!);
-                            BookingSchedule bookingSchedule = await CallAPI()
-                                .getBookingScheduleByID(
-                                    widget.bookingSchedule!.bookingScheduleID!);
+                            print("ID: ${widget.bookingDetailID!}");
+                            // BookingSchedule bookingSchedule = await CallAPI()
+                            //     .getBookingScheduleByID(
+                            //         widget.bookingSchedule!.bookingScheduleID!);
 
-                            BookingDetail bookingDetail = BookingDetail(
-                              bookingScheduleID:
-                                  bookingSchedule.bookingScheduleID!,
-                              bookingSchedule: bookingSchedule,
-                              shorttermStatus: 0,
-                              longtermStatus: -1,
-                            );
-                            BookingDetail addBookingDetail =
-                                await CallAPI().addBookingDetail(bookingDetail);
+                            // BookingDetail bookingDetail = BookingDetail(
+                            //   bookingScheduleID:
+                            //       widget.bookingSchedule!.bookingScheduleID!,
+                            //   bookingSchedule: widget.bookingSchedule!,
+                            //   shorttermStatus: 0,
+                            //   longtermStatus: 1,
+                            // );
+                            // BookingDetail addBookingDetail =
+                            //     await CallAPI().addBookingDetail(bookingDetail);
                             BookingDetail getBookingDetail = await CallAPI()
-                                .getBookingDetailByID(
-                                    addBookingDetail.bookingDetailID!);
+                                .getBookingDetailByID(widget.bookingDetailID!);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => PaymentShortTermPage(
+                                    builder: (context) => PaymenLongTermPage(
                                           bookingDetail: getBookingDetail,
                                         )));
                             // Navigator.pushNamed(
