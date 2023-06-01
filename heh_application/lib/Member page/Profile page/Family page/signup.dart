@@ -88,15 +88,14 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                     if (value!.isEmpty || _date.text == '') {
                       validDOB = false;
                       return "Hãy nhập ngày sinh";
-                    }
-                    else {
+                    } else {
                       validDOB = true;
                     }
                   },
                   controller: _date,
                   readOnly: true,
-                  decoration:const InputDecoration(
-                    hintStyle:  TextStyle(color: Colors.black),
+                  decoration: const InputDecoration(
+                    hintStyle: TextStyle(color: Colors.black),
                     hoverColor: Colors.black,
                     // hintText: dob,
                   ),
@@ -104,8 +103,8 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                     DateTime? pickeddate = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
-                        firstDate: DateTime(1960),
-                        lastDate: DateTime(2030));
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime.now());
                     if (pickeddate != null) {
                       setState(() {
                         age = DateTime.now().year - pickeddate.year;
@@ -138,10 +137,9 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           snapshot.data!.removeWhere((element) {
-                            if (element.relationName == "Tôi"){
+                            if (element.relationName == "Tôi") {
                               return true;
-                            }
-                            else {
+                            } else {
                               return false;
                             }
                           });
@@ -153,7 +151,8 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                             print("Co data");
                           }
                           return Form(
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             child: DropdownButtonFormField<String>(
                               decoration: const InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -164,8 +163,7 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                                 if (value == "- Chọn -") {
                                   validRelationShip = false;
                                   return "Hãy Chọn mối quan hệ";
-                                }
-                                else {
+                                } else {
                                   validRelationShip = true;
                                 }
                               },
@@ -211,12 +209,12 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                         child: MaterialButton(
                           height: 50,
                           onPressed: () async {
-                            if (validRelationShip == true
-                            && validDOB == true
-                            && validName == true) {
+                            if (validRelationShip == true &&
+                                validDOB == true &&
+                                validName == true) {
                               Relationship relationship = await CallAPI()
                                   .getRelationByRelationName(
-                                  selectedRelationship);
+                                      selectedRelationship);
                               SubProfile subProfile = SubProfile(
                                   userID: sharedCurrentUser!.userID,
                                   relationID: relationship.relationId,
@@ -229,13 +227,11 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
                                           FamilySignUpMedicalPage(
                                             subProfile: subProfile,
                                           )));
-                            }
-                            else {
+                            } else {
                               setState(() {
                                 visible = true;
                               });
                             }
-
                           },
                           color: const Color.fromARGB(255, 46, 161, 226),
                           elevation: 0,
@@ -295,7 +291,8 @@ class _SignUpFamilyPageState extends State<SignUpFamilyPage> {
             decoration: const InputDecoration(
                 // hintStyle: const TextStyle(color: Colors.black),
                 // hintText: sharedCurrentUser!.firstName,
-                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey),
                 ),

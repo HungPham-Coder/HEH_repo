@@ -129,7 +129,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
           children: [
             TableCalendar(
               focusedDay: _selectedDay,
-              firstDay: DateTime(2000),
+              firstDay: DateTime.now().subtract(Duration(days: 31)),
               lastDay: DateTime(2099),
               startingDayOfWeek: StartingDayOfWeek.monday,
               calendarBuilders: CalendarBuilders(

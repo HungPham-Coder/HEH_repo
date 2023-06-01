@@ -102,7 +102,6 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
 
                         _relationships.add(field);
                       });
-
                     }
                     return DropdownButtonFormField<String>(
                       validator: (value) {
@@ -174,7 +173,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
             DateTime? pickeddate = await showDatePicker(
                 context: context,
                 initialDate: DateTime.now(),
-                firstDate: DateTime(1960),
+                firstDate: DateTime.now(),
                 lastDate: DateTime(2099));
             if (pickeddate != null) {
               _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
@@ -273,7 +272,6 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                       .GetAllSlotByDateAndTypeOfSlot(date, widget.typeName),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-
                       if (snapshot.data!.isNotEmpty) {
                         visibleValid = false;
                         addSlot(snapshot.data!);
@@ -314,19 +312,19 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                             ),
                           ],
                         );
-                      }
-                      else {
+                      } else {
                         visible = false;
                         visibleValid = false;
-                        DateTime dateTemp =  DateFormat("yyyy-MM-dd").parse(date);
-                        String datefmt = DateFormat("dd-MM-yyyy").format(dateTemp);
+                        DateTime dateTemp =
+                            DateFormat("yyyy-MM-dd").parse(date);
+                        String datefmt =
+                            DateFormat("dd-MM-yyyy").format(dateTemp);
                         return Center(
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
                               "Ngày $datefmt không còn slot trống",
-                              style: TextStyle(
-                                  color: Colors.red, fontSize: 16),
+                              style: TextStyle(color: Colors.red, fontSize: 16),
                             ),
                           ),
                         );
@@ -446,7 +444,6 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
 
                             String date =
                                 DateFormat("yyyy-MM-dd").format(tempDate);
-
 
                             var timeSplit = selectedTime!.trim().split('-');
                             String start = timeSplit[0].trim();

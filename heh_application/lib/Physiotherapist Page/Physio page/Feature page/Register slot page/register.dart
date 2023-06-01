@@ -51,7 +51,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          "Đăng ký lịch làm việc ",
+          "Đăng ký lịch trị liệu",
           style: TextStyle(fontSize: 20),
         ),
         elevation: 10,
@@ -187,7 +187,7 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
         children: <Widget>[
           Row(
             children: const [
-              Text("Chọn thời gian làm việc"),
+              Text("Chọn thời gian trị liệu"),
               Text(
                 " *",
                 style: TextStyle(color: Colors.red),
@@ -208,13 +208,13 @@ class _PhysioRegisterSlotPageState extends State<PhysioRegisterSlotPage> {
               readOnly: true,
               controller: _date,
               decoration: const InputDecoration(
-                labelText: "Chọn ngày",
+                hintText: "Chọn ngày",
               ),
               onTap: () async {
                 DateTime? pickeddate = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
-                  firstDate: DateTime(1960),
+                  firstDate: DateTime.now(),
                   lastDate: DateTime(2099),
                 );
                 if (pickeddate != null) {

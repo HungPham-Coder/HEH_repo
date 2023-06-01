@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -16,14 +15,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-
-
-
 enum genderGroup { male, female }
 
 class FamilyInformationPage extends StatefulWidget {
-  FamilyInformationPage({Key? key, required this.subProfile})
-      : super(key: key);
+  FamilyInformationPage({Key? key, required this.subProfile}) : super(key: key);
   SubProfile? subProfile;
   @override
   State<FamilyInformationPage> createState() => _FamilyInformationPageState();
@@ -45,8 +40,8 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
   final TextEditingController _date = TextEditingController();
   final TextEditingController _firstName = TextEditingController();
   bool validName = true;
-  bool validDOB = true ;
-  bool validRelationShip = true ;
+  bool validDOB = true;
+  bool validRelationShip = true;
 
   @override
   void initState() {
@@ -104,8 +99,6 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
 
   @override
   Widget build(BuildContext context) {
-
-
     final auth = Provider.of<AuthBase>(context, listen: false);
     DateTime tempDob =
         new DateFormat("yyyy-MM-dd").parse(widget.subProfile!.dob!);
@@ -134,20 +127,17 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                   if (value!.isEmpty) {
                     validDOB = false;
                     return "Không được để trống ngày sinh!";
-                  } else if (widget.subProfile!.relationship!.relationName == "Tôi"){
-                      if (age < 18) {
-                        validDOB = false;
-                        return "Tuổi phải trên 18.";
-                      }
-                      else {
-                        validDOB = true;
-                      }
+                  } else if (widget.subProfile!.relationship!.relationName ==
+                      "Tôi") {
+                    if (age < 18) {
+                      validDOB = false;
+                      return "Tuổi phải trên 18.";
+                    } else {
+                      validDOB = true;
                     }
-                  else {
+                  } else {
                     validDOB = true;
                   }
-
-
                 },
                 decoration: InputDecoration(
                   hintStyle: const TextStyle(color: Colors.black),
@@ -159,7 +149,7 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                       context: context,
                       initialDate: today,
                       firstDate: DateTime(1900),
-                      lastDate: DateTime(2030));
+                      lastDate: DateTime.now());
                   if (pickeddate != null) {
                     _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
                     dob = _date.text;
@@ -204,15 +194,14 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                               if (selectedRelationship == "- Chọn -") {
                                 validRelationShip = false;
                                 return "Hãy chọn mối quan hệ";
-                              }
-                              else {
+                              } else {
                                 validRelationShip = true;
                               }
                             },
                             decoration: const InputDecoration(
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(width: 1, color: Colors.grey))),
+                                    borderSide: BorderSide(
+                                        width: 1, color: Colors.grey))),
                             value: selectedRelationship,
                             items: _relationships
                                 .map((relationship) => DropdownMenuItem<String>(
@@ -247,7 +236,6 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-
                 Container(
                     padding: const EdgeInsets.symmetric(horizontal: 0),
                     child: Container(
@@ -255,15 +243,17 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                       child: MaterialButton(
                         height: 50,
                         onPressed: () async {
-                          if (validRelationShip == true
-                          && validDOB == true
-                          && validName == true) {
-                            if (visible = true){
+                          if (validRelationShip == true &&
+                              validDOB == true &&
+                              validName == true) {
+                            if (visible = true) {
                               setState(() {
                                 visible = false;
                               });
                             }
-                            Relationship relationship = await CallAPI().getRelationByRelationName(selectedRelationship);
+                            Relationship relationship = await CallAPI()
+                                .getRelationByRelationName(
+                                    selectedRelationship);
                             SubProfile sub = SubProfile(
                               profileID: widget.subProfile!.profileID,
                               userID: sharedCurrentUser!.userID,
@@ -273,14 +263,18 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                             );
 
                             await CallAPI().updateSubprofile(sub);
-                            SubProfile subPro = await CallAPI().getSubProfileBySubNameAndUserID(_firstName.text, sharedCurrentUser!.userID!);
+                            SubProfile subPro = await CallAPI()
+                                .getSubProfileBySubNameAndUserID(
+                                    _firstName.text,
+                                    sharedCurrentUser!.userID!);
                             setState(() {
                               sharedSubprofile = subPro;
-                              if (sharedSubprofile!.relationship!.relationName == "Tôi") {
+                              if (sharedSubprofile!
+                                      .relationship!.relationName ==
+                                  "Tôi") {
                                 sharedCurrentUser!.firstName = subPro.subName;
                                 sharedCurrentUser!.dob = subPro.dob;
                               }
-
                             });
                             await CallAPI().updateUserbyUID(sharedCurrentUser!);
                             final snackBar = SnackBar(
@@ -298,14 +292,13 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
                               ),
                               backgroundColor: Colors.green,
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } else {
+                            setState(() {
+                              visible = true;
+                            });
                           }
-                          else {
-                              setState(() {
-                                visible = true;
-                              });
-                          }
-
                         },
                         color: const Color.fromARGB(255, 46, 161, 226),
                         elevation: 0,
@@ -360,8 +353,8 @@ class _FamilyInformationPageState extends State<FamilyInformationPage> {
             firstNameTxt = value;
           },
           decoration: const InputDecoration(
-            // hintStyle: const TextStyle(color: Colors.black),
-            // hintText: sharedCurrentUser!.firstName,
+              // hintStyle: const TextStyle(color: Colors.black),
+              // hintText: sharedCurrentUser!.firstName,
               contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),

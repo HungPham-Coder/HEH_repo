@@ -141,7 +141,7 @@ class _InformationPageState extends State<InformationPage> {
                         height: 50,
                         onPressed: () async {
                           if (list != null) {
-                            if (validPhone == false){
+                            if (validPhone == false) {
                               setState(() {
                                 validPhone = true;
                               });
@@ -185,7 +185,7 @@ class _InformationPageState extends State<InformationPage> {
                                   .CheckRegisterMember(signUpUser);
                             }
 
-                            if (result == "Validate Pass" ) {
+                            if (result == "Validate Pass") {
                               //update subProfile relationName là tôi
                               SubProfile subProfile = await CallAPI()
                                   .getSubProfileBySubNameAndUserID(
@@ -237,16 +237,17 @@ class _InformationPageState extends State<InformationPage> {
                                 //update subProfile relationName là tôi
                                 SubProfile subProfile = await CallAPI()
                                     .getSubProfileBySubNameAndUserID(
-                                    sharedCurrentUser!.firstName!,
-                                    sharedCurrentUser!.userID!);
+                                        sharedCurrentUser!.firstName!,
+                                        sharedCurrentUser!.userID!);
                                 subProfile.subName = _firstName.text;
 
                                 await CallAPI().updateSubprofile(subProfile);
                                 //update user
                                 await CallAPI().updateUserbyUID(signUpUser);
                                 //update firebase nếu có
-                                Map<String, dynamic>? firebaseData = await auth
-                                    .getDocumentByID(sharedCurrentUser!.userID!);
+                                Map<String, dynamic>? firebaseData =
+                                    await auth.getDocumentByID(
+                                        sharedCurrentUser!.userID!);
                                 if (firebaseData != null) {
                                   await auth.upLoadFirestoreData(
                                       FirestoreConstants.pathUserCollection,
@@ -279,7 +280,6 @@ class _InformationPageState extends State<InformationPage> {
                               }
                             }
                           } else {
-
                             setState(() {
                               visible = true;
                             });
@@ -561,7 +561,6 @@ class _InformationPageState extends State<InformationPage> {
               }
             } else {
               if (value.isNotEmpty) {
-
                 validPhone = true;
               }
             }
@@ -602,7 +601,7 @@ class _InformationPageState extends State<InformationPage> {
                 context: context,
                 initialDate: today,
                 firstDate: DateTime(1900),
-                lastDate: DateTime(2030));
+                lastDate: DateTime.now());
             if (pickeddate != null) {
               setState(() {
                 dob = DateFormat('dd-MM-yyyy').format(pickeddate);

@@ -147,7 +147,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         context: context,
                         initialDate: today,
                         firstDate: DateTime(1900),
-                        lastDate: DateTime(2030));
+                        lastDate: DateTime.now());
                     if (pickeddate != null) {
                       _date.text = DateFormat('dd-MM-yyyy').format(pickeddate);
                       // print(_date.text);
