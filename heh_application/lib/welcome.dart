@@ -133,7 +133,7 @@ class _WelcomePage1State extends State<WelcomePage1> {
         styleDescription: TextStyle(
             fontWeight: FontWeight.w500, color: Colors.white, fontSize: 17),
         description:
-            "HEH có các bài tập Trị Liệu bao gồm nội dung tập và video miễn phí.\n\nNgoài ra bạn có thể tập chung với người thân của mình để cùng cãi thiện sức khỏe của bản thân.\n\nBạn cũng có thể lưu lại bài tập riêng của mình.",
+            "HEH có các bài tập Trị Liệu bao gồm nội dung tập và video miễn phí.\n\nNgoài ra bạn có thể tập chung với người thân của mình để cùng cải thiện sức khỏe của bản thân.\n\nBạn cũng có thể lưu lại bài tập riêng của mình.",
         backgroundColor: Color.fromARGB(255, 46, 161, 226),
       ),
     );

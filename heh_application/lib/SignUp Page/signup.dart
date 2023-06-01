@@ -170,7 +170,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Visibility(
                 visible: visible,
                 child: const Text(
-                  "Hãy nhập đúng những field cần thiết",
+                  "Vui lòng nhập đầy đủ những thông tin cần thiết.",
                   style: TextStyle(fontSize: 15, color: Colors.red),
                 ),
               ),
@@ -229,8 +229,6 @@ class _SignUpPageState extends State<SignUpPage> {
                               gender = false;
                             }
 
-
-
                             if (validName == true &&
                                 validDOB == true &&
                                 validConfirmPass == true &&
@@ -238,17 +236,16 @@ class _SignUpPageState extends State<SignUpPage> {
                                 validPhone == true &&
                                 validEmail == true) {
                               SignUpUser signUpUser = SignUpUser(
-                                image:
-                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FavatarIcon.png?alt=media&token=790e190a-1559-4272-b4c8-213fbc0d7f89",
-                                firstName: _firstName.text,
-                                email: _email.text,
-                                phone: _phone.text,
-                                address: _address.text,
-                                gender: gender,
-                                dob: dob,
-                                password: _password.text,
-                                DateCreated: today.toString()
-                              );
+                                  image:
+                                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2FavatarIcon.png?alt=media&token=790e190a-1559-4272-b4c8-213fbc0d7f89",
+                                  firstName: _firstName.text,
+                                  email: _email.text,
+                                  phone: _phone.text,
+                                  address: _address.text,
+                                  gender: gender,
+                                  dob: dob,
+                                  password: _password.text,
+                                  DateCreated: today.toString());
                               if (list != null) {
                                 setState(() {
                                   list = null;
