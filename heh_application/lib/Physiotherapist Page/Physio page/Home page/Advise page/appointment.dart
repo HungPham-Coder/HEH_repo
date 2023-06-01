@@ -216,110 +216,105 @@ class _AppointmentPageState extends State<AppointmentPage> {
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            FutureBuilder<List<BookingDetail>?>(
-                future: CallAPI()
-                    .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                        sharedPhysiotherapist!.physiotherapistID,
-                        'Tư vấn trị liệu',
-                        1,
-                        0,
-                        ""),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    print(snapshot.data!.length);
-                    List<BookingDetail> listSort = [];
-                    for (var item in snapshot.data!) {
-                      if (item.shorttermStatus! < 3) {
-                        listSort.add(item);
-                      }
-                    }
-                    if (listSort.isNotEmpty) {
-                      return RefreshIndicator(
-                        child: ListView.builder(
-                            itemCount: listSort.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              print(index);
-                              String day = DateTimeFormat.formatDate(
-                                  listSort[index]
-                                      .bookingSchedule!
-                                      .schedule!
-                                      .slot!
-                                      .timeStart);
-                              String start = DateTimeFormat.formateTime(
-                                  listSort[index]
-                                      .bookingSchedule!
-                                      .schedule!
-                                      .slot!
-                                      .timeStart);
-                              String end = DateTimeFormat.formateTime(
-                                  listSort[index]
-                                      .bookingSchedule!
-                                      .schedule!
-                                      .slot!
-                                      .timeEnd);
-                              String weekDay =
-                                  "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(listSort[index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
-                              if (weekDay == "Thứ 8") {
-                                weekDay = "Chủ Nhật";
-                              }
-                              return ServicePaid(
-                                bookingDetail: listSort[index],
-                                firebaseFirestoreBase:
-                                    widget.firebaseFirestoreBase,
-                                icon:
-                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
-                                name:
-                                    "${listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
-                                date: "$day",
-                                weekDay: weekDay,
-                                time: "$start - $end",
-                                bookedFor:
-                                    "${listSort[index].bookingSchedule!.subProfile!.subName}",
-                                press: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              AdviseDetailPage(
-                                                  bookingSchedule:
-                                                      listSort[index]
-                                                          .bookingSchedule)));
-                                },
-                              );
-                            }),
-                        onRefresh: () async {
-                          setState(() {});
-                        },
-                      );
-                    } else {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(vertical: 280),
-                        child: const Center(
-                          child: Text(
-                            "Hiện tại không có lịch đặt hẹn",
-                            style: TextStyle(fontSize: 18, color: Colors.grey),
-                          ),
-                        ),
-                      );
-                    }
-                  } else {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(vertical: 280),
-                      child: const Center(
-                        child: Text(
-                          "Hiện tại không có lịch đặt hẹn.",
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
-                      ),
-                    );
+      body: RefreshIndicator(
+        onRefresh: () async {
+          CallAPI()
+              .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                  sharedPhysiotherapist!.physiotherapistID,
+                  'Tư vấn trị liệu',
+                  1,
+                  0,
+                  "");
+        },
+        child: FutureBuilder<List<BookingDetail>?>(
+            future: CallAPI()
+                .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                    sharedPhysiotherapist!.physiotherapistID,
+                    'Tư vấn trị liệu',
+                    1,
+                    0,
+                    ""),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                print(snapshot.data!.length);
+                List<BookingDetail> listSort = [];
+                for (var item in snapshot.data!) {
+                  if (item.shorttermStatus! < 3) {
+                    listSort.add(item);
                   }
-                }),
-          ],
-        ),
+                }
+                if (listSort.isNotEmpty) {
+                  return ListView.builder(
+                      itemCount: listSort.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        print(index);
+                        String day = DateTimeFormat.formatDate(listSort[index]
+                            .bookingSchedule!
+                            .schedule!
+                            .slot!
+                            .timeStart);
+                        String start = DateTimeFormat.formateTime(
+                            listSort[index]
+                                .bookingSchedule!
+                                .schedule!
+                                .slot!
+                                .timeStart);
+                        String end = DateTimeFormat.formateTime(listSort[index]
+                            .bookingSchedule!
+                            .schedule!
+                            .slot!
+                            .timeEnd);
+                        String weekDay =
+                            "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(listSort[index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
+                        if (weekDay == "Thứ 8") {
+                          weekDay = "Chủ Nhật";
+                        }
+                        return ServicePaid(
+                          bookingDetail: listSort[index],
+                          firebaseFirestoreBase: widget.firebaseFirestoreBase,
+                          icon:
+                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                          name:
+                              "${listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName}",
+                          date: "$day",
+                          weekDay: weekDay,
+                          time: "$start - $end",
+                          bookedFor:
+                              "${listSort[index].bookingSchedule!.subProfile!.subName}",
+                          press: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AdviseDetailPage(
+                                        bookingSchedule:
+                                            listSort[index].bookingSchedule)));
+                          },
+                        );
+                      });
+                } else {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(vertical: 280),
+                    child: const Center(
+                      child: Text(
+                        "Hiện tại không có lịch đặt hẹn",
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                    ),
+                  );
+                }
+              } else {
+                return Container(
+                  padding: const EdgeInsets.symmetric(vertical: 280),
+                  child: const Center(
+                    child: Text(
+                      "Hiện tại không có lịch đặt hẹn.",
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                    ),
+                  ),
+                );
+              }
+            }),
       ),
     );
   }
