@@ -225,7 +225,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         sharedPhysiotherapist!.physiotherapistID,
                         'Tư vấn trị liệu',
                         1,
-                        -1,
+                        0,
                         ""),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {

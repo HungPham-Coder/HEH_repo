@@ -225,14 +225,14 @@ class _SessionPageState extends State<SessionPage> {
                     .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
                         sharedPhysiotherapist!.physiotherapistID,
                         'Trị liệu dài hạn',
-                        3,
+                        1,
                         1,
                         ""),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     List<BookingDetail> listSort = [];
                     for (var item in snapshot.data!) {
-                      if (item.longtermStatus! < 3) {
+                      if (item.shorttermStatus! < 3) {
                         listSort.add(item);
                       }
                     }

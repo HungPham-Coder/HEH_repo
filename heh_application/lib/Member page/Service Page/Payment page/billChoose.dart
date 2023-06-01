@@ -264,7 +264,7 @@ class _BillChoosePageState extends State<BillChoosePage> {
                         bookingScheduleID: bookingSchedule.bookingScheduleID!,
                         bookingSchedule: bookingSchedule,
                         shorttermStatus: 0,
-                        longtermStatus: -1,
+                        longtermStatus: 0,
                       );
                       BookingDetail addBookingDetail =
                           await CallAPI().addBookingDetail(bookingDetail);

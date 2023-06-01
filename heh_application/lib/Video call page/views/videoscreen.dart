@@ -46,17 +46,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   }
   Future<void> changeStatus () async {
     if (sharedCurrentUser!.role!.name == "Physiotherapist"){
-      if (widget.bookingDetail.bookingSchedule!.schedule!.typeOfSlot!.typeName == "Tư vấn trị liệu"){
         widget.bookingDetail.shorttermStatus = 3;
         await CallAPI().updateBookingDetailStatus(widget.bookingDetail);
         // Navigator.popUntil(context, ModalRoute.withName('/shortTerm'));
-      }
-      else if (widget.bookingDetail.bookingSchedule!.schedule!.typeOfSlot!.typeName == "Trị liệu dài hạn"){
-        widget.bookingDetail.longtermStatus = 3;
-        await CallAPI().updateBookingDetailStatus(widget.bookingDetail);
-        // Navigator.popUntil(context, ModalRoute.withName('/longTerm'));
-      }
-
     }
 
   }

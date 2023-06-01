@@ -956,10 +956,9 @@ class CallAPI {
     }
   }
 
-  Future<List<BookingDetail>?> getLongTermListByStatus(
-      int shortTermStatus) async {
+  Future<List<BookingDetail>?> GetLongTermLists() async {
     var url = Uri.parse(
-        '${link}/api/BookingDetail/GetLongTermListByStatus?shortTermStatus=$shortTermStatus');
+        '${link}/api/BookingDetail/GetLongTermLists');
     // var url = Uri.https('localhost:7166', 'api/Exercise/GetByCategoryID/$categoryId');
     final headers = {
       "Accept": "application/json",

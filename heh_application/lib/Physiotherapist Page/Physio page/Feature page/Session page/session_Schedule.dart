@@ -73,7 +73,6 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
     if (widget.bookingDetail != null) {
       widget.listDetail!.forEach(
         (element) {
-          if (element.longtermStatus! >= 0 && element.longtermStatus! < 3) {
             DateTime dateTemp = new DateFormat("yyyy-MM-dd")
                 .parse(element.bookingSchedule!.schedule!.slot!.timeStart);
             if (selectedEvents[dateTemp] == null) {
@@ -81,7 +80,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
             } else {
               selectedEvents[dateTemp]!.add(element);
             }
-          }
+
         },
       );
     }
@@ -418,13 +417,13 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                     physiotherapistID: sharedPhysiotherapist!
                                         .physiotherapistID,
                                     typeOfSlotID: typeOfSlot.typeOfSlotID,
-                                    description: "Slot Trị liệu dài hạn",
+                                    description: "Slot Trị liệu dài hạn ",
                                     physioBookingStatus: true);
                                 Schedule addSchedule =
                                     await CallAPI().AddSchedule(schedule);
                                 //check add schedule
                                 if (addSchedule != null) {
-                                  //add booking detail
+                                  //add booking schedule
                                   BookingSchedule bookingSchedule =
                                       BookingSchedule(
                                           userID:
@@ -450,16 +449,13 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                   BookingDetail bookingDetail = BookingDetail(
                                       bookingScheduleID: bookingScheduleAdd!
                                           .bookingScheduleID!,
-                                      shorttermStatus: 3,
-                                      longtermStatus: 0,
+                                      shorttermStatus: 0,
+                                      longtermStatus: 1,
                                       imageUrl: "Dài hạn");
 
                                   BookingDetail bookingDetailAdd =
                                       await CallAPI()
                                           .addBookingDetail(bookingDetail);
-                                  widget.bookingDetail!.longtermStatus = 1;
-                                  await CallAPI().updateBookingDetailStatus(
-                                      widget.bookingDetail!);
                                   //check add booking detail
                                   if (bookingDetailAdd != null) {
                                     //get booking detail vừa mới add

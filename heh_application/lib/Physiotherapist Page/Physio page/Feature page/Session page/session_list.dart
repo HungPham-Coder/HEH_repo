@@ -29,28 +29,51 @@ class _SessionListPageState extends State<SessionListPage> {
         child: Column(
           children: [
             FutureBuilder<List<BookingDetail>?>(
-              future: CallAPI().getLongTermListByStatus(3),
+              future: CallAPI().GetLongTermLists(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data!.isNotEmpty) {
                     List<BookingDetail> listSort = [];
                     snapshot.data!.forEach((element) {
-                      int count = 0;
+                      int countAdd = 0;
+
                       listSort.forEach((elementCmp) {
-                        if (element.bookingSchedule!.schedule!.typeOfSlot!
-                                    .typeName ==
-                                "Trị liệu dài hạn" &&
+                        //loại bỏ phần trùng nhau
+                        if (element.longtermStatus ==
+                                elementCmp.longtermStatus &&
                             element.bookingSchedule!.signUpUser!.firstName ==
                                 elementCmp
                                     .bookingSchedule!.signUpUser!.firstName &&
                             element.bookingSchedule!.subProfile!.subName ==
                                 elementCmp
                                     .bookingSchedule!.subProfile!.subName) {
-                          count++;
+                          countAdd++;
                         }
                       });
-                      if (count <= 1  ) {
+                      if (countAdd == 0) {
                         listSort.add(element);
+                      }
+                    });
+                    listSort.removeWhere((elementRemove) {
+                      int count = 0;
+                      listSort.forEach((element) {
+                        if (elementRemove.shorttermStatus == 4 && elementRemove.longtermStatus == 0
+                        && element.bookingSchedule!.signUpUser!.firstName ==
+                                elementRemove
+                                    .bookingSchedule!.signUpUser!.firstName &&
+                            element.bookingSchedule!.subProfile!.subName ==
+                                elementRemove
+                                    .bookingSchedule!.subProfile!.subName
+                        ){
+                          count ++ ;
+                        }
+
+                      });
+                      if (count >=1 ) {
+                        return true;
+                      }
+                      else {
+                        return false;
                       }
                     });
                     return RefreshIndicator(
@@ -77,11 +100,11 @@ class _SessionListPageState extends State<SessionListPage> {
                                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
                                   name:
                                       "${listSort[index].bookingSchedule!.signUpUser!.firstName}",
-                                  status: listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName == "Tư vấn trị liệu" && listSort[index].longtermStatus == 0
-                                      ? "Chờ xếp lịch":
-                                   listSort[index].bookingSchedule!.schedule!.typeOfSlot!.typeName == "Trị liệu dài hạn" && listSort[index].longtermStatus == 0
-                                          ? "Đã được lên lịch"
-                                          : "Đã được lên lịch");
+                                  status: listSort[index].shorttermStatus ==
+                                              4 &&
+                                          listSort[index].longtermStatus == 0
+                                      ? "Chờ xếp lịch"
+                                      : "Đã được lên lịch");
                             }
                           },
                         ),
@@ -223,11 +246,10 @@ class _SessionListPageState extends State<SessionListPage> {
     return IconButton(
         onPressed: () async {
           List<BookingDetail>? listLongTerm =
-              await CallAPI().getLongTermListByStatus(3);
+              await CallAPI().GetLongTermLists();
           List<BookingDetail> listLongTermSort = [];
           listLongTerm!.forEach((element) {
-            if (element.bookingSchedule!.schedule!.typeOfSlot!.typeName ==
-                "Trị liệu dài hạn") {
+            if (element.longtermStatus == 1) {
               listLongTermSort.add(element);
             }
           });

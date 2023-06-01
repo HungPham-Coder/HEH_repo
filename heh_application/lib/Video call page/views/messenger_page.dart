@@ -527,14 +527,8 @@ class _MessengerScreenPageState extends State<MessengerScreenPage> {
                   onPressed: () async {
                     // await setupVoiceSDKEngine();
                     // await fetchToken(1, widget.bookingDetail!.bookingDetailID!, 2);
-                    if (widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.typeName == "Tư vấn trị liệu"){
                       widget.bookingDetail!.shorttermStatus = 2;
                       await CallAPI().updateBookingDetailStatus(widget.bookingDetail!);
-                    }
-                    else if (widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.typeName == "Trị liệu dài hạn"){
-                      widget.bookingDetail!.longtermStatus = 2;
-                      await CallAPI().updateBookingDetailStatus(widget.bookingDetail!);
-                    }
 
                     VideoCallScreen.channelName =
                         widget.bookingDetail!.bookingDetailID;
