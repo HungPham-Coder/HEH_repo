@@ -16,91 +16,99 @@ class _PhysioHistoryPageState extends State<PhysioHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          "Lịch sử trị liệu",
-          style: TextStyle(fontSize: 23),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: const Text(
+            "Lịch sử trị liệu",
+            style: TextStyle(fontSize: 23),
+          ),
+          elevation: 10,
+          backgroundColor: const Color.fromARGB(255, 46, 161, 226),
         ),
-        elevation: 10,
-        backgroundColor: const Color.fromARGB(255, 46, 161, 226),
-      ),
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: FutureBuilder<List<BookingDetail>>(
-            future: CallAPI().GetAllBookingDetailByPhysioID(
-                sharedPhysiotherapist!.physiotherapistID),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data!.isNotEmpty) {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      String day = DateTimeFormat.formatDate(snapshot
-                          .data![index]
-                          .bookingSchedule!
-                          .schedule!
-                          .slot!
-                          .timeStart);
-                      String start = DateTimeFormat.formateTime(snapshot
-                          .data![index]
-                          .bookingSchedule!
-                          .schedule!
-                          .slot!
-                          .timeStart);
-                      String end = DateTimeFormat.formateTime(snapshot
-                          .data![index]
-                          .bookingSchedule!
-                          .schedule!
-                          .slot!
-                          .timeEnd);
-                      return PhysioHistoryMenu(
-                        icon:
-                            "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
-                        name: snapshot.data![index].bookingSchedule!.schedule!
-                            .typeOfSlot!.typeName,
-                        date: day,
-                        time: "$start - $end",
-                        bookedFor: snapshot
-                            .data![index].bookingSchedule!.subProfile!.subName,
-                        press: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PhysioBillHistoryPage(
-                                      view: "true",
-                                      physiotherapist: snapshot
-                                          .data![index]
-                                          .bookingSchedule!
-                                          .schedule!
-                                          .physiotherapist!,
-                                      schedule: snapshot.data![index]
-                                          .bookingSchedule!.schedule!,
-                                      bookingSchedule: snapshot
-                                          .data![index].bookingSchedule!)));
-                        },
-                      );
-                    },
-                  );
-                } else {
-                  return Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 250),
-                      child: Text(
-                        "Hiện tại chưa hoàn thành buổi điều trị nào",
-                        style: TextStyle(color: Colors.grey[500], fontSize: 16),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await CallAPI().GetAllBookingDetailByPhysioID(
+                sharedPhysiotherapist!.physiotherapistID);
+          },
+          child: FutureBuilder<List<BookingDetail>>(
+              future: CallAPI().GetAllBookingDetailByPhysioID(
+                  sharedPhysiotherapist!.physiotherapistID),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.isNotEmpty) {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        String day = DateTimeFormat.formatDate(snapshot
+                            .data![index]
+                            .bookingSchedule!
+                            .schedule!
+                            .slot!
+                            .timeStart);
+                        String start = DateTimeFormat.formateTime(snapshot
+                            .data![index]
+                            .bookingSchedule!
+                            .schedule!
+                            .slot!
+                            .timeStart);
+                        String end = DateTimeFormat.formateTime(snapshot
+                            .data![index]
+                            .bookingSchedule!
+                            .schedule!
+                            .slot!
+                            .timeEnd);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: PhysioHistoryMenu(
+                            icon:
+                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fappointment.png?alt=media&token=647e3ff8-d708-4b77-b1e2-64444de5dad0",
+                            name: snapshot.data![index].bookingSchedule!
+                                .schedule!.typeOfSlot!.typeName,
+                            date: day,
+                            time: "$start - $end",
+                            bookedFor: snapshot.data![index].bookingSchedule!
+                                .subProfile!.subName,
+                            press: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          PhysioBillHistoryPage(
+                                              view: "true",
+                                              physiotherapist: snapshot
+                                                  .data![index]
+                                                  .bookingSchedule!
+                                                  .schedule!
+                                                  .physiotherapist!,
+                                              schedule: snapshot.data![index]
+                                                  .bookingSchedule!.schedule!,
+                                              bookingSchedule: snapshot
+                                                  .data![index]
+                                                  .bookingSchedule!)));
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 250),
+                        child: Text(
+                          "Hiện tại chưa hoàn thành buổi điều trị nào",
+                          style:
+                              TextStyle(color: Colors.grey[500], fontSize: 16),
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  }
+                } else {
+                  return Container();
                 }
-              } else {
-                return Container();
-              }
-            }),
-      )),
-    );
+              }),
+        ));
+    ;
   }
 }
 

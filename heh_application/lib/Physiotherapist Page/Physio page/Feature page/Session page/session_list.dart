@@ -25,112 +25,108 @@ class _SessionListPageState extends State<SessionListPage> {
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            FutureBuilder<List<BookingDetail>?>(
-              future: CallAPI()
-                  .GetLongTermLists(sharedPhysiotherapist!.physiotherapistID),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data!.isNotEmpty) {
-                    List<BookingDetail> listSort = [];
-                    snapshot.data!.forEach((element) {
-                      int countAdd = 0;
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await CallAPI()
+              .GetLongTermLists(sharedPhysiotherapist!.physiotherapistID);
+        },
+        child: FutureBuilder<List<BookingDetail>?>(
+          future: CallAPI()
+              .GetLongTermLists(sharedPhysiotherapist!.physiotherapistID),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.isNotEmpty) {
+                List<BookingDetail> listSort = [];
+                snapshot.data!.forEach((element) {
+                  int countAdd = 0;
 
-                      listSort.forEach((elementCmp) {
-                        //loại bỏ phần trùng nhau
-                        if (element.longtermStatus ==
-                                elementCmp.longtermStatus &&
-                            element.bookingSchedule!.signUpUser!.firstName ==
-                                elementCmp
-                                    .bookingSchedule!.signUpUser!.firstName &&
-                            element.bookingSchedule!.subProfile!.subName ==
-                                elementCmp
-                                    .bookingSchedule!.subProfile!.subName) {
-                          countAdd++;
-                        }
-                      });
-                      if (countAdd == 0) {
-                        listSort.add(element);
-                      }
-                    });
-                    listSort.removeWhere((elementRemove) {
-                      int count = 0;
-                      listSort.forEach((element) {
-                        if (elementRemove.shorttermStatus == 4 &&
-                            elementRemove.longtermStatus == 0 &&
-                            element.bookingSchedule!.signUpUser!.firstName ==
-                                elementRemove
-                                    .bookingSchedule!.signUpUser!.firstName &&
-                            element.bookingSchedule!.subProfile!.subName ==
-                                elementRemove
-                                    .bookingSchedule!.subProfile!.subName) {
-                          count++;
-                        }
-                      });
-                      if (count >= 1) {
-                        return true;
-                      } else {
-                        return false;
-                      }
-                    });
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: listSort.length,
-                      itemBuilder: (context, index) {
-                        if (listSort[index]
-                                    .bookingSchedule!
-                                    .schedule!
-                                    .typeOfSlot!
-                                    .typeName ==
-                                "Tư vấn trị liệu" &&
-                            listSort[index].longtermStatus != 0) {
-                          return Container();
-                        } else {
-                          return ServicePaid(
-                              bookingDetail: listSort[index],
-                              subName: listSort[index]
-                                  .bookingSchedule!
-                                  .subProfile!
-                                  .subName,
-                              icon:
-                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
-                              name:
-                                  "${listSort[index].bookingSchedule!.signUpUser!.firstName}",
-                              status: listSort[index].shorttermStatus == 4 &&
-                                      listSort[index].longtermStatus == 0
-                                  ? "Chờ xếp lịch"
-                                  : "Đã được lên lịch");
-                        }
-                      },
-                    );
-                  } else {
-                    return Center(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 250),
-                        child: Text(
-                          "Hiện tại đã hết slot có thể đăng ký",
-                          style:
-                              TextStyle(color: Colors.grey[500], fontSize: 16),
-                        ),
-                      ),
-                    );
+                  listSort.forEach((elementCmp) {
+                    //loại bỏ phần trùng nhau
+                    if (element.longtermStatus == elementCmp.longtermStatus &&
+                        element.bookingSchedule!.signUpUser!.firstName ==
+                            elementCmp.bookingSchedule!.signUpUser!.firstName &&
+                        element.bookingSchedule!.subProfile!.subName ==
+                            elementCmp.bookingSchedule!.subProfile!.subName) {
+                      countAdd++;
+                    }
+                  });
+                  if (countAdd == 0) {
+                    listSort.add(element);
                   }
-                } else {
-                  return Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 250),
-                      child: Text(
-                        "Hiện tại đã hết slot có thể đăng ký",
-                        style: TextStyle(color: Colors.grey[500], fontSize: 16),
-                      ),
+                });
+                listSort.removeWhere((elementRemove) {
+                  int count = 0;
+                  listSort.forEach((element) {
+                    if (elementRemove.shorttermStatus == 4 &&
+                        elementRemove.longtermStatus == 0 &&
+                        element.bookingSchedule!.signUpUser!.firstName ==
+                            elementRemove
+                                .bookingSchedule!.signUpUser!.firstName &&
+                        element.bookingSchedule!.subProfile!.subName ==
+                            elementRemove
+                                .bookingSchedule!.subProfile!.subName) {
+                      count++;
+                    }
+                  });
+                  if (count >= 1) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                });
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: listSort.length,
+                  itemBuilder: (context, index) {
+                    if (listSort[index]
+                                .bookingSchedule!
+                                .schedule!
+                                .typeOfSlot!
+                                .typeName ==
+                            "Tư vấn trị liệu" &&
+                        listSort[index].longtermStatus != 0) {
+                      return Container();
+                    } else {
+                      return ServicePaid(
+                          bookingDetail: listSort[index],
+                          subName: listSort[index]
+                              .bookingSchedule!
+                              .subProfile!
+                              .subName,
+                          icon:
+                              "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
+                          name:
+                              "${listSort[index].bookingSchedule!.signUpUser!.firstName}",
+                          status: listSort[index].shorttermStatus == 4 &&
+                                  listSort[index].longtermStatus == 0
+                              ? "Chờ xếp lịch"
+                              : "Đã được lên lịch");
+                    }
+                  },
+                );
+              } else {
+                return Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 250),
+                    child: Text(
+                      "Hiện tại đã hết slot có thể đăng ký",
+                      style: TextStyle(color: Colors.grey[500], fontSize: 16),
                     ),
-                  );
-                }
-              },
-            ),
-          ],
+                  ),
+                );
+              }
+            } else {
+              return Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 250),
+                  child: Text(
+                    "Hiện tại đã hết slot có thể đăng ký",
+                    style: TextStyle(color: Colors.grey[500], fontSize: 16),
+                  ),
+                ),
+              );
+            }
+          },
         ),
       ),
     );

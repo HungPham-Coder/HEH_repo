@@ -52,112 +52,115 @@ class _AdviseListPageState extends State<AdviseListPage> {
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            FutureBuilder<List<BookingDetail>?>(
-                future: CallAPI()
-                    .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                        sharedPhysiotherapist!.physiotherapistID,
-                        'Tư vấn trị liệu',
-                        3,
-                        0,
-                        ""),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data!.isNotEmpty) {
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            bool visible = true;
-                            String subName;
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await CallAPI()
+              .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                  sharedPhysiotherapist!.physiotherapistID,
+                  'Tư vấn trị liệu',
+                  3,
+                  0,
+                  "");
+        },
+        child: FutureBuilder<List<BookingDetail>?>(
+            future: CallAPI()
+                .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
+                    sharedPhysiotherapist!.physiotherapistID,
+                    'Tư vấn trị liệu',
+                    3,
+                    0,
+                    ""),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data!.isNotEmpty) {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        bool visible = true;
+                        String subName;
 
-                            if (snapshot.data![index].bookingSchedule!
-                                    .subProfile!.relationship!.relationName ==
-                                "Tôi") {
-                              visible = false;
+                        if (snapshot.data![index].bookingSchedule!.subProfile!
+                                .relationship!.relationName ==
+                            "Tôi") {
+                          visible = false;
 
-                              subName = "";
-                            } else {
-                              subName = snapshot.data![index].bookingSchedule!
-                                  .subProfile!.subName;
-                            }
-                            String date = DateTimeFormat.formatDate(snapshot
-                                .data![index]
-                                .bookingSchedule!
-                                .schedule!
-                                .slot!
-                                .timeStart);
-                            String start = DateTimeFormat.formateTime(snapshot
-                                .data![index]
-                                .bookingSchedule!
-                                .schedule!
-                                .slot!
-                                .timeStart);
-                            String end = DateTimeFormat.formateTime(snapshot
-                                .data![index]
-                                .bookingSchedule!
-                                .schedule!
-                                .slot!
-                                .timeEnd);
-                            String weekDay =
-                                "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(snapshot.data![index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
-                            if (weekDay == "Thứ 8") {
-                              weekDay = "Chủ Nhật";
-                            }
-                            if (snapshot.data![index].shorttermStatus == 3) {
-                              return ServicePaid(
-                                  icon:
-                                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
-                                  date: "$date",
-                                  weekDay: weekDay,
-                                  name:
-                                      "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
-                                  subName: subName,
-                                  time: "$start - $end",
-                                  status: 'xong',
-                                  press: () async {
-                                    snapshot.data![index].shorttermStatus = 4;
-                                    await CallAPI().updateBookingDetailStatus(
-                                        snapshot.data![index]);
-                                    setState(() {});
-                                    Navigator.pop(context);
-                                  },
-                                  visible: visible);
-                            } else {
-                              return Center(
-                                child: Container(),
-                              );
-                            }
-                          });
-                    } else {
-                      return Center(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 250),
-                          child: Text(
-                            "Hiện tại chưa có slot tư vấn trị liệu nào ",
-                            style: TextStyle(
-                                color: Colors.grey[500], fontSize: 16),
-                          ),
-                        ),
-                      );
-                    }
-                  } else {
-                    return Center(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 150),
-                        child: Text(
-                          "Hiện tại chưa có slot tư vấn trị liệu nào ",
-                          style:
-                              TextStyle(color: Colors.grey[500], fontSize: 16),
-                        ),
+                          subName = "";
+                        } else {
+                          subName = snapshot.data![index].bookingSchedule!
+                              .subProfile!.subName;
+                        }
+                        String date = DateTimeFormat.formatDate(snapshot
+                            .data![index]
+                            .bookingSchedule!
+                            .schedule!
+                            .slot!
+                            .timeStart);
+                        String start = DateTimeFormat.formateTime(snapshot
+                            .data![index]
+                            .bookingSchedule!
+                            .schedule!
+                            .slot!
+                            .timeStart);
+                        String end = DateTimeFormat.formateTime(snapshot
+                            .data![index]
+                            .bookingSchedule!
+                            .schedule!
+                            .slot!
+                            .timeEnd);
+                        String weekDay =
+                            "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(snapshot.data![index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
+                        if (weekDay == "Thứ 8") {
+                          weekDay = "Chủ Nhật";
+                        }
+                        if (snapshot.data![index].shorttermStatus == 3) {
+                          return ServicePaid(
+                              icon:
+                                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
+                              date: "$date",
+                              weekDay: weekDay,
+                              name:
+                                  "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
+                              subName: subName,
+                              time: "$start - $end",
+                              status: 'xong',
+                              press: () async {
+                                snapshot.data![index].shorttermStatus = 4;
+                                await CallAPI().updateBookingDetailStatus(
+                                    snapshot.data![index]);
+                                setState(() {});
+                                Navigator.pop(context);
+                              },
+                              visible: visible);
+                        } else {
+                          return Center(
+                            child: Container(),
+                          );
+                        }
+                      });
+                } else {
+                  return Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 250),
+                      child: Text(
+                        "Hiện tại chưa có slot tư vấn trị liệu nào ",
+                        style: TextStyle(color: Colors.grey[500], fontSize: 16),
                       ),
-                    );
-                  }
-                }),
-          ],
-        ),
+                    ),
+                  );
+                }
+              } else {
+                return Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 150),
+                    child: Text(
+                      "Hiện tại chưa có slot tư vấn trị liệu nào ",
+                      style: TextStyle(color: Colors.grey[500], fontSize: 16),
+                    ),
+                  ),
+                );
+              }
+            }),
       ),
     );
   }
