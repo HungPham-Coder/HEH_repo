@@ -312,7 +312,7 @@ class CallAPI {
     final headers = {
       "Accept": "application/json",
       "content-type": "application/json",
-      "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
+      // "Authorization": "Bearer ${sharedResultLogin!.accessToken}",
     };
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
