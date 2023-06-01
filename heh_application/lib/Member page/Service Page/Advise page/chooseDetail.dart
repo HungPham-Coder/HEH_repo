@@ -252,7 +252,6 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                                                           bookingSchedule);
                                               print(bookingScheduleAdd!
                                                   .bookingScheduleID);
-
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(

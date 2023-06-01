@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
-import 'package:heh_application/Login%20page/login.dart';
-import 'package:heh_application/Member%20page/navigation_main.dart';
 import 'package:heh_application/services/call_api.dart';
 
 class renewChangePass extends StatefulWidget {
@@ -19,6 +17,8 @@ class _renewChangePassState extends State<renewChangePass> {
   bool isObscure = false;
   bool isObscure1 = false;
   bool visible = false;
+  bool oldPassValid = false;
+  String oldPassError = "";
   @override
   void initState() {
     super.initState();
@@ -65,7 +65,11 @@ class _renewChangePassState extends State<renewChangePass> {
             onPressed: () async {
 
               dynamic result =  await CallAPI().ChangePassword(sharedCurrentUser!, _oldPassword.text, _newPassword.text);
-              if (result = true){
+              if (result == true){
+                setState(() {
+                  oldPassValid = true;
+                  visible = true;
+                });
                 final snackBar = SnackBar(
                   content: Row(
                     mainAxisAlignment:
@@ -84,12 +88,15 @@ class _renewChangePassState extends State<renewChangePass> {
                 );
                 ScaffoldMessenger.of(context)
                     .showSnackBar(snackBar);
-                setState(() {
-                  visible = true;
-                });
+
               }
               else {
-                print (result);
+                setState(() {
+                  oldPassValid = false;
+                  visible = false;
+                  oldPassError = result;
+                });
+
               }
             },
             child: Container(
@@ -120,8 +127,14 @@ class _renewChangePassState extends State<renewChangePass> {
         TextFormField(
           controller: _oldPassword,
           validator: (value) {
-            if (value!.length < 6 && value != '') {
-              return 'Password phải dài hơn 6 ký tự';
+            if (value!.length < 6 ) {
+              return 'Mật khẩu cũ phải dài hơn 6 ký tự';
+            }
+            else if (value.isEmpty){
+              return 'Hãy nhập mật khẩu cũ ';
+            }
+            else if (oldPassValid == false){
+              return oldPassError;
             }
           },
           obscureText: isObscure,

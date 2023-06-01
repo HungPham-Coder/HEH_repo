@@ -89,7 +89,11 @@ class _TimeResultPageState extends State<TimeResultPage> {
                                                   .data![index].scheduleID!,
                                               dateBooking: date,
                                               timeBooking: time);
-
+                                      BookingSchedule?
+                                      bookingScheduleAdd =
+                                      await CallAPI()
+                                          .addBookingSchedule(
+                                          bookingSchedule);
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -101,17 +105,14 @@ class _TimeResultPageState extends State<TimeResultPage> {
                                                       schedule:
                                                           snapshot.data![index],
                                                       bookingSchedule:
-                                                          bookingSchedule)));
+                                                      bookingScheduleAdd)));
                                     },
                                   );
                                 }),
                             onRefresh: () async {
-                              CallAPI()
-                                  .getallPhysiotherapistBySlotTimeAndSkillAndTypeOfSlot(
-                                      widget.timeStart,
-                                      widget.timeEnd,
-                                      'Đau Lưng',
-                                      'Tư vấn trị liệu');
+                           setState(() {
+
+                           });
                             });
                       } else {
                         return Center(

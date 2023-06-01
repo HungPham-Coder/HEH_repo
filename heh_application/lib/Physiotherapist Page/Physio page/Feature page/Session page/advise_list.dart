@@ -66,55 +66,48 @@ class _AdviseListPageState extends State<AdviseListPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.isNotEmpty) {
-                      List<BookingDetail> listSort = [];
-                      for (var item in snapshot.data!) {
-                        if (item.longtermStatus == 0) {
-                          listSort.add(item);
-                        }
-                      }
-                      if (listSort.isNotEmpty) {
-                        return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              bool visible = true;
-                              String subName;
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            bool visible = true;
+                            String subName;
 
-                              if (snapshot.data![index].bookingSchedule!
-                                      .subProfile!.relationship!.relationName ==
-                                  "Tôi") {
-                                visible = false;
+                            if (snapshot.data![index].bookingSchedule!
+                                    .subProfile!.relationship!.relationName ==
+                                "Tôi") {
+                              visible = false;
 
-                                subName = "";
-                              } else {
-                                subName = snapshot.data![index].bookingSchedule!
-                                    .subProfile!.subName;
-                              }
-                              String date = DateTimeFormat.formatDate(snapshot
-                                  .data![index]
-                                  .bookingSchedule!
-                                  .schedule!
-                                  .slot!
-                                  .timeStart);
-                              String start = DateTimeFormat.formateTime(snapshot
-                                  .data![index]
-                                  .bookingSchedule!
-                                  .schedule!
-                                  .slot!
-                                  .timeStart);
-                              String end = DateTimeFormat.formateTime(snapshot
-                                  .data![index]
-                                  .bookingSchedule!
-                                  .schedule!
-                                  .slot!
-                                  .timeEnd);
-                              String weekDay =
-                                  "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(snapshot.data![index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
-                              if (weekDay == "Thứ 8") {
-                                weekDay = "Chủ Nhật";
-                              }
-                              if (snapshot.data![index].longtermStatus == 0) {
-                                return ServicePaid(
+                              subName = "";
+                            } else {
+                              subName = snapshot.data![index].bookingSchedule!
+                                  .subProfile!.subName;
+                            }
+                            String date = DateTimeFormat.formatDate(snapshot
+                                .data![index]
+                                .bookingSchedule!
+                                .schedule!
+                                .slot!
+                                .timeStart);
+                            String start = DateTimeFormat.formateTime(snapshot
+                                .data![index]
+                                .bookingSchedule!
+                                .schedule!
+                                .slot!
+                                .timeStart);
+                            String end = DateTimeFormat.formateTime(snapshot
+                                .data![index]
+                                .bookingSchedule!
+                                .schedule!
+                                .slot!
+                                .timeEnd);
+                            String weekDay =
+                                "Thứ ${DateFormat("yyyy-MM-ddTHH:mm:ss").parse(snapshot.data![index].bookingSchedule!.schedule!.slot!.timeStart).weekday + 1}";
+                            if (weekDay == "Thứ 8") {
+                              weekDay = "Chủ Nhật";
+                            }
+                            if (snapshot.data![index].shorttermStatus == 3) {
+                              return ServicePaid(
                                   icon:
                                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
                                   date: "$date",
@@ -123,49 +116,21 @@ class _AdviseListPageState extends State<AdviseListPage> {
                                       "Người đặt: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}",
                                   subName: subName,
                                   time: "$start - $end",
-                                  status: 'Hoàn thành tư vấn',
+                                  status: 'xong',
                                   press: () async {
-                                    String bookingScheduleID =
-                                        snapshot.data![index].bookingScheduleID;
-                                    BookingDetail bookingDetail = BookingDetail(
-                                        bookingDetailID: snapshot
-                                            .data![index].bookingDetailID,
-                                        bookingScheduleID: bookingScheduleID,
-                                        longtermStatus: 0,
-                                        shorttermStatus: 4);
+                                    snapshot.data![index].shorttermStatus = 4;
                                     await CallAPI().updateBookingDetailStatus(
-                                        bookingDetail);
-
+                                        snapshot.data![index]);
                                     setState(() {});
                                     Navigator.pop(context);
                                   },
-                                  visible: visible,
-                                );
-                              } else {
-                                return Center(
-                                  child: Container(
-                                      // padding: const EdgeInsets.symmetric(vertical: 150),
-                                      // child: Text(
-                                      //   "Hiện tại chưa có slot tư vấn trị liệu nào",
-                                      //   style: TextStyle(
-                                      //       color: Colors.grey[500], fontSize: 16),
-                                      // ),
-                                      ),
-                                );
-                              }
-                            });
-                      } else {
-                        return Center(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 250),
-                            child: Text(
-                              "Hiện tại chưa có slot tư vấn trị liệu nào",
-                              style: TextStyle(
-                                  color: Colors.grey[500], fontSize: 16),
-                            ),
-                          ),
-                        );
-                      }
+                                  visible: visible);
+                            } else {
+                              return Center(
+                                child: Container(),
+                              );
+                            }
+                          });
                     } else {
                       return Center(
                         child: Container(

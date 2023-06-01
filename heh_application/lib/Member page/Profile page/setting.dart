@@ -153,13 +153,7 @@ class _SettingPageState extends State<SettingPage> {
                   ));
                 });
               }
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => OTPChangePage(
-                            email: sharedCurrentUser!.email,
-                            myauth: myauth,
-                          )));
+
             },
           ),
           ProfileMenu(
