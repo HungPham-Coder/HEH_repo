@@ -79,7 +79,9 @@ class _FamilyPageState extends State<FamilyPage> {
                                       builder: (context) => FamilyPersonalPage(
                                             subProfile: snapshot.data![index],
                                             medicalRecord: medicalRecord,
-                                          ))).then((value) {});
+                                          ))).then((value) {
+                                setState(() {});
+                              });
                             },
                           );
                         });
