@@ -1,15 +1,18 @@
 import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:heh_application/Login%20page/choose_form.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/SignUp%20Page/signupMed.dart';
 import 'package:heh_application/models/exercise_model/category.dart';
 import 'package:heh_application/models/medical_record.dart';
 import 'package:heh_application/models/problem.dart';
 import 'package:heh_application/models/relationship.dart';
+import 'package:heh_application/models/result_login.dart';
 import 'package:heh_application/models/sign_up_user.dart';
 import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/call_api.dart';
+import 'package:heh_application/services/stream_test.dart';
 
 class OTPPage extends StatefulWidget {
   OTPPage(
@@ -164,6 +167,15 @@ class _OTPPageState extends State<OTPPage> {
                         } else {
                           print("Add problem loi");
                         }
+
+
+                        if (signUp == null){
+                          Navigator.popUntil(context, ModalRoute.withName('/landing'),);
+                        }
+                        else {
+                          Navigator.popUntil(context, ModalRoute.withName('/chooseForm'),);
+                        }
+
                         final snackBar = SnackBar(
                           content: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -180,8 +192,6 @@ class _OTPPageState extends State<OTPPage> {
                           backgroundColor: Colors.green,
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        Navigator.popUntil(context, ModalRoute.withName('/landing'));
-
                       } else {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(

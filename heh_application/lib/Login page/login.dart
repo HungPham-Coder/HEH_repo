@@ -20,6 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/result_login.dart';
+import 'choose_form.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key, this.msg}) : super(key: key);
@@ -193,6 +194,7 @@ class _LoginPageState extends State<LoginPage> {
                               const Text("Bạn chưa có tài khoản ? "),
                               GestureDetector(
                                 onTap: () {
+                                  signUp = null;
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) {

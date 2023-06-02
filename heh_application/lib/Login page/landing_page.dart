@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:heh_application/Login%20page/login.dart';
 import 'package:heh_application/Member%20page/navigation_main.dart';
 import 'package:heh_application/Physiotherapist%20Page/navigation_main.dart';
+import 'package:heh_application/SignUp%20Page/signup.dart';
 import 'package:heh_application/main.dart';
 import 'package:heh_application/models/exercise_resource.dart';
 import 'package:heh_application/models/login_user.dart';
@@ -49,8 +50,8 @@ class _LandingPageState extends State<LandingPage> {
     // TODO: implement initState
 
     super.initState();
-  }
 
+  }
   Future<void> init() async {
     preferences = await SharedPreferences.getInstance();
     final resultLoginJson = preferences!.getString('result_login');
@@ -68,6 +69,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
     final stream = StreamTest.instance;
+
     return StreamBuilder<ResultLogin?>(
       stream: stream.loginUserStream,
       builder: (context, snapshot) {
@@ -103,12 +105,15 @@ class _LandingPageState extends State<LandingPage> {
         // else {
         //   return Center(child: CircularProgressIndicator(),);
         // }
-        if (snapshot.data == null) {
+
+         if (snapshot.data == null ) {
           return LoginPage(
             msg: widget.msg,
           );
           // return WelcomePage1();
-        } else if (snapshot.data!.userID == 'error login') {
+        }
+
+        else if (snapshot.data!.userID == 'error login') {
           return LoginPage(
             msg: 'Email hoặc mật khẩu của bạn sai. Vui lòng nhập lại.',
           );

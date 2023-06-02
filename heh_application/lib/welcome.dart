@@ -207,12 +207,24 @@ class _WelcomePage1State extends State<WelcomePage1> {
             spaceBetweenIndicator: 10),
         listContentConfig: slides,
         onDonePress: () {
-          Navigator.push(scaffoldKey.currentContext!,
-              MaterialPageRoute(builder: (context) => const ChooseForm()));
+          Navigator.push(
+              scaffoldKey.currentContext!,
+              MaterialPageRoute(
+                builder: (context) => const ChooseForm(),
+                settings: const RouteSettings(
+                  name: "/chooseForm",
+                ),
+              ));
         },
         onSkipPress: () {
-          Navigator.push(scaffoldKey.currentContext!,
-              MaterialPageRoute(builder: (context) => const ChooseForm()));
+          Navigator.push(
+              scaffoldKey.currentContext!,
+              MaterialPageRoute(
+                builder: (context) => const ChooseForm(),
+                settings: const RouteSettings(
+                  name: "/chooseForm",
+                ),
+              ));
         },
       ),
     );
