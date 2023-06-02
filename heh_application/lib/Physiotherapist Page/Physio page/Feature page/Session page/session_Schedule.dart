@@ -213,7 +213,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                 visible: visible,
                 color: color,
                 name:
-                    "Người điều trị: ${bookingDetail.bookingSchedule!.subProfile!.signUpUser!.firstName}",
+                    "Người điều trị: ${bookingDetail.bookingSchedule!.subProfile!.subName}",
                 time: "Khung giờ: ${start}-${end}",
                 day: "$weekDay ngày $day",
                 icon:

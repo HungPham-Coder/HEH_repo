@@ -79,17 +79,16 @@ class _AdviseListPageState extends State<AdviseListPage> {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         bool visible = true;
-                        String subName;
+                        String subName = "";
 
                         if (snapshot.data![index].bookingSchedule!.subProfile!
                                 .relationship!.relationName ==
                             "Tôi") {
-                          visible = false;
 
-                          subName = "";
+
+                          subName = "Người điều trị: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}";
                         } else {
-                          subName = snapshot.data![index].bookingSchedule!
-                              .subProfile!.subName;
+                          subName = "Người điều trị ${snapshot.data![index].bookingSchedule!.subProfile!.subName}";
                         }
                         String date = DateTimeFormat.formatDate(snapshot
                             .data![index]
