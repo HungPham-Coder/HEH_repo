@@ -20,11 +20,13 @@ class PhysioBillHistoryPage extends StatefulWidget {
     required this.physiotherapist,
     required this.schedule,
     required this.bookingSchedule,
+    required this.bookingDetail,
     this.view,
   }) : super(key: key);
   PhysiotherapistModel physiotherapist;
   Schedule schedule;
   BookingSchedule? bookingSchedule;
+  BookingDetail? bookingDetail;
   String? view;
   @override
   State<PhysioBillHistoryPage> createState() => _PhysioBillHistoryPageState();
@@ -140,7 +142,7 @@ class _PhysioBillHistoryPageState extends State<PhysioBillHistoryPage> {
                           information(
                               name: "Số tiền: ",
                               info:
-                                  '${value.format(widget.schedule.typeOfSlot!.price.toInt())} VNĐ'),
+                                  '${value.format(widget.bookingDetail!.paymentMoney!.toInt())} VNĐ'),
                           const SizedBox(height: 10),
                         ],
                       ),

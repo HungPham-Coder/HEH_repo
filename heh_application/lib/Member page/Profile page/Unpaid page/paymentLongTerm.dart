@@ -204,6 +204,14 @@ class _PaymenLongTermPageState extends State<PaymenLongTermPage> {
                                   getBookingDetail.longtermStatus == 1) {
                                 widget.bookingDetail!.bookingSchedule!.schedule!
                                     .physioBookingStatus = true;
+                                getBookingDetail.paymentMoney = getBookingDetail
+                                    .bookingSchedule!
+                                    .schedule!
+                                    .typeOfSlot!
+                                    .price;
+
+                                await CallAPI().updateBookingDetailStatus(
+                                    getBookingDetail);
                                 return showDialog(
                                   context: context,
                                   builder: (context) {
@@ -212,6 +220,16 @@ class _PaymenLongTermPageState extends State<PaymenLongTermPage> {
                                         Center(
                                           child: TextButton(
                                             onPressed: () async {
+                                              getBookingDetail.paymentMoney =
+                                                  getBookingDetail
+                                                      .bookingSchedule!
+                                                      .schedule!
+                                                      .typeOfSlot!
+                                                      .price;
+
+                                              await CallAPI()
+                                                  .updateBookingDetailStatus(
+                                                      getBookingDetail);
                                               Navigator.of(context).pop();
                                             },
                                             child: const Text(
@@ -514,6 +532,11 @@ class _PaymenLongTermPageState extends State<PaymenLongTermPage> {
                             widget.bookingDetail!.bookingDetailID!);
                     if (getBookingDetail.shorttermStatus! == 1 &&
                         getBookingDetail.longtermStatus == 1) {
+                      getBookingDetail.paymentMoney = getBookingDetail
+                          .bookingSchedule!.schedule!.typeOfSlot!.price;
+
+                      await CallAPI()
+                          .updateBookingDetailStatus(getBookingDetail);
                       Navigator.push(
                           context,
                           MaterialPageRoute(

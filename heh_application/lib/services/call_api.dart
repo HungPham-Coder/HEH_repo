@@ -938,6 +938,7 @@ class CallAPI {
       "bookingDetailID": bookingDetail.bookingDetailID,
       "bookingScheduleID": bookingDetail.bookingScheduleID,
       "imageUrl": bookingDetail.imageUrl,
+      "paymentMoney": bookingDetail.paymentMoney,
       "longtermStatus": bookingDetail.longtermStatus,
       "shorttermStatus": bookingDetail.shorttermStatus,
     });

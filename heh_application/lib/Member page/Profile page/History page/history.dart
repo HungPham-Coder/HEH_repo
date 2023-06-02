@@ -76,6 +76,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                   MaterialPageRoute(
                                       builder: (context) => BillHistoryPage(
                                           view: "true",
+                                          bookingDetail: snapshot.data![index],
                                           physiotherapist: snapshot
                                               .data![index]
                                               .bookingSchedule!

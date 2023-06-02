@@ -286,10 +286,12 @@ class _AdvicePaidPageState extends State<AdvicePaidPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => BillShortTerm(
-                          view: "true",
-                          physiotherapist: physiotherapist,
-                          schedule: schedule,
-                          bookingSchedule: bookingSchedule)));
+                            view: "true",
+                            physiotherapist: physiotherapist,
+                            schedule: schedule,
+                            bookingSchedule: bookingSchedule,
+                            bookingDetail: bookingDetail,
+                          )));
             },
             child: const Text("Xem hóa đơn",
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
@@ -364,11 +366,13 @@ class BillShortTerm extends StatefulWidget {
     required this.physiotherapist,
     required this.schedule,
     required this.bookingSchedule,
+    required this.bookingDetail,
     this.view,
   }) : super(key: key);
   PhysiotherapistModel physiotherapist;
   Schedule schedule;
   BookingSchedule? bookingSchedule;
+  BookingDetail? bookingDetail;
   String? view;
   @override
   State<BillShortTerm> createState() => _BillShortTermState();

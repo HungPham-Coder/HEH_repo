@@ -247,7 +247,6 @@ class _SessionPaidPageState extends State<SessionPaidPage> {
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black),
                           ),
-                          const SizedBox(height: 10),
                           button(
                               schedule: schedule,
                               physiotherapist: physiotherapist,
@@ -289,10 +288,12 @@ class _SessionPaidPageState extends State<SessionPaidPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => BillLongTerm(
-                          view: "true",
-                          physiotherapist: physiotherapist,
-                          schedule: schedule,
-                          bookingSchedule: bookingSchedule)));
+                            view: "true",
+                            physiotherapist: physiotherapist,
+                            schedule: schedule,
+                            bookingSchedule: bookingSchedule,
+                            bookingDetail: bookingDetail,
+                          )));
             },
             child: const Text("Xem hóa đơn",
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
@@ -367,11 +368,13 @@ class BillLongTerm extends StatefulWidget {
     required this.physiotherapist,
     required this.schedule,
     required this.bookingSchedule,
+    required this.bookingDetail,
     this.view,
   }) : super(key: key);
   PhysiotherapistModel physiotherapist;
   Schedule schedule;
   BookingSchedule? bookingSchedule;
+  BookingDetail? bookingDetail;
   String? view;
   @override
   State<BillLongTerm> createState() => _BillLongTermState();
@@ -487,7 +490,7 @@ class _BillLongTermState extends State<BillLongTerm> {
                           information(
                               name: "Số tiền: ",
                               info:
-                                  '${value.format(widget.schedule.typeOfSlot!.price.toInt())} VNĐ'),
+                                  '${value.format(widget.bookingDetail!.paymentMoney!.toInt())} VNĐ'),
                           const SizedBox(height: 10),
                         ],
                       ),

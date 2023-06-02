@@ -74,6 +74,8 @@ class _PhysioHistoryPageState extends State<PhysioHistoryPage> {
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           PhysioBillHistoryPage(
+                                              bookingDetail:
+                                                  snapshot.data![index],
                                               view: "true",
                                               physiotherapist: snapshot
                                                   .data![index]

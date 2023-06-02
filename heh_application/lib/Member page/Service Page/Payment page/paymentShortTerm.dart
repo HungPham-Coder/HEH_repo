@@ -196,14 +196,27 @@ class _PaymentShortTermPageState extends State<PaymentShortTermPage> {
                             onPressed: () async {
                               print(
                                   "BookingScheduleID: ${widget.bookingDetail!.bookingScheduleID}");
+
                               BookingDetail getBookingDetail = await CallAPI()
                                   .getBookingDetailByID(
                                       widget.bookingDetail!.bookingDetailID!);
+                              print(
+                                  "BookingDetailID: ${getBookingDetail.bookingDetailID}");
 
                               if (getBookingDetail.shorttermStatus! == 1 &&
                                   getBookingDetail.longtermStatus == 0) {
                                 widget.bookingDetail!.bookingSchedule!.schedule!
                                     .physioBookingStatus = true;
+
+                                getBookingDetail.paymentMoney = getBookingDetail
+                                    .bookingSchedule!
+                                    .schedule!
+                                    .typeOfSlot!
+                                    .price;
+
+                                await CallAPI().updateBookingDetailStatus(
+                                    getBookingDetail);
+
                                 return showDialog(
                                   context: context,
                                   builder: (context) {
@@ -212,6 +225,16 @@ class _PaymentShortTermPageState extends State<PaymentShortTermPage> {
                                         Center(
                                           child: TextButton(
                                             onPressed: () async {
+                                              getBookingDetail.paymentMoney =
+                                                  getBookingDetail
+                                                      .bookingSchedule!
+                                                      .schedule!
+                                                      .typeOfSlot!
+                                                      .price;
+
+                                              await CallAPI()
+                                                  .updateBookingDetailStatus(
+                                                      getBookingDetail);
                                               Navigator.of(context).pop();
                                             },
                                             child: const Text(
@@ -514,6 +537,11 @@ class _PaymentShortTermPageState extends State<PaymentShortTermPage> {
                             widget.bookingDetail!.bookingDetailID!);
                     if (getBookingDetail.shorttermStatus! == 1 &&
                         getBookingDetail.longtermStatus == 0) {
+                      getBookingDetail.paymentMoney = getBookingDetail
+                          .bookingSchedule!.schedule!.typeOfSlot!.price;
+
+                      await CallAPI()
+                          .updateBookingDetailStatus(getBookingDetail);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
