@@ -216,68 +216,6 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(
                         height: 15,
                       ),
-
-                      // Column(
-                      //   children: <Widget>[
-                      //     Row(children: <Widget>[
-                      //       Expanded(
-                      //           child: Container(
-                      //         margin: const EdgeInsets.only(
-                      //             left: 10.0, right: 10.0),
-                      //         child: const Divider(
-                      //           color: Colors.black,
-                      //           height: 20,
-                      //         ),
-                      //       )),
-                      //       const Text("Hoặc sử dụng",
-                      //           style: TextStyle(color: Colors.grey)),
-                      //       Expanded(
-                      //           child: Container(
-                      //         margin: const EdgeInsets.only(
-                      //             left: 10.0, right: 10.0),
-                      //         child: const Divider(
-                      //           color: Colors.black,
-                      //           height: 20,
-                      //         ),
-                      //       )),
-                      //     ]),
-
-                      //     const SizedBox(
-                      //       height: 10,
-                      //     ),
-
-                      //     // Center(
-                      //     //   child: FloatingActionButton.extended(
-                      //     //     heroTag: 'google',
-                      //     //     onPressed: null,
-                      //     //     icon: Image.network(
-                      //     //         'https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fgoogle_icon.png?alt=media&token=6234a131-fc34-4cd6-b596-beba7b1c3a46',
-                      //     //         height: 30,
-                      //     //         width: 30),
-                      //     //     label: const Text('Đăng nhập với Google'),
-                      //     //     backgroundColor: Colors.white,
-                      //     //     foregroundColor: Colors.black,
-                      //     //   ),
-                      //     // ),
-                      //     // // ignore: prefer_const_constructors
-                      //     // SizedBox(
-                      //     //   height: 15,
-                      //     // ),
-                      //     // Center(
-                      //     //   child: FloatingActionButton.extended(
-                      //     //     heroTag: 'facebook',
-                      //     //     onPressed: () => _signInWithFacebook(),
-                      //     //     icon: Image.network(
-                      //     //         'https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Ffacebook_icon.png?alt=media&token=412d4a7e-32b4-49bc-9e94-ff7a294703b3',
-                      //     //         height: 30,
-                      //     //         width: 30),
-                      //     //     label: const Text('Đăng nhập với Facebook'),
-                      //     //     backgroundColor: Colors.white,
-                      //     //     foregroundColor: Colors.black,
-                      //     //   ),
-                      //     // ),
-                      //   ],
-                      // ),
                     ],
                   ),
                 ),
@@ -292,11 +230,7 @@ class _LoginPageState extends State<LoginPage> {
       LoginUser loginUser = LoginUser(email: email, password: password);
       ResultLogin? resultLogin = await CallAPI().callLoginAPI(loginUser);
       if (resultLogin != null) {
-        //add login stream to manage login state
-        //add signup user to manage user object xuyen suot app
-        // await  stream.addSignUpStream(signUpUser);
-        // await auth.signInAnonymously();
-        // preferences!.setString('result_login', json.encode(resultLogin.toJson()));
+
         final snackBar = SnackBar(
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10))),
