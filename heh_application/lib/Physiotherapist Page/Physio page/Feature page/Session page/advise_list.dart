@@ -55,13 +55,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await CallAPI()
-              .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                  sharedPhysiotherapist!.physiotherapistID,
-                  'Tư vấn trị liệu',
-                  3,
-                  0,
-                  "");
+          setState(() {});
         },
         child: FutureBuilder<List<BookingDetail>?>(
             future: CallAPI()

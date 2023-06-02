@@ -32,6 +32,7 @@ import '../models/role.dart';
 
 class CallAPI {
   String link = 'https://taskuatapi.hisoft.vn';
+  // String link = 'https://1922-27-3-237-129.ngrok-free.app';
   Future<ResultLogin?> callLoginAPI(LoginUser loginUser) async {
     var url = Uri.parse('${link}/api/User/Login');
     // var url = Uri.https('localhost:7166', 'api/User/Login');
@@ -1708,6 +1709,25 @@ class CallAPI {
       return true;
     } else {
       throw Exception('Failed to delete BookingDetail');
+    }
+  }
+
+  Future<bool> deleteSlotbyID(String slotID) async {
+    var url = Uri.parse('${link}/api/Slot/$slotID');
+    // var url = Uri.https('localhost:7166', 'api/User/Register');
+
+    final body = jsonEncode({
+      "id": slotID,
+    });
+    final headers = {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    };
+    var response = await http.delete(url, body: body, headers: headers);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception('Failed to delete Slot');
     }
   }
 

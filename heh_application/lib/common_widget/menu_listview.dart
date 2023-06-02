@@ -244,7 +244,7 @@ class ScheduleMenu extends StatelessWidget {
     this.date,
     this.typeOfSlot,
   }) : super(key: key);
-  String? weekDay,date;
+  String? weekDay, date;
   final String icon, name, time;
   final String? typeOfSlot;
 
@@ -252,22 +252,14 @@ class ScheduleMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isSelected = true;
-    // ignore: duplicate_ignore
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      child: TextButton(
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-              padding: MaterialStateProperty.all(
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 15)),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(
-                        color: Color.fromARGB(255, 46, 161, 226), width: 2)),
-              )),
-          onPressed: press,
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: Color.fromARGB(255, 46, 161, 226), width: 2),
+              borderRadius: BorderRadius.circular(15)),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -299,11 +291,12 @@ class ScheduleMenu extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                               color: Colors.black)),
                       const SizedBox(height: 5),
-                      weekDay == null && date == null ? Container():
-                      Text(
-                        "$weekDay $date",
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                      weekDay == null && date == null
+                          ? Container()
+                          : Text(
+                              "$weekDay $date",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
                       Text(
                         time,
                         style: Theme.of(context).textTheme.bodyMedium,
@@ -311,6 +304,7 @@ class ScheduleMenu extends StatelessWidget {
                       Text(
                         '$typeOfSlot',
                         style: TextStyle(
+                          fontWeight: FontWeight.w600,
                           color: typeOfSlot != 'Chưa gán'
                               ? Colors.blue
                               : Colors.pink,
@@ -525,7 +519,7 @@ class SessionMenu extends StatelessWidget {
 class SessionScheduleMenu extends StatelessWidget {
   SessionScheduleMenu(
       {Key? key,
-        this.day,
+      this.day,
       required this.icon,
       required this.name,
       required this.time,
@@ -587,7 +581,6 @@ class SessionScheduleMenu extends StatelessWidget {
                         style: const TextStyle(color: Colors.white),
                       ),
                       const SizedBox(height: 5),
-
                       Text(
                         time,
                         style: const TextStyle(color: Colors.white),

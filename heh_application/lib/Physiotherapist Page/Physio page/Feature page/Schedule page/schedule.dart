@@ -39,8 +39,7 @@ class _SchedulePageState extends State<SchedulePage> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await CallAPI().getallSlotByPhysiotherapistID(
-              sharedPhysiotherapist!.physiotherapistID, "");
+          setState(() {});
         },
         child: FutureBuilder<List<Schedule>?>(
           future: CallAPI().getallSlotByPhysiotherapistID(

@@ -13,66 +13,95 @@ class PhysioHomePage extends StatefulWidget {
 }
 
 class _PhysioHomePageState extends State<PhysioHomePage> {
+  Future<bool> _onWillPop(BuildContext context) async {
+    bool? exitResult = await showDialog(
+      context: context,
+      builder: (context) => _buildExitDialog(context),
+    );
+    return exitResult ?? false;
+  }
+
+  AlertDialog _buildExitDialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Đăng xuất?'),
+      content: const Text('Ban có muốn đăng xuất?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Không'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: const Text('Có'),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final firestoreDatabase =
         Provider.of<FirebaseFirestoreBase>(context, listen: false);
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          "Trang chủ",
-          style: TextStyle(fontSize: 23),
-        ),
-        elevation: 10,
-        backgroundColor: const Color.fromARGB(255, 46, 161, 226),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            HomeMenu(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvisor.png?alt=media&token=dae71db1-2f53-404e-92de-46838ceff9c6",
-              text: "Tham gia buổi tư vấn",
-              press: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>  AppointmentPage(firebaseFirestoreBase: firestoreDatabase)));
-              },
+    return WillPopScope(
+        onWillPop: () => _onWillPop(context),
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: const Text(
+              "Trang chủ",
+              style: TextStyle(fontSize: 23),
             ),
-            HomeMenu(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fplan.png?alt=media&token=2356eeaa-f224-4b1f-ad5f-f0cb34f2e922",
-              text: "Tham gia buổi trị liệu",
-              press: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SessionPage(
-                            firebaseFirestoreBase: firestoreDatabase)));
-              },
+            elevation: 10,
+            backgroundColor: const Color.fromARGB(255, 46, 161, 226),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                HomeMenu(
+                  icon:
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvisor.png?alt=media&token=dae71db1-2f53-404e-92de-46838ceff9c6",
+                  text: "Tham gia buổi tư vấn",
+                  press: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AppointmentPage(
+                                firebaseFirestoreBase: firestoreDatabase)));
+                  },
+                ),
+                HomeMenu(
+                  icon:
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fplan.png?alt=media&token=2356eeaa-f224-4b1f-ad5f-f0cb34f2e922",
+                  text: "Tham gia buổi trị liệu",
+                  press: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SessionPage(
+                                firebaseFirestoreBase: firestoreDatabase)));
+                  },
+                ),
+                HomeMenu(
+                  icon:
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcare.png?alt=media&token=0ce5dd58-bcaf-45a8-b277-05eaad8b89b8",
+                  text: "Hỗ trợ tư vấn",
+                  press: () {
+                    final firestoreFirebase =
+                        Provider.of<FirebaseFirestoreBase>(context,
+                            listen: false);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PhysioMessengerPage(
+                                  firestoreBase: firestoreFirebase,
+                                )));
+                  },
+                ),
+              ],
             ),
-            HomeMenu(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcare.png?alt=media&token=0ce5dd58-bcaf-45a8-b277-05eaad8b89b8",
-              text: "Hỗ trợ tư vấn",
-              press: () {
-                final firestoreFirebase =
-                    Provider.of<FirebaseFirestoreBase>(context, listen: false);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PhysioMessengerPage(
-                              firestoreBase: firestoreFirebase,
-                            )));
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
 

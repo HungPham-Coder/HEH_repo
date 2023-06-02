@@ -27,8 +27,7 @@ class _PhysioHistoryPageState extends State<PhysioHistoryPage> {
         ),
         body: RefreshIndicator(
           onRefresh: () async {
-            await CallAPI().GetAllBookingDetailByPhysioID(
-                sharedPhysiotherapist!.physiotherapistID);
+            setState(() {});
           },
           child: FutureBuilder<List<BookingDetail>>(
               future: CallAPI().GetAllBookingDetailByPhysioID(

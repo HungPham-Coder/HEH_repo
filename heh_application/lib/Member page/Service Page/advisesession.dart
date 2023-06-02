@@ -17,7 +17,7 @@ class _AdviseSessionState extends State<AdviseSession> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          "Tư vấn một buổi",
+          "Tư vấn trị liệu",
           style: TextStyle(fontSize: 23),
         ),
         centerTitle: true,

@@ -52,99 +52,129 @@ class _ServicePageState extends State<ServicePage> {
     // print("${sharedSignupUser!.firstName} physio");
     String physioIcon = 'assets/icons/physio.png';
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          "Dịch vụ",
-          style: TextStyle(fontSize: 23),
-        ),
-        elevation: 10,
-        backgroundColor: const Color.fromARGB(255, 46, 161, 226),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            const Text("Bạn đang cần tim đến dịch vụ của chúng tôi?"),
-            FutureBuilder<List<TypeOfSlot>>(
-                future: CallAPI().getAllTypeOfSlot(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data!.length > 0) {
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            if (snapshot.data![index].typeName ==
-                                "Tư vấn trị liệu") {
-                              return PhysiptherapistMenu(
-                                icon:
-                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvise.png?alt=media&token=73296749-85c7-415c-9287-eb044d23d6a1",
-                                text: "${snapshot.data![index].typeName}",
-                                press: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => AdviseSession(
-                                                typeName: snapshot
-                                                    .data![index].typeName,
-                                              )));
-                                },
-                              );
-                            } else {
-                              return Container();
-                            }
-                          });
-                    } else {
-                      print("a");
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  } else {
-                    print("a");
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                }),
-            PhysiptherapistMenu(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcare.png?alt=media&token=0ce5dd58-bcaf-45a8-b277-05eaad8b89b8",
-              text: "Hỗ trợ tư vấn",
-              press: () async {
-                await loadPhysioTherapistAccount();
-                await auth.checkUserExistInFirebase(sharedCurrentUser!);
-
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  if (sharedCurrentUser?.image == null) {
-                    sharedCurrentUser?.setImage = "Không có hình";
-                  }
-
-                  if (sharedCurrentUser != null) {
-                    return Provider<ChatProviderBase>(
-                      create: (context) => ChatProvider(),
-                      child: MessengerPage(
-                          oponentID: opponentUser!.id,
-                          oponentAvartar: opponentUser!.photoUrl,
-                          oponentNickName: opponentUser!.nickname,
-                          userAvatar: sharedCurrentUser!.image,
-                          currentUserID: sharedCurrentUser!.userID!),
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                }));
-              },
+    return WillPopScope(
+        onWillPop: () => _onWillPop(context),
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: const Text(
+              "Dịch vụ",
+              style: TextStyle(fontSize: 23),
             ),
-          ],
+            elevation: 10,
+            backgroundColor: const Color.fromARGB(255, 46, 161, 226),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                const Text(
+                    "Bạn đang cần tim đến dịch vụ của chúng tôi?"),
+                FutureBuilder<List<TypeOfSlot>>(
+                    future: CallAPI().getAllTypeOfSlot(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data!.length > 0) {
+                          return ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                if (snapshot.data![index].typeName ==
+                                    "Tư vấn trị liệu") {
+                                  return PhysiptherapistMenu(
+                                    icon:
+                                        "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvise.png?alt=media&token=73296749-85c7-415c-9287-eb044d23d6a1",
+                                    text: "${snapshot.data![index].typeName}",
+                                    press: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AdviseSession(
+                                                    typeName: snapshot
+                                                        .data![index].typeName,
+                                                  )));
+                                    },
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              });
+                        } else {
+                          print("a");
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      } else {
+                        print("a");
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    }),
+                PhysiptherapistMenu(
+                  icon:
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcare.png?alt=media&token=0ce5dd58-bcaf-45a8-b277-05eaad8b89b8",
+                  text: "Hỗ trợ miễn phí",
+                  press: () async {
+                    await loadPhysioTherapistAccount();
+                    await auth.checkUserExistInFirebase(sharedCurrentUser!);
+
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      if (sharedCurrentUser?.image == null) {
+                        sharedCurrentUser?.setImage = "Không có hình";
+                      }
+
+                      if (sharedCurrentUser != null) {
+                        return Provider<ChatProviderBase>(
+                          create: (context) => ChatProvider(),
+                          child: MessengerPage(
+                              oponentID: opponentUser!.id,
+                              oponentAvartar: opponentUser!.photoUrl,
+                              oponentNickName: opponentUser!.nickname,
+                              userAvatar: sharedCurrentUser!.image,
+                              currentUserID: sharedCurrentUser!.userID!),
+                        );
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    }));
+                  },
+                ),
+              ],
+            ),
+          ),
+        ));
+  }
+
+  Future<bool> _onWillPop(BuildContext context) async {
+    bool? exitResult = await showDialog(
+      context: context,
+      builder: (context) => _buildExitDialog(context),
+    );
+    return exitResult ?? false;
+  }
+
+  AlertDialog _buildExitDialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Đăng xuất?'),
+      content: const Text('Ban có muốn đăng xuất?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Không'),
         ),
-      ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: const Text('Có'),
+        ),
+      ],
     );
   }
 }

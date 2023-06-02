@@ -32,138 +32,172 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          "Cài đặt",
-          style: TextStyle(fontSize: 23),
-        ),
-        centerTitle: true,
-        elevation: 10,
-        backgroundColor: const Color.fromARGB(255, 46, 161, 226),
-      ),
-      body: SingleChildScrollView(
-          child: Column(
-        children: [
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 115,
-            width: 115,
-            child: Stack(
-              clipBehavior: Clip.none,
-              fit: StackFit.expand,
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(sharedCurrentUser!.image == null
-                      ? "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2F360_F_84671939_jxymoYZO8Oeacc3JRBDE8bSXBWj0ZfA9.jpg?alt=media&token=86b0417c-4b47-4207-8c1f-eea21242c91a"
-                      : sharedCurrentUser!.image!),
-                ),
-              ],
+    return WillPopScope(
+        onWillPop: () => _onWillPop(context),
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: const Text(
+              "Cài đặt",
+              style: TextStyle(fontSize: 23),
             ),
+            centerTitle: true,
+            elevation: 10,
+            backgroundColor: const Color.fromARGB(255, 46, 161, 226),
           ),
-          const SizedBox(height: 10),
-          Text(sharedCurrentUser!.firstName.toString(),
-              style: const TextStyle(fontSize: 30)),
-          const SizedBox(height: 20),
-          ProfileMenu(
-            icon:
-                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fperson.svg?alt=media&token=7bef043d-fdb5-4c5b-bb2e-644ee7682345",
-            text: "Thông tin của bạn",
-            press: () {
-              Navigator.push(
+          body: SingleChildScrollView(
+              child: Column(
+            children: [
+              const SizedBox(height: 20),
+              SizedBox(
+                height: 115,
+                width: 115,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  fit: StackFit.expand,
+                  // ignore: prefer_const_literals_to_create_immutables
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(sharedCurrentUser!.image ==
+                              null
+                          ? "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2F360_F_84671939_jxymoYZO8Oeacc3JRBDE8bSXBWj0ZfA9.jpg?alt=media&token=86b0417c-4b47-4207-8c1f-eea21242c91a"
+                          : sharedCurrentUser!.image!),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(sharedCurrentUser!.firstName.toString(),
+                  style: const TextStyle(fontSize: 30)),
+              const SizedBox(height: 20),
+              ProfileMenu(
+                icon:
+                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fperson.svg?alt=media&token=7bef043d-fdb5-4c5b-bb2e-644ee7682345",
+                text: "Thông tin của bạn",
+                press: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const PersonalPage()))
+                      .then((value) => onGoBack());
+                },
+              ),
+              ProfileMenu(
+                icon:
+                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Ffamily.svg?alt=media&token=f6f01b99-6901-48be-9a69-798ea594bd77",
+                text: "Thành viên gia đình",
+                press: () async {
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const PersonalPage()))
-                  .then((value) => onGoBack());
-            },
-          ),
-          ProfileMenu(
-            icon:
-                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Ffamily.svg?alt=media&token=f6f01b99-6901-48be-9a69-798ea594bd77",
-            text: "Thành viên gia đình",
-            press: () async {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FamilyPage(),
-                    settings: const RouteSettings(
-                      name: "/familySignUp",
-                    ),
-                  )).then((value) => onGoBack());
-            },
-          ),
-          ProfileMenu(
-            icon:
-                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fhistory.svg?alt=media&token=13ed285f-0a27-4ee5-b984-bd73d5f15ac8",
-            text: "Dịch vụ chưa thanh toán",
-            press: () async {
-              List<BookingDetail> bookingDetail = await CallAPI()
-                  .GetAllBookingDetailBill(sharedCurrentUser!.userID!);
+                        builder: (context) => FamilyPage(),
+                        settings: const RouteSettings(
+                          name: "/familySignUp",
+                        ),
+                      )).then((value) => onGoBack());
+                },
+              ),
+              ProfileMenu(
+                icon:
+                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fhistory.svg?alt=media&token=13ed285f-0a27-4ee5-b984-bd73d5f15ac8",
+                text: "Dịch vụ chưa thanh toán",
+                press: () async {
+                  List<BookingDetail> bookingDetail = await CallAPI()
+                      .GetAllBookingDetailBill(sharedCurrentUser!.userID!);
 
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UnPaidServicePage(
-                            bookingdetail: bookingDetail,
-                          )));
-            },
-          ),
-          ProfileMenu(
-            icon:
-                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fhistory.svg?alt=media&token=13ed285f-0a27-4ee5-b984-bd73d5f15ac8",
-            text: "Lịch sử thanh toán",
-            press: () async {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HistoryPage()));
-            },
-          ),
-          ProfileMenu(
-            icon:
-                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Freset.svg?alt=media&token=f574651a-977a-4eea-a07d-61fe296f5505",
-            text: "Đặt lại mật khẩu",
-            press: () async {
-              myauth.setConfig(
-                  appEmail: "hungppmse140153@fpt.edu.vn",
-                  appName: "Health care and Healing system",
-                  userEmail: sharedCurrentUser!.email,
-                  otpLength: 6,
-                  otpType: OTPType.digitsOnly);
-              if (await myauth.sendOTP() == true) {
-                setState(() {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Mã OTP đã gửi đến email của bạn."),
-                  ));
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OTPChangePage(
-                        email: sharedCurrentUser!.email,
-                        myauth: myauth,
-                      ),
-                    ),
-                  );
-                });
-              } else {
-                setState(() {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Xin lỗi, gửi OTP thất bại."),
-                  ));
-                });
-              }
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UnPaidServicePage(
+                                bookingdetail: bookingDetail,
+                              )));
+                },
+              ),
+              ProfileMenu(
+                icon:
+                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fhistory.svg?alt=media&token=13ed285f-0a27-4ee5-b984-bd73d5f15ac8",
+                text: "Lịch sử thanh toán",
+                press: () async {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HistoryPage()));
+                },
+              ),
+              ProfileMenu(
+                icon:
+                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Freset.svg?alt=media&token=f574651a-977a-4eea-a07d-61fe296f5505",
+                text: "Đặt lại mật khẩu",
+                press: () async {
+                  myauth.setConfig(
+                      appEmail: "hungppmse140153@fpt.edu.vn",
+                      appName: "Health care and Healing system",
+                      userEmail: sharedCurrentUser!.email,
+                      otpLength: 6,
+                      otpType: OTPType.digitsOnly);
+                  if (await myauth.sendOTP() == true) {
+                    setState(() {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Mã OTP đã gửi đến email của bạn."),
+                      ));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OTPChangePage(
+                            email: sharedCurrentUser!.email,
+                            myauth: myauth,
+                          ),
+                        ),
+                      );
+                    });
+                  } else {
+                    setState(() {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Xin lỗi, gửi OTP thất bại."),
+                      ));
+                    });
+                  }
+                },
+              ),
+              ProfileMenu(
+                icon:
+                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Flogout.svg?alt=media&token=99ed3d5a-ec73-4a07-ac6f-2197f26829ef",
+                text: "Đăng xuất",
+                press: signout,
+              ),
+            ],
+          )),
+        ));
+  }
 
-            },
-          ),
-          ProfileMenu(
-            icon:
-                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Flogout.svg?alt=media&token=99ed3d5a-ec73-4a07-ac6f-2197f26829ef",
-            text: "Đăng xuất",
-            press: signout,
-          ),
-        ],
-      )),
+  Future<bool> _onWillPop(BuildContext context) async {
+    bool? exitResult = await showDialog(
+      context: context,
+      builder: (context) => _buildExitDialog(context),
+    );
+    return exitResult ?? false;
+  }
+
+  Future<bool?> _showExitDialog(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => _buildExitDialog(context),
+    );
+  }
+
+  AlertDialog _buildExitDialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Đăng xuất?'),
+      content: const Text('Ban có muốn đăng xuất?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Không'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: const Text('Có'),
+        ),
+      ],
     );
   }
 

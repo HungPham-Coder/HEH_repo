@@ -219,13 +219,7 @@ class _SessionPageState extends State<SessionPage> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          CallAPI()
-              .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                  sharedPhysiotherapist!.physiotherapistID,
-                  'Trị liệu dài hạn',
-                  1,
-                  1,
-                  "");
+          setState(() {});
         },
         child: FutureBuilder<List<BookingDetail>?>(
             future: CallAPI()

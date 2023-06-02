@@ -18,67 +18,97 @@ class FeaturePage extends StatefulWidget {
 }
 
 class _FeaturePageState extends State<FeaturePage> {
+  Future<bool> _onWillPop(BuildContext context) async {
+    bool? exitResult = await showDialog(
+      context: context,
+      builder: (context) => _buildExitDialog(context),
+    );
+    return exitResult ?? false;
+  }
+
+  AlertDialog _buildExitDialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Đăng xuất?'),
+      content: const Text('Ban có muốn đăng xuất?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Không'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: const Text('Có'),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          "Tính năng",
-          style: TextStyle(fontSize: 23),
-        ),
-        elevation: 10,
-        backgroundColor: const Color.fromARGB(255, 46, 161, 226),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            FeatureMenu(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar1.png?alt=media&token=0c80092a-d7d8-4f16-97cc-afa766361770",
-              text: "Đăng ký lịch trị liệu",
-              press: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PhysioRegisterSlotPage()));
-              },
+    return WillPopScope(
+        onWillPop: () => _onWillPop(context),
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: const Text(
+              "Tính năng",
+              style: TextStyle(fontSize: 23),
             ),
-            FeatureMenu(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
-              text: "Đăng ký lịch dài hạn",
-              press: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AdviseListPage()));
-              },
+            elevation: 10,
+            backgroundColor: const Color.fromARGB(255, 46, 161, 226),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                FeatureMenu(
+                  icon:
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar1.png?alt=media&token=0c80092a-d7d8-4f16-97cc-afa766361770",
+                  text: "Đăng ký lịch trị liệu",
+                  press: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const PhysioRegisterSlotPage()));
+                  },
+                ),
+                FeatureMenu(
+                  icon:
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.jpg?alt=media&token=bcd461f3-e46a-4d99-8a59-0250c520c8f8",
+                  text: "Đăng ký lịch dài hạn",
+                  press: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AdviseListPage()));
+                  },
+                ),
+                FeatureMenu(
+                  icon:
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.png?alt=media&token=45426216-f7a3-449b-8a91-05582ebc1339",
+                  text: "Khung giờ đã đăng ký.",
+                  press: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SchedulePage()));
+                  },
+                ),
+                FeatureMenu(
+                  icon:
+                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fexercise.png?alt=media&token=f9b0b759-2f11-431e-b821-f695bd62e78c",
+                  text: "Bài tập trị liệu",
+                  press: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CategoryPage()));
+                  },
+                ),
+              ],
             ),
-            FeatureMenu(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcalendar.png?alt=media&token=45426216-f7a3-449b-8a91-05582ebc1339",
-              text: "Khung giờ đã đăng ký.",
-              press: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SchedulePage()));
-              },
-            ),
-            FeatureMenu(
-              icon:
-                  "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fexercise.png?alt=media&token=f9b0b759-2f11-431e-b821-f695bd62e78c",
-              text: "Bài tập trị liệu",
-              press: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CategoryPage()));
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }

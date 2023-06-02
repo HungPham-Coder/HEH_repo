@@ -218,13 +218,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          CallAPI()
-              .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
-                  sharedPhysiotherapist!.physiotherapistID,
-                  'Tư vấn trị liệu',
-                  1,
-                  0,
-                  "");
+          setState(() {});
         },
         child: FutureBuilder<List<BookingDetail>?>(
             future: CallAPI()
