@@ -474,7 +474,6 @@ class _BillLongTermState extends State<BillLongTerm> {
                               name: "Tên người đặt: ",
                               info: sharedCurrentUser!.firstName!),
                           padding(),
-                          const SizedBox(height: 15),
                           information(
                               name: "Buổi điều trị: ",
                               info: widget.schedule.slot!.slotName),
