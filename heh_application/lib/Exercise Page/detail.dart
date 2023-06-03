@@ -59,7 +59,7 @@ class _ExerciseDetailState extends State<ExerciseDetail> {
                     itemBuilder: (context, index) {
                       return MenuListView(
                         icon:
-                            "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fbackache.png?alt=media&token=d725e1f5-c106-41f7-9ee5-ade77c464a54",
+                            "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fdumbbells.png?alt=media&token=8850ebc2-fa27-48ee-a966-efff56137fe7&_gl=1*n2e1jy*_ga*MTQ1NTY2MDE0Ny4xNjY1MzY4ODc5*_ga_CW55HF8NVT*MTY4NTgwNzUwNC4yMi4xLjE2ODU4MDg5ODkuMC4wLjA.",
                         text: "${snapshot.data![index].detailName}",
                         press: () async {
                           Navigator.push(context,

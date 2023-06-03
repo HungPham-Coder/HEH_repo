@@ -60,8 +60,7 @@ class _ExercisePageState extends State<ExercisePage> {
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
                           return MenuListView(
-                            icon:
-                                "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/category%2Fbackache.png?alt=media&token=56f8cdbd-7ca2-46d8-a60b-93cfc4951c91",
+                            icon: snapshot.data![index].iconUrl!,
                             text: "${snapshot.data![index].exerciseName}",
                             press: () async {
                               // List<ExerciseDetail1> exerciseDetailList = await CallAPI()
