@@ -29,7 +29,6 @@ class FamilyMedicalPage extends StatefulWidget {
 }
 
 class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
-
   List<Problem> _problems = [];
   List<Problem?> _selectedProblems = [];
   final List<CategoryModel> _listCategory = [];
@@ -74,7 +73,7 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                 Row(
                   children: const <Widget>[
                     Text(
-                      "Anh/Chị đang gặp tình trạng gì?",
+                      "Tình trạng của bạn",
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
@@ -109,16 +108,14 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                                   color: Colors.black, fontSize: 13),
                             ),
                             items: _problems
-                                .map((e) =>
-                                    MultiSelectItem<Problem?>(e, e.name))
+                                .map(
+                                    (e) => MultiSelectItem<Problem?>(e, e.name))
                                 .toList(),
                             listType: MultiSelectListType.CHIP,
                             searchable: true,
                             onConfirm: (values) {
                               setState(() {
-
-                                  _selectedProblems = values;
-
+                                _selectedProblems = values;
                               });
                             },
                             chipDisplay:
@@ -139,13 +136,13 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                 ),
                 const SizedBox(height: 20),
                 difficult(
-                  label: "Hoạt động khó khăn trong cuộc sống?",
+                  label: "Hoạt động khó khăn của bạn",
                 ),
                 injury(
-                  label: "Anh/Chị đã gặp chấn thương gì?",
+                  label: "Chấn thương của bạn",
                 ),
                 curing(
-                  label: "Bệnh lý Anh/Chị đang điều trị kèm theo",
+                  label: "Bệnh lý bạn đang điều trị",
                 ),
                 medicine(
                   label: "Thuốc đang sử dụng hiện tại",
@@ -153,7 +150,6 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-
                     Container(
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         child: Container(
@@ -163,29 +159,28 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                             onPressed: () async {
                               String problem = '';
                               if (_selectedProblems.length > 0) {
-                              if (_selectedProblems.length > 1) {
-                                _selectedProblems.forEach((element) {
-                                  if (element != _selectedProblems.last) {
-                                    problem += '${element!.name}, ';
-                                  } else {
-                                    problem += '${element!.name} ';
-                                  }
-                                });
-
+                                if (_selectedProblems.length > 1) {
+                                  _selectedProblems.forEach((element) {
+                                    if (element != _selectedProblems.last) {
+                                      problem += '${element!.name}, ';
+                                    } else {
+                                      problem += '${element!.name} ';
+                                    }
+                                  });
+                                } else {
+                                  _selectedProblems.forEach((element) {
+                                    problem = '${element!.name}';
+                                  });
+                                }
                               } else {
-                                _selectedProblems.forEach((element) {
-                                  problem = '${element!.name}';
-                                });
-                              }
-                              }
-                              else {
                                 problem = widget.medicalRecord!.problem!;
                               }
 
                               MedicalRecord medicalRecord = MedicalRecord(
                                 medicalRecordID:
                                     widget.medicalRecord!.medicalRecordID,
-                                subProfileID: widget.medicalRecord!.subProfileID,
+                                subProfileID:
+                                    widget.medicalRecord!.subProfileID,
                                 problem: problem,
                                 curing: _curing.text,
                                 difficulty: _difficult.text,
@@ -201,7 +196,7 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                                 //listDB
                                 List<Problem1>? listProblem = await CallAPI()
                                     .getProblemByMedicalRecordID(
-                                    sharedMedicalRecord!.medicalRecordID!);
+                                        sharedMedicalRecord!.medicalRecordID!);
                                 //listAdd
                                 List<Problem1>? listAddProblem = [];
                                 //listDelete
@@ -216,7 +211,7 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                                         // problemID: sharedProblem!.problemID,
                                         categoryID: element.categoryID,
                                         medicalRecordID:
-                                        medical!.medicalRecordID!,
+                                            medical!.medicalRecordID!,
                                       );
                                       listOutput.add(problem1);
                                     }
@@ -266,9 +261,13 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                               }
                               MedicalRecord? medicalUpdate = await CallAPI()
                                   .getMedicalRecordByUserIDAndRelationName(
-                                  sharedCurrentUser!.userID!, sharedSubprofile!.relationship!.relationName);
+                                      sharedCurrentUser!.userID!,
+                                      sharedSubprofile!
+                                          .relationship!.relationName);
                               setState(() {
-                                if (sharedSubprofile!.relationship!.relationName == "Tôi") {
+                                if (sharedSubprofile!
+                                        .relationship!.relationName ==
+                                    "Tôi") {
                                   sharedMedicalRecord = medicalUpdate;
                                 }
                                 widget.medicalRecord = medicalUpdate;
@@ -288,7 +287,8 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                                 ),
                                 backgroundColor: Colors.green,
                               );
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
                             },
                             color: const Color.fromARGB(255, 46, 161, 226),
                             elevation: 0,
@@ -332,7 +332,6 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-
           ],
         ),
         const SizedBox(height: 5),
@@ -370,7 +369,6 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-
           ],
         ),
         const SizedBox(height: 5),
@@ -408,7 +406,6 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-
           ],
         ),
         const SizedBox(height: 5),
@@ -446,7 +443,6 @@ class _FamilyMedicalPageState extends State<FamilyMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-
           ],
         ),
         const SizedBox(height: 5),

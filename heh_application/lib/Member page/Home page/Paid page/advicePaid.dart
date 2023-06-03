@@ -234,7 +234,7 @@ class _AdvicePaidPageState extends State<AdvicePaidPage> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Chuyên viên điều trị: ",
+                            "Chuyên viên trị liệu: ",
                             style: Theme.of(context).textTheme.bodyText2,
                           ),
                           const SizedBox(height: 10),
@@ -382,6 +382,7 @@ class _BillShortTermState extends State<BillShortTerm> {
   String? day;
   String? timeStart;
   String? timeEnd;
+  String? timeBook;
   bool check = false;
 
   String title = "Xác nhận";
@@ -393,6 +394,8 @@ class _BillShortTermState extends State<BillShortTerm> {
     DateTime tempTimeStart = new DateFormat("yyyy-MM-ddTHH:mm:ss")
         .parse(widget.schedule.slot!.timeStart);
     timeStart = DateFormat("HH:mm").format(tempTimeStart);
+    timeBook = DateTimeFormat.formatDateTime(
+        widget.bookingDetail!.bookingSchedule!.timeBooking);
 
     DateTime tempTimeEnd = new DateFormat("yyyy-MM-ddTHH:mm:ss")
         .parse(widget.schedule.slot!.timeEnd);
@@ -463,6 +466,8 @@ class _BillShortTermState extends State<BillShortTerm> {
                           information(
                               name: "ID: ", info: widget.schedule.scheduleID),
                           padding(),
+                          information(name: "Ngày đặt: ", info: "$timeBook"),
+                          padding(),
                           information(
                               name: "Tên chuyên viên: ",
                               info: widget
@@ -473,10 +478,10 @@ class _BillShortTermState extends State<BillShortTerm> {
                               info: sharedCurrentUser!.firstName!),
                           padding(),
                           information(
-                              name: "Buổi điều trị: ",
+                              name: "Buổi trị liệu: ",
                               info: widget.schedule.slot!.slotName),
                           padding(),
-                          information(name: "Ngày điều trị: ", info: day),
+                          information(name: "Ngày trị liệu: ", info: day),
                           padding(),
                           information(
                               name: "Thời gian bắt đầu: ", info: timeStart),

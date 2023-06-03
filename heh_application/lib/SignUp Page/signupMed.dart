@@ -195,11 +195,11 @@ class _SignUpMedicalPageState extends State<SignUpMedicalPage> {
               difficult(label: "Hoạt động khó khăn trong cuộc sống?"),
               injury(label: "Anh/Chị đã gặp chấn thương gì?"),
               curing(label: "Bệnh lý Anh/Chị đang điều trị kèm theo"),
-              medicine(label: "Thuốc đang sử dụng hiện tại"),
+              medicine(label: "Thuốc đang sử dụng hiện tại là gì?"),
               Visibility(
                 visible: visible,
                 child: const Text(
-                  "Hãy nhập đúng những field cần thiết",
+                  "Vui lòng nhập đầy đủ những thông tin cần thiết.",
                   style: TextStyle(fontSize: 15, color: Colors.red),
                 ),
               ),

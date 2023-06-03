@@ -31,13 +31,13 @@ class _PersonalPageState extends State<PersonalPage> {
           bottom: const TabBar(
             tabs: [
               Tab(text: "Thông tin chính"),
-              Tab(text: "Thông tin khác"),
+              Tab(text: "Hồ sơ bệnh án"),
             ],
           ),
           elevation: 10,
           backgroundColor: const Color.fromARGB(255, 46, 161, 226),
         ),
-        body: TabBarView(children: [
+        body: TabBarView(clipBehavior: Clip.antiAlias, children: [
           InformationPage(),
           MedicalPage(
             medicalRecord: sharedMedicalRecord,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class AllowFunction {
-  static Future CustomAlertDialog(BuildContext context, text) {
+  static Future CustomAlertDialog(BuildContext context, text, content) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -25,20 +25,27 @@ class AllowFunction {
             ),
           ],
           icon: Lottie.network(
-            'https://assets5.lottiefiles.com/packages/lf20_dygofb4l.json',
+            'https://assets8.lottiefiles.com/packages/lf20_0P6TnSO6YK.json',
             repeat: false,
             height: 80,
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          content:  Text(
-           text,
-            style: TextStyle(
-              fontWeight: FontWeight.w800,
-              fontSize: 20,
+          content: Text(
+            content,
+            style: const TextStyle(
+              fontSize: 16,
             ),
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.start,
+          ),
+          title: Text(
+            text,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.start,
           ),
         );
       },

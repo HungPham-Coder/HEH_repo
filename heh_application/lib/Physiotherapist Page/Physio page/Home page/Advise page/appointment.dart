@@ -179,7 +179,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           Row(
                             children: [
                               Text(
-                                "Người điều trị: ",
+                                "Người được trị liệu: ",
                                 style: Theme.of(context).textTheme.bodyText2,
                               ),
                               Text(

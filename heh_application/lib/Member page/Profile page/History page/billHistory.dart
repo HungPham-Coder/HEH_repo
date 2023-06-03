@@ -43,9 +43,9 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
   String title = "Xác nhận";
   String subTitle = "Xác nhận hóa đơn";
   void formatDateAndTime() {
-
     day = DateTimeFormat.formatDate(widget.schedule.slot!.timeStart);
-    timeBook = DateTimeFormat.formatDateTime(widget.bookingDetail!.bookingSchedule!.timeBooking);
+    timeBook = DateTimeFormat.formatDateTime(
+        widget.bookingDetail!.bookingSchedule!.timeBooking);
     DateTime tempTimeStart = new DateFormat("yyyy-MM-ddTHH:mm:ss")
         .parse(widget.schedule.slot!.timeStart);
     timeStart = DateFormat("HH:mm").format(tempTimeStart);
@@ -78,7 +78,7 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
       appBar: AppBar(
         title: Text(
           title,
-          style: TextStyle(fontSize: 23),
+          style: const TextStyle(fontSize: 23),
         ),
         centerTitle: true,
         elevation: 10,
@@ -113,17 +113,15 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
                         children: [
                           Center(
                               child: Text(subTitle,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500))),
                           const SizedBox(height: 20),
                           information(
                               name: "ID: ", info: widget.schedule.scheduleID),
                           padding(),
-                          information(
-                              name: "Ngày đặt: ", info: "$timeBook"),
+                          information(name: "Ngày đặt: ", info: "$timeBook"),
                           padding(),
-
                           information(
                               name: "Tên chuyên viên: ",
                               info: widget
@@ -134,17 +132,16 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
                               info: sharedCurrentUser!.firstName!),
                           padding(),
                           information(
-                              name: "Buổi điều trị: ",
+                              name: "Buổi trị liệu: ",
                               info: widget.schedule.slot!.slotName),
                           padding(),
-                          information(name: "Ngày điều trị: ", info: day),
+                          information(name: "Ngày trị liệu: ", info: day),
                           padding(),
                           information(
                               name: "Thời gian bắt đầu: ", info: timeStart),
                           padding(),
                           information(
                               name: "Thời gian kết thúc: ", info: timeEnd),
-
                           padding(),
                           information(
                               name: "Số tiền: ",

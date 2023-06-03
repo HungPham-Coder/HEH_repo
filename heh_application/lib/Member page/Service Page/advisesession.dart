@@ -16,11 +16,10 @@ class _AdviseSessionState extends State<AdviseSession> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title:  Text(
+        title: Text(
           widget.typeName,
-          style: TextStyle(fontSize: 23),
+          style: const TextStyle(fontSize: 23),
         ),
-        centerTitle: true,
         elevation: 10,
         backgroundColor: const Color.fromARGB(255, 46, 161, 226),
       ),

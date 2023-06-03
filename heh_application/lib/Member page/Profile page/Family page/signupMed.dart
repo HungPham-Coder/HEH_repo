@@ -25,7 +25,7 @@ class FamilySignUpMedicalPage extends StatefulWidget {
 class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
   List<Problem> _problems = [];
   List _selectedProblems = [];
-  bool validProblem = false ;
+  bool validProblem = false;
   bool visible = false;
   late bool _visibility = false;
   TextEditingController _difficult = TextEditingController();
@@ -109,7 +109,6 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                                 style: TextStyle(fontSize: 18)),
                             initialChildSize: 0.4,
                             title: const Text("Vấn đề của bạn"),
-
                             buttonText: const Text(
                               "Vấn đề của bạn",
                               style:
@@ -120,10 +119,9 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                                 .toList(),
                             validator: (value) {
                               if (_selectedProblems.isEmpty) {
-                                 validProblem = false;
+                                validProblem = false;
                                 return "Hãy chọn vấn đề của bạn";
-                              }
-                              else {
+                              } else {
                                 validProblem = true;
                               }
                             },
@@ -153,7 +151,7 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                 difficult(label: "Hoạt động khó khăn trong cuộc sống?"),
                 injury(label: "Anh/Chị đã gặp chấn thương gì?"),
                 curing(label: "Bệnh lý Anh/Chị đang điều trị kèm theo"),
-                medicine(label: "Thuốc đang sử dụng hiện tại"),
+                medicine(label: "Thuốc đang sử dụng hiện tại là gì?"),
                 Visibility(
                   visible: visible,
                   child: const Text(
@@ -205,38 +203,36 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                                       medicine: _medicine.text,
                                       problem: problem);
                                   MedicalRecord? medicalRecordAdd =
-                                  await CallAPI()
-                                      .createMedicalRecord(medicalRecord);
+                                      await CallAPI()
+                                          .createMedicalRecord(medicalRecord);
                                   if (medicalRecordAdd != null) {
                                     //create Problem
-                                    List<Problem1>? listAddProblem = [] ;
-                                    _selectedProblems.forEach((elementSelected)  {
-                                      _listCategory.forEach((element)   {
+                                    List<Problem1>? listAddProblem = [];
+                                    _selectedProblems
+                                        .forEach((elementSelected) {
+                                      _listCategory.forEach((element) {
                                         if (elementSelected!.name ==
                                             element.categoryName) {
                                           Problem1 problem1 = Problem1(
                                               categoryID: element.categoryID,
-                                              medicalRecordID:
-                                              medicalRecordAdd.medicalRecordID!);
-
+                                              medicalRecordID: medicalRecordAdd
+                                                  .medicalRecordID!);
 
                                           listAddProblem.add(problem1);
                                         }
                                       });
                                     });
-                                    if (listAddProblem.length > 0){
-                                      for (var element in listAddProblem){
-
+                                    if (listAddProblem.length > 0) {
+                                      for (var element in listAddProblem) {
                                         await CallAPI().addProblem(element);
                                       }
-                                    }
-                                    else {
-                                      print ("Add problem loi");
+                                    } else {
+                                      print("Add problem loi");
                                     }
                                     final snackBar = SnackBar(
                                       content: Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                         children: const [
                                           Text(
                                             "Đăng ký Thành công",
@@ -255,13 +251,11 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                                         ModalRoute.withName('/familySignUp'));
                                   }
                                 }
-                              }
-                              else {
+                              } else {
                                 setState(() {
                                   visible = true;
                                 });
                               }
-
                             },
                             color: const Color.fromARGB(255, 46, 161, 226),
                             elevation: 0,
@@ -336,12 +330,10 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-
           ],
         ),
         const SizedBox(height: 5),
         TextFormField(
-
           controller: _difficult,
           obscureText: obscureText,
           decoration: const InputDecoration(
@@ -370,12 +362,10 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-
           ],
         ),
         const SizedBox(height: 5),
         TextFormField(
-
           controller: _injury,
           obscureText: obscureText,
           decoration: const InputDecoration(
@@ -404,7 +394,6 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-
           ],
         ),
         const SizedBox(height: 5),
@@ -437,7 +426,6 @@ class _FamilySignUpMedicalPageState extends State<FamilySignUpMedicalPage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-
           ],
         ),
         const SizedBox(height: 5),

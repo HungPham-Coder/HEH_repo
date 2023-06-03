@@ -19,7 +19,7 @@ class _SessionListPageState extends State<SessionListPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          "Danh sách điều trị dài hạn",
+          "Danh sách trị liệu dài hạn",
           style: TextStyle(fontSize: 18),
         ),
         elevation: 10,
@@ -188,7 +188,7 @@ class _SessionListPageState extends State<SessionListPage> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Người điều trị: $subName ",
+                            "Người được trị liệu: $subName ",
                             style: Theme.of(context).textTheme.bodyText2,
                           ),
 

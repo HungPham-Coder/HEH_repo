@@ -68,16 +68,16 @@ class _SessionDetailPageState extends State<SessionDetailPage> {
                                     "${widget.bookingSchedule!.signUpUser!.firstName}"),
                             padding(),
                             information(
-                                name: "Tên người được điều trị: ",
+                                name: "Tên người được trị liệu: ",
                                 info:
                                     "${widget.bookingSchedule!.subProfile!.subName}"),
                             padding(),
                             information(
-                                name: "Buổi điều trị: ",
+                                name: "Buổi trị liệu: ",
                                 info:
                                     "${widget.bookingSchedule!.schedule!.slot!.slotName}"),
                             padding(),
-                            information(name: "Ngày điều trị: ", info: "$date"),
+                            information(name: "Ngày trị liệu: ", info: "$date"),
                             padding(),
                             information(
                                 name: "Thời gian bắt đầu: ", info: "$start"),

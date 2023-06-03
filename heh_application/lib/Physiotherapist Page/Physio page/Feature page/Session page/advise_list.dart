@@ -78,11 +78,11 @@ class _AdviseListPageState extends State<AdviseListPage> {
                         if (snapshot.data![index].bookingSchedule!.subProfile!
                                 .relationship!.relationName ==
                             "Tôi") {
-
-
-                          subName = "Người điều trị: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}";
+                          subName =
+                              "Người trị được liệu: ${snapshot.data![index].bookingSchedule!.signUpUser!.firstName}";
                         } else {
-                          subName = "Người điều trị ${snapshot.data![index].bookingSchedule!.subProfile!.subName}";
+                          subName =
+                              "Người trị được liệu: ${snapshot.data![index].bookingSchedule!.subProfile!.subName}";
                         }
                         String date = DateTimeFormat.formatDate(snapshot
                             .data![index]
@@ -290,7 +290,7 @@ class _AdviseListPageState extends State<AdviseListPage> {
         builder: (BuildContext context) => AlertDialog(
           title: const Text('Thêm khách hàng'),
           content: const Text(
-              'Bạn có muốn thêm khách hàng này vào Điều Trị Dài Hạn?'),
+              'Bạn có muốn thêm khách hàng này vào Trị Liệu Dài Hạn?'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'Hủy'),

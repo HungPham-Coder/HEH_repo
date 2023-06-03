@@ -45,22 +45,23 @@ class _FeaturePageState extends State<FeaturePage> {
       ],
     );
   }
-  Future<bool> checkValidPhysio () async {
-    List<CategoryModel> listCate =  await CallAPI().getAllCategory();
+
+  Future<bool> checkValidPhysio() async {
+    List<CategoryModel> listCate = await CallAPI().getAllCategory();
     int count = 0;
     listCate.forEach((element) {
-      if (sharedPhysiotherapist!.skill!.contains(element.categoryName) || element.categoryName.contains(sharedPhysiotherapist!.skill!) )
-        {
-          count ++;
-        }
+      if (sharedPhysiotherapist!.skill!.contains(element.categoryName) ||
+          element.categoryName.contains(sharedPhysiotherapist!.skill!)) {
+        count++;
+      }
     });
     if (count == 0) {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -87,16 +88,17 @@ class _FeaturePageState extends State<FeaturePage> {
                     bool valid = await checkValidPhysio();
 
                     if (valid == false) {
-                      await AllowFunction.CustomAlertDialog(context, "Bạn hãy cập nhật thông tin về chuyên môn và kỹ năng của bạn để sử dụng chức năng này");
-                    }
-                    else {
+                      await AllowFunction.CustomAlertDialog(
+                          context,
+                          "Kỹ năng của bạn đang trống!",
+                          "Vui lòng vào ''Cài đặt -> Thông tin của bạn -> Thông tin khác'' để cung cấp thông tin về Kỹ năng chuyên vien của bạn.");
+                    } else {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                              const PhysioRegisterSlotPage()));
+                                  const PhysioRegisterSlotPage()));
                     }
-
                   },
                 ),
                 FeatureMenu(
@@ -106,15 +108,16 @@ class _FeaturePageState extends State<FeaturePage> {
                   press: () async {
                     bool valid = await checkValidPhysio();
                     if (valid == false) {
-                      await AllowFunction.CustomAlertDialog(context, "Bạn hãy cập nhật thông tin về chuyên môn và kỹ năng của bạn để sử dụng chức năng này");
-                    }
-                    else {
+                      await AllowFunction.CustomAlertDialog(
+                          context,
+                          "Kỹ năng của bạn đang trống!",
+                          "Vui lòng vào ''Cài đặt -> Thông tin của bạn -> Thông tin khác'' để cung cấp thông tin về Kỹ năng chuyên vien của bạn.");
+                    } else {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const AdviseListPage()));
                     }
-
                   },
                 ),
                 FeatureMenu(
@@ -124,15 +127,16 @@ class _FeaturePageState extends State<FeaturePage> {
                   press: () async {
                     bool valid = await checkValidPhysio();
                     if (valid == false) {
-                      await AllowFunction.CustomAlertDialog(context, "Bạn hãy cập nhật thông tin về chuyên môn và kỹ năng của bạn để sử dụng chức năng này");
-                    }
-                    else {
+                      await AllowFunction.CustomAlertDialog(
+                          context,
+                          "Kỹ năng của bạn đang trống!",
+                          "Vui lòng vào ''Cài đặt -> Thông tin của bạn -> Thông tin khác'' để cung cấp thông tin về Kỹ năng chuyên vien của bạn.");
+                    } else {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => SchedulePage()));
                     }
-
                   },
                 ),
                 FeatureMenu(
@@ -140,17 +144,18 @@ class _FeaturePageState extends State<FeaturePage> {
                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fexercise.png?alt=media&token=f9b0b759-2f11-431e-b821-f695bd62e78c",
                   text: "Bài tập trị liệu",
                   press: () async {
-                    bool valid = await checkValidPhysio();
-                    if (valid == false) {
-                      await AllowFunction.CustomAlertDialog(context, "Bạn hãy cập nhật thông tin về chuyên môn và kỹ năng của bạn để sử dụng chức năng này");
-                    }
-                    else {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const CategoryPage()));
-                    }
-
+                    // bool valid = await checkValidPhysio();
+                    // if (valid == false) {
+                    //   await AllowFunction.CustomAlertDialog(
+                    //       context,
+                    //       "Kỹ năng của bạn đang trống!",
+                    //       "Vui lòng vào ''Cài đặt -> Thông tin của bạn -> Thông tin khác'' để cung cấp thông tin về Kỹ năng chuyên vien của bạn.");
+                    // } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CategoryPage()));
+                    // }
                   },
                 ),
               ],

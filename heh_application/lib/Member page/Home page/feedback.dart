@@ -30,7 +30,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
             children: [
               FeedbackListView(
                 slotName: "A",
-                typeOfSlot: "Loại điều trị: ",
+                typeOfSlot: "Loại trị liệu: ",
                 date: "Ngày đặt:",
                 physiotherapist: "Chuyên viên: ",
                 press: () {},

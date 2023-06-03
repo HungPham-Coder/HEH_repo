@@ -161,10 +161,10 @@ class _BillShortTermPageState extends State<BillShortTermPage> {
                               padding(),
                               const SizedBox(height: 15),
                               information(
-                                  name: "Buổi điều trị: ",
+                                  name: "Buổi trị liệu: ",
                                   info: widget.schedule.slot!.slotName),
                               padding(),
-                              information(name: "Ngày điều trị: ", info: day),
+                              information(name: "Ngày trị liệu: ", info: day),
                               padding(),
                               information(
                                   name: "Thời gian bắt đầu: ", info: timeStart),

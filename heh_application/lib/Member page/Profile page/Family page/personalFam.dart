@@ -31,7 +31,7 @@ class _FamilyPersonalPageState extends State<FamilyPersonalPage> {
               bottom: const TabBar(
                 tabs: [
                   Tab(text: "Thông tin chính"),
-                  Tab(text: "Thông tin khác"),
+                  Tab(text: "Hồ sơ bệnh án"),
                 ],
               ),
               elevation: 10,

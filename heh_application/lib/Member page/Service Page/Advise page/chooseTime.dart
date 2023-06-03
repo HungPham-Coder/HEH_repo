@@ -107,7 +107,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                       validator: (value) {
                         if (selectedSubName == "- Chọn -") {
                           validRelationShip = false;
-                          return "Hãy chọn người cần được điều trị";
+                          return "Hãy chọn người cần được trị liệu";
                         } else {
                           validRelationShip = true;
                         }
@@ -158,7 +158,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
           validator: (value) {
             if (value!.isEmpty) {
               validDate = false;
-              return "Hãy chọn ngày điều trị";
+              return "Hãy chọn ngày trị liệu";
             } else {
               validDate = true;
             }
@@ -300,7 +300,7 @@ class _ChooseTimePageState extends State<ChooseTimePage> {
                                 if (selectedTime == "- Chọn khung giờ -") {
                                   validTime = false;
 
-                                  return "Hãy chọn khung giờ điều trị";
+                                  return "Hãy chọn khung giờ trị liệu";
                                 } else {
                                   validTime = true;
                                 }

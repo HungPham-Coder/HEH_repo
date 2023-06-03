@@ -11,6 +11,7 @@ import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/chat_provider.dart';
 import 'package:heh_application/services/firebase_firestore.dart';
+import 'package:heh_application/util/date_time_format.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -237,7 +238,7 @@ class _SessionPaidPageState extends State<SessionPaidPage> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Chuyên viên điều trị: ",
+                            "Chuyên viên trị liệu: ",
                             style: Theme.of(context).textTheme.bodyText2,
                           ),
                           const SizedBox(height: 10),
@@ -384,6 +385,7 @@ class _BillLongTermState extends State<BillLongTerm> {
   String? day;
   String? timeStart;
   String? timeEnd;
+  String? timeBook;
   bool check = false;
 
   String title = "Xác nhận";
@@ -399,6 +401,9 @@ class _BillLongTermState extends State<BillLongTerm> {
     DateTime tempTimeEnd = new DateFormat("yyyy-MM-ddTHH:mm:ss")
         .parse(widget.schedule.slot!.timeEnd);
     timeEnd = DateFormat("HH:mm").format(tempTimeEnd);
+
+    timeBook = DateTimeFormat.formatDateTime(
+        widget.bookingDetail!.bookingSchedule!.timeBooking);
   }
 
   final value = NumberFormat("###,###,###");
@@ -465,6 +470,8 @@ class _BillLongTermState extends State<BillLongTerm> {
                           information(
                               name: "ID: ", info: widget.schedule.scheduleID),
                           padding(),
+                          information(name: "Ngày đặt: ", info: "$timeBook"),
+                          padding(),
                           information(
                               name: "Tên chuyên viên: ",
                               info: widget
@@ -475,10 +482,10 @@ class _BillLongTermState extends State<BillLongTerm> {
                               info: sharedCurrentUser!.firstName!),
                           padding(),
                           information(
-                              name: "Buổi điều trị: ",
+                              name: "Buổi trị liệu: ",
                               info: widget.schedule.slot!.slotName),
                           padding(),
-                          information(name: "Ngày điều trị: ", info: day),
+                          information(name: "Ngày trị liệu: ", info: day),
                           padding(),
                           information(
                               name: "Thời gian bắt đầu: ", info: timeStart),

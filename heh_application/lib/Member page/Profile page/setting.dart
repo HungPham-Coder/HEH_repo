@@ -7,6 +7,9 @@ import 'package:heh_application/Change%20password/otpchange.dart';
 import 'package:heh_application/Login%20page/landing_page.dart';
 import 'package:heh_application/Member%20page/Home%20page/favorite.dart';
 import 'package:heh_application/Member%20page/Profile%20page/History%20page/history.dart';
+
+import 'package:heh_application/Member%20page/Profile%20page/Personal%20page/information.dart';
+import 'package:heh_application/Member%20page/Profile%20page/Personal%20page/medical.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Personal%20page/personal.dart';
 import 'package:heh_application/Member%20page/Profile%20page/Unpaid%20page/unpaid.dart';
 import 'package:heh_application/models/booking_detail.dart';

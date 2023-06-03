@@ -82,33 +82,35 @@ class _ServicePageState extends State<ServicePage> {
                               physics: NeverScrollableScrollPhysics(),
                               itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) {
-                                if (snapshot.data![index].typeName != "Trị liệu dài hạn") {
+                                if (snapshot.data![index].typeName !=
+                                    "Trị liệu dài hạn") {
                                   return PhysiptherapistMenu(
                                     icon:
-                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvise.png?alt=media&token=73296749-85c7-415c-9287-eb044d23d6a1",
+                                        "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvise.png?alt=media&token=73296749-85c7-415c-9287-eb044d23d6a1",
                                     text: "${snapshot.data![index].typeName}",
                                     press: () async {
-                                      if (sharedMedicalRecord!.problem == null) {
-                                       await AllowFunction.CustomAlertDialog(context, "Bạn hãy cung cấp thông tin hồ sơ bệnh án để xài chức năng này");
-                                      }
-                                      else {
+                                      if (sharedMedicalRecord!.problem ==
+                                          null) {
+                                        await AllowFunction.CustomAlertDialog(
+                                            context,
+                                            "Tình trạng của Hồ Sơ Bệnh Án đang trống!",
+                                            "Vui lòng vào ''Cài đặt -> Thông tin của bạn -> Hồ sơ bệnh án'' để cung cấp thông tin về Tình trạng của bạn.");
+                                      } else {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     AdviseSession(
                                                       typeName: snapshot
-                                                          .data![index].typeName,
+                                                          .data![index]
+                                                          .typeName,
                                                     )));
                                       }
-
                                     },
                                   );
+                                } else {
+                                  return Container();
                                 }
-                                 else {
-                                   return Container();
-                                }
-
                               });
                         } else {
                           return Center(

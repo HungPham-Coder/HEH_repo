@@ -179,7 +179,7 @@ class _SessionPageState extends State<SessionPage> {
                           Row(
                             children: [
                               Text(
-                                "Người điều trị: ",
+                                "Người được trị liệu: ",
                                 style: Theme.of(context).textTheme.bodyText2,
                               ),
                               Text(

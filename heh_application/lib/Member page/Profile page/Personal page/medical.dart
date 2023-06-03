@@ -71,7 +71,7 @@ class _MedicalPageState extends State<MedicalPage> {
                 Row(
                   children: const <Widget>[
                     Text(
-                      "Anh/Chị đang gặp tình trạng gì?",
+                      "Tình trạng của bạn",
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
@@ -154,13 +154,13 @@ class _MedicalPageState extends State<MedicalPage> {
                 ),
                 const SizedBox(height: 20),
                 difficult(
-                  label: "Hoạt động khó khăn trong cuộc sống?",
+                  label: "Hoạt động khó khăn của bạn",
                 ),
                 injury(
-                  label: "Anh/Chị đã gặp chấn thương gì?",
+                  label: "Chấn thương của bạn",
                 ),
                 curing(
-                  label: "Bệnh lý Anh/Chị đang điều trị kèm theo",
+                  label: "Bệnh lý bạn đang điều trị",
                 ),
                 medicine(
                   label: "Thuốc đang sử dụng hiện tại",
@@ -193,7 +193,6 @@ class _MedicalPageState extends State<MedicalPage> {
                                     }
                                   });
                                 } else {
-                                  
                                   _selectedProblems.forEach((element) {
                                     problem = '${element!.name}';
                                   });
@@ -221,33 +220,40 @@ class _MedicalPageState extends State<MedicalPage> {
                                           sharedCurrentUser!.userID!);
                                   //create Medical Record
                                   MedicalRecord medicalRecord = MedicalRecord(
-                                    subProfileID:
-                                        subProfile.profileID,
+                                    subProfileID: subProfile.profileID,
                                     problem: problem,
                                     curing: _curing.text,
                                     difficulty: _difficulty.text,
                                     injury: _injury.text,
                                     medicine: _medicine.text,
-
                                   );
-                                 MedicalRecord? medicalRecordAdd =  await CallAPI().createMedicalRecord(medicalRecord);
-                                 MedicalRecord? medicalRecordGet =  await CallAPI().getMedicalRecordBySubProfileID(subProfile.profileID!);
-                                 setState(() {
-                                   sharedMedicalRecord = medicalRecordGet;
-                                 });
-                                 //add problem
-                                  _selectedProblems.forEach((elementProblem) { 
-                                    
-                                    _listCategory.forEach((elementCate) async { 
-                                      if (elementProblem!.name == elementCate.categoryName){
-                                        Problem1 problem1 = Problem1(categoryID: elementCate.categoryID, medicalRecordID: medicalRecordAdd!.medicalRecordID!);
+                                  MedicalRecord? medicalRecordAdd =
+                                      await CallAPI()
+                                          .createMedicalRecord(medicalRecord);
+                                  MedicalRecord? medicalRecordGet =
+                                      await CallAPI()
+                                          .getMedicalRecordBySubProfileID(
+                                              subProfile.profileID!);
+                                  setState(() {
+                                    sharedMedicalRecord = medicalRecordGet;
+                                  });
+                                  //add problem
+                                  _selectedProblems.forEach((elementProblem) {
+                                    _listCategory.forEach((elementCate) async {
+                                      if (elementProblem!.name ==
+                                          elementCate.categoryName) {
+                                        Problem1 problem1 = Problem1(
+                                            categoryID: elementCate.categoryID,
+                                            medicalRecordID: medicalRecordAdd!
+                                                .medicalRecordID!);
                                         await CallAPI().addProblem(problem1);
                                       }
                                     });
                                   });
                                   final snackBar = SnackBar(
                                     content: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: const [
                                         Text(
                                           "Thành công",
@@ -262,7 +268,6 @@ class _MedicalPageState extends State<MedicalPage> {
                                   );
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
-                                  
                                 } else {
                                   setState(() {
                                     visible = true;
