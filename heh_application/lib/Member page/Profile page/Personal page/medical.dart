@@ -77,6 +77,10 @@ class _MedicalPageState extends State<MedicalPage> {
                           fontWeight: FontWeight.w400,
                           color: Colors.black87),
                     ),
+                    Text(
+                      " *",
+                      style: TextStyle(color: Colors.red),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 5),

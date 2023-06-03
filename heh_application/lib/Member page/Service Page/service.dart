@@ -11,6 +11,7 @@ import 'package:heh_application/services/auth.dart';
 import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/chat_provider.dart';
 import 'package:heh_application/services/firebase_firestore.dart';
+import 'package:heh_application/util/allow_function.dart';
 import 'package:provider/provider.dart';
 
 class ServicePage extends StatefulWidget {
@@ -81,35 +82,40 @@ class _ServicePageState extends State<ServicePage> {
                               physics: NeverScrollableScrollPhysics(),
                               itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) {
-                                if (snapshot.data![index].typeName ==
-                                    "Tư vấn trị liệu") {
+                                if (snapshot.data![index].typeName != "Trị liệu dài hạn") {
                                   return PhysiptherapistMenu(
                                     icon:
-                                        "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvise.png?alt=media&token=73296749-85c7-415c-9287-eb044d23d6a1",
+                                    "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvise.png?alt=media&token=73296749-85c7-415c-9287-eb044d23d6a1",
                                     text: "${snapshot.data![index].typeName}",
-                                    press: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AdviseSession(
-                                                    typeName: snapshot
-                                                        .data![index].typeName,
-                                                  )));
+                                    press: () async {
+                                      if (sharedMedicalRecord!.problem == null) {
+                                       await AllowFunction.CustomAlertDialog(context, "Bạn hãy cung cấp thông tin hồ sơ bệnh án để xài chức năng này");
+                                      }
+                                      else {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AdviseSession(
+                                                      typeName: snapshot
+                                                          .data![index].typeName,
+                                                    )));
+                                      }
+
                                     },
                                   );
-                                } else {
-                                  return Container();
                                 }
+                                 else {
+                                   return Container();
+                                }
+
                               });
                         } else {
-                          print("a");
                           return Center(
                             child: CircularProgressIndicator(),
                           );
                         }
                       } else {
-                        print("a");
                         return Center(
                           child: CircularProgressIndicator(),
                         );

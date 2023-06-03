@@ -12,6 +12,7 @@ import 'package:heh_application/models/physiotherapist.dart';
 import 'package:heh_application/models/schedule.dart';
 import 'package:heh_application/models/sub_profile.dart';
 import 'package:heh_application/services/call_api.dart';
+import 'package:heh_application/util/date_time_format.dart';
 import 'package:intl/intl.dart';
 
 class BillHistoryPage extends StatefulWidget {
@@ -36,14 +37,15 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
   String? day;
   String? timeStart;
   String? timeEnd;
+  String? timeBook;
   bool check = false;
 
   String title = "Xác nhận";
   String subTitle = "Xác nhận hóa đơn";
   void formatDateAndTime() {
-    DateTime tempDate =
-        new DateFormat("yyyy-MM-dd").parse(widget.schedule.slot!.timeStart);
-    day = DateFormat("dd-MM-yyyy").format(tempDate);
+
+    day = DateTimeFormat.formatDate(widget.schedule.slot!.timeStart);
+    timeBook = DateTimeFormat.formatDateTime(widget.bookingDetail!.bookingSchedule!.timeBooking);
     DateTime tempTimeStart = new DateFormat("yyyy-MM-ddTHH:mm:ss")
         .parse(widget.schedule.slot!.timeStart);
     timeStart = DateFormat("HH:mm").format(tempTimeStart);
@@ -70,6 +72,7 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
         subTitle = "Hóa Đơn";
       });
     }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -118,6 +121,10 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
                               name: "ID: ", info: widget.schedule.scheduleID),
                           padding(),
                           information(
+                              name: "Ngày đặt: ", info: "$timeBook"),
+                          padding(),
+
+                          information(
                               name: "Tên chuyên viên: ",
                               info: widget
                                   .physiotherapist.signUpUser!.firstName!),
@@ -137,6 +144,7 @@ class _BillHistoryPageState extends State<BillHistoryPage> {
                           padding(),
                           information(
                               name: "Thời gian kết thúc: ", info: timeEnd),
+
                           padding(),
                           information(
                               name: "Số tiền: ",

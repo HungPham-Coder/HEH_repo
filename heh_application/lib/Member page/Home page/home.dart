@@ -106,18 +106,16 @@ class _HomePageState extends State<HomePage> {
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
-                                if (snapshot.data![index].typeName !=
-                                    "Tư vấn trị liệu 1 buổi") {
+
                                   return HomeMenu(
                                     icon: snapshot.data![index].typeName ==
-                                            "Tư vấn trị liệu"
+                                            "Tư vấn trị liệu" || snapshot.data![index].typeName == "Tư vấn trị liệu 1 buổi"
                                         ? "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvisor.png?alt=media&token=dae71db1-2f53-404e-92de-46838ceff9c6"
                                         : "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fplan.png?alt=media&token=2356eeaa-f224-4b1f-ad5f-f0cb34f2e922",
                                     text:
                                         "Tham gia buổi ${snapshot.data![index].typeName}",
                                     press: () async {
-                                      if (snapshot.data![index].typeName ==
-                                          "Tư vấn trị liệu") {
+                                      if (snapshot.data![index].typeName != "Trị liệu dài hạn") {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -150,9 +148,7 @@ class _HomePageState extends State<HomePage> {
                                       }
                                     },
                                   );
-                                } else {
-                                  return Container();
-                                }
+
                               });
                         } else {
                           return const Center(

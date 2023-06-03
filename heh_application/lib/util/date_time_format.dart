@@ -17,4 +17,10 @@ class DateTimeFormat {
     return timefmt;
   }
 
+  static String formatDateTime(String time) {
+    DateTime timeTemp =  DateFormat("yyyy-MM-ddTHH:mm:ss").parse(time);
+    String timefmt = DateFormat("yyyy-MM-dd HH:mm").format(timeTemp);
+    return timefmt;
+  }
+
 }

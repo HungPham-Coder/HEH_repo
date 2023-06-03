@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Home%20page/Advise%20page/appointment.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/Home%20page/Session%20Page/session.dart';
 import 'package:heh_application/Physiotherapist%20Page/Physio%20page/messenger.dart';
+import 'package:heh_application/models/type_of_slot.dart';
+import 'package:heh_application/services/call_api.dart';
 import 'package:heh_application/services/firebase_firestore.dart';
 import 'package:provider/provider.dart';
 
@@ -58,30 +60,53 @@ class _PhysioHomePageState extends State<PhysioHomePage> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                HomeMenu(
-                  icon:
-                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvisor.png?alt=media&token=dae71db1-2f53-404e-92de-46838ceff9c6",
-                  text: "Tham gia buổi tư vấn",
-                  press: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AppointmentPage(
-                                firebaseFirestoreBase: firestoreDatabase)));
+                FutureBuilder <List<TypeOfSlot>>(
+                  future: CallAPI().getAllTypeOfSlot(),
+                  builder:(context, snapshot) {
+                    if (snapshot.hasData){
+                      if (snapshot.data!.length > 0){
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder:(context, index) =>  HomeMenu(
+                            icon:
+                            "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvisor.png?alt=media&token=dae71db1-2f53-404e-92de-46838ceff9c6",
+                            text: "Tham gia buổi ${snapshot.data![index].typeName}",
+                            press: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AppointmentPage(
+                                        typeName: snapshot.data![index].typeName,
+                                          firebaseFirestoreBase: firestoreDatabase)));
+                            },
+                          ),
+                        );
+                      }
+                      else {
+                        return Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 300),
+                            child: Text(
+                              "List Type Of Slot rỗng",
+                              style: TextStyle(
+                                  color: Colors.grey[500], fontSize: 16),
+                            ),
+                          ),
+                        );
+                      }
+
+                    }
+                    else {
+                      return Center(
+                        child: Container(
+                        ),
+                      );
+                    }
+
                   },
                 ),
-                HomeMenu(
-                  icon:
-                      "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fplan.png?alt=media&token=2356eeaa-f224-4b1f-ad5f-f0cb34f2e922",
-                  text: "Tham gia buổi trị liệu",
-                  press: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SessionPage(
-                                firebaseFirestoreBase: firestoreDatabase)));
-                  },
-                ),
+
                 HomeMenu(
                   icon:
                       "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fcare.png?alt=media&token=0ce5dd58-bcaf-45a8-b277-05eaad8b89b8",

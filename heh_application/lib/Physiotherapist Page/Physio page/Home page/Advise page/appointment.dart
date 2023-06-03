@@ -11,9 +11,10 @@ import 'package:heh_application/util/date_time_format.dart';
 import 'package:intl/intl.dart';
 
 class AppointmentPage extends StatefulWidget {
-  AppointmentPage({Key? key, required this.firebaseFirestoreBase})
+  AppointmentPage({Key? key, required this.firebaseFirestoreBase, required this.typeName})
       : super(key: key);
   FirebaseFirestoreBase firebaseFirestoreBase;
+  String typeName;
   @override
   State<AppointmentPage> createState() => _AppointmentPageState();
 }
@@ -224,7 +225,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
             future: CallAPI()
                 .getAllBookingDetailByPhysioIDAndTypeOfSlotAndShortTermLongTermStatus(
                     sharedPhysiotherapist!.physiotherapistID,
-                    'Tư vấn trị liệu',
+                    widget.typeName,
                     1,
                     0,
                     ""),

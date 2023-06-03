@@ -16,8 +16,8 @@ class _AdviseSessionState extends State<AdviseSession> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          "Tư vấn trị liệu",
+        title:  Text(
+          widget.typeName,
           style: TextStyle(fontSize: 23),
         ),
         centerTitle: true,

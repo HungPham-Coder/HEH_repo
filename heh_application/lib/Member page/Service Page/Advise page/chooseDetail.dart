@@ -157,7 +157,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                         count++;
                       }
                     });
-                    if (count == snapshot.data!.length) {
+                    if (count >= 1) {
                       return Container(
                           child: Center(
                         child: Container(
@@ -275,6 +275,7 @@ class _ChooseDetailPageState extends State<ChooseDetailPage> {
                       );
                     }
                   } else {
+                    print("a0");
                     return Container(
                         // child: const Center(
                         //     child: Text(

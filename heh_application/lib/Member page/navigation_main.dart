@@ -41,34 +41,6 @@ class _Navigation_BarState extends State<Navigation_Bar> {
     super.dispose();
   }
 
-  // final GoRouter _router = GoRouter(
-  //   debugLogDiagnostics: true,
-  //   initialLocation: "/",
-  //   routes: [
-  //     GoRoute(
-  //       path: "/",
-  //       builder: (context, state) => Navigation_Bar(),
-  //       routes: [
-  //         GoRoute(
-  //           path: "home",
-  //           builder: (context, state) => HomePage(),
-  //         ),
-  //         GoRoute(
-  //             path: "service",
-  //             builder: (context, state) => ServicePage(),
-  //             routes: []),
-  //         GoRoute(
-  //           path: "favorite",
-  //           builder: (context, state) => FavoritePage(),
-  //         ),
-  //         GoRoute(
-  //           path: "setting",
-  //           builder: (context, state) => SettingPage(),
-  //         ),
-  //       ],
-  //     ),
-  //   ],
-  // );
 
   int pageIndex = 0;
   List<Widget> pageList = <Widget>[

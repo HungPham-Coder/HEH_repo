@@ -91,11 +91,11 @@ class _SchedulePageState extends State<SchedulePage> {
             } else {
               return Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 300),
-                  child: Text(
-                    "Hiện tại không còn slot cho bạn",
-                    style: TextStyle(color: Colors.grey[500], fontSize: 16),
-                  ),
+                  // padding: const EdgeInsets.symmetric(vertical: 300),
+                  // child: Text(
+                  //   "Hiện tại không còn slot cho bạn",
+                  //   style: TextStyle(color: Colors.grey[500], fontSize: 16),
+                  // ),
                 ),
               );
             }
