@@ -33,6 +33,8 @@ class _PhysioCertificatePageState extends State<PhysioCertificatePage> {
   List<Problem> _problems = [];
   bool validSpecialize = true ;
   bool visible = false ;
+
+
   List<Problem?> _selectedProblems = [];
   String specializeTxt = sharedPhysiotherapist!.specialize!;
   void addProblem(List<CategoryModel> list) {
@@ -54,7 +56,22 @@ class _PhysioCertificatePageState extends State<PhysioCertificatePage> {
       }
     });
   }
-
+  Future<bool> checkValidSkill () async {
+    List<CategoryModel> listCate =  await CallAPI().getAllCategory();
+    int count = 0;
+    listCate.forEach((element) {
+      if (sharedPhysiotherapist!.skill!.contains(element.categoryName) || element.categoryName.contains(sharedPhysiotherapist!.skill!) )
+      {
+        count ++;
+      }
+    });
+    if (count == 0) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,101 +102,101 @@ class _PhysioCertificatePageState extends State<PhysioCertificatePage> {
                             ),
                           ),
                           Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 0),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.only(top: 10, bottom: 10),
-                                child: MaterialButton(
-                                  height: 50,
-                                  onPressed: () async {
-                                    if (validSpecialize == true) {
-                                      //get Skill concatenate String
-                                      if (visible) {
-                                        setState(() {
-                                          visible = false;
-                                        });
-                                      }
-                                      String skill = '';
-                                      if (_selectedProblems.length > 0) {
-                                        if (_selectedProblems.length > 1) {
-                                          _selectedProblems.forEach((element) {
-                                            if (element != _selectedProblems.last) {
-                                              skill += '${element!.name}, ';
-                                            } else {
-                                              skill += '${element!.name} ';
-                                            }
-                                          });
+                            padding:
+                                const EdgeInsets.only(top: 10, bottom: 10),
+                            child: MaterialButton(
+                              height: 50,
+                              onPressed: () async {
+                                if (validSpecialize == true) {
+                                  //get Skill concatenate String
+                                  if (visible) {
+                                    setState(() {
+                                      visible = false;
+                                    });
+                                  }
+                                  String skill = '';
+                                  if (_selectedProblems.length > 0) {
+                                    if (_selectedProblems.length > 1) {
+                                      _selectedProblems.forEach((element) {
+                                        if (element != _selectedProblems.last) {
+                                          skill += '${element!.name}, ';
                                         } else {
-                                          _selectedProblems.forEach((element) {
-                                            skill = '${element!.name}';
-                                          });
+                                          skill += '${element!.name} ';
                                         }
-                                      } else {
-                                        skill = sharedPhysiotherapist!.skill!;
-                                      }
-                                      //update physio
-                                      PhysiotherapistModel physio =
-                                      PhysiotherapistModel(
-                                        physiotherapistID: sharedPhysiotherapist!
-                                            .physiotherapistID,
-                                        scheduleStatus:
-                                        sharedPhysiotherapist!.scheduleStatus,
-                                        userID: sharedCurrentUser!.userID,
-                                        skill: skill,
-                                        specialize: _specialize.text,
-                                      );
-                                      bool result =
-                                      await CallAPI().updatePhysio(physio);
-                                      if (result) {
-                                        PhysiotherapistModel physio = await CallAPI().getPhysiotherapistByUserID(
-                                            sharedCurrentUser!.userID!);
-                                        setState(() {
-                                          sharedPhysiotherapist = physio;
-                                        });
-                                        print("a");
-                                        print(sharedPhysiotherapist!.skill);
-                                        final snackBar = SnackBar(
-                                          content: Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: const [
-                                              Text(
-                                                "Thành công",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500),
-                                              ),
-                                            ],
-                                          ),
-                                          backgroundColor: Colors.green,
-                                        );
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar);
-                                      }
-                                    }
-                                    else {
-                                      setState(() {
-                                        visible = true;
+                                      });
+                                    } else {
+                                      _selectedProblems.forEach((element) {
+                                        skill = '${element!.name}';
                                       });
                                     }
+                                  } else {
+                                    skill = sharedPhysiotherapist!.skill!;
+                                  }
 
-                                  },
-                                  color: const Color.fromARGB(255, 46, 161, 226),
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: const Text(
-                                    "Cập nhật",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+
+                                    //update physio
+                                    PhysiotherapistModel physio =
+                                    PhysiotherapistModel(
+                                      physiotherapistID: sharedPhysiotherapist!
+                                          .physiotherapistID,
+                                      scheduleStatus:
+                                      sharedPhysiotherapist!.scheduleStatus,
+                                      userID: sharedCurrentUser!.userID,
+                                      skill: skill,
+                                      specialize: _specialize.text,
+                                    );
+                                    bool result =
+                                    await CallAPI().updatePhysio(physio);
+                                    if (result) {
+                                      PhysiotherapistModel physio = await CallAPI().getPhysiotherapistByUserID(
+                                          sharedCurrentUser!.userID!);
+                                      setState(() {
+                                        sharedPhysiotherapist = physio;
+                                      });
+                                      final snackBar = SnackBar(
+                                        content: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                          children: const [
+                                            Text(
+                                              "Thành công",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ],
+                                        ),
+                                        backgroundColor: Colors.green,
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                    }
+
+
+                                }
+                                else {
+                                  setState(() {
+                                    visible = true;
+                                  });
+                                }
+
+                              },
+                              color: const Color.fromARGB(255, 46, 161, 226),
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Text(
+                                "Cập nhật",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18,
+                                  color: Colors.white,
                                 ),
-                              )),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     );
@@ -241,6 +258,7 @@ class _PhysioCertificatePageState extends State<PhysioCertificatePage> {
   }
 
   Widget skill({label, obscureText = false, String? skill}) {
+
     return Column(
       children: <Widget>[
         Row(
@@ -271,35 +289,43 @@ class _PhysioCertificatePageState extends State<PhysioCertificatePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   addProblem(snapshot.data!);
-                  return MultiSelectBottomSheetField<Problem?>(
-                    isDismissible: true,
-                    confirmText: const Text("Chấp nhận",
-                        style: TextStyle(fontSize: 18)),
-                    cancelText:
-                        const Text("Hủy", style: TextStyle(fontSize: 18)),
-                    title: const Text("Kỹ năng"),
-                    buttonText: Text(
-                      sharedPhysiotherapist!.skill!,
-                      overflow: TextOverflow.clip,
-                      style: const TextStyle(color: Colors.black, fontSize: 13),
+                  return Form(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: MultiSelectBottomSheetField<Problem?>(
+                      isDismissible: true,
+                      confirmText: const Text("Chấp nhận",
+                          style: TextStyle(fontSize: 18)),
+                      cancelText:
+                          const Text("Hủy", style: TextStyle(fontSize: 18)),
+                      title: const Text("Kỹ năng"),
+                      buttonText: Text(
+                        sharedPhysiotherapist!.skill!,
+                        overflow: TextOverflow.clip,
+                        style: const TextStyle(color: Colors.black, fontSize: 13),
+                      ),
+                      items: _problems
+                          .map((e) => MultiSelectItem<Problem?>(e, e.name))
+                          .toList(),
+                      listType: MultiSelectListType.CHIP,
+                      searchable: true,
+                      onConfirm: (values) {
+                        setState(() {
+                          _selectedProblems = values;
+                        });
+                      },
+                      // validator: (value) {
+                      //   if (validSkill== false){
+                      //     return "Hãy chọn kỹ năng của bạn";
+                      //   }
+                      // },
+                      chipDisplay: MultiSelectChipDisplay(onTap: (values) {
+                        setState(
+                          () {
+                            _itemChange(values!, false);
+                          },
+                        );
+                      }),
                     ),
-                    items: _problems
-                        .map((e) => MultiSelectItem<Problem?>(e, e.name))
-                        .toList(),
-                    listType: MultiSelectListType.CHIP,
-                    searchable: true,
-                    onConfirm: (values) {
-                      setState(() {
-                        _selectedProblems = values;
-                      });
-                    },
-                    chipDisplay: MultiSelectChipDisplay(onTap: (values) {
-                      setState(
-                        () {
-                          _itemChange(values!, false);
-                        },
-                      );
-                    }),
                   );
                 } else {
                   return const Center(

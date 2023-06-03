@@ -70,7 +70,9 @@ class _PhysioHomePageState extends State<PhysioHomePage> {
                           itemCount: snapshot.data!.length,
                           itemBuilder:(context, index) =>  HomeMenu(
                             icon:
-                            "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvisor.png?alt=media&token=dae71db1-2f53-404e-92de-46838ceff9c6",
+                                snapshot.data![index].typeName != "Trị liệu dài hạn"?
+                            "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fadvisor.png?alt=media&token=dae71db1-2f53-404e-92de-46838ceff9c6"
+                            : "https://firebasestorage.googleapis.com/v0/b/healthcaresystem-98b8d.appspot.com/o/icon%2Fplan.png?alt=media&token=2356eeaa-f224-4b1f-ad5f-f0cb34f2e922",
                             text: "Tham gia buổi ${snapshot.data![index].typeName}",
                             press: () {
                               Navigator.push(
