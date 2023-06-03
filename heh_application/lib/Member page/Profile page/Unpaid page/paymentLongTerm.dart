@@ -115,9 +115,7 @@ class _PaymenLongTermPageState extends State<PaymenLongTermPage> {
                   PaymentModel payment = PaymentModel(
                     orderId:
                         "${widget.bookingDetail!.bookingScheduleID}_$randomNumber",
-                    amount: widget.bookingDetail!.bookingSchedule!.schedule!
-                        .typeOfSlot!.price
-                        .toInt(),
+                    amount: widget.bookingDetail!.paymentMoney!.toInt(),
                     email: sharedCurrentUser!.email,
                   );
 
@@ -204,14 +202,7 @@ class _PaymenLongTermPageState extends State<PaymenLongTermPage> {
                                   getBookingDetail.longtermStatus == 1) {
                                 widget.bookingDetail!.bookingSchedule!.schedule!
                                     .physioBookingStatus = true;
-                                getBookingDetail.paymentMoney = getBookingDetail
-                                    .bookingSchedule!
-                                    .schedule!
-                                    .typeOfSlot!
-                                    .price;
 
-                                await CallAPI().updateBookingDetailStatus(
-                                    getBookingDetail);
                                 return showDialog(
                                   context: context,
                                   builder: (context) {
@@ -220,16 +211,6 @@ class _PaymenLongTermPageState extends State<PaymenLongTermPage> {
                                         Center(
                                           child: TextButton(
                                             onPressed: () async {
-                                              getBookingDetail.paymentMoney =
-                                                  getBookingDetail
-                                                      .bookingSchedule!
-                                                      .schedule!
-                                                      .typeOfSlot!
-                                                      .price;
-
-                                              await CallAPI()
-                                                  .updateBookingDetailStatus(
-                                                      getBookingDetail);
                                               Navigator.of(context).pop();
                                             },
                                             child: const Text(
@@ -453,11 +434,7 @@ class _PaymenLongTermPageState extends State<PaymenLongTermPage> {
                                 children: [
                                   Text(
                                       value.format(widget
-                                          .bookingDetail!
-                                          .bookingSchedule!
-                                          .schedule!
-                                          .typeOfSlot!
-                                          .price
+                                          .bookingDetail!.paymentMoney!
                                           .toInt()),
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w600)),
@@ -505,9 +482,8 @@ class _PaymenLongTermPageState extends State<PaymenLongTermPage> {
                   children: [
                     const Text("Số tiền:"),
                     Text(
-                        value.format(widget.bookingDetail!.bookingSchedule!
-                            .schedule!.typeOfSlot!.price
-                            .toInt()),
+                        value.format(
+                            widget.bookingDetail!.paymentMoney!.toInt()),
                         style: const TextStyle(fontWeight: FontWeight.w600)),
                     const Text(" VND"),
                   ],
@@ -532,11 +508,6 @@ class _PaymenLongTermPageState extends State<PaymenLongTermPage> {
                             widget.bookingDetail!.bookingDetailID!);
                     if (getBookingDetail.shorttermStatus! == 1 &&
                         getBookingDetail.longtermStatus == 1) {
-                      getBookingDetail.paymentMoney = getBookingDetail
-                          .bookingSchedule!.schedule!.typeOfSlot!.price;
-
-                      await CallAPI()
-                          .updateBookingDetailStatus(getBookingDetail);
                       Navigator.push(
                           context,
                           MaterialPageRoute(

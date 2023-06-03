@@ -159,7 +159,6 @@ class _BillShortTermPageState extends State<BillShortTermPage> {
                                   name: "Tên người đặt: ",
                                   info: sharedCurrentUser!.firstName!),
                               padding(),
-                              const SizedBox(height: 15),
                               information(
                                   name: "Buổi trị liệu: ",
                                   info: widget.schedule.slot!.slotName),
@@ -308,20 +307,27 @@ class _BillShortTermPageState extends State<BillShortTermPage> {
                                       await CallAPI().getBookingScheduleByID(
                                           widget.bookingSchedule!
                                               .bookingScheduleID!);
-
+                                  print(
+                                    "price: ${bookingSchedule.schedule!.typeOfSlot!.price}",
+                                  );
                                   BookingDetail bookingDetail = BookingDetail(
                                     bookingScheduleID:
                                         bookingSchedule.bookingScheduleID!,
                                     bookingSchedule: bookingSchedule,
+                                    paymentMoney: bookingSchedule
+                                        .schedule!.typeOfSlot!.price,
                                     shorttermStatus: 0,
                                     longtermStatus: 0,
                                   );
                                   BookingDetail addBookingDetail =
                                       await CallAPI()
                                           .addBookingDetail(bookingDetail);
+
                                   BookingDetail getBookingDetail =
                                       await CallAPI().getBookingDetailByID(
                                           addBookingDetail.bookingDetailID!);
+                                  print(
+                                      "money :${bookingDetail.paymentMoney!}");
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

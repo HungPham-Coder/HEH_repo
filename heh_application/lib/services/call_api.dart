@@ -1659,6 +1659,7 @@ class CallAPI {
     final body = jsonEncode({
       "bookingScheduleID": bookingDetail.bookingScheduleID,
       "imageUrl": bookingDetail.imageUrl,
+      "paymentMoney": bookingDetail.paymentMoney,
       "longtermStatus": bookingDetail.longtermStatus,
       "shorttermStatus": bookingDetail.shorttermStatus,
     });

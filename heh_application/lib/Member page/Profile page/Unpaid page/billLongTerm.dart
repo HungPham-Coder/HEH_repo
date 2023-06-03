@@ -196,22 +196,8 @@ class _BillLongTermPageState extends State<BillLongTermPage> {
                                           color: Colors.white)),
                                 )),
                             onPressed: () async {
-                              // BookingSchedule? bookingScheduleAdd = await CallAPI()
-                              //     .addBookingSchedule(widget.bookingSchedule!);
                               print("ID: ${widget.bookingDetailID!}");
-                              // BookingSchedule bookingSchedule = await CallAPI()
-                              //     .getBookingScheduleByID(
-                              //         widget.bookingSchedule!.bookingScheduleID!);
 
-                              // BookingDetail bookingDetail = BookingDetail(
-                              //   bookingScheduleID:
-                              //       widget.bookingSchedule!.bookingScheduleID!,
-                              //   bookingSchedule: widget.bookingSchedule!,
-                              //   shorttermStatus: 0,
-                              //   longtermStatus: 1,
-                              // );
-                              // BookingDetail addBookingDetail =
-                              //     await CallAPI().addBookingDetail(bookingDetail);
                               BookingDetail getBookingDetail = await CallAPI()
                                   .getBookingDetailByID(
                                       widget.bookingDetailID!);
@@ -221,11 +207,6 @@ class _BillLongTermPageState extends State<BillLongTermPage> {
                                       builder: (context) => PaymenLongTermPage(
                                             bookingDetail: getBookingDetail,
                                           )));
-                              // Navigator.pushNamed(
-                              //   context,
-                              //   '/payment',
-                              //   arguments: {'bookingDetail': getBookingDetail},
-                              // );
                             },
                             child: const Text(
                               "Thanh toán",
