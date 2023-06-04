@@ -21,14 +21,15 @@ class BillLongTermPage extends StatefulWidget {
     required this.physiotherapist,
     required this.schedule,
     required this.bookingSchedule,
-    required this.bookingDetailID,
+    required this.bookingDetail,
     this.view,
   }) : super(key: key);
   PhysiotherapistModel physiotherapist;
   Schedule schedule;
   BookingSchedule? bookingSchedule;
   String? view;
-  String? bookingDetailID;
+
+  BookingDetail? bookingDetail;
   @override
   State<BillLongTermPage> createState() => _BillLongTermPageState();
 }
@@ -127,7 +128,6 @@ class _BillLongTermPageState extends State<BillLongTermPage> {
                               name: "Tên người đặt: ",
                               info: sharedCurrentUser!.firstName!),
                           padding(),
-                          const SizedBox(height: 15),
                           information(
                               name: "Buổi trị liệu: ",
                               info: widget.schedule.slot!.slotName),
@@ -143,7 +143,7 @@ class _BillLongTermPageState extends State<BillLongTermPage> {
                           information(
                               name: "Số tiền: ",
                               info:
-                                  '${value.format(widget.schedule.typeOfSlot!.price.toInt())} VNĐ'),
+                                  '${value.format(widget.bookingDetail!.paymentMoney!.toInt())} VNĐ'),
                           const SizedBox(height: 10),
                         ],
                       ),
@@ -196,17 +196,37 @@ class _BillLongTermPageState extends State<BillLongTermPage> {
                                           color: Colors.white)),
                                 )),
                             onPressed: () async {
-                              print("ID: ${widget.bookingDetailID!}");
+                              // BookingSchedule? bookingScheduleAdd = await CallAPI()
+                              //     .addBookingSchedule(widget.bookingSchedule!);
+                              print(
+                                  "ID: ${widget.bookingDetail!.bookingDetailID!}");
+                              // BookingSchedule bookingSchedule = await CallAPI()
+                              //     .getBookingScheduleByID(
+                              //         widget.bookingSchedule!.bookingScheduleID!);
 
+                              // BookingDetail bookingDetail = BookingDetail(
+                              //   bookingScheduleID:
+                              //       widget.bookingSchedule!.bookingScheduleID!,
+                              //   bookingSchedule: widget.bookingSchedule!,
+                              //   shorttermStatus: 0,
+                              //   longtermStatus: 1,
+                              // );
+                              // BookingDetail addBookingDetail =
+                              //     await CallAPI().addBookingDetail(bookingDetail);
                               BookingDetail getBookingDetail = await CallAPI()
                                   .getBookingDetailByID(
-                                      widget.bookingDetailID!);
+                                      widget.bookingDetail!.bookingDetailID!);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => PaymenLongTermPage(
                                             bookingDetail: getBookingDetail,
                                           )));
+                              // Navigator.pushNamed(
+                              //   context,
+                              //   '/payment',
+                              //   arguments: {'bookingDetail': getBookingDetail},
+                              // );
                             },
                             child: const Text(
                               "Thanh toán",

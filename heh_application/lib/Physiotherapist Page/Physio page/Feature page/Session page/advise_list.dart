@@ -119,12 +119,6 @@ class _AdviseListPageState extends State<AdviseListPage> {
                               time: "$start - $end",
                               status: 'Hoàn thành tư vấn',
                               press: () async {
-                                snapshot.data![index].paymentMoney = snapshot
-                                    .data![index]
-                                    .bookingSchedule!
-                                    .schedule!
-                                    .typeOfSlot!
-                                    .price;
                                 snapshot.data![index].shorttermStatus = 4;
                                 await CallAPI().updateBookingDetailStatus(
                                     snapshot.data![index]);

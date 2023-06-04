@@ -129,7 +129,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
           children: [
             TableCalendar(
               focusedDay: _selectedDay,
-              firstDay: DateTime.now().subtract(Duration(days: 31)),
+              firstDay: DateTime.now().subtract(const Duration(days: 31)),
               lastDay: DateTime(2099),
               startingDayOfWeek: StartingDayOfWeek.monday,
               calendarBuilders: CalendarBuilders(
@@ -196,7 +196,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                       bookingDetail.bookingSchedule!.signUpUser!.firstName &&
                   widget.bookingDetail!.bookingSchedule!.subProfile!.subName ==
                       bookingDetail.bookingSchedule!.subProfile!.subName) {
-                color = Color.fromARGB(255, 46, 161, 226);
+                color = const Color.fromARGB(255, 46, 161, 226);
                 //  color = Colors.blue ;
               } else {
                 visible = false;
@@ -371,6 +371,8 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                       ),
                       TextButton(
                           onPressed: () async {
+                            print(
+                                "Giá tiền: ${widget.bookingDetail!.bookingSchedule!.schedule!.typeOfSlot!.price}");
                             //compare start và end
                             DateTime start = DateTime.parse(startCompare!);
                             DateTime end = DateTime.parse(endCompare!);
@@ -422,6 +424,7 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                     physioBookingStatus: true);
                                 Schedule addSchedule =
                                     await CallAPI().AddSchedule(schedule);
+                                print("ScheduleID: ${addSchedule.scheduleID}");
                                 //check add schedule
                                 if (addSchedule != null) {
                                   //add booking schedule
@@ -443,20 +446,37 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                                           timeBooking:
                                               DateFormat("yyyy-MM-ddTHH:mm:ss")
                                                   .format(DateTime.now()));
+
                                   BookingSchedule? bookingScheduleAdd =
                                       await CallAPI()
                                           .addBookingSchedule(bookingSchedule);
                                   //add booking detail
+                                  print(
+                                      "ID: ${bookingScheduleAdd!.bookingScheduleID!}");
+
+                                  BookingSchedule getBookingSchedule =
+                                      await CallAPI().getBookingScheduleByID(
+                                          bookingScheduleAdd
+                                              .bookingScheduleID!);
+
                                   BookingDetail bookingDetail = BookingDetail(
-                                      bookingScheduleID: bookingScheduleAdd!
-                                          .bookingScheduleID!,
-                                      shorttermStatus: 0,
-                                      longtermStatus: 1,
-                                      imageUrl: "Dài hạn");
+                                    bookingScheduleID:
+                                        bookingScheduleAdd.bookingScheduleID!,
+                                    shorttermStatus: 0,
+                                    longtermStatus: 1,
+                                    // imageUrl: "Dài hạn",
+                                    paymentMoney: widget
+                                        .bookingDetail!
+                                        .bookingSchedule!
+                                        .schedule!
+                                        .typeOfSlot!
+                                        .price,
+                                  );
 
                                   BookingDetail bookingDetailAdd =
                                       await CallAPI()
                                           .addBookingDetail(bookingDetail);
+
                                   //check add booking detail
                                   if (bookingDetailAdd != null) {
                                     //get booking detail vừa mới add
@@ -496,14 +516,14 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
     return Column(
       children: [
         visibleCheckAfter == true
-            ? Text('Thời gian bắt đầu phải trước thời gian kết thúc')
+            ? const Text('Thời gian bắt đầu phải trước thời gian kết thúc')
             : Container(),
         visibleAdd == true
             ? Column(
                 children: [
                   Text('Khung thời gian đăng ký đã có slot rồi'),
                   ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: listSlotDup?.length,
                       itemBuilder: (context, index) {
@@ -513,40 +533,38 @@ class _SessionRegisterPageState extends State<SessionRegisterPage> {
                             listSlotDup![index].timeEnd);
 
                         return Text('Khung giờ : $start-$end');
-                      }),
+                      })
                 ],
               )
             : Container(),
-        Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: TextFormField(
-                controller: _timeStart,
-                readOnly: true,
-                decoration: const InputDecoration(
-                  labelText: "Thời gian bắt đầu",
-                ),
-                onTap: () async {
-                  final selectedTime = await showTimePicker(
-                    context: context,
-                    initialTime: TimeOfDay.now(),
-                    builder: (BuildContext context, Widget? child) {
-                      return MediaQuery(
-                        data: MediaQuery.of(context)
-                            .copyWith(alwaysUse24HourFormat: true),
-                        child: child!,
-                      );
-                    },
+        TextFormField(
+            controller: _timeStart,
+            readOnly: true,
+            decoration: const InputDecoration(
+              labelText: "Thời gian bắt đầu",
+            ),
+            onTap: () async {
+              final selectedTime = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+                builder: (BuildContext context, Widget? child) {
+                  return MediaQuery(
+                    data: MediaQuery.of(context)
+                        .copyWith(alwaysUse24HourFormat: true),
+                    child: child!,
                   );
+                },
+              );
 
-                  if (selectedTime != null) {
-                    final text = selectedTime.format(context);
-                    setState(() {
-                      startCompare = '$date $text';
-                      startTime = '${date}T$text:00';
-                      _timeStart.text = text;
-                    });
-                  }
-                })),
+              if (selectedTime != null) {
+                final text = selectedTime.format(context);
+                setState(() {
+                  startCompare = '$date $text';
+                  startTime = '${date}T$text:00';
+                  _timeStart.text = text;
+                });
+              }
+            }),
         TextFormField(
           controller: _timeEnd,
           readOnly: true,

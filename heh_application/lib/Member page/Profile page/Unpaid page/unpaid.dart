@@ -76,6 +76,9 @@ class _UnPaidServicePageState extends State<UnPaidServicePage> {
                           bookedFor: snapshot.data![index].bookingSchedule!
                               .subProfile!.subName,
                           press: () {
+                            print(
+                                "Tiền ${snapshot.data![index].bookingSchedule!.schedule!.typeOfSlot!.price}");
+
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -90,8 +93,7 @@ class _UnPaidServicePageState extends State<UnPaidServicePage> {
                                               .bookingSchedule!.schedule!,
                                           bookingSchedule: snapshot
                                               .data![index].bookingSchedule!,
-                                          bookingDetailID: snapshot
-                                              .data![index].bookingDetailID,
+                                          bookingDetail: snapshot.data![index],
                                         )));
                           },
                         ),
