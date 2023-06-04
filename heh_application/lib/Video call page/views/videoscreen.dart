@@ -45,6 +45,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     super.dispose();
   }
   Future<void> changeStatus () async {
+    print(sharedCurrentUser!.role!.name);
+    print(widget.bookingDetail.shorttermStatus );
     if (sharedCurrentUser!.role!.name == "Physiotherapist" && widget.bookingDetail.shorttermStatus ==2){
 
         widget.bookingDetail.shorttermStatus = 3;
